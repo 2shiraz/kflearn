@@ -8,6 +8,7 @@ import FAQ from "./components/FAQ";
 import Disclaimer from "./components/Disclaimer";
 import Footer from "./components/Footer";
 import SigninPage from "./pages/SigninPage";
+import SignupPage from "./pages/SignupPage";
 import DashboardPage from "./pages/DashboardPage";
 import ComingSoonPage from "./pages/ComingSoonPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/signin" element={<SigninPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/stations" element={<ComingSoonPage sectionKey="stations" title="OSCE Stations" />} />

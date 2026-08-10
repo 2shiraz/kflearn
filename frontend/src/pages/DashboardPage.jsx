@@ -57,7 +57,7 @@ export default function DashboardPage() {
       <Sidebar active="dashboard" onLogout={() => { logout(); window.location.href = "/signin"; }} />
 
       <main className="flex-1 px-6 py-8 lg:px-10 lg:py-10">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex animate-fade-up items-start justify-between gap-4">
           <div>
             <h1 className="font-display text-2xl font-bold text-ink">
               {greeting()}, {user.fullName.split(" ")[0]}
@@ -77,10 +77,15 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
-          {sections.map((s) => (
-            <Link key={s.key} to={s.href} className="group rounded-2xl border border-line bg-white p-6 transition hover:border-brand hover:shadow-sm">
+          {sections.map((s, i) => (
+            <Link
+              key={s.key}
+              to={s.href}
+              style={{ animationDelay: `${100 + i * 80}ms` }}
+              className="group animate-fade-up rounded-2xl border border-line bg-white p-6 transition duration-300 ease-out hover:-translate-y-1 hover:border-brand hover:shadow-lg hover:shadow-brand/5"
+            >
               <div className="flex items-start justify-between">
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${s.iconBg} ${s.iconText}`}>
+                <span className={`flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${s.iconBg} ${s.iconText}`}>
                   <s.icon size={20} />
                 </span>
                 <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${s.badgeBg} ${s.badgeText}`}>
@@ -90,7 +95,7 @@ export default function DashboardPage() {
               <h2 className="mt-4 font-display text-lg font-bold text-ink">{s.label}</h2>
               <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{s.desc}</p>
               <span className={`mt-4 inline-flex items-center gap-1 text-sm font-semibold ${s.iconText} group-hover:underline`}>
-                Open <ArrowRight size={14} />
+                Open <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
               </span>
             </Link>
           ))}

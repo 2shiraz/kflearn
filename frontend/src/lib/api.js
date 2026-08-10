@@ -40,6 +40,60 @@ export function logout() {
   sessionStorage.removeItem(SESSION_KEY);
 }
 
+export const ROLE_OPTIONS = [
+  "MBBS Student",
+  "FCPS Candidate",
+  "MCPS Candidate",
+  "Postgraduate Resident",
+  "Other Medical Learner",
+];
+
+/**
+ * POST /api/auth/register (FR-1.1) — creates the account.
+ * On success in mock mode, also logs the user in immediately (no email
+ * verification step in mock mode; real version requires FR-1.2 verification
+ * before the account is usable — see API_SPEC.md).
+ * @returns {Promise<{token: string, expiresIn: number, user: object}>}
+ */
+export async function registerRequest({ fullName, email, password, roleLabel }) {
+  if (USE_MOCK) {
+    await delay(600);
+    if (MOCK_USERS.some((u) => u.email === email)) {
+      throw new Error("An account with this email already exists.");
+    }
+    const user = {
+      id: `u_${Date.now()}`,
+      fullName,
+      email,
+      role: "student",
+      roleLabel,
+    };
+    return { token: "mock-jwt-token", expiresIn: 86400, user };
+  }
+
+  const res = await fetch(`${API_BASE}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ fullName, email, password, role: "student" }),
+  });
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || "Something went wrong. Please try again.");
+  }
+  return data.data;
+}
+
+/**
+ * PATCH /api/users/me — saves the optional academic-profile step.
+ * Mock mode merges it straight into the session user.
+ */
+export function saveProfileDetails(user, profile) {
+  const merged = { ...user, ...profile };
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(merged));
+  return merged;
+}
+
 /**
  * POST /api/auth/login
  * @param {{email: string, password: string}} credentials

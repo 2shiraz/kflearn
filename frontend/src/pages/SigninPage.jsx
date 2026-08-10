@@ -161,7 +161,7 @@ export default function SigninPage() {
 
           <p className="mt-6 text-center text-sm text-ink-soft">
             Don't have an account?{" "}
-            <Link to="/register" className="font-semibold text-brand hover:underline">
+            <Link to="/signup" className="font-semibold text-brand hover:underline">
               Create one free
             </Link>
           </p>

@@ -50,7 +50,7 @@ Register a new user (Student, Content Contributor, or Admin-invited).
 
 **Errors**: `409 EMAIL_TAKEN`, `422 VALIDATION_ERROR`
 
-Status: **not yet built** — placeholder, frontend not wired.
+Status: **frontend built (SignupPage.jsx, 3-step flow), awaiting backend** — mock registration auto-logs the user in with no email verification step. Real backend must enforce FR-1.2 verification before login succeeds.
 
 ---
 
@@ -180,3 +180,5 @@ Update the authenticated user's academic profile.
 **Response `200`**: `{ "success": true, "data": { "user": {...} } }`
 
 Status: **not yet built** — `SettingsPage.jsx` currently saves to local component state only; changes are lost on reload. Wire this up and swap the mock `handleSave` for a real call.
+
+- 2026-08-10: Added `/signup` — 3-step flow (account details → role select → optional academic profile). `registerRequest()` and `saveProfileDetails()` added to `lib/api.js`, same USE_MOCK switch-over pattern as login. Role selection maps to a free-text `roleLabel` for display; internal `role` field stays `"student"` for all signups (contributor accounts are still seeded only, per FR-1.6 — public signup shouldn't grant elevated roles). No email verification gate in mock mode — flag this when wiring the real backend.
