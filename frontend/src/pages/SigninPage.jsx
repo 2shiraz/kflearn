@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Stethoscope, Loader2, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { loginRequest } from "../lib/api";
 
@@ -102,9 +103,9 @@ export default function SigninPage() {
                 <label htmlFor="password" className="block text-sm font-medium text-ink">
                   Password
                 </label>
-                <a href="/forgot-password" className="text-sm font-medium text-brand hover:underline">
+                <Link to="/forgot-password" className="text-sm font-medium text-brand hover:underline">
                   Forgot password?
-                </a>
+                </Link>
               </div>
               <div className="relative">
                 <input
@@ -160,9 +161,9 @@ export default function SigninPage() {
 
           <p className="mt-6 text-center text-sm text-ink-soft">
             Don't have an account?{" "}
-            <a href="/register" className="font-semibold text-brand hover:underline">
+            <Link to="/register" className="font-semibold text-brand hover:underline">
               Create one free
-            </a>
+            </Link>
           </p>
 
           <p className="mt-3 text-center text-xs text-ink-soft">

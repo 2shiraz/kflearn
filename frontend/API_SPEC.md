@@ -143,6 +143,11 @@ contracts above, gated by `USE_MOCK = true` at the top of that file. Backend dev
 route is ready, flip that flag to `false` and the frontend switches to real `fetch` calls with
 zero changes to any page component.
 
+`getCurrentUser()` / `logout()` in the same file read/clear the mock session
+(`sessionStorage['kf_mock_user']`). Replace their internals with a real `GET /api/auth/me` call
+and a real `POST /api/auth/logout` call respectively when wiring the backend — nothing that
+imports them (DashboardPage, SigninPage) needs to change.
+
 **Demo login credentials (mock mode only):**
 | Email | Password | Role |
 |---|---|---|
@@ -152,3 +157,26 @@ zero changes to any page component.
 ## Changelog
 - 2026-08-10: Initial auth spec drafted (register, verify-email, login, google, logout, forgot/reset password, me). Signin page built against `/api/auth/login`.
 - 2026-08-10: Added mock API layer (`src/lib/api.js`) so frontend/signin work independently of backend. `USE_MOCK` flag is the single switch-over point.
+- 2026-08-10: Added `/dashboard` route (mock data), `getCurrentUser()`/`logout()` session helpers, and brand palette changed to indigo/purple per updated design.
+
+---
+
+## User Profile Module
+
+### `PATCH /api/users/me`
+Update the authenticated user's academic profile.
+
+**Request** (any subset of fields)
+```json
+{
+  "fullName": "Ahmed Khan",
+  "institution": "Allama Iqbal Medical College",
+  "programme": "MBBS",
+  "yearLevel": "Year 4",
+  "targetExam": "FCPS Part 1",
+  "expectedExamDate": "2027-03"
+}
+```
+**Response `200`**: `{ "success": true, "data": { "user": {...} } }`
+
+Status: **not yet built** — `SettingsPage.jsx` currently saves to local component state only; changes are lost on reload. Wire this up and swap the mock `handleSave` for a real call.

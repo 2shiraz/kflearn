@@ -11,17 +11,33 @@ const MOCK_USERS = [
   {
     email: "student@kflearn.pk",
     password: "Student123",
-    user: { id: "u_001", fullName: "Ayesha Khan", email: "student@kflearn.pk", role: "student" },
+    user: { id: "u_001", fullName: "Ayesha Khan", email: "student@kflearn.pk", role: "student", roleLabel: "MBBS Yr 4" },
   },
   {
     email: "contributor@kflearn.pk",
     password: "Contrib123",
-    user: { id: "u_002", fullName: "Dr. Bilal Ahmed", email: "contributor@kflearn.pk", role: "contributor" },
+    user: { id: "u_002", fullName: "Dr. Bilal Ahmed", email: "contributor@kflearn.pk", role: "contributor", roleLabel: "Clinical Content Contributor" },
   },
 ];
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const SESSION_KEY = "kf_mock_user";
+
+/**
+ * Returns the currently "logged in" mock user, or null.
+ * Real version: this becomes a call to GET /api/auth/me on app load.
+ */
+export function getCurrentUser() {
+  const raw = sessionStorage.getItem(SESSION_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+export function logout() {
+  // Real version: also POST /api/auth/logout to invalidate the server session (SEC-11).
+  sessionStorage.removeItem(SESSION_KEY);
 }
 
 /**
