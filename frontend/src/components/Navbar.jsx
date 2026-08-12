@@ -12,7 +12,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-white/70 backdrop-blur-xl">
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-4 lg:px-8">
-        <button type="button" aria-label="Menu" className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-white/70 md:hidden">
+        <button type="button" aria-label="Menu" className="flex h-10 w-10 items-center justify-center rounded-lg text-ink transition hover:bg-white/70 md:hidden">
           <Menu size={22} />
         </button>
         <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold text-ink">
@@ -33,7 +33,7 @@ export default function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3">
-          <span className="hidden h-9 w-9 items-center justify-center rounded-full bg-ink/5 text-ink sm:flex">
+          <span className="hidden h-9 w-9 items-center justify-center rounded-lg bg-ink/5 text-ink sm:flex">
             <Bell size={17} />
           </span>
           <Link to="/signin" className="hidden text-sm font-medium text-ink-soft hover:text-ink sm:block">
@@ -41,7 +41,7 @@ export default function Navbar() {
           </Link>
           <Link
             to="/signup"
-            className="gradient-brand rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:scale-[1.02]"
+            className="gradient-brand rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition"
           >
             Start Free
           </Link>

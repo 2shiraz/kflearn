@@ -26,7 +26,7 @@ export default function FeaturesPage() {
       <section className="mx-auto max-w-4xl px-6 py-20 lg:px-10">
         <div className="space-y-5">
           {details.map((d) => (
-            <div key={d.title} className="glass-surface rounded-[18px] p-6">
+            <div key={d.title} className="glass-surface rounded-lg p-6">
               <h2 className="font-display text-xl font-extrabold text-ink">{d.title}</h2>
               <p className="mt-2 leading-relaxed text-ink-soft">{d.body}</p>
             </div>

@@ -13,7 +13,7 @@ export const SECTIONS = [
 export default function Sidebar({ active = "dashboard", onLogout }) {
   return (
     <aside className="sticky top-0 flex h-screen w-20 flex-col items-center border-r border-line bg-white/70 py-5 backdrop-blur-xl lg:w-60 lg:items-stretch lg:px-4">
-      <button type="button" aria-label="Menu" className="mb-5 flex h-10 w-10 items-center justify-center rounded-full text-ink lg:hidden">
+      <button type="button" aria-label="Menu" className="mb-5 flex h-10 w-10 items-center justify-center rounded-lg text-ink lg:hidden">
         <Menu size={22} />
       </button>
       <Link to="/dashboard" className="mb-8 flex items-center justify-center gap-2 lg:justify-start lg:px-2">

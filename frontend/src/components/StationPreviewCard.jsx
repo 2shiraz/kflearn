@@ -28,10 +28,10 @@ function ChecklistRow({ label, state }) {
 
 export default function StationPreviewCard() {
   return (
-    <div className="gradient-card w-full max-w-md rounded-[18px]" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.45)" }}>
+    <div className="gradient-card w-full max-w-md rounded-lg" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.45)" }}>
       <div className="flex items-center justify-between border-b border-line px-5 py-3">
         <span className="text-sm font-semibold text-ink">Cardiovascular Examination - Guided Mode</span>
-        <span className="gradient-pill flex items-center gap-1 rounded-full px-2 py-1 text-xs font-bold text-ink">
+        <span className="gradient-pill flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-bold text-ink">
           <Timer size={13} /> 06:12
         </span>
       </div>
@@ -48,7 +48,7 @@ export default function StationPreviewCard() {
 
           <div>
             <p className="flex items-center gap-1.5 text-xs font-bold uppercase text-rose-500">
-              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" /> Live Transcript
+              <span className="h-1.5 w-1.5 rounded-lg bg-rose-500" /> Live Transcript
             </p>
             <p className="mt-1 text-sm italic leading-relaxed text-ink-soft">
               "I would begin by washing my hands and introducing myself to Mr Ahmed. With your
@@ -57,7 +57,7 @@ export default function StationPreviewCard() {
           </div>
         </div>
 
-        <div className="glass-surface col-span-2 rounded-[14px] p-3">
+        <div className="glass-surface col-span-2 rounded-lg p-3">
           <p className="mb-1 text-xs font-bold uppercase text-ink-soft">Checklist</p>
           <ul className="space-y-0.5">
             {checklist.map((c) => (
@@ -71,7 +71,7 @@ export default function StationPreviewCard() {
         <span className="flex items-center gap-1.5 text-xs font-medium text-good">
           <Sparkles size={14} /> Score improved +13% since last attempt
         </span>
-        <div className="gradient-brand rounded-full px-4 py-2 text-center text-xs font-semibold text-white">
+        <div className="gradient-brand rounded-lg px-4 py-2 text-center text-xs font-semibold text-white">
           Score so far <span className="ml-1 text-sm">9 / 20</span>
         </div>
       </div>

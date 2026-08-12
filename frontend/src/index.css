@@ -24,8 +24,8 @@ body {
   font-family: var(--font-body);
   color: var(--color-ink);
   background:
-    radial-gradient(900px 500px at 8% -10%, rgba(255,143,207,0.26), transparent 60%),
-    radial-gradient(900px 600px at 100% 0%, rgba(127,184,255,0.30), transparent 60%),
+    radial-gradient(760px 420px at 6% -12%, rgba(255,143,207,0.10), transparent 60%),
+    radial-gradient(780px 500px at 100% -8%, rgba(127,184,255,0.12), transparent 62%),
     #FAFAFC;
   min-height: 100vh;
   overflow-x: hidden;
@@ -46,30 +46,27 @@ select {
 
 .app-gradient-bg {
   background:
-    radial-gradient(900px 500px at 8% -10%, rgba(255,143,207,0.26), transparent 60%),
-    radial-gradient(900px 600px at 100% 0%, rgba(127,184,255,0.30), transparent 60%),
+    radial-gradient(760px 420px at 6% -12%, rgba(255,143,207,0.10), transparent 60%),
+    radial-gradient(780px 500px at 100% -8%, rgba(127,184,255,0.12), transparent 62%),
     #FAFAFC;
 }
 
 .glass-surface {
-  background: rgba(255,255,255,0.76);
-  border: 1px solid rgba(20,18,31,0.07);
-  box-shadow: 0 2px 8px -4px rgba(20,18,31,0.08);
-  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(20,18,31,0.10);
+  box-shadow: 0 1px 3px rgba(20,18,31,0.05);
+  backdrop-filter: blur(8px);
 }
 
 .gradient-brand {
-  background: linear-gradient(135deg, #FF8FCF, #7FB8FF);
-  box-shadow: 0 8px 18px -9px rgba(127,139,255,0.7);
+  background: #6F7DFF;
+  box-shadow: 0 1px 3px rgba(99,113,242,0.22);
 }
 
 .gradient-pill {
-  border: 1.5px solid transparent;
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(90deg, #FF8FCF, #7FB8FF, #FFD84D, #FF8FCF) border-box;
-  background-size: 100% 100%, 300% auto;
-  box-shadow: 0 8px 24px -14px rgba(127,139,255,0.38);
+  border: 1px solid rgba(127,139,255,0.28);
+  background: rgba(255,255,255,0.92);
+  box-shadow: none;
 }
 
 .gradient-card {
@@ -78,10 +75,10 @@ select {
   --glow: rgba(127,139,255,0.34);
   position: relative;
   overflow: hidden;
-  background: rgba(255,255,255,0.84);
-  border: 1px solid rgba(20,18,31,0.07);
-  box-shadow: 0 2px 8px -4px rgba(20,18,31,0.08);
-  transition: transform 0.22s cubic-bezier(.2,.8,.2,1), box-shadow 0.22s ease, border-color 0.22s ease;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(20,18,31,0.10);
+  box-shadow: 0 1px 3px rgba(20,18,31,0.05);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
 
 .gradient-card::before {
@@ -89,8 +86,8 @@ select {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
-  background: linear-gradient(135deg, var(--g1), var(--g2));
+  padding: 1px;
+  background: #7F8BFF;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -100,18 +97,19 @@ select {
 }
 
 .gradient-card:hover {
-  transform: translateY(-4px);
-  border-color: transparent;
-  box-shadow: 0 20px 40px -18px var(--glow);
+  transform: translateY(-1px);
+  border-color: rgba(127,139,255,0.34);
+  box-shadow: 0 8px 18px -16px rgba(20,18,31,0.22);
 }
 
 .gradient-card:hover::before {
-  opacity: 1;
+  opacity: 0.45;
 }
 
 .gradient-icon {
-  background: linear-gradient(135deg, var(--g1, #FF8FCF), var(--g2, #7FB8FF));
-  box-shadow: 0 8px 16px -8px var(--glow, rgba(127,139,255,0.4));
+  background: color-mix(in srgb, var(--g1, #7F8BFF) 18%, white);
+  border: 1px solid rgba(20,18,31,0.06);
+  box-shadow: none;
 }
 
 @keyframes fade-up {

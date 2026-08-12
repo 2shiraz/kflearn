@@ -43,13 +43,13 @@ export default function SigninPage() {
           <span className="font-display text-lg font-bold">KF LearnSmart</span>
         </div>
 
-        <blockquote className="gradient-card max-w-md rounded-[18px] p-7" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" }}>
+        <blockquote className="gradient-card max-w-md rounded-lg p-7" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" }}>
           <p className="font-display text-2xl font-extrabold leading-snug">
             "KF LearnSmart helped me structure my cardiovascular examination properly. The AI
             feedback showed me exactly what I was missing in every attempt."
           </p>
           <footer className="mt-6 flex items-center gap-3">
-            <span className="gradient-brand flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold text-white">
+            <span className="gradient-brand flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold text-white">
               FA
             </span>
             <div className="text-sm">
@@ -65,7 +65,7 @@ export default function SigninPage() {
       </div>
 
       <div className="flex items-center justify-center px-6 py-16">
-        <div className="glass-surface w-full max-w-sm rounded-[18px] p-8">
+        <div className="glass-surface w-full max-w-sm rounded-lg p-8">
           <div className="mb-8 flex items-center gap-2 lg:hidden">
             <span className="gradient-brand flex h-8 w-8 items-center justify-center rounded-[9px] text-white">
               <Stethoscope size={18} strokeWidth={2.5} />
@@ -89,7 +89,7 @@ export default function SigninPage() {
                 value={form.email}
                 onChange={handleChange}
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-line bg-white/80 px-4 py-3 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20"
+                className="w-full rounded-lg border border-line bg-white/80 px-4 py-3 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20"
               />
             </div>
 
@@ -112,7 +112,7 @@ export default function SigninPage() {
                   value={form.password}
                   onChange={handleChange}
                   placeholder="Enter password"
-                  className="w-full rounded-xl border border-line bg-white/80 px-4 py-3 pr-11 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20"
+                  className="w-full rounded-lg border border-line bg-white/80 px-4 py-3 pr-11 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20"
                 />
                 <button
                   type="button"
@@ -126,13 +126,13 @@ export default function SigninPage() {
             </div>
 
             {status === "error" && (
-              <p className="rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
+              <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
             )}
 
             <button
               type="submit"
               disabled={status === "loading"}
-              className="gradient-brand flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] disabled:opacity-60"
+              className="gradient-brand flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
             >
               {status === "loading" && <Loader2 size={16} className="animate-spin" />}
               Sign in
@@ -148,7 +148,7 @@ export default function SigninPage() {
           <button
             type="button"
             onClick={handleGoogleClick}
-            className="glass-surface flex w-full items-center justify-center gap-2.5 rounded-full px-4 py-3 text-sm font-semibold text-ink transition hover:border-brand"
+            className="glass-surface flex w-full items-center justify-center gap-2.5 rounded-lg px-4 py-3 text-sm font-semibold text-ink transition hover:border-brand"
           >
             <GoogleIcon />
             Continue with Google

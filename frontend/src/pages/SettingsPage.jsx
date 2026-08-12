@@ -47,7 +47,7 @@ export default function SettingsPage() {
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-12 lg:px-10">
         <div className="flex items-center gap-3">
-          <span className="gradient-brand flex h-11 w-11 items-center justify-center rounded-[13px] text-white">
+          <span className="gradient-brand flex h-11 w-11 items-center justify-center rounded-lg text-white">
             <User size={20} />
           </span>
           <div>
@@ -57,18 +57,18 @@ export default function SettingsPage() {
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[280px_1fr]">
-          <div className="gradient-card h-fit rounded-[18px]" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" }}>
+          <div className="gradient-card h-fit rounded-lg" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" }}>
             <div className="h-16 bg-gradient-to-r from-[#FF8FCF] to-[#7FB8FF]" />
             <div className="px-6 pb-6 text-center">
               <div className="group relative -mt-10 inline-block">
-                <span className="gradient-brand flex h-20 w-20 items-center justify-center rounded-full border-4 border-white text-2xl font-bold text-white shadow-md">
+                <span className="gradient-brand flex h-20 w-20 items-center justify-center rounded-lg border-4 border-white text-2xl font-bold text-white shadow-md">
                   {initials}
                 </span>
                 <button
                   type="button"
                   disabled
                   title="Photo upload isn't wired up yet"
-                  className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-ink text-white opacity-60"
+                  className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-lg border-2 border-white bg-ink text-white opacity-60"
                 >
                   <Camera size={13} />
                 </button>
@@ -78,12 +78,12 @@ export default function SettingsPage() {
               <p className="text-sm text-ink-soft">{form.yearLevel} - {form.institution}</p>
 
               <div className="mt-4 flex justify-center gap-2">
-                <span className="gradient-pill rounded-full px-3 py-1 text-xs font-bold text-ink">{form.role}</span>
+                <span className="gradient-pill rounded-lg px-3 py-1 text-xs font-bold text-ink">{form.role}</span>
               </div>
             </div>
           </div>
 
-          <form onSubmit={handleSave} className="glass-surface rounded-[18px] p-7">
+          <form onSubmit={handleSave} className="glass-surface rounded-lg p-7">
             <h2 className="flex items-center gap-2 font-display text-base font-extrabold text-ink">
               <GraduationCap size={18} className="text-brand" /> Academic profile
             </h2>
@@ -103,12 +103,12 @@ export default function SettingsPage() {
             <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-line pt-6">
               <button
                 type="submit"
-                className="gradient-brand rounded-full px-6 py-2.5 text-sm font-semibold text-white transition hover:scale-[1.02]"
+                className="gradient-brand rounded-lg px-6 py-2.5 text-sm font-semibold text-white transition"
               >
                 Save changes
               </button>
               {saved && (
-                <span className="flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-sm font-medium text-good">
+                <span className="flex items-center gap-1.5 rounded-lg bg-white/80 px-3 py-1.5 text-sm font-medium text-good">
                   <Check size={15} /> Saved locally - not yet connected to backend
                 </span>
               )}
@@ -136,7 +136,7 @@ function Field({ icon: Icon, label, name, value, onChange, type = "text", placeh
           placeholder={placeholder}
           onChange={onChange}
           disabled={disabled}
-          className="w-full rounded-xl border border-line bg-white/80 py-2.5 pl-10 pr-3.5 text-sm text-ink outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20 disabled:opacity-60"
+          className="w-full rounded-lg border border-line bg-white/80 py-2.5 pl-10 pr-3.5 text-sm text-ink outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20 disabled:opacity-60"
         />
       </div>
     </label>

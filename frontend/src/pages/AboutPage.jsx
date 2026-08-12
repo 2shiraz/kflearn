@@ -32,7 +32,7 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-16 lg:px-10">
-        <p className="glass-surface rounded-[18px] p-6 leading-relaxed text-ink-soft">
+        <p className="glass-surface rounded-lg p-6 leading-relaxed text-ink-soft">
           KF LearnSmart is a low-cost, web-first platform offering PMDC- and CPSP-aligned OSCE
           stations, history-taking modules, clinical examination guides, and an AI-powered Virtual
           Examiner and Feedback Coach - built specifically for undergraduate MBBS students and
@@ -41,8 +41,8 @@ export default function AboutPage() {
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2">
           {principles.map((p, i) => (
-            <div key={p.title} style={gradients[i % gradients.length]} className="gradient-card rounded-[18px] p-6">
-              <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-[13px] text-ink">
+            <div key={p.title} style={gradients[i % gradients.length]} className="gradient-card rounded-lg p-6">
+              <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-lg text-ink">
                 <p.icon size={18} />
               </span>
               <h3 className="mt-4 font-display text-base font-extrabold text-ink">{p.title}</h3>

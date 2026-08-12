@@ -30,8 +30,8 @@ export default function HowItWorks() {
 
         <div className="mt-12 grid gap-6 text-left sm:grid-cols-3">
           {steps.map((s) => (
-            <div key={s.n} style={s.style} className="gradient-card rounded-[18px] p-6">
-              <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-[13px] text-ink">
+            <div key={s.n} style={s.style} className="gradient-card rounded-lg p-6">
+              <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-lg text-ink">
                 <s.icon size={18} />
               </span>
               <p className="mt-4 font-mono text-xs text-ink-soft">{s.n}</p>

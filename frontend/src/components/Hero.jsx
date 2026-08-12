@@ -6,7 +6,7 @@ export default function Hero() {
     <section className="app-gradient-bg">
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-2 lg:px-10 lg:py-28">
         <div>
-          <span className="gradient-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-ink">
+          <span className="gradient-pill inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold text-ink">
             <GraduationCap size={14} /> Built for Pakistani medical students
           </span>
 
@@ -22,13 +22,13 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
               href="#"
-              className="gradient-brand flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02]"
+              className="gradient-brand flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-white transition"
             >
               Start Practising <ArrowRight size={16} />
             </a>
             <a
               href="#"
-              className="glass-surface rounded-full px-6 py-3 text-sm font-semibold text-ink transition hover:border-brand"
+              className="glass-surface rounded-lg px-6 py-3 text-sm font-semibold text-ink transition hover:border-brand"
             >
               Explore Sample Stations
             </a>

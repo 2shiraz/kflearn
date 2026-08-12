@@ -70,8 +70,8 @@ export default function DashboardPage() {
             <p className="mt-1 text-ink-soft">What would you like to practise today?</p>
           </div>
 
-          <div className="glass-surface flex shrink-0 items-center gap-2 rounded-full py-1.5 pl-1.5 pr-4">
-            <span className="gradient-brand flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold text-white">
+          <div className="glass-surface flex shrink-0 items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-4">
+            <span className="gradient-brand flex h-8 w-8 items-center justify-center rounded-lg text-xs font-semibold text-white">
               {user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
             </span>
             <span className="hidden text-left sm:block">
@@ -87,13 +87,13 @@ export default function DashboardPage() {
               key={s.key}
               to={s.href}
               style={{ ...s.iconStyle, animationDelay: `${100 + i * 80}ms` }}
-              className="gradient-card group animate-fade-up block min-h-[172px] rounded-[18px] p-6"
+              className="gradient-card group animate-fade-up block min-h-[172px] rounded-lg p-6"
             >
               <div className="flex items-start justify-between">
-                <span className={`gradient-icon flex h-12 w-12 items-center justify-center rounded-[13px] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${s.iconText}`}>
+                <span className={`gradient-icon flex h-12 w-12 items-center justify-center rounded-lg ${s.iconText}`}>
                   <s.icon size={20} />
                 </span>
-                <span className={`gradient-pill rounded-full px-3 py-1 text-xs font-semibold ${s.badgeText}`}>
+                <span className={`gradient-pill rounded-lg px-3 py-1 text-xs font-semibold ${s.badgeText}`}>
                   {s.badge}
                 </span>
               </div>

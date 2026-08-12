@@ -29,7 +29,7 @@ export default function PricingPage() {
           <p className="mx-auto mt-4 max-w-xl text-ink-soft">
             Core access stays free. Premium unlocks the full station library and every AI feature.
           </p>
-          <p className="gradient-pill mt-3 inline-block rounded-full px-3 py-1 text-xs font-bold text-ink">
+          <p className="gradient-pill mt-3 inline-block rounded-lg px-3 py-1 text-xs font-bold text-ink">
             Placeholder pricing - figures below are not final
           </p>
         </div>
@@ -41,10 +41,10 @@ export default function PricingPage() {
             <div
               key={t.name}
               style={t.highlighted ? { "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" } : { "--g1": "#7FB8FF", "--g2": "#C6A6FF", "--glow": "rgba(150,160,255,0.28)" }}
-              className="gradient-card rounded-[18px] p-8"
+              className="gradient-card rounded-lg p-8"
             >
               {t.highlighted && (
-                <span className="gradient-brand mb-3 inline-block rounded-full px-3 py-1 text-xs font-semibold text-white">
+                <span className="gradient-brand mb-3 inline-block rounded-lg px-3 py-1 text-xs font-semibold text-white">
                   Most popular
                 </span>
               )}
@@ -62,9 +62,9 @@ export default function PricingPage() {
               </ul>
               <Link
                 to="/signin"
-                className={`mt-8 block rounded-full px-4 py-2.5 text-center text-sm font-semibold transition ${
+                className={`mt-8 block rounded-lg px-4 py-2.5 text-center text-sm font-semibold transition ${
                   t.highlighted
-                    ? "gradient-brand text-white hover:scale-[1.02]"
+                    ? "gradient-brand text-white"
                     : "glass-surface text-ink hover:border-brand"
                 }`}
               >

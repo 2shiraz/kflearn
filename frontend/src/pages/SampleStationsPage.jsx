@@ -35,8 +35,8 @@ export default function SampleStationsPage() {
       <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {sampleStations.map((s, i) => (
-            <div key={s.title} style={gradients[i % gradients.length]} className="gradient-card rounded-[18px] p-6">
-              <span className="gradient-pill inline-block rounded-full px-2.5 py-1 text-xs font-bold text-ink">
+            <div key={s.title} style={gradients[i % gradients.length]} className="gradient-card rounded-lg p-6">
+              <span className="gradient-pill inline-block rounded-lg px-2.5 py-1 text-xs font-bold text-ink">
                 {s.specialty}
               </span>
               <h3 className="mt-3 font-display text-lg font-extrabold text-ink">{s.title}</h3>

@@ -55,8 +55,8 @@ export default function FeatureGrid({ compact = false }) {
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <div key={f.title} style={f.style} className="gradient-card rounded-[18px] p-6">
-              <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-[13px] text-ink">
+            <div key={f.title} style={f.style} className="gradient-card rounded-lg p-6">
+              <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-lg text-ink">
                 <f.icon size={18} />
               </span>
               <h3 className="mt-4 font-display text-base font-extrabold text-ink">{f.title}</h3>

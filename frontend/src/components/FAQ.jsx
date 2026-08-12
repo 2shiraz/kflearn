@@ -26,7 +26,7 @@ const faqs = [
 
 function FaqItem({ q, a, isOpen, onToggle }) {
   return (
-    <div className="glass-surface rounded-[18px]">
+    <div className="glass-surface rounded-lg">
       <button
         onClick={onToggle}
         className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left"
