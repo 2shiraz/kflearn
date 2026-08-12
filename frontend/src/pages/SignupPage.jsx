@@ -9,12 +9,11 @@ import {
   Eye,
   EyeOff,
   GraduationCap,
-  Loader2,
   Stethoscope,
   Target,
   User,
 } from "lucide-react";
-import { getCurrentUser, registerRequest, ROLE_OPTIONS, saveProfileDetails } from "../lib/api";
+import { registerRequest, ROLE_OPTIONS } from "../lib/api";
 
 const STEP_LABELS = ["Account", "Role", "Profile"];
 
@@ -30,34 +29,32 @@ export default function SignupPage() {
     institution: "", programme: "MBBS", yearLevel: "", targetExam: "", expectedExamDate: "",
   });
 
-  async function handleAccountSubmit(e) {
+  function handleAccountSubmit(e) {
     e.preventDefault();
-    setStatus("loading");
     setError("");
-    try {
-      const data = await registerRequest({ ...account, roleLabel: "" });
-      sessionStorage.setItem("kf_mock_user", JSON.stringify(data.user));
-      setStatus("idle");
-      setStep(2);
-    } catch (err) {
-      setStatus("error");
-      setError(err.message);
-    }
+    setStatus("idle");
+    setStep(2);
   }
 
   function handleRoleContinue() {
     if (!role) return;
-    const user = getCurrentUser();
-    if (user) saveProfileDetails(user, { roleLabel: role });
     setStep(3);
   }
 
-  function finishToDashboard(withProfile) {
-    const user = getCurrentUser();
-    if (user && withProfile) {
-      saveProfileDetails(user, profile);
+  async function finishToDashboard(withProfile) {
+    setStatus("loading");
+    setError("");
+    try {
+      await registerRequest({
+        ...account,
+        roleLabel: role,
+        profile: withProfile ? profile : {},
+      });
+      window.location.href = "/dashboard";
+    } catch (err) {
+      setStatus("error");
+      setError(err.message);
     }
-    window.location.href = "/dashboard";
   }
 
   return (
@@ -140,8 +137,7 @@ export default function SignupPage() {
                 disabled={status === "loading"}
                 className="gradient-brand flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
               >
-                {status === "loading" && <Loader2 size={16} className="animate-spin" />}
-                Continue
+                {status === "loading" ? "Creating account..." : "Continue"}
               </button>
             </form>
 
@@ -216,17 +212,22 @@ export default function SignupPage() {
             <div className="mt-7 flex gap-3">
               <button
                 onClick={() => finishToDashboard(false)}
+                disabled={status === "loading"}
                 className="glass-surface flex-1 rounded-lg px-4 py-3 text-sm font-semibold text-ink-soft transition hover:border-brand hover:text-ink"
               >
                 Skip for now
               </button>
               <button
                 onClick={() => finishToDashboard(true)}
+                disabled={status === "loading"}
                 className="gradient-brand flex-1 rounded-lg px-4 py-3 text-sm font-semibold text-white transition"
               >
-                Done
+                {status === "loading" ? "Creating..." : "Done"}
               </button>
             </div>
+            {status === "error" && (
+              <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
+            )}
           </>
         )}
       </div>

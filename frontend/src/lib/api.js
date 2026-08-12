@@ -1,44 +1,8 @@
-// Central API client. Every function here returns the SAME shape as the
-// real backend will, per API_SPEC.md — so flipping USE_MOCK to false is
-// the only change needed when the backend is ready. Nothing in the pages
-// should import fetch() directly; they call these functions instead.
-
-const USE_MOCK = true; // <-- flip this when backend/auth endpoints are live
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
-// Seed accounts for local frontend dev / demoing without a backend.
-const MOCK_USERS = [
-  {
-    email: "student@kflearn.pk",
-    password: "Student123",
-    user: { id: "u_001", fullName: "Ayesha Khan", email: "student@kflearn.pk", role: "student", roleLabel: "MBBS Yr 4" },
-  },
-  {
-    email: "contributor@kflearn.pk",
-    password: "Contrib123",
-    user: { id: "u_002", fullName: "Dr. Bilal Ahmed", email: "contributor@kflearn.pk", role: "contributor", roleLabel: "Clinical Content Contributor" },
-  },
-];
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-const SESSION_KEY = "kf_mock_user";
-
-/**
- * Returns the currently "logged in" mock user, or null.
- * Real version: this becomes a call to GET /api/auth/me on app load.
- */
-export function getCurrentUser() {
-  const raw = sessionStorage.getItem(SESSION_KEY);
-  return raw ? JSON.parse(raw) : null;
-}
-
-export function logout() {
-  // Real version: also POST /api/auth/logout to invalidate the server session (SEC-11).
-  sessionStorage.removeItem(SESSION_KEY);
-}
+const SESSION_KEY = "kf_user";
+const LEGACY_SESSION_KEY = "kf_mock_user";
+const TOKEN_KEY = "kf_auth_token";
 
 export const ROLE_OPTIONS = [
   "MBBS Student",
@@ -48,76 +12,197 @@ export const ROLE_OPTIONS = [
   "Other Medical Learner",
 ];
 
-/**
- * POST /api/auth/register (FR-1.1) — creates the account.
- * On success in mock mode, also logs the user in immediately (no email
- * verification step in mock mode; real version requires FR-1.2 verification
- * before the account is usable — see API_SPEC.md).
- * @returns {Promise<{token: string, expiresIn: number, user: object}>}
- */
-export async function registerRequest({ fullName, email, password, roleLabel }) {
-  if (USE_MOCK) {
-    await delay(600);
-    if (MOCK_USERS.some((u) => u.email === email)) {
-      throw new Error("An account with this email already exists.");
-    }
-    const user = {
-      id: `u_${Date.now()}`,
-      fullName,
-      email,
-      role: "student",
-      roleLabel,
-    };
-    return { token: "mock-jwt-token", expiresIn: 86400, user };
-  }
-
-  const res = await fetch(`${API_BASE}/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ fullName, email, password, role: "student" }),
-  });
-  const data = await res.json();
-  if (!res.ok || !data.success) {
-    throw new Error(data.message || "Something went wrong. Please try again.");
-  }
-  return data.data;
+export function saveAuthSession(data) {
+  sessionStorage.removeItem(LEGACY_SESSION_KEY);
+  if (data?.token) sessionStorage.setItem(TOKEN_KEY, data.token);
+  if (data?.user) sessionStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  return data;
 }
 
-/**
- * PATCH /api/users/me — saves the optional academic-profile step.
- * Mock mode merges it straight into the session user.
- */
+export function getCurrentUser() {
+  sessionStorage.removeItem(LEGACY_SESSION_KEY);
+  const raw = sessionStorage.getItem(SESSION_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    logout();
+    return null;
+  }
+}
+
+export function getAuthToken() {
+  const token = sessionStorage.getItem(TOKEN_KEY);
+  if (token === "mock-jwt-token") {
+    logout();
+    return null;
+  }
+  return token;
+}
+
+export function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(LEGACY_SESSION_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+}
+
+export async function registerRequest({ fullName, email, password, roleLabel, profile }) {
+  const data = await publicFetch("/auth/register", {
+    method: "POST",
+    body: JSON.stringify({ fullName, email, password, roleLabel, profile }),
+  });
+  return saveAuthSession(data);
+}
+
+export async function loginRequest({ email, password }) {
+  const data = await publicFetch("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+  return saveAuthSession(data);
+}
+
+export async function fetchCurrentUser() {
+  const data = await apiFetch("/auth/me");
+  if (data?.user) sessionStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  return data;
+}
+
+export async function updateProfileRequest(payload) {
+  const data = await apiFetch("/auth/me", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+  if (data?.user) sessionStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  return data;
+}
+
 export function saveProfileDetails(user, profile) {
-  const merged = { ...user, ...profile };
+  const merged = { ...user, ...profile, profile: { ...(user?.profile || {}), ...profile } };
   sessionStorage.setItem(SESSION_KEY, JSON.stringify(merged));
   return merged;
 }
 
-/**
- * POST /api/auth/login
- * @param {{email: string, password: string}} credentials
- * @returns {Promise<{token: string, expiresIn: number, user: object}>}
- */
-export async function loginRequest({ email, password }) {
-  if (USE_MOCK) {
-    await delay(600); // simulate network latency
-    const match = MOCK_USERS.find((u) => u.email === email && u.password === password);
-    if (!match) {
-      throw new Error("Incorrect email or password.");
-    }
-    return { token: "mock-jwt-token", expiresIn: 86400, user: match.user };
-  }
-
-  const res = await fetch(`${API_BASE}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ email, password }),
+async function publicFetch(path, options = {}) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
   });
-  const data = await res.json();
-  if (!res.ok || !data.success) {
-    throw new Error(data.message || "Something went wrong. Please try again.");
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.success === false) {
+    throw new Error(data.message || "Request failed.");
   }
   return data.data;
+}
+
+async function apiFetch(path, options = {}) {
+  const token = getAuthToken();
+  if (!token) {
+    logout();
+    window.location.href = "/signin";
+    throw new Error("Authentication required.");
+  }
+
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: {
+      ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
+      Authorization: `Bearer ${token}`,
+      ...(options.headers || {}),
+    },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) {
+    logout();
+    window.location.href = "/signin";
+  }
+  if (!res.ok || data.success === false) {
+    throw new Error(data.message || "Request failed.");
+  }
+  return data.data;
+}
+
+export function listHistoryModules() {
+  return apiFetch("/history");
+}
+
+export function getHistoryModule(slug) {
+  return apiFetch(`/history/${slug}`);
+}
+
+export function getSinglePlayerContent(slug) {
+  return apiFetch(`/history/${slug}/single-player`);
+}
+
+export function createHistoryAttempt({ moduleId, mode }) {
+  return apiFetch("/history/attempts", {
+    method: "POST",
+    body: JSON.stringify({ moduleId, mode }),
+  });
+}
+
+export function getHistoryAttempt(attemptId) {
+  return apiFetch(`/history/attempts/${attemptId}`);
+}
+
+export function listHistoryAttempts() {
+  return apiFetch("/history/attempts");
+}
+
+export function sendPatientMessage(attemptId, payload) {
+  return apiFetch(`/history/attempts/${attemptId}/messages`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function endHistoryAttempt(attemptId, payload = {}) {
+  return apiFetch(`/history/attempts/${attemptId}/end`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function selfAssessHistoryAttempt(attemptId, checkedItemIds) {
+  return apiFetch(`/history/attempts/${attemptId}/self-assessment`, {
+    method: "POST",
+    body: JSON.stringify({ checkedItemIds }),
+  });
+}
+
+export function aiAssessHistoryAttempt(attemptId) {
+  return apiFetch(`/history/attempts/${attemptId}/ai-assessment`, {
+    method: "POST",
+    body: JSON.stringify({}),
+  });
+}
+
+export function transcribeHistoryAudio(attemptId, audioBlob) {
+  const form = new FormData();
+  form.append("audio", audioBlob, "question.webm");
+  return apiFetch(`/history/attempts/${attemptId}/transcribe`, {
+    method: "POST",
+    body: form,
+  });
+}
+
+export function listAdminHistoryModules() {
+  return apiFetch("/admin/history");
+}
+
+export function createAdminHistoryContent(payload) {
+  return apiFetch("/admin/history", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function publishAdminHistoryModule(id) {
+  return apiFetch(`/admin/history/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status: "published" }),
+  });
 }

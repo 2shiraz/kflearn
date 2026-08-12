@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { Stethoscope, LayoutGrid, ClipboardList, MessageSquareText, FileText, TrendingUp, Settings, LogOut, Menu } from "lucide-react";
+import { Stethoscope, LayoutGrid, ClipboardList, MessageSquareText, FileText, TrendingUp, Settings, LogOut, Menu, ShieldCheck } from "lucide-react";
+import { getCurrentUser } from "../lib/api";
 
 export const SECTIONS = [
   { key: "dashboard", label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
-  { key: "history", label: "History Taking", icon: MessageSquareText, href: "/history-taking" },
+  { key: "history", label: "History Taking", icon: MessageSquareText, href: "/history" },
   { key: "clinical-exam", label: "Clinical Examination", icon: Stethoscope, href: "/clinical-examination" },
   { key: "handouts", label: "Handout Notes", icon: FileText, href: "/handout-notes" },
   { key: "stations", label: "OSCE Stations", icon: ClipboardList, href: "/stations" },
@@ -11,6 +12,9 @@ export const SECTIONS = [
 ];
 
 export default function Sidebar({ active = "dashboard", onLogout }) {
+  const user = getCurrentUser();
+  const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", icon: ShieldCheck, href: "/admin/history" }] : SECTIONS;
+
   return (
     <aside className="sticky top-0 flex h-screen w-20 flex-col items-center border-r border-line bg-white/70 py-5 backdrop-blur-xl lg:w-60 lg:items-stretch lg:px-4">
       <button type="button" aria-label="Menu" className="mb-5 flex h-10 w-10 items-center justify-center rounded-lg text-ink lg:hidden">
@@ -24,7 +28,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
       </Link>
 
       <nav className="flex flex-1 flex-col gap-2">
-        {SECTIONS.map((s) => {
+        {navSections.map((s) => {
           const isActive = s.key === active;
           return (
             <Link

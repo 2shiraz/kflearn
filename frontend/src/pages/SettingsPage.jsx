@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { BookOpen, Building2, CalendarClock, Camera, Check, GraduationCap, Mail, Sparkles, Target, User } from "lucide-react";
-import { getCurrentUser, logout } from "../lib/api";
+import { fetchCurrentUser, getCurrentUser, logout, updateProfileRequest } from "../lib/api";
 import Sidebar from "../components/Sidebar";
 
 export default function SettingsPage() {
   const [user, setUser] = useState(null);
   const [form, setForm] = useState(null);
   const [saved, setSaved] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const u = getCurrentUser();
@@ -14,17 +16,10 @@ export default function SettingsPage() {
       window.location.href = "/signin";
       return;
     }
-    setUser(u);
-    setForm({
-      fullName: u.fullName,
-      email: u.email,
-      role: u.role === "contributor" ? "Clinical Content Contributor" : "MBBS Student",
-      institution: "Allama Iqbal Medical College",
-      programme: "MBBS",
-      yearLevel: "Year 4",
-      targetExam: "FCPS Part 1",
-      expectedExamDate: "March 2027",
-    });
+    applyUser(u);
+    fetchCurrentUser().then((data) => {
+      if (data?.user) applyUser(data.user);
+    }).catch(() => {});
   }, []);
 
   if (!user || !form) return null;
@@ -34,9 +29,43 @@ export default function SettingsPage() {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   }
 
-  function handleSave(e) {
+  async function handleSave(e) {
     e.preventDefault();
-    setSaved(true);
+    setStatus("loading");
+    setError("");
+    try {
+      const data = await updateProfileRequest({
+        fullName: form.fullName,
+        roleLabel: form.role,
+        profile: {
+          institution: form.institution,
+          programme: form.programme,
+          yearLevel: form.yearLevel,
+          targetExam: form.targetExam,
+          expectedExamDate: form.expectedExamDate,
+        },
+      });
+      if (data?.user) applyUser(data.user);
+      setSaved(true);
+      setStatus("idle");
+    } catch (err) {
+      setError(err.message);
+      setStatus("error");
+    }
+  }
+
+  function applyUser(nextUser) {
+    setUser(nextUser);
+    setForm({
+      fullName: nextUser.fullName || "",
+      email: nextUser.email || "",
+      role: nextUser.roleLabel || (nextUser.role === "admin" ? "Admin" : "MBBS Student"),
+      institution: nextUser.institution || nextUser.profile?.institution || "",
+      programme: nextUser.programme || nextUser.profile?.programme || "",
+      yearLevel: nextUser.yearLevel || nextUser.profile?.yearLevel || "",
+      targetExam: nextUser.targetExam || nextUser.profile?.targetExam || "",
+      expectedExamDate: nextUser.expectedExamDate || nextUser.profile?.expectedExamDate || "",
+    });
   }
 
   const initials = form.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
@@ -45,7 +74,7 @@ export default function SettingsPage() {
     <div className="app-gradient-bg flex min-h-screen">
       <Sidebar active="settings" onLogout={() => { logout(); window.location.href = "/signin"; }} />
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-12 lg:px-10">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-5 py-8 lg:px-8">
         <div className="flex items-center gap-3">
           <span className="gradient-brand flex h-11 w-11 items-center justify-center rounded-lg text-white">
             <User size={20} />
@@ -91,7 +120,7 @@ export default function SettingsPage() {
 
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <Field icon={User} label="Full name" name="fullName" value={form.fullName} onChange={handleChange} />
-              <Field icon={Mail} label="Email" name="email" type="email" value={form.email} onChange={handleChange} />
+              <Field icon={Mail} label="Email" name="email" type="email" value={form.email} onChange={handleChange} disabled />
               <Field icon={GraduationCap} label="Role" name="role" value={form.role} onChange={handleChange} disabled />
               <Field icon={Building2} label="Institution" name="institution" value={form.institution} onChange={handleChange} />
               <Field icon={BookOpen} label="Programme" name="programme" value={form.programme} onChange={handleChange} />
@@ -103,15 +132,17 @@ export default function SettingsPage() {
             <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-line pt-6">
               <button
                 type="submit"
+                disabled={status === "loading"}
                 className="gradient-brand rounded-lg px-6 py-2.5 text-sm font-semibold text-white transition"
               >
-                Save changes
+                {status === "loading" ? "Saving..." : "Save changes"}
               </button>
               {saved && (
                 <span className="flex items-center gap-1.5 rounded-lg bg-white/80 px-3 py-1.5 text-sm font-medium text-good">
-                  <Check size={15} /> Saved locally - not yet connected to backend
+                  <Check size={15} /> Saved
                 </span>
               )}
+              {status === "error" && <span className="rounded-lg bg-rose-50 px-3 py-1.5 text-sm font-medium text-rose-600">{error}</span>}
               <span className="ml-auto flex items-center gap-1 text-xs text-ink-soft">
                 <Sparkles size={13} /> Used to personalise your dashboard
               </span>

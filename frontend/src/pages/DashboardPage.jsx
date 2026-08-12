@@ -60,7 +60,7 @@ export default function DashboardPage() {
     <div className="app-gradient-bg flex min-h-screen">
       <Sidebar active="dashboard" onLogout={() => { logout(); window.location.href = "/signin"; }} />
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-12 lg:px-10">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-5 py-8 lg:px-8">
         <div className="flex animate-fade-up items-start justify-between gap-4">
           <div>
             <p className="mb-2 text-sm font-semibold text-ink-soft">Dashboard</p>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Loader2, ShieldCheck, Stethoscope } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck, Stethoscope } from "lucide-react";
 import { loginRequest } from "../lib/api";
 
 export default function SigninPage() {
@@ -19,8 +19,7 @@ export default function SigninPage() {
     setError("");
 
     try {
-      const data = await loginRequest(form);
-      sessionStorage.setItem("kf_mock_user", JSON.stringify(data.user));
+      await loginRequest(form);
       window.location.href = "/dashboard";
     } catch (err) {
       setStatus("error");
@@ -134,8 +133,7 @@ export default function SigninPage() {
               disabled={status === "loading"}
               className="gradient-brand flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
             >
-              {status === "loading" && <Loader2 size={16} className="animate-spin" />}
-              Sign in
+              {status === "loading" ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
