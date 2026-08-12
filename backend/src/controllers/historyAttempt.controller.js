@@ -33,15 +33,7 @@ export async function createAttempt(req, res) {
     moduleVersion: module.version,
     mode,
     status: "active",
-    messages: mode === "virtual-patient"
-      ? [{
-        messageId: messageId("patient"),
-        role: "patient",
-        inputType: "typed",
-        finalText: patientScript.openingStatement,
-        matchedFactIds: patientScript.facts.filter((fact) => fact.revealPolicy === "OPENING").map((fact) => fact.factId),
-      }]
-      : [],
+    messages: [],
   });
 
   res.status(201).json({ success: true, data: { attempt: attemptDto(attempt), module: studentModuleDetailDto(module) } });
@@ -49,8 +41,15 @@ export async function createAttempt(req, res) {
 
 export async function getAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
-  const { module, checklist } = await getModuleClinicalBundle(attempt.historyModuleId);
-  res.json({ success: true, data: { attempt: attemptDto(attempt), module: studentModuleDetailDto(module), checklist: checklistDto(checklist) } });
+  const { module, patientScript, checklist } = await getModuleClinicalBundle(attempt.historyModuleId);
+  res.json({
+    success: true,
+    data: {
+      attempt: attemptDto(attempt),
+      module: { ...studentModuleDetailDto(module), openingStatement: patientScript.openingStatement },
+      checklist: checklistDto(checklist),
+    },
+  });
 }
 
 export async function listAttempts(req, res) {
@@ -171,7 +170,9 @@ export function attemptDto(attempt) {
     endedAt: attempt.endedAt,
     elapsedSeconds: attempt.elapsedSeconds,
     notes: attempt.notes,
-    messages: attempt.messages.map((message) => ({
+    messages: attempt.messages
+      .filter((message) => message.role !== "system")
+      .map((message) => ({
       id: message.messageId,
       role: message.role,
       inputType: message.inputType,

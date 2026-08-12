@@ -109,6 +109,60 @@ test("patient response endpoint does not serialize hidden facts", async () => {
   assert.equal(JSON.stringify(res.body).includes("asthma_family_history"), false);
 });
 
+test("haematemesis virtual patient answers natural OSCE phrasing", async () => {
+  const auth = await registerTestUser("haem.patient@example.com");
+  const moduleRes = await request(app).get("/api/history").set("Authorization", auth);
+  const module = moduleRes.body.data.modules.find((item) => item.slug === "haematemesis-upper-gi-bleed-history");
+  assert.ok(module);
+
+  const create = await request(app)
+    .post("/api/history/attempts")
+    .set("Authorization", auth)
+    .send({ moduleId: module.id, mode: "virtual-patient" });
+  assert.equal(create.status, 201);
+
+  const cases = [
+    ["When did the vomiting blood start?", /started suddenly this morning|this morning/i],
+    ["What do you think might be causing this?", /related to my liver|liver/i],
+    ["What are you most worried about?", /bleeding inside|might die|scared/i],
+    ["Hi, I’m one of the doctors. Can I confirm your name and date of birth?", /50 years old/i],
+    ["I’d like to ask you some questions about what happened today. Is that okay?", /yes/i],
+  ];
+
+  for (const [text, expected] of cases) {
+    const res = await request(app)
+      .post(`/api/history/attempts/${create.body.data.attempt.id}/messages`)
+      .set("Authorization", auth)
+      .send({ text });
+    assert.equal(res.status, 200);
+    assert.match(res.body.data.patientMessage.text, expected);
+  }
+});
+
+test("virtual patient intent matching uses authored content across stations", async () => {
+  const seeded = await seedHistoryContent();
+  const auth = await registerTestUser("content.aware@example.com");
+  const create = await request(app)
+    .post("/api/history/attempts")
+    .set("Authorization", auth)
+    .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient" });
+  assert.equal(create.status, 201);
+
+  const worried = await request(app)
+    .post(`/api/history/attempts/${create.body.data.attempt.id}/messages`)
+    .set("Authorization", auth)
+    .send({ text: "What are you most worried about with this?" });
+  assert.equal(worried.status, 200);
+  assert.match(worried.body.data.patientMessage.text, /worried|exams|sports/i);
+
+  const medication = await request(app)
+    .post(`/api/history/attempts/${create.body.data.attempt.id}/messages`)
+    .set("Authorization", auth)
+    .send({ text: "Are you taking any tablets or medicines for it?" });
+  assert.equal(medication.status, 200);
+  assert.match(medication.body.data.patientMessage.text, /salbutamol|inhaler/i);
+});
+
 test("deterministic scoring and self assessment calculation", async () => {
   const seeded = await seedHistoryContent();
   const result = selfAssessChecklist(seeded.checklist, ["duration", "nocturnal"]);

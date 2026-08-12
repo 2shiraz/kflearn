@@ -3,9 +3,18 @@ import { getGroqClient } from "../config/groq.js";
 import { UnansweredQuestion } from "../models/UnansweredQuestion.js";
 import { buildVirtualPatientMessages } from "../prompts/virtualPatient.prompt.js";
 import { selectRelevantFacts } from "./historyIntent.service.js";
-import { normalizeText } from "../utils/text.js";
+import { keywordMatches, normalizeText } from "../utils/text.js";
 
 export async function generatePatientResponse({ patientScript, module, attempt, studentQuestion }) {
+  const conversationalResponse = buildConversationalResponse(patientScript, studentQuestion);
+  if (conversationalResponse) {
+    return {
+      text: conversationalResponse,
+      matchedFactIds: [],
+      matchedConceptIds: [],
+    };
+  }
+
   const { concepts, facts } = selectRelevantFacts(studentQuestion, patientScript);
 
   if (facts.length === 0) {
@@ -55,4 +64,31 @@ export async function generatePatientResponse({ patientScript, module, attempt, 
       matchedConceptIds: concepts,
     };
   }
+}
+
+function buildConversationalResponse(patientScript, studentQuestion) {
+  const question = normalizeText(studentQuestion);
+  const identity = patientScript.patientIdentity || {};
+
+  if (matchesAny(question, ["is that okay", "is that ok", "can i ask", "would like to ask", "take a history", "ask you some questions", "consent"])) {
+    return "Yes, that's okay.";
+  }
+
+  if (matchesAny(question, ["my name is", "i am one of the doctors", "im one of the doctors", "i m one of the doctors", "hello", "hi"])) {
+    if (!matchesAny(question, ["name", "date of birth", "dob", "confirm"])) return "Hello.";
+  }
+
+  if (matchesAny(question, ["confirm your name", "your name", "date of birth", "dob", "confirm your details"])) {
+    const details = [];
+    if (identity.name) details.push(`My name is ${identity.name}.`);
+    if (identity.age) details.push(`I am ${identity.age} years old.`);
+    if (details.length > 0) return details.join(" ");
+    return "I'm sorry, I don't think my name or date of birth has been provided.";
+  }
+
+  return "";
+}
+
+function matchesAny(question, terms) {
+  return terms.some((term) => keywordMatches(question, term));
 }

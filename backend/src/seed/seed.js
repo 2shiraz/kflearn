@@ -7,4 +7,13 @@ console.log(`Seeded history module: ${result.module.title}`);
 for (const module of result.respiratoryPdfHistoryModules) {
   console.log(`Seeded history module: ${module.title}`);
 }
+for (const module of result.gynaecologyHistoryModules) {
+  console.log(`Seeded history module: ${module.title}`);
+}
+for (const module of result.endocrinologyHistoryModules) {
+  console.log(`Seeded history module: ${module.title}`);
+}
+for (const module of result.gastroenterologyHistoryModules) {
+  console.log(`Seeded history module: ${module.title}`);
+}
 await disconnectDatabase();

@@ -360,7 +360,7 @@ export function SinglePlayerHistory() {
 export function VirtualPatientSession() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
-  const [state, setState] = useState({ loading: true, attempt: null, module: null, text: "", sending: false, error: "", recording: false, transcript: "", voiceMode: "" });
+  const [state, setState] = useState({ loading: true, attempt: null, module: null, text: "", sending: false, error: "", recording: false, transcript: "", voiceMode: "", speakPatient: false });
   const mediaRef = useRef(null);
   const recognitionRef = useRef(null);
   const chunksRef = useRef([]);
@@ -371,12 +371,24 @@ export function VirtualPatientSession() {
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [attemptId]);
 
+  useEffect(() => () => window.speechSynthesis?.cancel(), []);
+
+  function speak(text) {
+    if (!state.speakPatient || !window.speechSynthesis || !text) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  }
+
   async function send(text = state.text, inputType = "typed", originalTranscript = "") {
     if (!text.trim()) return;
     setState((s) => ({ ...s, sending: true, text: "", transcript: "" }));
     try {
       const data = await sendPatientMessage(attemptId, { text, inputType, originalTranscript });
       setState((s) => ({ ...s, sending: false, attempt: data.attempt }));
+      speak(data.patientMessage?.text);
     } catch (err) {
       setState((s) => ({ ...s, sending: false, error: err.message }));
     }
@@ -466,14 +478,30 @@ export function VirtualPatientSession() {
                     Virtual patient mode{state.voiceMode === "browser" ? " / browser dictation" : state.voiceMode === "groq" ? " / Groq fallback recording" : ""}
                   </p>
                 </div>
-                <span className="flex items-center gap-2 text-sm font-semibold text-ink-soft"><Timer size={16} /> Active</span>
+                <div className="flex flex-wrap items-center justify-end gap-3">
+                  <label className="glass-surface flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold text-ink">
+                    <input type="checkbox" checked={state.speakPatient} onChange={(e) => setState((s) => ({ ...s, speakPatient: e.target.checked }))} />
+                    Speak replies
+                  </label>
+                  <span className="flex items-center gap-2 text-sm font-semibold text-ink-soft"><Timer size={16} /> Active</span>
+                </div>
               </div>
-              <div className="flex-1 space-y-3 overflow-y-auto pr-1">
-                {state.attempt.messages.map((message) => (
-                  <div key={message.id} className={`max-w-[80%] rounded-lg p-3 text-sm ${message.role === "student" ? "ml-auto bg-brand text-white" : "bg-white/90 text-ink"}`}>
-                    {message.finalText}
+              <div className="flex min-h-[360px] flex-1 flex-col overflow-y-auto pr-1">
+                {state.attempt.messages.length === 0 ? (
+                  <div className="m-auto max-w-md text-center">
+                    <p className="text-sm font-semibold text-ink-soft">Patient opening</p>
+                    <p className="mt-2 rounded-lg border border-line bg-white/80 p-4 text-base font-semibold text-ink">{state.module?.openingStatement}</p>
+                    <p className="mt-3 text-sm text-ink-soft">Ask your first history question below.</p>
                   </div>
-                ))}
+                ) : (
+                  <div className="space-y-3">
+                    {state.attempt.messages.map((message) => (
+                      <div key={message.id} className={`max-w-[80%] rounded-lg p-3 text-sm ${message.role === "student" ? "ml-auto bg-brand text-white" : "bg-white/90 text-ink"}`}>
+                        {message.finalText}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               {state.transcript && (
                 <div className="mt-3 rounded-lg border border-line bg-white/80 p-3">
@@ -483,7 +511,7 @@ export function VirtualPatientSession() {
                 </div>
               )}
               <div className="mt-4 flex gap-2">
-                <input className="flex-1 rounded-lg border border-line bg-white/90 px-3 py-2 text-sm outline-none focus:border-brand" value={state.text} onChange={(e) => setState((s) => ({ ...s, text: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter") send(); }} placeholder="Ask Maya a history question..." />
+                <input className="flex-1 rounded-lg border border-line bg-white/90 px-3 py-2 text-sm outline-none focus:border-brand" value={state.text} onChange={(e) => setState((s) => ({ ...s, text: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter") send(); }} placeholder="Type your question..." />
                 <button aria-label="Record voice question" onClick={toggleRecording} className={`rounded-lg border border-line px-3 ${state.recording ? "bg-rose-50 text-rose-600" : "bg-white/90 text-ink"}`}>{state.recording ? <Square size={17} /> : <Mic size={17} />}</button>
                 <PrimaryButton onClick={() => send()} disabled={state.sending}>{state.sending ? "Sending..." : <Send size={16} />}</PrimaryButton>
               </div>

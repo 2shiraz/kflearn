@@ -3,6 +3,9 @@ import { HistoryModule } from "../models/HistoryModule.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 import { Specialty } from "../models/Specialty.js";
+import { seedEndocrinologyHistoryStations } from "./endocrinologyHistory.seed.js";
+import { seedGastroenterologyHistoryStations } from "./gastroenterologyHistory.seed.js";
+import { seedGynaecologyHistoryStations } from "./gynaecologyHistory.seed.js";
 import { seedRespiratoryPdfHistoryStations } from "./respiratoryPdfHistory.seed.js";
 
 export async function seedHistoryContent() {
@@ -333,8 +336,11 @@ export async function seedHistoryContent() {
   );
 
   const respiratoryPdfHistoryModules = await seedRespiratoryPdfHistoryStations({ respiratory, breathlessnessGuide });
+  const gynaecologyHistoryModules = await seedGynaecologyHistoryStations({ universalGuide });
+  const endocrinologyHistoryModules = await seedEndocrinologyHistoryStations({ universalGuide });
+  const gastroenterologyHistoryModules = await seedGastroenterologyHistoryStations({ universalGuide });
 
-  return { respiratory, universalGuide, breathlessnessGuide, patientScript, checklist, module, respiratoryPdfHistoryModules };
+  return { respiratory, universalGuide, breathlessnessGuide, patientScript, checklist, module, respiratoryPdfHistoryModules, gynaecologyHistoryModules, endocrinologyHistoryModules, gastroenterologyHistoryModules };
 }
 
 function fact(factId, section, conceptId, label, value, naturalResponse, revealPolicy, synonyms = []) {
