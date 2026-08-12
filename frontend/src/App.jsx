@@ -36,7 +36,7 @@ function LandingPage() {
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-white">
+      <div className="app-gradient-bg min-h-screen">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/features" element={<FeaturesPage />} />

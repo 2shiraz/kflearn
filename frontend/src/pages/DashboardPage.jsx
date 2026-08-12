@@ -9,25 +9,29 @@ const sections = [
     key: "history", label: "History Taking", href: "/history-taking",
     desc: "Practise structured patient consultations for common presenting complaints across all specialties.",
     badge: "30 modules", icon: MessageSquareText,
-    iconBg: "bg-indigo-50", iconText: "text-brand", badgeBg: "bg-indigo-50", badgeText: "text-brand",
+    iconStyle: { "--g1": "#FFD84D", "--g2": "#FFE38A", "--glow": "rgba(255,216,77,0.35)" },
+    iconText: "text-ink", badgeText: "text-brand",
   },
   {
     key: "clinical-exam", label: "Clinical Examination", href: "/clinical-examination",
     desc: "Step-by-step illustrated examination guides by body system, with downloadable checklists.",
     badge: "12 systems", icon: Stethoscope,
-    iconBg: "bg-emerald-50", iconText: "text-emerald-600", badgeBg: "bg-emerald-50", badgeText: "text-emerald-600",
+    iconStyle: { "--g1": "#7FB8FF", "--g2": "#A6D0FF", "--glow": "rgba(127,184,255,0.35)" },
+    iconText: "text-ink", badgeText: "text-brand",
   },
   {
     key: "handouts", label: "Handout Notes", href: "/handout-notes",
     desc: "Concise revision notes and downloadable PDFs organised by specialty — ideal for quick review.",
     badge: "PDF downloads", icon: FileText,
-    iconBg: "bg-amber-50", iconText: "text-amber-600", badgeBg: "bg-amber-50", badgeText: "text-amber-600",
+    iconStyle: { "--g1": "#7FB8FF", "--g2": "#C6A6FF", "--glow": "rgba(150,160,255,0.35)" },
+    iconText: "text-ink", badgeText: "text-brand",
   },
   {
     key: "stations", label: "OSCE Stations", href: "/stations",
     desc: "Timed clinical stations with AI evaluation, structured checklists, and viva questions.",
     badge: "200+ stations", icon: ClipboardList,
-    iconBg: "bg-violet-50", iconText: "text-violet-600", badgeBg: "bg-violet-50", badgeText: "text-violet-600",
+    iconStyle: { "--g1": "#FF8FCF", "--g2": "#FFB3E0", "--glow": "rgba(255,143,207,0.35)" },
+    iconText: "text-ink", badgeText: "text-brand",
   },
 ];
 
@@ -53,20 +57,21 @@ export default function DashboardPage() {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-surface-alt">
+    <div className="app-gradient-bg flex min-h-screen">
       <Sidebar active="dashboard" onLogout={() => { logout(); window.location.href = "/signin"; }} />
 
-      <main className="flex-1 px-6 py-8 lg:px-10 lg:py-10">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-12 lg:px-10">
         <div className="flex animate-fade-up items-start justify-between gap-4">
           <div>
-            <h1 className="font-display text-2xl font-bold text-ink">
+            <p className="mb-2 text-sm font-semibold text-ink-soft">Dashboard</p>
+            <h1 className="font-display text-4xl font-extrabold text-ink">
               {greeting()}, {user.fullName.split(" ")[0]}
             </h1>
             <p className="mt-1 text-ink-soft">What would you like to practise today?</p>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2 rounded-full border border-line bg-white py-1.5 pl-1.5 pr-4">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-semibold text-white">
+          <div className="glass-surface flex shrink-0 items-center gap-2 rounded-full py-1.5 pl-1.5 pr-4">
+            <span className="gradient-brand flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold text-white">
               {user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
             </span>
             <span className="hidden text-left sm:block">
@@ -76,23 +81,23 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
           {sections.map((s, i) => (
             <Link
               key={s.key}
               to={s.href}
-              style={{ animationDelay: `${100 + i * 80}ms` }}
-              className="group animate-fade-up rounded-2xl border border-line bg-white p-6 transition duration-300 ease-out hover:-translate-y-1 hover:border-brand hover:shadow-lg hover:shadow-brand/5"
+              style={{ ...s.iconStyle, animationDelay: `${100 + i * 80}ms` }}
+              className="gradient-card group animate-fade-up block min-h-[172px] rounded-[18px] p-6"
             >
               <div className="flex items-start justify-between">
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${s.iconBg} ${s.iconText}`}>
+                <span className={`gradient-icon flex h-12 w-12 items-center justify-center rounded-[13px] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${s.iconText}`}>
                   <s.icon size={20} />
                 </span>
-                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${s.badgeBg} ${s.badgeText}`}>
+                <span className={`gradient-pill rounded-full px-3 py-1 text-xs font-semibold ${s.badgeText}`}>
                   {s.badge}
                 </span>
               </div>
-              <h2 className="mt-4 font-display text-lg font-bold text-ink">{s.label}</h2>
+              <h2 className="mt-5 font-display text-xl font-extrabold text-ink">{s.label}</h2>
               <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{s.desc}</p>
               <span className={`mt-4 inline-flex items-center gap-1 text-sm font-semibold ${s.iconText} group-hover:underline`}>
                 Open <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />

@@ -1,29 +1,117 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Lora", ui-serif, Georgia, serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --color-ink: #0F172A;
-  --color-ink-soft: #475569;
-  --color-brand: #6D4FE0;
-  --color-brand-dark: #5638C4;
-  --color-surface: #F1EDFC;
-  --color-surface-alt: #F9F7FE;
-  --color-line: #E6DFF9;
-  --color-good: #17A673;
-  --color-warn: #E0A82F;
+  --color-ink: #14121F;
+  --color-ink-soft: #7E818B;
+  --color-brand: #7F8BFF;
+  --color-brand-dark: #6371F2;
+  --color-surface: #F7F8FC;
+  --color-surface-alt: #FFFFFF;
+  --color-line: rgba(20,18,31,0.08);
+  --color-good: #28C996;
+  --color-warn: #FFD84D;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   font-family: var(--font-body);
   color: var(--color-ink);
-  background: #FFFFFF;
+  background:
+    radial-gradient(900px 500px at 8% -10%, rgba(255,143,207,0.26), transparent 60%),
+    radial-gradient(900px 600px at 100% 0%, rgba(127,184,255,0.30), transparent 60%),
+    #FAFAFC;
+  min-height: 100vh;
+  overflow-x: hidden;
+  letter-spacing: 0;
 }
 
 h1, h2, h3, .font-display {
   font-family: var(--font-display);
+  letter-spacing: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.app-gradient-bg {
+  background:
+    radial-gradient(900px 500px at 8% -10%, rgba(255,143,207,0.26), transparent 60%),
+    radial-gradient(900px 600px at 100% 0%, rgba(127,184,255,0.30), transparent 60%),
+    #FAFAFC;
+}
+
+.glass-surface {
+  background: rgba(255,255,255,0.76);
+  border: 1px solid rgba(20,18,31,0.07);
+  box-shadow: 0 2px 8px -4px rgba(20,18,31,0.08);
+  backdrop-filter: blur(14px);
+}
+
+.gradient-brand {
+  background: linear-gradient(135deg, #FF8FCF, #7FB8FF);
+  box-shadow: 0 8px 18px -9px rgba(127,139,255,0.7);
+}
+
+.gradient-pill {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(90deg, #FF8FCF, #7FB8FF, #FFD84D, #FF8FCF) border-box;
+  background-size: 100% 100%, 300% auto;
+  box-shadow: 0 8px 24px -14px rgba(127,139,255,0.38);
+}
+
+.gradient-card {
+  --g1: #FF8FCF;
+  --g2: #7FB8FF;
+  --glow: rgba(127,139,255,0.34);
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,0.84);
+  border: 1px solid rgba(20,18,31,0.07);
+  box-shadow: 0 2px 8px -4px rgba(20,18,31,0.08);
+  transition: transform 0.22s cubic-bezier(.2,.8,.2,1), box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.gradient-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, var(--g1), var(--g2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.gradient-card:hover {
+  transform: translateY(-4px);
+  border-color: transparent;
+  box-shadow: 0 20px 40px -18px var(--glow);
+}
+
+.gradient-card:hover::before {
+  opacity: 1;
+}
+
+.gradient-icon {
+  background: linear-gradient(135deg, var(--g1, #FF8FCF), var(--g2, #7FB8FF));
+  box-shadow: 0 8px 16px -8px var(--glow, rgba(127,139,255,0.4));
 }
 
 @keyframes fade-up {

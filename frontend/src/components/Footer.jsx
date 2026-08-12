@@ -31,12 +31,12 @@ const columns = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-white">
+    <footer className="border-t border-line bg-white/55 backdrop-blur-xl">
       <div className="mx-auto max-w-6xl px-6 py-14 lg:px-10">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand text-white">
+              <span className="gradient-brand flex h-8 w-8 items-center justify-center rounded-[9px] text-white">
                 <Stethoscope size={16} strokeWidth={2.5} />
               </span>
               <span className="font-display text-base font-bold text-ink">KF LearnSmart</span>
@@ -48,7 +48,7 @@ export default function Footer() {
 
           {columns.map((col) => (
             <div key={col.heading}>
-              <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">{col.heading}</p>
+              <p className="text-xs font-semibold uppercase text-ink-soft">{col.heading}</p>
               <ul className="mt-3 space-y-2">
                 {col.links.map((l) => (
                   <li key={l.label}>
@@ -63,7 +63,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-2 border-t border-line pt-6 text-xs text-ink-soft sm:flex-row">
-          <p>© 2026 KF LearnSmart. All rights reserved.</p>
+          <p>&copy; 2026 KF LearnSmart. All rights reserved.</p>
           <p>Made for Pakistani medical students</p>
         </div>
       </div>

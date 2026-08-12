@@ -3,14 +3,14 @@ import StationPreviewCard from "./StationPreviewCard";
 
 export default function Hero() {
   return (
-    <section className="bg-surface">
+    <section className="app-gradient-bg">
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-2 lg:px-10 lg:py-28">
         <div>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1 text-xs font-medium text-brand">
+          <span className="gradient-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-ink">
             <GraduationCap size={14} /> Built for Pakistani medical students
           </span>
 
-          <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl lg:text-[3.25rem]" style={{ fontFamily: "var(--font-serif)" }}>
+          <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] text-ink sm:text-5xl lg:text-[3.35rem]">
             Build clinical confidence before the station begins.
           </h1>
 
@@ -22,13 +22,13 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
               href="#"
-              className="flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-sm shadow-blue-200 transition hover:bg-brand-dark"
+              className="gradient-brand flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02]"
             >
               Start Practising <ArrowRight size={16} />
             </a>
             <a
               href="#"
-              className="rounded-full border border-line bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:border-brand"
+              className="glass-surface rounded-full px-6 py-3 text-sm font-semibold text-ink transition hover:border-brand"
             >
               Explore Sample Stations
             </a>

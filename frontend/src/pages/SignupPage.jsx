@@ -1,17 +1,27 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Stethoscope, Loader2, Eye, EyeOff, ChevronLeft, Check,
-  User, Building2, BookOpen, GraduationCap, Target, CalendarClock,
+  BookOpen,
+  Building2,
+  CalendarClock,
+  Check,
+  ChevronLeft,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  Loader2,
+  Stethoscope,
+  Target,
+  User,
 } from "lucide-react";
-import { registerRequest, saveProfileDetails, ROLE_OPTIONS, getCurrentUser } from "../lib/api";
+import { getCurrentUser, registerRequest, ROLE_OPTIONS, saveProfileDetails } from "../lib/api";
 
 const STEP_LABELS = ["Account", "Role", "Profile"];
 
 export default function SignupPage() {
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
-  const [status, setStatus] = useState("idle"); // idle | loading | error
+  const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
   const [account, setAccount] = useState({ fullName: "", email: "", password: "" });
@@ -25,7 +35,7 @@ export default function SignupPage() {
     setStatus("loading");
     setError("");
     try {
-      const data = await registerRequest({ ...account, roleLabel: "" }); // role attached at step 2
+      const data = await registerRequest({ ...account, roleLabel: "" });
       sessionStorage.setItem("kf_mock_user", JSON.stringify(data.user));
       setStatus("idle");
       setStep(2);
@@ -51,20 +61,19 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface px-6 py-12">
-      <div className="w-full max-w-md rounded-2xl border border-line bg-white p-8 shadow-sm">
+    <div className="app-gradient-bg flex min-h-screen items-center justify-center px-6 py-12">
+      <div className="glass-surface w-full max-w-md rounded-[18px] p-8">
         <Link to="/" className="mb-6 flex items-center justify-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand text-white">
+          <span className="gradient-brand flex h-8 w-8 items-center justify-center rounded-[9px] text-white">
             <Stethoscope size={18} strokeWidth={2.5} />
           </span>
           <span className="font-display text-lg font-bold text-ink">KF LearnSmart</span>
         </Link>
 
-        {/* Step indicator */}
         <div className="relative mb-7 flex items-center justify-between px-1">
           <div className="absolute left-4 right-4 top-1/2 h-0.5 -translate-y-1/2 bg-line" />
           <div
-            className="absolute left-4 top-1/2 h-0.5 -translate-y-1/2 bg-brand transition-all duration-300"
+            className="absolute left-4 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-[#FF8FCF] to-[#7FB8FF] transition-all duration-300"
             style={{ width: `calc(${(Math.min(step, 3) - 1) / (STEP_LABELS.length - 1)} * (100% - 2rem))` }}
           />
           {STEP_LABELS.map((label, i) => {
@@ -75,7 +84,7 @@ export default function SignupPage() {
               <div
                 key={label}
                 className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold transition ${
-                  isDone ? "bg-brand text-white" : isActive ? "bg-white text-brand ring-2 ring-brand" : "bg-white text-ink-soft ring-1 ring-line"
+                  isDone ? "gradient-brand text-white" : isActive ? "bg-white text-brand ring-2 ring-brand" : "bg-white text-ink-soft ring-1 ring-line"
                 }`}
               >
                 {isDone ? <Check size={12} /> : n}
@@ -86,8 +95,8 @@ export default function SignupPage() {
 
         {step === 1 && (
           <>
-            <h1 className="font-display text-2xl font-bold text-ink">Create your account</h1>
-            <p className="mt-1 text-ink-soft">Start practising clinical skills today — free.</p>
+            <h1 className="font-display text-2xl font-extrabold text-ink">Create your account</h1>
+            <p className="mt-1 text-ink-soft">Start practising clinical skills today - free.</p>
 
             <form onSubmit={handleAccountSubmit} className="mt-6 space-y-4">
               <TextField
@@ -110,7 +119,7 @@ export default function SignupPage() {
                     placeholder="Min. 8 characters"
                     value={account.password}
                     onChange={(e) => setAccount((a) => ({ ...a, password: e.target.value }))}
-                    className="w-full rounded-lg border border-line bg-surface-alt px-4 py-3 pr-11 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-blue-100"
+                    className="w-full rounded-xl border border-line bg-white/80 px-4 py-3 pr-11 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20"
                   />
                   <button
                     type="button"
@@ -123,13 +132,13 @@ export default function SignupPage() {
               </div>
 
               {status === "error" && (
-                <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
+                <p className="rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
               )}
 
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
+                className="gradient-brand flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] disabled:opacity-60"
               >
                 {status === "loading" && <Loader2 size={16} className="animate-spin" />}
                 Continue
@@ -148,7 +157,7 @@ export default function SignupPage() {
             <button onClick={() => setStep(1)} className="mb-3 flex items-center gap-1 text-sm font-medium text-brand hover:underline">
               <ChevronLeft size={16} /> Back
             </button>
-            <h1 className="font-display text-2xl font-bold text-ink">Select your role</h1>
+            <h1 className="font-display text-2xl font-extrabold text-ink">Select your role</h1>
             <p className="mt-1 text-ink-soft">This helps us personalise your experience.</p>
 
             <div className="mt-6 space-y-3">
@@ -160,12 +169,12 @@ export default function SignupPage() {
                     type="button"
                     onClick={() => setRole(opt)}
                     className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition ${
-                      selected ? "border-brand bg-brand/5 text-brand" : "border-line text-ink hover:border-brand/40"
+                      selected ? "border-transparent bg-white/80 text-brand shadow-sm" : "border-line text-ink hover:border-brand/40"
                     }`}
                   >
                     <span
                       className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition ${
-                        selected ? "border-brand bg-brand" : "border-line"
+                        selected ? "border-brand bg-gradient-to-br from-[#FF8FCF] to-[#7FB8FF]" : "border-line"
                       }`}
                     >
                       {selected && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
@@ -179,7 +188,7 @@ export default function SignupPage() {
             <button
               onClick={handleRoleContinue}
               disabled={!role}
-              className="mt-7 w-full rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-40"
+              className="gradient-brand mt-7 w-full rounded-full px-4 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-40"
             >
               Continue
             </button>
@@ -191,8 +200,8 @@ export default function SignupPage() {
             <button onClick={() => setStep(2)} className="mb-3 flex items-center gap-1 text-sm font-medium text-brand hover:underline">
               <ChevronLeft size={16} /> Back
             </button>
-            <h1 className="font-display text-2xl font-bold text-ink">Tell us about your studies</h1>
-            <p className="mt-1 text-ink-soft">Optional — you can add or change this later in Settings.</p>
+            <h1 className="font-display text-2xl font-extrabold text-ink">Tell us about your studies</h1>
+            <p className="mt-1 text-ink-soft">Optional - you can add or change this later in Settings.</p>
 
             <div className="mt-6 space-y-4">
               <TextField label="Institution" icon={Building2} placeholder="Allama Iqbal Medical College" value={profile.institution} onChange={(v) => setProfile((p) => ({ ...p, institution: v }))} />
@@ -207,13 +216,13 @@ export default function SignupPage() {
             <div className="mt-7 flex gap-3">
               <button
                 onClick={() => finishToDashboard(false)}
-                className="flex-1 rounded-lg border border-line px-4 py-3 text-sm font-semibold text-ink-soft transition hover:border-brand hover:text-ink"
+                className="glass-surface flex-1 rounded-full px-4 py-3 text-sm font-semibold text-ink-soft transition hover:border-brand hover:text-ink"
               >
                 Skip for now
               </button>
               <button
                 onClick={() => finishToDashboard(true)}
-                className="flex-1 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark"
+                className="gradient-brand flex-1 rounded-full px-4 py-3 text-sm font-semibold text-white transition hover:scale-[1.02]"
               >
                 Done
               </button>
@@ -237,7 +246,7 @@ function TextField({ label, icon: Icon, value, onChange, type = "text", placehol
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full rounded-lg border border-line bg-surface-alt py-3 pr-3.5 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-blue-100 ${Icon ? "pl-10" : "pl-4"}`}
+          className={`w-full rounded-xl border border-line bg-white/80 py-3 pr-3.5 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20 ${Icon ? "pl-10" : "pl-4"}`}
         />
       </div>
     </label>

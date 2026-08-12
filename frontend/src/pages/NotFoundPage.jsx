@@ -2,12 +2,12 @@ import { Link } from "react-router-dom";
 
 export default function NotFoundPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface-alt px-6">
-      <div className="text-center">
-        <p className="font-display text-5xl font-bold text-brand">404</p>
+    <div className="app-gradient-bg flex min-h-screen items-center justify-center px-6">
+      <div className="gradient-card rounded-[18px] p-8 text-center" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" }}>
+        <p className="font-display text-5xl font-extrabold text-brand">404</p>
         <h1 className="mt-2 text-xl font-semibold text-ink">This page isn't built yet</h1>
         <p className="mt-1 text-ink-soft">Check back once this part of KF LearnSmart ships.</p>
-        <Link to="/" className="mt-6 inline-block rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark">
+        <Link to="/" className="gradient-brand mt-6 inline-block rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:scale-[1.02]">
           Back to home
         </Link>
       </div>
