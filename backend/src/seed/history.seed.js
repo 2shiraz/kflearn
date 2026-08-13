@@ -298,7 +298,7 @@ export async function seedHistoryContent() {
         stationType: "history",
         taskTags: ["history", "respiratory", "diagnostic-planning"],
         difficulty: "beginner",
-        timeLimitSeconds: 480,
+        timeLimitSeconds: 360,
         shortDescription: "Take a focused respiratory history from a young adult with episodic breathlessness and wheeze.",
         candidateInstructions: {
           context: "You are a medical student in a GP clinic.",

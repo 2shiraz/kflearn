@@ -10,6 +10,7 @@ import {
   Mic,
   Send,
   ShieldCheck,
+  Sparkles,
   Square,
   Stethoscope,
   Timer,
@@ -105,6 +106,64 @@ function groupModulesBySpecialty(modules) {
     else groups.push({ name: specialtyName, modules: [module] });
     return groups;
   }, []);
+}
+
+function formatTime(seconds = 0) {
+  const safeSeconds = Math.max(0, seconds);
+  const minutes = Math.floor(safeSeconds / 60).toString().padStart(2, "0");
+  const secs = Math.floor(safeSeconds % 60).toString().padStart(2, "0");
+  return `${minutes}:${secs}`;
+}
+
+function useCountdown({ limitSeconds = 360, startedAt, enabled = true }) {
+  const startRef = useRef(startedAt ? new Date(startedAt).getTime() : Date.now());
+  const [remaining, setRemaining] = useState(limitSeconds);
+
+  useEffect(() => {
+    startRef.current = startedAt ? new Date(startedAt).getTime() : Date.now();
+  }, [startedAt]);
+
+  useEffect(() => {
+    if (!enabled) return undefined;
+    function tick() {
+      const elapsed = Math.max(0, Math.floor((Date.now() - startRef.current) / 1000));
+      setRemaining(Math.max(0, limitSeconds - elapsed));
+    }
+    tick();
+    const intervalId = window.setInterval(tick, 1000);
+    return () => window.clearInterval(intervalId);
+  }, [enabled, limitSeconds]);
+
+  return {
+    remainingSeconds: remaining,
+    elapsedSeconds: Math.max(0, limitSeconds - remaining),
+    isExpired: enabled && remaining === 0,
+  };
+}
+
+function TimerBadge({ remainingSeconds }) {
+  const urgent = remainingSeconds <= 60;
+  return (
+    <span className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-extrabold ${urgent ? "border-rose-100 bg-rose-50 text-rose-700" : "border-line bg-white/90 text-ink"}`}>
+      <Timer size={16} />
+      {formatTime(remainingSeconds)}
+    </span>
+  );
+}
+
+function AiBadge({ children = "AI" }) {
+  return (
+    <span className="ai-chip inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-extrabold text-white">
+      <Sparkles size={13} />
+      {children}
+    </span>
+  );
+}
+
+function modeLabel(mode) {
+  if (mode === "single-player") return "Guided Self-Practice";
+  if (mode === "virtual-patient") return "AI Virtual Patient";
+  return mode;
 }
 
 export function HistoryHome() {
@@ -261,8 +320,8 @@ export function HistoryModuleDetail() {
               <CandidateInstructions module={state.module} />
             </Panel>
             <div className="space-y-4">
-              <PracticeCard icon={FileText} title="Single Player" body="Reveal the patient script and checklist for self-practice." onClick={() => start("single-player")} loading={state.starting === "single-player"} />
-              <PracticeCard icon={Bot} title="Virtual Patient" body="Talk to the patient without seeing hidden facts or checklist answers." onClick={() => start("virtual-patient")} loading={state.starting === "virtual-patient"} />
+              <PracticeCard icon={FileText} title="Guided Self-Practice" body="Reveal the patient script and checklist for self-marked practice." onClick={() => start("single-player")} loading={state.starting === "single-player"} />
+              <PracticeCard icon={Bot} title="AI Virtual Patient" body="Talk to the patient without seeing hidden facts or checklist answers." onClick={() => start("virtual-patient")} loading={state.starting === "virtual-patient"} ai />
             </div>
           </div>
         )}
@@ -273,13 +332,14 @@ export function HistoryModuleDetail() {
 
 function CandidateInstructions({ module }) {
   const instructions = module.candidateInstructions || {};
+  const tasks = (instructions.tasks || []).filter((task) => !task.toLowerCase().includes("examiner may ask"));
   return (
     <div className="mt-6 border-t border-line pt-5">
       <h2 className="text-lg font-bold text-ink">Candidate instructions</h2>
       <p className="mt-2 text-sm text-ink-soft">{instructions.context}</p>
       <p className="mt-2 text-sm text-ink-soft">{instructions.patientSummary}</p>
       <ul className="mt-4 space-y-2">
-        {(instructions.tasks || []).map((task) => (
+        {tasks.map((task) => (
           <li key={task} className="flex gap-2 text-sm text-ink-soft"><CheckCircle2 size={16} className="mt-0.5 text-good" /> {task}</li>
         ))}
       </ul>
@@ -287,13 +347,16 @@ function CandidateInstructions({ module }) {
   );
 }
 
-function PracticeCard({ icon: Icon, title, body, onClick, loading }) {
+function PracticeCard({ icon: Icon, title, body, onClick, loading, ai = false }) {
   return (
-    <Panel>
-      <span className="gradient-icon flex h-10 w-10 items-center justify-center rounded-lg text-ink"><Icon size={18} /></span>
+    <Panel className={ai ? "ai-panel" : ""}>
+      <div className="flex items-start justify-between gap-3">
+        <span className={ai ? "ai-icon flex h-10 w-10 items-center justify-center rounded-lg text-white" : "gradient-icon flex h-10 w-10 items-center justify-center rounded-lg text-ink"}><Icon size={18} /></span>
+        {ai && <AiBadge>AI powered</AiBadge>}
+      </div>
       <h3 className="mt-4 text-xl font-extrabold text-ink">{title}</h3>
       <p className="mt-1 text-sm text-ink-soft">{body}</p>
-      <PrimaryButton onClick={onClick} disabled={loading} className="mt-5 w-full">
+      <PrimaryButton onClick={onClick} disabled={loading} className={`mt-5 w-full ${ai ? "ai-button" : ""}`}>
         {loading ? "Starting..." : "Start"}
       </PrimaryButton>
     </Panel>
@@ -306,6 +369,8 @@ export function SinglePlayerHistory() {
   const params = new URLSearchParams(window.location.search);
   const attemptId = params.get("attemptId");
   const [state, setState] = useState({ loading: true, content: null, checked: [], notes: "", error: "" });
+  const finishRef = useRef(false);
+  const timer = useCountdown({ limitSeconds: state.content?.timeLimitSeconds || 360, enabled: Boolean(state.content) });
 
   useEffect(() => {
     getSinglePlayerContent(slug)
@@ -314,12 +379,18 @@ export function SinglePlayerHistory() {
   }, [slug]);
 
   async function finish() {
+    if (finishRef.current) return;
+    finishRef.current = true;
     if (attemptId) {
-      await endHistoryAttempt(attemptId, { notes: state.notes });
+      await endHistoryAttempt(attemptId, { notes: state.notes, elapsedSeconds: timer.elapsedSeconds });
       await selfAssessHistoryAttempt(attemptId, state.checked);
       navigate(`/history/attempts/${attemptId}/results`);
     }
   }
+
+  useEffect(() => {
+    if (timer.isExpired && state.content) finish();
+  }, [timer.isExpired, state.content]);
 
   return (
     <RequireUser>
@@ -330,7 +401,10 @@ export function SinglePlayerHistory() {
         {state.content && (
           <div className="grid gap-5 xl:grid-cols-[1fr_420px]">
             <Panel>
-              <h1 className="text-3xl font-extrabold text-ink">{state.content.title}</h1>
+              <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+                <h1 className="text-3xl font-extrabold text-ink">{state.content.title}</h1>
+                <TimerBadge remainingSeconds={timer.remainingSeconds} />
+              </div>
               <CandidateInstructions module={state.content} />
               <h2 className="mt-6 text-lg font-bold text-ink">Patient script</h2>
               <div className="mt-3 grid gap-2">
@@ -348,7 +422,7 @@ export function SinglePlayerHistory() {
                 <span className="text-sm font-semibold text-ink">Notes</span>
                 <textarea className="mt-2 min-h-28 w-full rounded-lg border border-line bg-white/80 p-3 text-sm outline-none focus:border-brand" value={state.notes} onChange={(e) => setState((s) => ({ ...s, notes: e.target.value }))} />
               </label>
-              <PrimaryButton onClick={finish} className="mt-4 w-full">Finish &amp; score</PrimaryButton>
+              <PrimaryButton onClick={finish} className="mt-4 w-full">End session &amp; score</PrimaryButton>
             </Panel>
           </div>
         )}
@@ -364,6 +438,8 @@ export function VirtualPatientSession() {
   const mediaRef = useRef(null);
   const recognitionRef = useRef(null);
   const chunksRef = useRef([]);
+  const endRef = useRef(false);
+  const timer = useCountdown({ limitSeconds: state.module?.timeLimitSeconds || 360, startedAt: state.attempt?.startedAt, enabled: Boolean(state.attempt && state.module) });
 
   useEffect(() => {
     getHistoryAttempt(attemptId)
@@ -458,9 +534,15 @@ export function VirtualPatientSession() {
   }
 
   async function endSession() {
-    await endHistoryAttempt(attemptId);
+    if (endRef.current) return;
+    endRef.current = true;
+    await endHistoryAttempt(attemptId, { elapsedSeconds: timer.elapsedSeconds });
     navigate(`/history/attempts/${attemptId}/self-assessment`);
   }
+
+  useEffect(() => {
+    if (timer.isExpired && state.attempt && state.module) endSession();
+  }, [timer.isExpired, state.attempt, state.module]);
 
   return (
     <RequireUser>
@@ -469,13 +551,16 @@ export function VirtualPatientSession() {
         {state.loading && <Loading />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.attempt && (
-          <div className="grid min-h-[70vh] gap-5 xl:grid-cols-[1fr_340px]">
-            <Panel className="flex flex-col">
-              <div className="mb-4 flex items-center justify-between gap-3 border-b border-line pb-3">
+          <div className="grid min-h-[72vh] gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+            <Panel className="chat-shell flex min-h-[72vh] flex-col overflow-hidden p-0">
+              <div className="flex items-center justify-between gap-3 border-b border-line bg-white/90 px-4 py-3 sm:px-5">
                 <div>
-                  <h1 className="text-2xl font-extrabold text-ink">{state.module?.title}</h1>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h1 className="text-xl font-extrabold text-ink sm:text-2xl">{state.module?.title}</h1>
+                    <AiBadge>AI patient</AiBadge>
+                  </div>
                   <p className="text-sm text-ink-soft">
-                    Virtual patient mode{state.voiceMode === "browser" ? " / browser dictation" : state.voiceMode === "groq" ? " / Groq fallback recording" : ""}
+                    {state.voiceMode === "browser" ? "Browser dictation" : state.voiceMode === "groq" ? "Groq fallback recording" : "Virtual patient session"}
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center justify-end gap-3">
@@ -483,37 +568,42 @@ export function VirtualPatientSession() {
                     <input type="checkbox" checked={state.speakPatient} onChange={(e) => setState((s) => ({ ...s, speakPatient: e.target.checked }))} />
                     Speak replies
                   </label>
-                  <span className="flex items-center gap-2 text-sm font-semibold text-ink-soft"><Timer size={16} /> Active</span>
+                  <TimerBadge remainingSeconds={timer.remainingSeconds} />
                 </div>
               </div>
-              <div className="flex min-h-[360px] flex-1 flex-col overflow-y-auto pr-1">
+              <div className="chat-thread flex min-h-[380px] flex-1 flex-col overflow-y-auto px-3 py-4 sm:px-5">
                 {state.attempt.messages.length === 0 ? (
                   <div className="m-auto max-w-md text-center">
+                    <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand shadow-sm"><Bot size={20} /></div>
                     <p className="text-sm font-semibold text-ink-soft">Patient opening</p>
-                    <p className="mt-2 rounded-lg border border-line bg-white/80 p-4 text-base font-semibold text-ink">{state.module?.openingStatement}</p>
-                    <p className="mt-3 text-sm text-ink-soft">Ask your first history question below.</p>
+                    <p className="mt-2 rounded-lg border border-line bg-white/95 p-4 text-base font-semibold text-ink shadow-sm">{state.module?.openingStatement}</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {state.attempt.messages.map((message) => (
-                      <div key={message.id} className={`max-w-[80%] rounded-lg p-3 text-sm ${message.role === "student" ? "ml-auto bg-brand text-white" : "bg-white/90 text-ink"}`}>
-                        {message.finalText}
+                      <div key={message.id} className={`flex ${message.role === "student" ? "justify-end" : "justify-start"}`}>
+                        <div className={`chat-bubble ${message.role === "student" ? "chat-bubble-user" : "chat-bubble-patient"}`}>
+                          {message.role === "patient" && <span className="mb-1 flex items-center gap-1.5 text-[11px] font-bold uppercase text-brand"><Sparkles size={12} /> Patient</span>}
+                          <p>{message.finalText}</p>
+                        </div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
               {state.transcript && (
-                <div className="mt-3 rounded-lg border border-line bg-white/80 p-3">
+                <div className="mx-3 mb-3 rounded-lg border border-line bg-white/90 p-3 sm:mx-5">
                   <label className="text-xs font-semibold text-ink-soft">Transcript review</label>
                   <textarea className="mt-2 w-full rounded-lg border border-line p-2 text-sm" value={state.transcript} onChange={(e) => setState((s) => ({ ...s, transcript: e.target.value }))} />
                   <PrimaryButton onClick={() => send(state.transcript, "voice", state.transcript)} className="mt-2">Confirm transcript</PrimaryButton>
                 </div>
               )}
-              <div className="mt-4 flex gap-2">
-                <input className="flex-1 rounded-lg border border-line bg-white/90 px-3 py-2 text-sm outline-none focus:border-brand" value={state.text} onChange={(e) => setState((s) => ({ ...s, text: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter") send(); }} placeholder="Type your question..." />
-                <button aria-label="Record voice question" onClick={toggleRecording} className={`rounded-lg border border-line px-3 ${state.recording ? "bg-rose-50 text-rose-600" : "bg-white/90 text-ink"}`}>{state.recording ? <Square size={17} /> : <Mic size={17} />}</button>
-                <PrimaryButton onClick={() => send()} disabled={state.sending}>{state.sending ? "Sending..." : <Send size={16} />}</PrimaryButton>
+              <div className="border-t border-line bg-white/90 p-3 sm:p-4">
+                <div className="flex items-end gap-2 rounded-lg border border-line bg-white p-2 shadow-sm">
+                  <input className="min-h-10 flex-1 bg-transparent px-2 text-sm outline-none" value={state.text} onChange={(e) => setState((s) => ({ ...s, text: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter") send(); }} placeholder="Ask the patient..." />
+                  <button aria-label="Record voice question" onClick={toggleRecording} className={`flex h-10 w-10 items-center justify-center rounded-lg border border-line ${state.recording ? "bg-rose-50 text-rose-600" : "bg-white text-ink"}`}>{state.recording ? <Square size={17} /> : <Mic size={17} />}</button>
+                  <PrimaryButton onClick={() => send()} disabled={state.sending} className="h-10 px-3">{state.sending ? "..." : <Send size={16} />}</PrimaryButton>
+                </div>
               </div>
             </Panel>
             <Panel>
@@ -563,7 +653,7 @@ export function SelfAssessmentPage() {
             <Checklist checklist={state.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
             <div className="mt-5 flex flex-wrap gap-3">
               <PrimaryButton onClick={selfAssess}>Submit Self Assessment</PrimaryButton>
-              <PrimaryButton onClick={aiAssess} disabled={state.aiLoading}>{state.aiLoading ? "Assessing..." : "AI Assessment"}</PrimaryButton>
+              <PrimaryButton onClick={aiAssess} disabled={state.aiLoading} className="ai-button inline-flex items-center gap-2"><Sparkles size={16} /> {state.aiLoading ? "Assessing..." : "AI Assessment"}</PrimaryButton>
             </div>
           </Panel>
         )}
@@ -631,7 +721,7 @@ export function AttemptHistoryPage() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="font-bold text-ink">{attempt.module?.title}</p>
-                  <p className="text-sm text-ink-soft">{attempt.mode} / {attempt.status}</p>
+                  <p className="text-sm text-ink-soft">{modeLabel(attempt.mode)} / {attempt.status}</p>
                 </div>
                 <p className="text-xl font-extrabold text-ink">{attempt.finalScore?.percentage ?? "-"}%</p>
               </div>
@@ -658,7 +748,7 @@ export function AdminHistoryPage() {
       presentingComplaint: "",
       shortDescription: "",
       difficulty: "beginner",
-      timeLimitMinutes: "8",
+      timeLimitMinutes: "6",
       candidateContext: "",
       patientSummary: "",
       tasks: "",
@@ -935,7 +1025,7 @@ function createAdminPayload(form) {
         examinationRequired: false,
         additionalInstructions: [],
       },
-      timeLimitSeconds: Number(form.timeLimitMinutes || 8) * 60,
+      timeLimitSeconds: Number(form.timeLimitMinutes || 6) * 60,
     },
     patientScript: {
       name: `${form.patientName} - ${form.title}`,

@@ -45,7 +45,7 @@ const respiratoryHistoryStations = [
       stationType: "history",
       taskTags: ["history", "respiratory", "diagnostic-planning"],
       difficulty: "intermediate",
-      timeLimitSeconds: 480,
+      timeLimitSeconds: 360,
       shortDescription: "Maya Khan, a 28-year-old primary-school teacher, reports episodic wheeze and chest tightness.",
       candidateInstructions: {
         context: "You are a medical officer in a respiratory outpatient clinic.",
@@ -135,7 +135,7 @@ const respiratoryHistoryStations = [
       stationType: "history",
       taskTags: ["history", "respiratory", "acute-assessment"],
       difficulty: "advanced",
-      timeLimitSeconds: 480,
+      timeLimitSeconds: 360,
       shortDescription: "Daniel Reed, aged 54, developed sudden breathlessness and pleuritic chest pain three weeks after knee replacement.",
       candidateInstructions: {
         context: "You are a medical officer in the acute assessment unit.",
@@ -217,7 +217,7 @@ const respiratoryHistoryStations = [
       stationType: "history",
       taskTags: ["history", "respiratory", "urgent-investigation"],
       difficulty: "advanced",
-      timeLimitSeconds: 480,
+      timeLimitSeconds: 360,
       shortDescription: "Peter Mensah, aged 61, has coughed up blood several times this week.",
       candidateInstructions: {
         context: "You are a medical officer in a rapid-access respiratory clinic.",
@@ -298,7 +298,7 @@ const respiratoryHistoryStations = [
       stationType: "history",
       taskTags: ["history", "respiratory", "occupational-history"],
       difficulty: "advanced",
-      timeLimitSeconds: 480,
+      timeLimitSeconds: 360,
       shortDescription: "Ahmed Saleh, aged 58, has progressive exertional breathlessness and a persistent dry cough.",
       candidateInstructions: {
         context: "You are a medical officer in a respiratory clinic.",

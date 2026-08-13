@@ -10,7 +10,7 @@ const historyModuleSchema = new mongoose.Schema(
     stationType: { type: String, enum: ["history"], default: "history" },
     taskTags: [{ type: String }],
     difficulty: { type: String, enum: ["beginner", "intermediate", "advanced"], default: "beginner" },
-    timeLimitSeconds: { type: Number, default: 480 },
+    timeLimitSeconds: { type: Number, default: 360 },
     thumbnail: { type: String, default: "" },
     shortDescription: { type: String, required: true },
     candidateInstructions: {

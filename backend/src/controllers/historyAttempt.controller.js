@@ -53,7 +53,7 @@ export async function getAttempt(req, res) {
 }
 
 export async function listAttempts(req, res) {
-  const attempts = await HistoryAttempt.find({ userId: req.user.id }).populate("historyModuleId").sort({ createdAt: -1 });
+  const attempts = await HistoryAttempt.find({ userId: req.user.id, status: { $in: ["self-assessed", "ai-assessed"] } }).populate("historyModuleId").sort({ createdAt: -1 });
   res.json({
     success: true,
     data: attempts.map((attempt) => ({

@@ -1,23 +1,10 @@
 import { env } from "../config/env.js";
 import { getGroqClient } from "../config/groq.js";
 import { buildAssessmentPrompt } from "../prompts/assessment.prompt.js";
-import { calculateScore } from "./scoring.service.js";
+import { assessChecklistFromTranscript, calculateScore } from "./scoring.service.js";
 
 function fallbackItemScores(checklist, attempt) {
-  const coveredFacts = new Set(attempt.internalCoverage?.factIds || []);
-  const coveredConcepts = new Set(attempt.internalCoverage?.conceptIds || []);
-  return checklist.sections.flatMap((section) =>
-    section.items.map((item) => {
-      const factHit = item.relatedFactIds.some((id) => coveredFacts.has(id));
-      const conceptHit = item.expectedConcepts.some((id) => coveredConcepts.has(id));
-      return {
-        itemId: item.itemId,
-        rawScore: factHit || conceptHit ? item.maxRawScore || 1 : 0,
-        evidence: factHit || conceptHit ? "Matched against internally tracked patient facts/concepts." : "",
-        rationale: factHit || conceptHit ? "Relevant concept was explored." : "No clear evidence in the transcript.",
-      };
-    }),
-  );
+  return assessChecklistFromTranscript(checklist, attempt).itemScores;
 }
 
 function parseAssessmentJson(text) {
@@ -38,7 +25,7 @@ export async function assessAttemptWithAi({ module, checklist, attempt }) {
     const completion = await groq.chat.completions.create({
       model: env.groqEvalModel,
       temperature: 0.1,
-      max_tokens: 1200,
+      max_tokens: 5000,
       response_format: { type: "json_object" },
       messages: buildAssessmentPrompt({ module, checklist, transcript }),
     });
@@ -53,7 +40,8 @@ export async function assessAttemptWithAi({ module, checklist, attempt }) {
     };
   }
 
-  const itemScores = Array.isArray(parsed.items) ? parsed.items : fallbackItemScores(checklist, attempt);
+  const deterministicScores = fallbackItemScores(checklist, attempt);
+  const itemScores = selectAssessmentScores(checklist, Array.isArray(parsed.items) ? parsed.items : [], deterministicScores);
   return {
     itemScores,
     finalScore: calculateScore(checklist, itemScores),
@@ -69,4 +57,27 @@ export async function assessAttemptWithAi({ module, checklist, attempt }) {
     },
     model: env.groqEvalModel,
   };
+}
+
+function selectAssessmentScores(checklist, aiScores, deterministicScores) {
+  const validItems = checklist.sections.flatMap((section) => section.items);
+  const normalizedAiScores = normalizeAiScores(validItems, aiScores);
+  const aiFinalScore = calculateScore(checklist, normalizedAiScores);
+  if (aiFinalScore.rawScore > 0) return normalizedAiScores;
+  return deterministicScores;
+}
+
+function normalizeAiScores(validItems, aiScores) {
+  const aiById = new Map(aiScores.map((score) => [score.itemId, score]));
+  return validItems.map((item) => {
+    const aiScore = aiById.get(item.itemId);
+    const maxRawScore = Number(item.maxRawScore || 1);
+    const normalizedAiRaw = Number.isFinite(Number(aiScore?.rawScore)) ? Math.min(Math.max(Number(aiScore.rawScore), 0), maxRawScore) : 0;
+    return {
+      itemId: item.itemId,
+      rawScore: normalizedAiRaw,
+      evidence: aiScore?.evidence || "",
+      rationale: aiScore?.rationale || "",
+    };
+  });
 }

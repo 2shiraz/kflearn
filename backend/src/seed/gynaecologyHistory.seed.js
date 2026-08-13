@@ -60,7 +60,7 @@ function abdominalPainStation() {
       stationType: "history",
       taskTags: ["history", "gynaecology", "abdominal-pain"],
       difficulty: "intermediate",
-      timeLimitSeconds: 480,
+      timeLimitSeconds: 360,
       shortDescription: "22-year-old woman in the emergency department with abdominal pain.",
       candidateInstructions: {
         context: "You are in the emergency department.",

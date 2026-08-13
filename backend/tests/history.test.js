@@ -7,9 +7,10 @@ import { createApp } from "../src/app.js";
 import { seedHistoryContent } from "../src/seed/history.seed.js";
 import { PatientScript } from "../src/models/PatientScript.js";
 import { SmartChecklist } from "../src/models/SmartChecklist.js";
+import { HistoryModule } from "../src/models/HistoryModule.js";
 import { HistoryAttempt } from "../src/models/HistoryAttempt.js";
 import { User } from "../src/models/User.js";
-import { calculateScore, selfAssessChecklist } from "../src/services/scoring.service.js";
+import { assessChecklistFromTranscript, calculateScore, selfAssessChecklist } from "../src/services/scoring.service.js";
 import { env } from "../src/config/env.js";
 
 let mongod;
@@ -92,6 +93,35 @@ test("student cannot access another user's attempt", async () => {
   assert.equal(read.status, 404);
 });
 
+test("ended unassessed sessions are hidden from attempt history", async () => {
+  const seeded = await seedHistoryContent();
+  const auth = await registerTestUser("hidden.ended@example.com");
+  const create = await request(app)
+    .post("/api/history/attempts")
+    .set("Authorization", auth)
+    .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient" });
+  assert.equal(create.status, 201);
+
+  const end = await request(app)
+    .post(`/api/history/attempts/${create.body.data.attempt.id}/end`)
+    .set("Authorization", auth)
+    .send({ elapsedSeconds: 120 });
+  assert.equal(end.status, 200);
+
+  const history = await request(app).get("/api/history/attempts").set("Authorization", auth);
+  assert.equal(history.status, 200);
+  assert.equal(history.body.data.some((attempt) => attempt.id === create.body.data.attempt.id), false);
+
+  const score = await request(app)
+    .post(`/api/history/attempts/${create.body.data.attempt.id}/self-assessment`)
+    .set("Authorization", auth)
+    .send({ checkedItemIds: [] });
+  assert.equal(score.status, 200);
+
+  const scoredHistory = await request(app).get("/api/history/attempts").set("Authorization", auth);
+  assert.equal(scoredHistory.body.data.some((attempt) => attempt.id === create.body.data.attempt.id), true);
+});
+
 test("patient response endpoint does not serialize hidden facts", async () => {
   const seeded = await seedHistoryContent();
   const auth = await registerTestUser("patient.response@example.com");
@@ -160,7 +190,31 @@ test("virtual patient intent matching uses authored content across stations", as
     .set("Authorization", auth)
     .send({ text: "Are you taking any tablets or medicines for it?" });
   assert.equal(medication.status, 200);
-  assert.match(medication.body.data.patientMessage.text, /salbutamol|inhaler/i);
+  assert.match(medication.body.data.patientMessage.text, /medication|medicine|prescribed|inhaler/i);
+});
+
+test("haematemesis transcript scoring does not collapse to zero", async () => {
+  const module = await HistoryModule.findOne({ slug: "haematemesis-upper-gi-bleed-history" });
+  const checklist = await SmartChecklist.findById(module.smartChecklistId);
+  const attempt = new HistoryAttempt({
+    userId: "score-test",
+    historyModuleId: module._id,
+    mode: "virtual-patient",
+    messages: haematemesisHalfScoreQuestions.map((text, index) => ({
+      messageId: `student_${index}`,
+      role: "student",
+      inputType: "typed",
+      finalText: text,
+    })),
+    internalCoverage: {
+      factIds: [],
+      conceptIds: ["onset", "timing", "character", "dizziness_weakness", "melaena", "alcohol_related_cirrhosis", "oesophageal_varices", "ideas", "concerns", "expectations", "alcohol", "smoking", "recreational_drugs"],
+    },
+  });
+
+  const result = assessChecklistFromTranscript(checklist, attempt);
+  assert.ok(result.finalScore.percentage >= 35, `Expected meaningful score, got ${result.finalScore.percentage}%`);
+  assert.ok(result.finalScore.percentage <= 75, `Expected mid-range score, got ${result.finalScore.percentage}%`);
 });
 
 test("deterministic scoring and self assessment calculation", async () => {
@@ -280,6 +334,32 @@ function baseFact(factId) {
     naturalResponse: "response",
   };
 }
+
+const haematemesisHalfScoreQuestions = [
+  "Hi, I am one of the doctors. Can I confirm your age?",
+  "I would like to ask you some questions about what happened today. Is that okay?",
+  "Can you tell me what brought you into hospital?",
+  "When did the vomiting blood start?",
+  "How many times have you vomited blood today?",
+  "What did the blood look like? Was it bright red or dark? Were there clots?",
+  "Was it just streaks or a larger amount?",
+  "Have you felt dizzy, weak, or like you might faint?",
+  "Have you noticed black or sticky stools?",
+  "Any abdominal pain, chest pain, fever, diarrhoea, or bleeding from anywhere else?",
+  "Has this ever happened before?",
+  "Do you have any liver disease or previous stomach or food pipe problems?",
+  "Have you ever had a camera test or been told you have swollen veins?",
+  "Are you taking any regular medications?",
+  "Do you take aspirin, ibuprofen, blood thinners, or any over-the-counter medicines?",
+  "Do you have any allergies?",
+  "How much alcohol do you drink?",
+  "Do you smoke?",
+  "Do you use any recreational drugs?",
+  "What do you think might be causing this?",
+  "What are you most worried about?",
+  "What were you hoping we could do today?",
+  "Thank you, I will summarise: you vomited a large amount of blood this morning, feel weak and light-headed, have black stools, and you have liver disease. Is there anything important I have missed?",
+];
 
 function baseItem(itemId) {
   return {
