@@ -19,6 +19,7 @@ const historyAttemptSchema = new mongoose.Schema(
     checklistVersion: Number,
     moduleVersion: Number,
     mode: { type: String, enum: ["single-player", "virtual-patient"], required: true },
+    aiProvider: { type: String, enum: ["groq", "openai"], default: "groq" },
     status: {
       type: String,
       enum: ["started", "active", "ended", "self-assessed", "ai-assessed"],
@@ -53,6 +54,7 @@ const historyAttemptSchema = new mongoose.Schema(
     aiAssessment: {
       itemScores: [{ itemId: String, rawScore: Number, evidence: String, rationale: String }],
       model: String,
+      provider: String,
     },
     finalScore: scoreSchema,
     feedback: {

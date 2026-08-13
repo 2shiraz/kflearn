@@ -79,6 +79,19 @@ test("creating attempt snapshots content versions", async () => {
   assert.equal(attempt.moduleVersion, 1);
 });
 
+test("creating attempt stores selected AI provider", async () => {
+  const seeded = await seedHistoryContent();
+  const auth = await registerTestUser("provider@example.com");
+  const res = await request(app)
+    .post("/api/history/attempts")
+    .set("Authorization", auth)
+    .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient", aiProvider: "openai" });
+  assert.equal(res.status, 201);
+  assert.equal(res.body.data.attempt.aiProvider, "openai");
+  const attempt = await HistoryAttempt.findById(res.body.data.attempt.id);
+  assert.equal(attempt.aiProvider, "openai");
+});
+
 test("student cannot access another user's attempt", async () => {
   const seeded = await seedHistoryContent();
   const studentA = await registerTestUser("student.a@example.com");
@@ -137,6 +150,20 @@ test("patient response endpoint does not serialize hidden facts", async () => {
   assert.ok(res.body.data.patientMessage.text.includes("vape"));
   assert.equal(JSON.stringify(res.body).includes("matchedFactIds"), false);
   assert.equal(JSON.stringify(res.body).includes("asthma_family_history"), false);
+});
+
+test("patient message endpoint rejects oversized questions", async () => {
+  const seeded = await seedHistoryContent();
+  const auth = await registerTestUser("long.message@example.com");
+  const create = await request(app)
+    .post("/api/history/attempts")
+    .set("Authorization", auth)
+    .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient" });
+  const res = await request(app)
+    .post(`/api/history/attempts/${create.body.data.attempt.id}/messages`)
+    .set("Authorization", auth)
+    .send({ text: "word ".repeat(800) });
+  assert.equal(res.status, 413);
 });
 
 test("haematemesis virtual patient answers natural OSCE phrasing", async () => {
@@ -249,7 +276,36 @@ test("missing Groq key returns useful AI assessment error", async () => {
   const res = await request(app).post(`/api/history/attempts/${create.body.data.attempt.id}/ai-assessment`).set("Authorization", auth);
   env.groqApiKey = originalKey;
   assert.equal(res.status, 503);
-  assert.match(res.body.message, /GROQ_API_KEY/);
+  assert.match(res.body.message, /No AI provider|GROQ_API_KEY|OPENAI_API_KEY/);
+});
+
+test("admin can view users and update AI settings", async () => {
+  const auth = await registerTestUser("admin.settings@example.com");
+  const user = await User.findOne({ email: "admin.settings@example.com" });
+  user.role = "admin";
+  await user.save();
+
+  const users = await request(app).get("/api/admin/users").set("Authorization", auth);
+  assert.equal(users.status, 200);
+  assert.ok(users.body.data.some((item) => item.email === "admin.settings@example.com"));
+  assert.equal(JSON.stringify(users.body.data).includes("passwordHash"), false);
+
+  const settings = await request(app)
+    .patch("/api/ai/status")
+    .set("Authorization", auth)
+    .send({
+      defaultProvider: "openai",
+      maxStudentMessageTokens: 120,
+      openaiApiKey: "sk-test",
+      openaiChatModel: "gpt-5.6-luna",
+      openaiEvalModel: "gpt-5.6-luna",
+    });
+  assert.equal(settings.status, 200);
+  assert.equal(settings.body.data.defaultProvider, "openai");
+  assert.equal(settings.body.data.maxStudentMessageTokens, 120);
+  const openai = settings.body.data.providers.find((provider) => provider.id === "openai");
+  assert.equal(openai.configured, true);
+  assert.equal(JSON.stringify(settings.body.data).includes("sk-test"), false);
 });
 
 test("protected endpoints reject requests without a real token", async () => {

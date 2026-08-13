@@ -1,8 +1,7 @@
-import { env } from "../config/env.js";
-import { getGroqClient } from "../config/groq.js";
 import { UnansweredQuestion } from "../models/UnansweredQuestion.js";
 import { buildVirtualPatientMessages } from "../prompts/virtualPatient.prompt.js";
 import { selectRelevantFacts } from "./historyIntent.service.js";
+import { generateText } from "./llm.service.js";
 import { keywordMatches, normalizeText } from "../utils/text.js";
 
 export async function generatePatientResponse({ patientScript, module, attempt, studentQuestion }) {
@@ -40,11 +39,9 @@ export async function generatePatientResponse({ patientScript, module, attempt, 
   }
 
   try {
-    const groq = getGroqClient();
-    const completion = await groq.chat.completions.create({
-      model: env.groqChatModel,
-      temperature: 0.4,
-      max_tokens: 160,
+    const completion = await generateText({
+      provider: attempt.aiProvider,
+      maxTokens: 160,
       messages: buildVirtualPatientMessages({
         patientScript,
         relevantFacts: facts,
@@ -53,15 +50,18 @@ export async function generatePatientResponse({ patientScript, module, attempt, 
       }),
     });
     return {
-      text: completion.choices[0]?.message?.content?.trim() || facts[0].naturalResponse,
+      text: completion.text || facts[0].naturalResponse,
       matchedFactIds: facts.map((fact) => fact.factId),
       matchedConceptIds: concepts,
+      aiProvider: completion.provider,
+      aiModel: completion.model,
     };
   } catch (error) {
     return {
       text: facts.map((fact) => fact.naturalResponse).join(" "),
       matchedFactIds: facts.map((fact) => fact.factId),
       matchedConceptIds: concepts,
+      aiProvider: attempt.aiProvider,
     };
   }
 }

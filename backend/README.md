@@ -10,7 +10,21 @@ npm run seed
 npm run dev
 ```
 
-Set `MONGODB_URI` and `GROQ_API_KEY` in `.env`.
+Set `MONGODB_URI` plus at least one AI provider key in `.env`.
+
+```env
+GROQ_API_KEY=
+GROQ_CHAT_MODEL=openai/gpt-oss-20b
+GROQ_EVAL_MODEL=openai/gpt-oss-20b
+GROQ_STT_MODEL=whisper-large-v3-turbo
+
+OPENAI_API_KEY=
+OPENAI_CHAT_MODEL=gpt-5.6-luna
+OPENAI_EVAL_MODEL=gpt-5.6-luna
+
+DEFAULT_AI_PROVIDER=groq
+MAX_STUDENT_MESSAGE_TOKENS=160
+```
 
 Frontend should use:
 

@@ -137,10 +137,21 @@ export function getSinglePlayerContent(slug) {
   return apiFetch(`/history/${slug}/single-player`);
 }
 
-export function createHistoryAttempt({ moduleId, mode }) {
+export function getAiStatus() {
+  return apiFetch("/ai/status");
+}
+
+export function updateAiStatus(payload) {
+  return apiFetch("/ai/status", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function createHistoryAttempt({ moduleId, mode, aiProvider }) {
   return apiFetch("/history/attempts", {
     method: "POST",
-    body: JSON.stringify({ moduleId, mode }),
+    body: JSON.stringify({ moduleId, mode, aiProvider }),
   });
 }
 
@@ -191,6 +202,10 @@ export function transcribeHistoryAudio(attemptId, audioBlob) {
 
 export function listAdminHistoryModules() {
   return apiFetch("/admin/history");
+}
+
+export function listAdminUsers() {
+  return apiFetch("/admin/users");
 }
 
 export function createAdminHistoryContent(payload) {

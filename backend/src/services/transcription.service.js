@@ -1,12 +1,13 @@
 import { toFile } from "groq-sdk";
-import { env } from "../config/env.js";
 import { getGroqClient } from "../config/groq.js";
+import { getAiSettings } from "./aiSettings.service.js";
 
 export async function transcribeAudio(file) {
-  const groq = getGroqClient();
+  const settings = await getAiSettings();
+  const groq = getGroqClient(settings.groq.apiKey);
   const result = await groq.audio.transcriptions.create({
     file: await toFile(file.buffer, file.originalname || "audio.webm"),
-    model: env.groqSttModel,
+    model: settings.groq.sttModel,
   });
   return result.text || "";
 }

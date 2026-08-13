@@ -1,6 +1,5 @@
-import { env } from "../config/env.js";
-import { getGroqClient } from "../config/groq.js";
 import { buildAssessmentPrompt } from "../prompts/assessment.prompt.js";
+import { generateJson } from "./llm.service.js";
 import { assessChecklistFromTranscript, calculateScore } from "./scoring.service.js";
 
 function fallbackItemScores(checklist, attempt) {
@@ -20,16 +19,17 @@ export async function assessAttemptWithAi({ module, checklist, attempt }) {
     .map((message) => ({ text: message.finalText, inputType: message.inputType, at: message.createdAt }));
 
   let parsed;
+  let model = attempt.aiProvider;
+  let provider = attempt.aiProvider;
   try {
-    const groq = getGroqClient();
-    const completion = await groq.chat.completions.create({
-      model: env.groqEvalModel,
-      temperature: 0.1,
-      max_tokens: 5000,
-      response_format: { type: "json_object" },
+    const completion = await generateJson({
+      provider: attempt.aiProvider,
+      maxTokens: 5000,
       messages: buildAssessmentPrompt({ module, checklist, transcript }),
     });
-    parsed = parseAssessmentJson(completion.choices[0]?.message?.content || "{}");
+    model = completion.model;
+    provider = completion.provider;
+    parsed = parseAssessmentJson(completion.text || "{}");
   } catch (error) {
     if (error.status === 503) throw error;
     parsed = {
@@ -55,7 +55,8 @@ export async function assessAttemptWithAi({ module, checklist, attempt }) {
           .map((item) => item.label),
       ),
     },
-    model: env.groqEvalModel,
+    model,
+    provider,
   };
 }
 

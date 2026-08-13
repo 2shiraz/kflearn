@@ -9,6 +9,7 @@ import historyRoutes from "./routes/history.routes.js";
 import attemptRoutes from "./routes/historyAttempt.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
 import adminHistoryRoutes from "./routes/adminHistory.routes.js";
+import adminUserRoutes from "./routes/adminUser.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 
 export function createApp() {
@@ -27,6 +28,7 @@ export function createApp() {
   app.use("/api/history", historyRoutes);
   app.use("/api/ai", aiRoutes);
   app.use("/api/admin/history", adminHistoryRoutes);
+  app.use("/api/admin/users", adminUserRoutes);
 
   app.use(notFound);
   app.use(errorHandler);

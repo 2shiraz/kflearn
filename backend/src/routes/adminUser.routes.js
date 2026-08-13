@@ -1,12 +1,11 @@
 import { Router } from "express";
-import { getAiStatus, updateAiStatus } from "../controllers/ai.controller.js";
+import { listAdminUsers } from "../controllers/adminUser.controller.js";
 import { requireRole } from "../middleware/role.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const router = Router();
 
 router.use(requireRole("admin"));
-router.get("/status", asyncHandler(getAiStatus));
-router.patch("/status", asyncHandler(updateAiStatus));
+router.get("/", asyncHandler(listAdminUsers));
 
 export default router;

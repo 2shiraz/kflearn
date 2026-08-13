@@ -21,16 +21,19 @@ import {
   createAdminHistoryContent,
   createHistoryAttempt,
   endHistoryAttempt,
+  getAiStatus,
   getHistoryAttempt,
   getHistoryModule,
   getSinglePlayerContent,
   listAdminHistoryModules,
+  listAdminUsers,
   listHistoryAttempts,
   listHistoryModules,
   publishAdminHistoryModule,
   selfAssessHistoryAttempt,
   sendPatientMessage,
   transcribeHistoryAudio,
+  updateAiStatus,
 } from "../lib/api";
 import { getCurrentUser, logout } from "../lib/api";
 
@@ -165,6 +168,8 @@ function modeLabel(mode) {
   if (mode === "virtual-patient") return "AI Virtual Patient";
   return mode;
 }
+
+const CHAT_CHAR_LIMIT = 640;
 
 export function HistoryHome() {
   const [state, setState] = useState({ loading: true, modules: [], attempts: [], error: "" });
@@ -460,6 +465,10 @@ export function VirtualPatientSession() {
 
   async function send(text = state.text, inputType = "typed", originalTranscript = "") {
     if (!text.trim()) return;
+    if (text.length > CHAT_CHAR_LIMIT) {
+      setState((s) => ({ ...s, error: `Message is too long. Keep each question under ${CHAT_CHAR_LIMIT} characters.` }));
+      return;
+    }
     setState((s) => ({ ...s, sending: true, text: "", transcript: "" }));
     try {
       const data = await sendPatientMessage(attemptId, { text, inputType, originalTranscript });
@@ -560,7 +569,7 @@ export function VirtualPatientSession() {
                     <AiBadge>AI patient</AiBadge>
                   </div>
                   <p className="text-sm text-ink-soft">
-                    {state.voiceMode === "browser" ? "Browser dictation" : state.voiceMode === "groq" ? "Groq fallback recording" : "Virtual patient session"}
+                    AI virtual patient{state.voiceMode === "browser" ? " / browser dictation" : state.voiceMode === "groq" ? " / fallback recording" : ""}
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center justify-end gap-3">
@@ -600,9 +609,14 @@ export function VirtualPatientSession() {
               )}
               <div className="border-t border-line bg-white/90 p-3 sm:p-4">
                 <div className="flex items-end gap-2 rounded-lg border border-line bg-white p-2 shadow-sm">
-                  <input className="min-h-10 flex-1 bg-transparent px-2 text-sm outline-none" value={state.text} onChange={(e) => setState((s) => ({ ...s, text: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter") send(); }} placeholder="Ask the patient..." />
+                  <div className="flex-1">
+                    <input maxLength={CHAT_CHAR_LIMIT} className="min-h-10 w-full bg-transparent px-2 text-sm outline-none" value={state.text} onChange={(e) => setState((s) => ({ ...s, text: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter") send(); }} placeholder="Ask one focused question..." />
+                    <p className={`px-2 text-[11px] font-semibold ${state.text.length > CHAT_CHAR_LIMIT - 80 ? "text-rose-600" : "text-ink-soft"}`}>
+                      {state.text.length} / {CHAT_CHAR_LIMIT} characters
+                    </p>
+                  </div>
                   <button aria-label="Record voice question" onClick={toggleRecording} className={`flex h-10 w-10 items-center justify-center rounded-lg border border-line ${state.recording ? "bg-rose-50 text-rose-600" : "bg-white text-ink"}`}>{state.recording ? <Square size={17} /> : <Mic size={17} />}</button>
-                  <PrimaryButton onClick={() => send()} disabled={state.sending} className="h-10 px-3">{state.sending ? "..." : <Send size={16} />}</PrimaryButton>
+                  <PrimaryButton onClick={() => send()} disabled={state.sending || state.text.length > CHAT_CHAR_LIMIT} className="h-10 px-3">{state.sending ? "..." : <Send size={16} />}</PrimaryButton>
                 </div>
               </div>
             </Panel>
@@ -684,6 +698,7 @@ export function HistoryResultPage() {
               <p className="text-sm font-semibold text-ink-soft">Final score</p>
               <p className="mt-2 text-5xl font-extrabold text-ink">{attempt.finalScore?.percentage ?? 0}%</p>
               <p className="mt-2 text-sm text-ink-soft">{attempt.finalScore?.rawScore ?? 0} / {attempt.finalScore?.maxRawScore ?? 0} raw marks</p>
+              {attempt.aiAssessment?.provider && <p className="mt-2 text-xs font-semibold text-ink-soft">{attempt.aiAssessment.provider} / {attempt.aiAssessment.model}</p>}
               <LinkButton to="/history/attempts" className="mt-5 w-full">Attempt history</LinkButton>
             </Panel>
             <Panel>
@@ -738,9 +753,24 @@ export function AdminHistoryPage() {
   const [state, setState] = useState({
     loading: true,
     saving: false,
+    savingAi: false,
+    activeTab: "content",
     modules: [],
+    users: [],
+    aiStatus: null,
     message: "",
     error: "",
+    aiForm: {
+      defaultProvider: "groq",
+      maxStudentMessageTokens: "160",
+      groqApiKey: "",
+      groqChatModel: "openai/gpt-oss-20b",
+      groqEvalModel: "openai/gpt-oss-20b",
+      groqSttModel: "whisper-large-v3-turbo",
+      openaiApiKey: "",
+      openaiChatModel: "gpt-5.6-luna",
+      openaiEvalModel: "gpt-5.6-luna",
+    },
     form: {
       section: "Respiratory",
       title: "",
@@ -760,13 +790,24 @@ export function AdminHistoryPage() {
     },
   });
   useEffect(() => {
-    listAdminHistoryModules()
-      .then((modules) => setState((s) => ({ ...s, loading: false, modules })))
+    Promise.all([listAdminHistoryModules(), getAiStatus(), listAdminUsers()])
+      .then(([modules, aiStatus, users]) => setState((s) => ({
+        ...s,
+        loading: false,
+        modules,
+        users,
+        aiStatus,
+        aiForm: aiStatusToForm(aiStatus),
+      })))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);
 
   function updateForm(field, value) {
     setState((s) => ({ ...s, form: { ...s.form, [field]: value } }));
+  }
+
+  function updateAiForm(field, value) {
+    setState((s) => ({ ...s, aiForm: { ...s.aiForm, [field]: value } }));
   }
 
   async function createDraft(e) {
@@ -807,24 +848,60 @@ export function AdminHistoryPage() {
     setState((s) => ({ ...s, modules, message: "Published." }));
   }
 
+  async function saveAiSettings(e) {
+    e.preventDefault();
+    setState((s) => ({ ...s, savingAi: true, error: "", message: "" }));
+    try {
+      const aiStatus = await updateAiStatus(aiFormToPayload(state.aiForm));
+      setState((s) => ({
+        ...s,
+        savingAi: false,
+        aiStatus,
+        aiForm: { ...aiStatusToForm(aiStatus), groqApiKey: "", openaiApiKey: "" },
+        message: "AI settings saved.",
+      }));
+    } catch (err) {
+      setState((s) => ({ ...s, savingAi: false, error: err.message }));
+    }
+  }
+
+  const tabs = [
+    { id: "content", label: "Content" },
+    { id: "ai", label: "AI settings" },
+    { id: "users", label: "Users" },
+  ];
+
   return (
     <RequireUser active="admin" adminOnly>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin", to: "/admin/history" }, { label: "History content" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin", to: "/admin/history" }, { label: "Console" }]} />
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm font-semibold text-ink-soft">Admin</p>
-            <h1 className="mt-1 text-4xl font-extrabold text-ink">History content</h1>
-            <p className="mt-2 max-w-2xl text-ink-soft">Add history stations as drafts, then publish when reviewed.</p>
+            <h1 className="mt-1 text-4xl font-extrabold text-ink">Admin console</h1>
+            <p className="mt-2 max-w-2xl text-ink-soft">Manage content, AI inference settings, and user accounts from one place.</p>
           </div>
           <span className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-ink"><ShieldCheck size={16} /> Admin only</span>
+        </div>
+        <div className="mb-5 flex flex-wrap gap-2">
+          {tabs.map((tab) => (
+            <button key={tab.id} type="button" onClick={() => setState((s) => ({ ...s, activeTab: tab.id }))} className={`rounded-lg px-4 py-2 text-sm font-bold ${state.activeTab === tab.id ? "gradient-brand text-white" : "glass-surface text-ink"}`}>
+              {tab.label}
+            </button>
+          ))}
         </div>
         {state.loading && <Loading />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.message && <p className="mt-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">{state.message}</p>}
-        {!state.loading && <div className="mt-6 grid gap-5 xl:grid-cols-[1fr_420px]">
+        {!state.loading && state.activeTab === "content" && <div className="mt-6 grid gap-5 xl:grid-cols-[1fr_420px]">
           <Panel>
-            <h2 className="text-xl font-extrabold text-ink">Add history station</h2>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-extrabold text-ink">Add content</h2>
+                <p className="mt-1 text-sm text-ink-soft">History stations are supported now. Other content types can fit this section later.</p>
+              </div>
+              <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-bold text-ink">History station</span>
+            </div>
             <form onSubmit={createDraft} className="mt-5 space-y-5">
               <div className="grid gap-3 md:grid-cols-2">
                 <TextInput label="Main section" value={state.form.section} onChange={(value) => updateForm("section", value)} required />
@@ -868,6 +945,83 @@ export function AdminHistoryPage() {
             </div>
           </Panel>
         </div>}
+        {!state.loading && state.activeTab === "ai" && (
+          <Panel className="ai-panel">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <AiBadge>AI control</AiBadge>
+                <h2 className="mt-3 text-2xl font-extrabold text-ink">Inference settings</h2>
+                <p className="mt-1 max-w-2xl text-sm text-ink-soft">Controls the provider and models used by virtual patients and AI assessment. API keys are write-only.</p>
+              </div>
+              <div className="text-right text-xs font-semibold text-ink-soft">
+                {(state.aiStatus?.providers || []).map((provider) => (
+                  <p key={provider.id}>{provider.label}: {provider.configured ? provider.apiKeyPreview || "configured" : "not configured"}</p>
+                ))}
+              </div>
+            </div>
+            <form onSubmit={saveAiSettings} className="mt-6 space-y-5">
+              <div className="grid gap-3 md:grid-cols-2">
+                <label className="block text-sm font-semibold text-ink">Default provider
+                  <select className="mt-1 w-full rounded-lg border border-line bg-white/90 p-2.5" value={state.aiForm.defaultProvider} onChange={(e) => updateAiForm("defaultProvider", e.target.value)}>
+                    <option value="groq">Groq</option>
+                    <option value="openai">OpenAI</option>
+                  </select>
+                </label>
+                <TextInput label="Per-message token limit" type="number" min="20" max="2000" value={state.aiForm.maxStudentMessageTokens} onChange={(value) => updateAiForm("maxStudentMessageTokens", value)} />
+              </div>
+              <div className="grid gap-5 xl:grid-cols-2">
+                <div className="rounded-lg border border-line bg-white/80 p-4">
+                  <h3 className="font-extrabold text-ink">Groq</h3>
+                  <div className="mt-3 space-y-3">
+                    <TextInput label="Groq API key" type="password" value={state.aiForm.groqApiKey} onChange={(value) => updateAiForm("groqApiKey", value)} placeholder="Leave blank to keep existing" />
+                    <TextInput label="Chat model" value={state.aiForm.groqChatModel} onChange={(value) => updateAiForm("groqChatModel", value)} />
+                    <TextInput label="Assessment model" value={state.aiForm.groqEvalModel} onChange={(value) => updateAiForm("groqEvalModel", value)} />
+                    <TextInput label="Speech-to-text model" value={state.aiForm.groqSttModel} onChange={(value) => updateAiForm("groqSttModel", value)} />
+                  </div>
+                </div>
+                <div className="rounded-lg border border-line bg-white/80 p-4">
+                  <h3 className="font-extrabold text-ink">OpenAI</h3>
+                  <div className="mt-3 space-y-3">
+                    <TextInput label="OpenAI API key" type="password" value={state.aiForm.openaiApiKey} onChange={(value) => updateAiForm("openaiApiKey", value)} placeholder="Leave blank to keep existing" />
+                    <TextInput label="Chat model" value={state.aiForm.openaiChatModel} onChange={(value) => updateAiForm("openaiChatModel", value)} />
+                    <TextInput label="Assessment model" value={state.aiForm.openaiEvalModel} onChange={(value) => updateAiForm("openaiEvalModel", value)} />
+                  </div>
+                </div>
+              </div>
+              <PrimaryButton type="submit" disabled={state.savingAi}>{state.savingAi ? "Saving..." : "Save AI settings"}</PrimaryButton>
+            </form>
+          </Panel>
+        )}
+        {!state.loading && state.activeTab === "users" && (
+          <Panel>
+            <h2 className="text-2xl font-extrabold text-ink">Users</h2>
+            <p className="mt-1 text-sm text-ink-soft">{state.users.length} registered accounts.</p>
+            <div className="mt-5 overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead className="text-xs uppercase text-ink-soft">
+                  <tr>
+                    <th className="border-b border-line py-3 pr-3">Name</th>
+                    <th className="border-b border-line py-3 pr-3">Email</th>
+                    <th className="border-b border-line py-3 pr-3">Role</th>
+                    <th className="border-b border-line py-3 pr-3">Profile</th>
+                    <th className="border-b border-line py-3 pr-3">Joined</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {state.users.map((user) => (
+                    <tr key={user.id}>
+                      <td className="border-b border-line py-3 pr-3 font-semibold text-ink">{user.fullName}</td>
+                      <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.email}</td>
+                      <td className="border-b border-line py-3 pr-3"><span className="gradient-pill rounded-lg px-2.5 py-1 text-xs font-bold text-ink">{user.role}</span></td>
+                      <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.roleLabel || user.profile?.programme || "-"}</td>
+                      <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Panel>
+        )}
       </PageMain>
     </RequireUser>
   );
@@ -999,6 +1153,36 @@ function parseChecklistItems(value, slug) {
       order: index + 1,
     };
   });
+}
+
+function aiStatusToForm(status = {}) {
+  const groq = status.providers?.find((provider) => provider.id === "groq") || {};
+  const openai = status.providers?.find((provider) => provider.id === "openai") || {};
+  return {
+    defaultProvider: status.defaultProvider || "groq",
+    maxStudentMessageTokens: String(status.maxStudentMessageTokens || 160),
+    groqApiKey: "",
+    groqChatModel: groq.chatModel || "openai/gpt-oss-20b",
+    groqEvalModel: groq.evalModel || "openai/gpt-oss-20b",
+    groqSttModel: groq.sttModel || "whisper-large-v3-turbo",
+    openaiApiKey: "",
+    openaiChatModel: openai.chatModel || "gpt-5.6-luna",
+    openaiEvalModel: openai.evalModel || "gpt-5.6-luna",
+  };
+}
+
+function aiFormToPayload(form) {
+  return {
+    defaultProvider: form.defaultProvider,
+    maxStudentMessageTokens: Number(form.maxStudentMessageTokens || 160),
+    groqApiKey: form.groqApiKey,
+    groqChatModel: form.groqChatModel,
+    groqEvalModel: form.groqEvalModel,
+    groqSttModel: form.groqSttModel,
+    openaiApiKey: form.openaiApiKey,
+    openaiChatModel: form.openaiChatModel,
+    openaiEvalModel: form.openaiEvalModel,
+  };
 }
 
 function createAdminPayload(form) {

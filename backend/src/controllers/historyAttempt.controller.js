@@ -2,6 +2,7 @@ import { HistoryAttempt } from "../models/HistoryAttempt.js";
 import { getModuleClinicalBundle, checklistDto, studentModuleDetailDto } from "../services/history.service.js";
 import { generatePatientResponse } from "../services/virtualPatient.service.js";
 import { assessAttemptWithAi } from "../services/aiAssessment.service.js";
+import { getAiSettings } from "../services/aiSettings.service.js";
 import { selfAssessChecklist } from "../services/scoring.service.js";
 import { messageId } from "../utils/ids.js";
 import { transcribeAudio } from "../services/transcription.service.js";
@@ -17,8 +18,9 @@ async function findOwnedAttempt(attemptId, userId) {
 }
 
 export async function createAttempt(req, res) {
-  const { moduleId, mode } = req.body;
+  const { moduleId, mode, aiProvider } = req.body;
   const { module, patientScript, checklist } = await getModuleClinicalBundle(moduleId);
+  const aiSettings = await getAiSettings();
   if (module.status !== "published") {
     const error = new Error("Only published modules can be practiced.");
     error.status = 404;
@@ -32,6 +34,7 @@ export async function createAttempt(req, res) {
     checklistVersion: checklist.version,
     moduleVersion: module.version,
     mode,
+    aiProvider: aiProvider || aiSettings.defaultProvider,
     status: "active",
     messages: [],
   });
@@ -59,6 +62,7 @@ export async function listAttempts(req, res) {
     data: attempts.map((attempt) => ({
       id: attempt._id,
       mode: attempt.mode,
+      aiProvider: attempt.aiProvider,
       status: attempt.status,
       startedAt: attempt.startedAt,
       endedAt: attempt.endedAt,
@@ -141,7 +145,7 @@ export async function aiAssessAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
   const { module, checklist } = await getModuleClinicalBundle(attempt.historyModuleId);
   const result = await assessAttemptWithAi({ module, checklist, attempt });
-  attempt.aiAssessment = { itemScores: result.itemScores, model: result.model };
+  attempt.aiAssessment = { itemScores: result.itemScores, model: result.model, provider: result.provider };
   attempt.finalScore = result.finalScore;
   attempt.feedback = result.feedback;
   attempt.status = "ai-assessed";
@@ -165,6 +169,7 @@ export function attemptDto(attempt) {
     id: attempt._id,
     moduleId: attempt.historyModuleId,
     mode: attempt.mode,
+    aiProvider: attempt.aiProvider,
     status: attempt.status,
     startedAt: attempt.startedAt,
     endedAt: attempt.endedAt,
@@ -181,6 +186,7 @@ export function attemptDto(attempt) {
     })),
     finalScore: attempt.finalScore,
     feedback: attempt.feedback,
+    aiAssessment: attempt.aiAssessment ? { model: attempt.aiAssessment.model, provider: attempt.aiAssessment.provider } : undefined,
   };
 }
 
