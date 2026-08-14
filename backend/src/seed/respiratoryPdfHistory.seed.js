@@ -6,6 +6,7 @@ const sourceReference = "Respiratory OSCE Stations PDF";
 
 export async function seedRespiratoryPdfHistoryStations({ respiratory, breathlessnessGuide }) {
   const seeded = [];
+  await deleteAdultAsthmaStation();
   for (const station of respiratoryHistoryStations) {
     const patientScript = await PatientScript.findOneAndUpdate(
       { slug: station.patientScript.slug },
@@ -35,17 +36,25 @@ export async function seedRespiratoryPdfHistoryStations({ respiratory, breathles
   return seeded;
 }
 
+async function deleteAdultAsthmaStation() {
+  await Promise.all([
+    HistoryModule.deleteOne({ slug: "pdf-focused-history-diagnostic-planning-suspected-adult-asthma" }),
+    PatientScript.deleteOne({ slug: "pdf-maya-khan-suspected-adult-asthma" }),
+    SmartChecklist.deleteOne({ slug: "pdf-adult-asthma-history-checklist" }),
+  ]);
+}
+
 const respiratoryHistoryStations = [
   {
     module: {
-      title: "Suspected Adult Asthma",
+      title: "Focused history and diagnostic planning for suspected adult asthma",
       slug: "pdf-focused-history-diagnostic-planning-suspected-adult-asthma",
       presentingComplaint: "Episodic wheeze and chest tightness",
       systemOrTopic: "Asthma",
       stationType: "history",
       taskTags: ["history", "respiratory", "diagnostic-planning"],
       difficulty: "intermediate",
-      timeLimitSeconds: 360,
+      timeLimitSeconds: 480,
       shortDescription: "Maya Khan, a 28-year-old primary-school teacher, reports episodic wheeze and chest tightness.",
       candidateInstructions: {
         context: "You are a medical officer in a respiratory outpatient clinic.",
@@ -77,7 +86,7 @@ const respiratoryHistoryStations = [
         { question: "Will I need a breathing test?", modelAnswerOutline: "" },
         { question: "Can asthma be controlled?", modelAnswerOutline: "" },
       ],
-      sourceReferences: [sourceReference],
+      sourceReferences: [sourceReference, "MBBS History Taking Complete Study Guide"],
       status: "published",
       version: 1,
       createdBy: "seed",
@@ -92,6 +101,8 @@ const respiratoryHistoryStations = [
       openingStatement: "For the past few months, I've had times when my chest feels tight and I start wheezing.",
       demeanor: { general: "Cooperative and mildly anxious.", verbosity: "Do not volunteer triggers, atopy, vaping, or previous severity unless asked." },
       facts: [
+        fact("adult_asthma_key_details", "OTHER", "key_details", "Key details", "My name is Maya Khan. I am 28 years old and I work as a primary-school teacher.", ["name", "age", "occupation", "work", "teacher"]),
+        fact("adult_asthma_current_distress", "RED_FLAG", "current_distress", "Current distress", "I am comfortable at rest at the moment.", ["distress", "comfortable", "rest", "right now"]),
         fact("adult_asthma_duration", "HPC", "duration", "Duration", "About four months.", ["duration", "how long", "onset"]),
         fact("adult_asthma_pattern", "HPC", "pattern", "Pattern", "It comes and goes three or four times a week. I feel normal between episodes.", ["pattern", "frequency", "come and go"]),
         fact("adult_asthma_timing", "HPC", "timing", "Timing", "It is often worse at night or early in the morning.", ["timing", "night", "morning"]),
@@ -99,6 +110,7 @@ const respiratoryHistoryStations = [
         fact("adult_asthma_triggers", "HPC", "triggers", "Triggers", "Exercise, cold air, cats, classroom dust, and spring pollen.", ["triggers", "exercise", "cold air", "cats", "dust", "pollen"]),
         fact("adult_asthma_relief", "HPC", "relief", "Relief", "A relative's blue inhaler helped briefly on two occasions.", ["relief", "inhaler", "helps"]),
         fact("adult_asthma_impact", "ICE", "impact", "Impact", "Occasionally stops exercise and interrupts sleep; no time off work.", ["impact", "exercise", "sleep", "work"]),
+        fact("adult_asthma_concerns", "ICE", "concerns", "Concerns", "I am worried that the problem will affect work and exercise.", ["concern", "worried", "work", "exercise"]),
         fact("adult_asthma_current_danger", "RED_FLAG", "current_danger_symptoms", "Current danger symptoms", "No severe breathlessness, blue lips, fainting, or inability to speak.", ["danger", "blue lips", "fainting", "speak"]),
         fact("adult_asthma_previous_severity", "HPC", "previous_severity", "Previous severity", "No emergency attendance, admission, intensive care, or intubation.", ["emergency", "admission", "intensive care", "intubation"]),
         fact("adult_asthma_atopy", "PMH", "atopy", "Atopy", "Childhood eczema and seasonal allergic rhinitis.", ["eczema", "allergic rhinitis", "atopy"]),
@@ -115,14 +127,24 @@ const respiratoryHistoryStations = [
       title: "Focused history and diagnostic planning for suspected adult asthma checklist",
       slug: "pdf-adult-asthma-history-checklist",
       items: [
-        row("adult_asthma_rapport_safety", "Rapport, consent, and immediate safety", "Introduces self; confirms identity; gains consent; checks current distress", ["introduce_self", "consent", "current_distress"], [], "major"),
-        row("adult_asthma_core_symptoms", "Core symptom history", "Wheeze, breathlessness, cough, chest tightness, onset, duration, variability", ["symptoms", "duration", "variability"], ["adult_asthma_symptoms", "adult_asthma_duration", "adult_asthma_pattern"], "major"),
-        row("adult_asthma_pattern_triggers", "Pattern and triggers", "Night/early morning, exercise, seasonal, allergen, cold-air, occupational pattern", ["timing", "triggers"], ["adult_asthma_timing", "adult_asthma_triggers"], "major"),
-        row("adult_asthma_control_impact", "Control and impact", "Frequency, night waking, activity limitation, reliever use, deterioration", ["pattern", "impact", "relief"], ["adult_asthma_pattern", "adult_asthma_impact", "adult_asthma_relief"], "major"),
-        row("adult_asthma_previous_severity", "Previous severity", "Emergency visits, admission, ICU, intubation, systemic steroid courses", ["previous_severity"], ["adult_asthma_previous_severity"], "critical"),
-        row("adult_asthma_background_risks", "Background risks", "Atopy, rhinitis, family history, smoking/vaping, medicines, work/home exposures", ["atopy", "family_history", "smoking_exposure", "medication"], ["adult_asthma_atopy", "adult_asthma_family_history", "adult_asthma_smoking_exposure", "adult_asthma_medication"], "major"),
-        row("adult_asthma_explanation_testing", "Explanation and testing", "Suspects asthma but explains need for objective confirmation", ["explanation", "testing"], [], "major"),
-        row("adult_asthma_safe_counselling", "Safe counselling", "ICS-containing principle, written plan, follow-up, urgent warning symptoms", ["safe_counselling"], ["adult_asthma_current_danger"], "critical"),
+        row("adult_asthma_opening", "Universal opening", "Introduces self, confirms name, age and occupation, gains consent, and checks current distress", ["introduce_self", "identity", "occupation", "consent", "current_distress"], ["adult_asthma_key_details", "adult_asthma_current_distress"], "major"),
+        row("adult_asthma_open_question", "Open presenting question", "Starts with an open question about what brought the patient in today", ["opening_statement", "presenting_complaint"], [], "major"),
+        row("adult_asthma_core_symptoms", "Core symptom history", "Wheeze, breathlessness, dry cough, chest tightness, onset, duration and variability", ["symptoms", "duration", "variability"], ["adult_asthma_symptoms", "adult_asthma_duration", "adult_asthma_pattern"], "major"),
+        row("adult_asthma_one_resps_pattern", "ONE RESPS pattern for breathlessness", "Clarifies episodic nature, exercise limitation, relief, exacerbating factors, sleep/night symptoms and associated symptoms", ["pattern", "timing", "relief", "triggers", "associated_symptoms"], ["adult_asthma_pattern", "adult_asthma_timing", "adult_asthma_relief", "adult_asthma_triggers", "adult_asthma_symptoms"], "critical"),
+        row("adult_asthma_triggers", "Specific asthma triggers", "Asks about exercise, cold air, cats, classroom dust and spring pollen", ["triggers"], ["adult_asthma_triggers"], "major"),
+        row("adult_asthma_control_impact", "Control and impact", "Assesses frequency, night waking, activity limitation, reliever use, deterioration, exercise, sleep and work impact", ["pattern", "impact", "relief"], ["adult_asthma_pattern", "adult_asthma_impact", "adult_asthma_relief"], "critical"),
+        row("adult_asthma_current_danger", "Current danger symptoms", "Screens for severe breathlessness, blue lips, fainting and inability to speak", ["current_danger_symptoms"], ["adult_asthma_current_danger"], "critical"),
+        row("adult_asthma_previous_severity", "Previous severity", "Asks about emergency attendance, admission, intensive care, intubation and severe previous attacks", ["previous_severity"], ["adult_asthma_previous_severity"], "critical"),
+        row("adult_asthma_atopy", "Atopy and rhinitis", "Asks about childhood eczema and seasonal allergic rhinitis", ["atopy"], ["adult_asthma_atopy"], "major"),
+        row("adult_asthma_family", "Family history", "Asks about family history, including mother with asthma", ["family_history"], ["adult_asthma_family_history"], "minor"),
+        row("adult_asthma_social_exposure", "HOSE PIPERS social and exposure screen", "Covers occupation/exposures, smoking, vaping and relevant home/work exposure", ["occupation", "smoking_exposure", "social_history"], ["adult_asthma_key_details", "adult_asthma_smoking_exposure"], "major"),
+        row("adult_asthma_drug_history", "Drug history", "Asks regular medicines and beta-blocker or NSAID-associated symptoms", ["medication"], ["adult_asthma_medication"], "major"),
+        row("adult_asthma_alternatives", "Alternative diagnoses and red flags", "Screens fever, weight loss, coughing blood, leg swelling and persistent daily symptoms", ["alternatives_red_flags"], ["adult_asthma_alternatives_red_flags"], "critical"),
+        row("adult_asthma_ice", "Ideas, concerns, expectations and impact", "Explores worries about work and exercise and checks what the patient expects", ["ideas", "concerns", "expectations", "impact"], ["adult_asthma_impact", "adult_asthma_concerns"], "major"),
+        row("adult_asthma_systems_review", "Focused systems review", "Runs through a quick respiratory and relevant systems review to avoid missed symptoms", ["systems_review", "associated_symptoms"], ["adult_asthma_alternatives_red_flags", "adult_asthma_symptoms"], "minor"),
+        row("adult_asthma_summary", "Summary and signposting", "Summarises salient points and checks whether anything important has been missed", ["summarising", "signposting"], [], "major"),
+        row("adult_asthma_explanation_testing", "Explanation and objective testing", "Explains suspected asthma but states symptoms alone do not confirm it and objective testing is needed", ["explanation", "testing"], [], "major"),
+        row("adult_asthma_safe_counselling", "Safe counselling and next steps", "Covers ICS-containing principle, written plan, follow-up and urgent warning symptoms", ["safe_counselling"], ["adult_asthma_current_danger"], "critical"),
       ],
     }),
   },
@@ -426,9 +448,9 @@ function checklist({ title, slug, items }) {
   return {
     title,
     slug,
-    sourceScoring: { maxRawScore: 8, description: "8 one-mark checklist rows" },
+    sourceScoring: { maxRawScore: items.length, description: `${items.length} one-mark checklist rows` },
     weightConfiguration: { critical: 3, major: 2, minor: 1 },
-    sections: [{ sectionId: "station_checklist", title: "Marking Checklist", items }],
+    sections: [{ sectionId: "station_checklist", title: "Marking Checklist", items: items.map((item, index) => ({ ...item, order: index + 1 })) }],
     version: 1,
     status: "published",
   };
