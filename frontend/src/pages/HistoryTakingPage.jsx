@@ -444,6 +444,7 @@ export function VirtualPatientSession() {
   const recognitionRef = useRef(null);
   const chunksRef = useRef([]);
   const endRef = useRef(false);
+  const threadEndRef = useRef(null);
   const timer = useCountdown({ limitSeconds: state.module?.timeLimitSeconds || 360, startedAt: state.attempt?.startedAt, enabled: Boolean(state.attempt && state.module) });
 
   useEffect(() => {
@@ -453,6 +454,10 @@ export function VirtualPatientSession() {
   }, [attemptId]);
 
   useEffect(() => () => window.speechSynthesis?.cancel(), []);
+
+  useEffect(() => {
+    threadEndRef.current?.scrollIntoView({ block: "end" });
+  }, [state.attempt?.messages?.length]);
 
   function speak(text) {
     if (!state.speakPatient || !window.speechSynthesis || !text) return;
@@ -464,18 +469,44 @@ export function VirtualPatientSession() {
   }
 
   async function send(text = state.text, inputType = "typed", originalTranscript = "") {
-    if (!text.trim()) return;
-    if (text.length > CHAT_CHAR_LIMIT) {
+    const finalText = text.trim();
+    if (!finalText) return;
+    if (finalText.length > CHAT_CHAR_LIMIT) {
       setState((s) => ({ ...s, error: `Message is too long. Keep each question under ${CHAT_CHAR_LIMIT} characters.` }));
       return;
     }
-    setState((s) => ({ ...s, sending: true, text: "", transcript: "" }));
+
+    const localMessage = {
+      id: `local-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      role: "student",
+      inputType,
+      finalText,
+      createdAt: new Date().toISOString(),
+    };
+
+    setState((s) => ({
+      ...s,
+      sending: true,
+      text: "",
+      transcript: "",
+      error: "",
+      attempt: s.attempt
+        ? { ...s.attempt, messages: [...(s.attempt.messages || []), localMessage] }
+        : s.attempt,
+    }));
     try {
-      const data = await sendPatientMessage(attemptId, { text, inputType, originalTranscript });
+      const data = await sendPatientMessage(attemptId, { text: finalText, inputType, originalTranscript });
       setState((s) => ({ ...s, sending: false, attempt: data.attempt }));
       speak(data.patientMessage?.text);
     } catch (err) {
-      setState((s) => ({ ...s, sending: false, error: err.message }));
+      setState((s) => ({
+        ...s,
+        sending: false,
+        error: err.message,
+        attempt: s.attempt
+          ? { ...s.attempt, messages: (s.attempt.messages || []).filter((message) => message.id !== localMessage.id) }
+          : s.attempt,
+      }));
     }
   }
 
@@ -560,8 +591,8 @@ export function VirtualPatientSession() {
         {state.loading && <Loading />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.attempt && (
-          <div className="grid min-h-[72vh] gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
-            <Panel className="chat-shell flex min-h-[72vh] flex-col overflow-hidden p-0">
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+            <Panel className="chat-shell flex h-[calc(100vh-170px)] min-h-[560px] flex-col overflow-hidden p-0">
               <div className="flex items-center justify-between gap-3 border-b border-line bg-white/90 px-4 py-3 sm:px-5">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -580,7 +611,7 @@ export function VirtualPatientSession() {
                   <TimerBadge remainingSeconds={timer.remainingSeconds} />
                 </div>
               </div>
-              <div className="chat-thread flex min-h-[380px] flex-1 flex-col overflow-y-auto px-3 py-4 sm:px-5">
+              <div className="chat-thread flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-4 sm:px-5">
                 {state.attempt.messages.length === 0 ? (
                   <div className="m-auto max-w-md text-center">
                     <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand shadow-sm"><Bot size={20} /></div>
@@ -599,6 +630,7 @@ export function VirtualPatientSession() {
                     ))}
                   </div>
                 )}
+                <div ref={threadEndRef} />
               </div>
               {state.transcript && (
                 <div className="mx-3 mb-3 rounded-lg border border-line bg-white/90 p-3 sm:mx-5">
