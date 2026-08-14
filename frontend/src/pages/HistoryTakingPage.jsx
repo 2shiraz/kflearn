@@ -196,7 +196,7 @@ export function HistoryHome() {
           </Link>
         </div>
 
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="history-bank" />}
         {state.error && <ErrorMessage message={state.error} />}
         {!state.loading && !state.error && (
           <>
@@ -247,7 +247,7 @@ export function HistorySectionPage() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: decodedSectionName || "Section" }]} />
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="history-section" />}
         {state.error && <ErrorMessage message={state.error} />}
         {!state.loading && !state.error && !selectedGroup && <ErrorMessage message="History section not found." />}
         {!state.loading && !state.error && selectedGroup && (
@@ -313,7 +313,7 @@ export function HistoryModuleDetail() {
         ) : (
           <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Station" }]} />
         )}
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="module-detail" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.module && (
           <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
@@ -400,7 +400,7 @@ export function SinglePlayerHistory() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Single player" }]} />
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="single-player" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.content && (
           <div className="grid gap-5 xl:grid-cols-[1fr_420px]">
@@ -587,7 +587,7 @@ export function VirtualPatientSession() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Virtual patient" }]} />
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="chat" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.attempt && (
           <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -689,7 +689,7 @@ export function SelfAssessmentPage() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Assessment" }]} />
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="assessment" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.checklist && (
           <Panel className="mx-auto max-w-3xl">
@@ -721,7 +721,7 @@ export function HistoryResultPage() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Results" }]} />
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="results" />}
         {state.error && <ErrorMessage message={state.error} />}
         {attempt && (
           <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
@@ -759,7 +759,7 @@ export function AttemptHistoryPage() {
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Attempts" }]} />
         <h1 className="mb-5 text-3xl font-extrabold text-ink">Attempt history</h1>
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="attempts" />}
         {state.error && <ErrorMessage message={state.error} />}
         <div className="space-y-3">
           {state.attempts.map((attempt) => (
@@ -921,7 +921,7 @@ export function AdminHistoryPage() {
             </button>
           ))}
         </div>
-        {state.loading && <Loading />}
+        {state.loading && <Loading variant="admin" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.message && <p className="mt-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">{state.message}</p>}
         {!state.loading && state.activeTab === "content" && <div className="mt-6 grid gap-5 xl:grid-cols-[1fr_420px]">
@@ -1085,27 +1085,227 @@ function Checklist({ checklist, checked, onChange }) {
   );
 }
 
-function Loading() {
+function Loading({ variant = "cards" }) {
+  const variants = {
+    "history-bank": <CardGridSkeleton cards={6} />,
+    "history-section": <CardGridSkeleton cards={6} withHeader />,
+    "module-detail": <ModuleDetailSkeleton />,
+    "single-player": <TwoColumnSkeleton leftRows={8} rightRows={7} />,
+    chat: <ChatSkeleton />,
+    assessment: <AssessmentSkeleton />,
+    results: <ResultsSkeleton />,
+    attempts: <AttemptListSkeleton />,
+    admin: <AdminSkeleton />,
+    cards: <CardGridSkeleton cards={3} />,
+  };
+  return <div className="animate-pulse">{variants[variant] || variants.cards}</div>;
+}
+
+function SkeletonLine({ className = "" }) {
+  return <div className={`rounded bg-slate-200/80 ${className}`} />;
+}
+
+function SkeletonPanel({ children, className = "" }) {
+  return <div className={`glass-surface rounded-lg p-5 ${className}`}>{children}</div>;
+}
+
+function CardGridSkeleton({ cards = 3, withHeader = false }) {
   return (
-    <div className="animate-pulse space-y-4">
-      <div className="glass-surface rounded-lg p-5">
-        <div className="h-4 w-32 rounded bg-slate-200/80" />
-        <div className="mt-3 h-8 w-72 max-w-full rounded bg-slate-200/80" />
-        <div className="mt-3 h-4 w-full max-w-xl rounded bg-slate-200/70" />
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {[0, 1, 2].map((item) => (
-          <div key={item} className="glass-surface rounded-lg p-5">
-            <div className="flex items-center justify-between">
-              <div className="h-10 w-10 rounded-lg bg-slate-200/80" />
-              <div className="h-6 w-20 rounded bg-slate-200/70" />
-            </div>
-            <div className="mt-5 h-6 w-44 rounded bg-slate-200/80" />
-            <div className="mt-3 h-4 w-full rounded bg-slate-200/70" />
-            <div className="mt-2 h-4 w-2/3 rounded bg-slate-200/70" />
+    <div className="space-y-4">
+      {withHeader && (
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <SkeletonLine className="h-3 w-24" />
+            <SkeletonLine className="mt-3 h-8 w-56" />
           </div>
+          <SkeletonLine className="h-8 w-24" />
+        </div>
+      )}
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {Array.from({ length: cards }).map((_, item) => (
+          <SkeletonPanel key={item}>
+            <div className="flex items-start justify-between">
+              <div>
+                <SkeletonLine className="h-3 w-20" />
+                <SkeletonLine className="mt-3 h-7 w-40" />
+              </div>
+              <SkeletonLine className="h-10 w-10 rounded-lg" />
+            </div>
+            <SkeletonLine className="mt-6 h-5 w-24" />
+            <SkeletonLine className="mt-3 h-4 w-full" />
+          </SkeletonPanel>
         ))}
       </div>
+    </div>
+  );
+}
+
+function ModuleDetailSkeleton() {
+  return (
+    <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+      <SkeletonPanel>
+        <SkeletonLine className="h-4 w-56" />
+        <SkeletonLine className="mt-4 h-10 w-3/4" />
+        <SkeletonLine className="mt-4 h-4 w-full max-w-2xl" />
+        <SkeletonLine className="mt-2 h-4 w-4/5" />
+        <div className="mt-8 space-y-3 border-t border-line pt-5">
+          <SkeletonLine className="h-5 w-44" />
+          <SkeletonLine className="h-4 w-full" />
+          <SkeletonLine className="h-4 w-5/6" />
+          <SkeletonLine className="h-4 w-3/4" />
+        </div>
+      </SkeletonPanel>
+      <div className="space-y-4">
+        <SkeletonPanel><PracticeCardSkeleton /></SkeletonPanel>
+        <SkeletonPanel><PracticeCardSkeleton /></SkeletonPanel>
+      </div>
+    </div>
+  );
+}
+
+function PracticeCardSkeleton() {
+  return (
+    <>
+      <div className="flex items-center justify-between">
+        <SkeletonLine className="h-10 w-10 rounded-lg" />
+        <SkeletonLine className="h-6 w-20" />
+      </div>
+      <SkeletonLine className="mt-5 h-6 w-44" />
+      <SkeletonLine className="mt-3 h-4 w-full" />
+      <SkeletonLine className="mt-2 h-4 w-2/3" />
+      <SkeletonLine className="mt-5 h-10 w-full" />
+    </>
+  );
+}
+
+function TwoColumnSkeleton({ leftRows = 6, rightRows = 5 }) {
+  return (
+    <div className="grid gap-5 xl:grid-cols-[1fr_420px]">
+      <SkeletonPanel>
+        <div className="flex items-start justify-between gap-3">
+          <SkeletonLine className="h-9 w-2/3" />
+          <SkeletonLine className="h-8 w-20" />
+        </div>
+        <div className="mt-7 grid gap-2">
+          {Array.from({ length: leftRows }).map((_, item) => (
+            <div key={item} className="rounded-lg border border-line bg-white/60 p-3">
+              <SkeletonLine className="h-4 w-44" />
+              <SkeletonLine className="mt-2 h-4 w-full" />
+            </div>
+          ))}
+        </div>
+      </SkeletonPanel>
+      <SkeletonPanel>
+        <SkeletonLine className="h-6 w-36" />
+        <div className="mt-5 space-y-3">
+          {Array.from({ length: rightRows }).map((_, item) => (
+            <SkeletonLine key={item} className="h-12 w-full" />
+          ))}
+        </div>
+      </SkeletonPanel>
+    </div>
+  );
+}
+
+function ChatSkeleton() {
+  return (
+    <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+      <SkeletonPanel className="flex h-[calc(100vh-170px)] min-h-[560px] flex-col overflow-hidden p-0">
+        <div className="border-b border-line p-5">
+          <SkeletonLine className="h-7 w-64" />
+          <SkeletonLine className="mt-2 h-4 w-40" />
+        </div>
+        <div className="flex flex-1 flex-col gap-4 p-5">
+          <SkeletonLine className="h-12 w-3/5" />
+          <SkeletonLine className="ml-auto h-12 w-1/2" />
+          <SkeletonLine className="h-20 w-2/3" />
+          <SkeletonLine className="ml-auto h-12 w-3/5" />
+        </div>
+        <div className="border-t border-line p-4">
+          <SkeletonLine className="h-12 w-full" />
+        </div>
+      </SkeletonPanel>
+      <SkeletonPanel>
+        <SkeletonLine className="h-6 w-44" />
+        <SkeletonLine className="mt-4 h-4 w-full" />
+        <SkeletonLine className="mt-2 h-4 w-5/6" />
+        <SkeletonLine className="mt-7 h-10 w-full" />
+      </SkeletonPanel>
+    </div>
+  );
+}
+
+function AssessmentSkeleton() {
+  return (
+    <SkeletonPanel className="mx-auto max-w-3xl">
+      <SkeletonLine className="h-8 w-56" />
+      <SkeletonLine className="mt-3 h-4 w-full max-w-xl" />
+      <div className="mt-6 space-y-3">
+        {Array.from({ length: 6 }).map((_, item) => <SkeletonLine key={item} className="h-14 w-full" />)}
+      </div>
+      <div className="mt-5 flex gap-3">
+        <SkeletonLine className="h-10 w-44" />
+        <SkeletonLine className="h-10 w-36" />
+      </div>
+    </SkeletonPanel>
+  );
+}
+
+function ResultsSkeleton() {
+  return (
+    <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
+      <SkeletonPanel>
+        <SkeletonLine className="h-4 w-24" />
+        <SkeletonLine className="mt-4 h-12 w-32" />
+        <SkeletonLine className="mt-3 h-4 w-40" />
+        <SkeletonLine className="mt-6 h-10 w-full" />
+      </SkeletonPanel>
+      <SkeletonPanel>
+        <SkeletonLine className="h-7 w-32" />
+        <SkeletonLine className="mt-4 h-4 w-full" />
+        <SkeletonLine className="mt-2 h-4 w-5/6" />
+        <SkeletonLine className="mt-7 h-5 w-28" />
+        <SkeletonLine className="mt-3 h-4 w-3/4" />
+      </SkeletonPanel>
+    </div>
+  );
+}
+
+function AttemptListSkeleton() {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: 5 }).map((_, item) => (
+        <SkeletonPanel key={item} className="p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex-1">
+              <SkeletonLine className="h-5 w-1/2" />
+              <SkeletonLine className="mt-2 h-4 w-36" />
+            </div>
+            <SkeletonLine className="h-8 w-16" />
+          </div>
+        </SkeletonPanel>
+      ))}
+    </div>
+  );
+}
+
+function AdminSkeleton() {
+  return (
+    <div className="mt-6 grid gap-5 xl:grid-cols-[1fr_420px]">
+      <SkeletonPanel>
+        <SkeletonLine className="h-7 w-40" />
+        <div className="mt-6 grid gap-3 md:grid-cols-2">
+          {Array.from({ length: 6 }).map((_, item) => <SkeletonLine key={item} className="h-11 w-full" />)}
+        </div>
+        <SkeletonLine className="mt-5 h-24 w-full" />
+        <SkeletonLine className="mt-5 h-10 w-full" />
+      </SkeletonPanel>
+      <SkeletonPanel>
+        <SkeletonLine className="h-7 w-48" />
+        <div className="mt-4 space-y-3">
+          {Array.from({ length: 5 }).map((_, item) => <SkeletonLine key={item} className="h-16 w-full" />)}
+        </div>
+      </SkeletonPanel>
     </div>
   );
 }

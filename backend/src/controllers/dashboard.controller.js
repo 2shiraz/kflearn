@@ -11,6 +11,9 @@ export async function getDashboardSummary(req, res) {
     data: {
       modules: {
         history: historyModuleCount,
+        clinicalExam: 0,
+        handouts: 0,
+        stations: 0,
       },
       attempts: attemptCount,
     },

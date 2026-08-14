@@ -129,6 +129,10 @@ export function listHistoryModules() {
   return apiFetch("/history");
 }
 
+export function getDashboardSummary() {
+  return apiFetch("/dashboard/summary");
+}
+
 export function getHistoryModule(slug) {
   return apiFetch(`/history/${slug}`);
 }
