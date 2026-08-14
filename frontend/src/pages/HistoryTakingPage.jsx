@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Bot,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   FileText,
@@ -343,11 +342,11 @@ function CandidateInstructions({ module }) {
       <h2 className="text-lg font-bold text-ink">Candidate instructions</h2>
       <p className="mt-2 text-sm text-ink-soft">{instructions.context}</p>
       <p className="mt-2 text-sm text-ink-soft">{instructions.patientSummary}</p>
-      <ul className="mt-4 space-y-2">
+      <div className="mt-4 space-y-2">
         {tasks.map((task) => (
-          <li key={task} className="flex gap-2 text-sm text-ink-soft"><CheckCircle2 size={16} className="mt-0.5 text-good" /> {task}</li>
+          <p key={task} className="text-sm font-bold text-ink">{task}</p>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

@@ -47,7 +47,7 @@ async function deleteAdultAsthmaStation() {
 const respiratoryHistoryStations = [
   {
     module: {
-      title: "Focused history and diagnostic planning for suspected adult asthma",
+      title: "Suspected Adult Asthma",
       slug: "pdf-focused-history-diagnostic-planning-suspected-adult-asthma",
       presentingComplaint: "Episodic wheeze and chest tightness",
       systemOrTopic: "Asthma",
@@ -62,8 +62,6 @@ const respiratoryHistoryStations = [
         tasks: [
           "Take a focused respiratory history.",
           "Assess symptom pattern, triggers, control, risk factors, and red flags.",
-          "Explain the likely diagnosis and the need for objective confirmation.",
-          "Outline safe next steps.",
         ],
         examinationRequired: false,
         additionalInstructions: ["You have 8 minutes."],
