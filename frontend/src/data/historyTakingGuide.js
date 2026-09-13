@@ -797,8 +797,6 @@ export const masterChecklist = {
   ],
 };
 
-export const closingNote =
-  "This guide covers all history-taking stations from the OSCE book. Memorise SOCRATES, MJTHREADS, and HOSE PIPERS — they appear in every station. The station-specific additions are the extras that separate a good mark from an excellent one.";
 
 export function getTopic(slug) {
   return topics.find((topic) => topic.slug === slug) || null;

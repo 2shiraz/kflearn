@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { Breadcrumbs, ErrorMessage, PageMain, Panel, RequireUser } from "../components/AppPage";
 import {
-  closingNote,
   communicationSkills,
   coreMnemonics,
   generalApproach,
@@ -328,8 +327,6 @@ export function HistoryGuideHome() {
           </Panel>
 
           <MasterChecklistWidget />
-
-          <p className="text-center text-sm text-ink-soft">{closingNote}</p>
         </div>
       </PageMain>
     </RequireUser>
