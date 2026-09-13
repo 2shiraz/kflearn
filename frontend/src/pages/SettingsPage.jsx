@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BookOpen, Building2, CalendarClock, Camera, Check, GraduationCap, Mail, Sparkles, Target, User } from "lucide-react";
-import { fetchCurrentUser, getCurrentUser, logout, updateProfileRequest } from "../lib/api";
-import Sidebar from "../components/Sidebar";
+import { fetchCurrentUser, getCurrentUser, updateProfileRequest } from "../lib/api";
+import { PageMain, RequireUser } from "../components/AppPage";
 
 export default function SettingsPage() {
   const [user, setUser] = useState(null);
@@ -71,10 +71,8 @@ export default function SettingsPage() {
   const initials = form.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
 
   return (
-    <div className="app-gradient-bg flex min-h-screen">
-      <Sidebar active="settings" onLogout={() => { logout(); window.location.href = "/signin"; }} />
-
-      <main className="mx-auto w-full max-w-7xl flex-1 px-5 py-8 lg:px-8">
+    <RequireUser active="settings">
+      <PageMain>
         <div className="flex items-center gap-3">
           <span className="gradient-brand flex h-11 w-11 items-center justify-center rounded-lg text-white">
             <User size={20} />
@@ -149,8 +147,8 @@ export default function SettingsPage() {
             </div>
           </form>
         </div>
-      </main>
-    </div>
+      </PageMain>
+    </RequireUser>
   );
 }
 

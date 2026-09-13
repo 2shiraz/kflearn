@@ -45,26 +45,43 @@ function TopicIcon({ name, ...props }) {
 function GuideBlock({ block }) {
   if (block.type === "table") {
     return (
-      <div className="mt-3 overflow-x-auto rounded-lg border border-line">
-        <table className="w-full min-w-[420px] text-left text-sm">
-          <thead>
-            <tr className="border-b border-line bg-white/60">
-              {block.columns.map((column) => (
-                <th key={column} className="px-3 py-2 font-bold text-ink">{column}</th>
+      <>
+        {/* Phones: one stacked card per row — avoids hunting for a horizontal scrollbar on a 3-column table. */}
+        <div className="mt-3 space-y-2 sm:hidden">
+          {block.rows.map((row, rowIndex) => (
+            <div key={rowIndex} className="rounded-lg border border-line bg-white/60 p-3 text-sm">
+              <p className="font-semibold text-ink">{row[0]}</p>
+              {row.slice(1).map((cell, cellIndex) => (
+                <p key={cellIndex} className="mt-1 text-ink-soft">
+                  <span className="font-medium text-ink">{block.columns[cellIndex + 1]}: </span>
+                  {cell}
+                </p>
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {block.rows.map((row, rowIndex) => (
-              <tr key={rowIndex} className="border-b border-line/70 bg-white/40 last:border-b-0">
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className={`px-3 py-2 align-top ${cellIndex === 0 ? "font-semibold text-ink" : "text-ink-soft"}`}>{cell}</td>
+            </div>
+          ))}
+        </div>
+        {/* Tablet and up: a real table, room enough that it doesn't need to scroll. */}
+        <div className="mt-3 hidden overflow-x-auto rounded-lg border border-line sm:block">
+          <table className="w-full min-w-[420px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-line bg-white/60">
+                {block.columns.map((column) => (
+                  <th key={column} className="px-3 py-2 font-bold text-ink">{column}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {block.rows.map((row, rowIndex) => (
+                <tr key={rowIndex} className="border-b border-line/70 bg-white/40 last:border-b-0">
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex} className={`px-3 py-2 align-top ${cellIndex === 0 ? "font-semibold text-ink" : "text-ink-soft"}`}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
     );
   }
 

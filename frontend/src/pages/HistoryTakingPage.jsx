@@ -986,7 +986,20 @@ export function AdminHistoryPage() {
           <Panel>
             <h2 className="text-2xl font-extrabold text-ink">Users</h2>
             <p className="mt-1 text-sm text-ink-soft">{state.users.length} registered accounts.</p>
-            <div className="mt-5 overflow-x-auto">
+            {/* Phones: one card per user — a 5-column table has no room to breathe below sm. */}
+            <div className="mt-5 space-y-2 sm:hidden">
+              {state.users.map((user) => (
+                <div key={user.id} className="rounded-lg border border-line bg-white/60 p-3 text-sm">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-semibold text-ink">{user.fullName}</p>
+                    <span className="gradient-pill shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold text-ink">{user.role}</span>
+                  </div>
+                  <p className="mt-1 break-all text-ink-soft">{user.email}</p>
+                  <p className="mt-1 text-ink-soft">{user.roleLabel || user.profile?.programme || "-"} · Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-5 hidden overflow-x-auto sm:block">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead className="text-xs uppercase text-ink-soft">
                   <tr>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MessageSquareText, Stethoscope, FileText, ClipboardList, ArrowRight } from "lucide-react";
-import { getCurrentUser, getDashboardSummary, logout } from "../lib/api";
-import Sidebar from "../components/Sidebar";
+import { getCurrentUser, getDashboardSummary } from "../lib/api";
+import { PageMain, RequireUser } from "../components/AppPage";
 import { topics as historyGuideTopics } from "../data/historyTakingGuide";
 
 const sections = [
@@ -62,11 +62,9 @@ export default function DashboardPage() {
   if (!user) return null;
 
   return (
-    <div className="app-gradient-bg flex min-h-screen">
-      <Sidebar active="dashboard" onLogout={() => { logout(); window.location.href = "/signin"; }} />
-
-      <main className="mx-auto w-full max-w-7xl flex-1 px-5 py-8 lg:px-8">
-        <div className="flex animate-fade-up items-start justify-between gap-4">
+    <RequireUser active="dashboard">
+      <PageMain>
+        <div className="flex animate-fade-up flex-wrap items-start justify-between gap-4">
           <div>
             <p className="mb-2 text-sm font-semibold text-ink-soft">Dashboard</p>
             <h1 className="font-display text-4xl font-extrabold text-ink">
@@ -119,8 +117,8 @@ export default function DashboardPage() {
             })}
           </div>
         )}
-      </main>
-    </div>
+      </PageMain>
+    </RequireUser>
   );
 }
 

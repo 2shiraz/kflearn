@@ -12,7 +12,7 @@ export default function ComingSoonPage({ sectionKey, title }) {
   return (
     <div className="app-gradient-bg flex min-h-screen">
       <Sidebar active={sectionKey} onLogout={() => { logout(); window.location.href = "/signin"; }} />
-      <main className="flex flex-1 items-center justify-center px-6">
+      <main className="mt-14 flex min-w-0 flex-1 items-center justify-center px-6 sm:mt-0">
         <div className="gradient-card rounded-lg p-8 text-center" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" }}>
           <h1 className="font-display text-2xl font-extrabold text-ink">{title}</h1>
           <p className="mt-2 text-ink-soft">This section isn't built yet - coming in the next pass.</p>

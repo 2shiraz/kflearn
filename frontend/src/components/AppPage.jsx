@@ -31,11 +31,18 @@ export function RequireUser({ children, active = "stations", adminOnly = false }
 }
 
 export function PageMain({ children }) {
-  return <main className="mx-auto w-full max-w-7xl flex-1 px-5 py-8 lg:px-8">{children}</main>;
+  // min-w-0 overrides the flex item's default min-width:auto — without it, a wide
+  // descendant (e.g. a reference table) forces this whole column wider than the
+  // viewport instead of scrolling within its own overflow-x-auto wrapper, which
+  // pushes the sidebar+content flex row into a page-wide horizontal scroll.
+  // mt-14 clears Sidebar's fixed mobile header bar (only rendered below sm).
+  return <main className="mx-auto mt-14 w-full min-w-0 max-w-7xl flex-1 px-4 py-6 sm:mt-0 sm:px-5 sm:py-8 lg:px-8">{children}</main>;
 }
 
 export function Panel({ children, className = "", ...props }) {
-  return <div className={`glass-surface rounded-lg p-5 ${className}`} {...props}>{children}</div>;
+  // Same min-w-0 fix, one level down: Panels sit in grids/flex rows of their own
+  // (dashboard cards, guide sections) and are just as susceptible.
+  return <div className={`glass-surface min-w-0 rounded-lg p-4 sm:p-5 ${className}`} {...props}>{children}</div>;
 }
 
 export function PrimaryButton({ children, className = "", ...props }) {
