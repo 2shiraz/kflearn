@@ -4,6 +4,7 @@ import {
   Bot,
   ChevronLeft,
   ChevronRight,
+  Eye,
   FileText,
   History,
   Mic,
@@ -373,6 +374,7 @@ export function SinglePlayerHistory() {
   const params = new URLSearchParams(window.location.search);
   const attemptId = params.get("attemptId");
   const [state, setState] = useState({ loading: true, content: null, checked: [], notes: "", error: "" });
+  const [checklistRevealed, setChecklistRevealed] = useState(false);
   const finishRef = useRef(false);
   const timer = useCountdown({ limitSeconds: state.content?.timeLimitSeconds || 360, enabled: Boolean(state.content) });
 
@@ -420,8 +422,26 @@ export function SinglePlayerHistory() {
                 ))}
               </div>
             </Panel>
-            <Panel>
-              <Checklist checklist={state.content.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
+            <Panel className="self-start">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-lg font-bold text-ink">Marking checklist</h2>
+                {!checklistRevealed && (
+                  <button
+                    type="button"
+                    onClick={() => setChecklistRevealed(true)}
+                    className="glass-surface inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold text-ink"
+                  >
+                    <Eye size={14} /> Reveal checklist
+                  </button>
+                )}
+              </div>
+              {checklistRevealed ? (
+                <Checklist checklist={state.content.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
+              ) : (
+                <p className="mt-3 rounded-lg border border-dashed border-line bg-white/60 p-3 text-sm text-ink-soft">
+                  Hidden for now so you self-test properly — take the history from the patient script first, then reveal the checklist to self-mark.
+                </p>
+              )}
               <label className="mt-5 block">
                 <span className="text-sm font-semibold text-ink">Notes</span>
                 <textarea className="mt-2 min-h-28 w-full rounded-lg border border-line bg-white/80 p-3 text-sm outline-none focus:border-brand" value={state.notes} onChange={(e) => setState((s) => ({ ...s, notes: e.target.value }))} />
