@@ -29,6 +29,7 @@ import {
   VirtualPatientSession,
 } from "./pages/HistoryTakingPage";
 import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
+import { ClinicalExamGuideHome, ClinicalExamGuideStation } from "./pages/ClinicalExaminationPage";
 
 function LandingPage() {
   return (
@@ -72,7 +73,8 @@ export default function App() {
           <Route path="/history-taking" element={<HistoryGuideHome />} />
           <Route path="/history-taking/:topicSlug" element={<HistoryGuideTopic />} />
           <Route path="/history" element={<HistoryGuideHome />} />
-          <Route path="/clinical-examination" element={<ComingSoonPage sectionKey="clinical-exam" title="Clinical Examination" />} />
+          <Route path="/clinical-examination" element={<ClinicalExamGuideHome />} />
+          <Route path="/clinical-examination/:stationSlug" element={<ClinicalExamGuideStation />} />
           <Route path="/handout-notes" element={<ComingSoonPage sectionKey="handouts" title="Handout Notes" />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />
           <Route path="*" element={<NotFoundPage />} />

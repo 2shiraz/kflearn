@@ -4,6 +4,7 @@ import { MessageSquareText, Stethoscope, FileText, ClipboardList, ArrowRight } f
 import { getCurrentUser, getDashboardSummary } from "../lib/api";
 import { PageMain, RequireUser } from "../components/AppPage";
 import { topics as historyGuideTopics } from "../data/historyTakingGuide";
+import { stations as examStations } from "../data/clinicalExaminationGuide";
 
 const sections = [
   {
@@ -14,9 +15,9 @@ const sections = [
     iconText: "text-ink", badgeText: "text-brand",
   },
   {
-    key: "clinical-exam", label: "Clinical Examination", href: "/clinical-examination",
-    desc: "Step-by-step illustrated examination guides by body system, with downloadable checklists.",
-    countKey: "clinicalExam", icon: Stethoscope,
+    key: "clinical-exam", label: "Clinical Examination Guide", href: "/clinical-examination",
+    desc: "The step-by-step order, mnemonics, and findings for all twelve OSCE examination stations.",
+    staticCount: examStations.length, countLabel: "station", icon: Stethoscope,
     iconStyle: { "--g1": "#7FB8FF", "--g2": "#A6D0FF", "--glow": "rgba(127,184,255,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },
