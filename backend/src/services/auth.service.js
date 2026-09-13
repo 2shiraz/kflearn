@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
@@ -27,10 +28,14 @@ function toUserDto(user) {
 }
 
 function signToken(user) {
-  return jwt.sign({ sub: user._id.toString(), role: user.role }, env.jwtSecret, {
+  const token = jwt.sign({ sub: user._id.toString(), role: user.role }, env.jwtSecret, {
     expiresIn: env.jwtExpiresIn,
   });
+  const { exp } = jwt.decode(token);
+  return { token, expiresInMs: exp * 1000 - Date.now() };
 }
+
+const PASSWORD_RULE = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
 function cleanProfile(profile = {}) {
   return {
@@ -50,8 +55,8 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     error.status = 400;
     throw error;
   }
-  if (password.length < 8) {
-    const error = new Error("Password must be at least 8 characters.");
+  if (!PASSWORD_RULE.test(password)) {
+    const error = new Error("Password must be at least 8 characters and include a letter and a number.");
     error.status = 400;
     throw error;
   }
@@ -63,9 +68,9 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     throw error;
   }
 
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await bcrypt.hash(password, 12);
   const user = await User.create({
-    externalId: `user_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    externalId: `user_${crypto.randomUUID()}`,
     fullName: normalizedName,
     email: normalizedEmail,
     passwordHash,
@@ -74,7 +79,8 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     profile: cleanProfile(profile),
   });
 
-  return { token: signToken(user), expiresIn: env.jwtExpiresIn, user: toUserDto(user) };
+  const { token, expiresInMs } = signToken(user);
+  return { token, expiresInMs, user: toUserDto(user) };
 }
 
 export async function loginUser({ email, password }) {
@@ -86,7 +92,8 @@ export async function loginUser({ email, password }) {
     throw error;
   }
 
-  return { token: signToken(user), expiresIn: env.jwtExpiresIn, user: toUserDto(user) };
+  const { token, expiresInMs } = signToken(user);
+  return { token, expiresInMs, user: toUserDto(user) };
 }
 
 export async function currentUser(userId) {

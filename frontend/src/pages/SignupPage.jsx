@@ -113,7 +113,9 @@ export default function SignupPage() {
                     type={showPassword ? "text" : "password"}
                     required
                     minLength={8}
-                    placeholder="Min. 8 characters"
+                    pattern="(?=.*[A-Za-z])(?=.*\d).{8,}"
+                    title="At least 8 characters, including a letter and a number."
+                    placeholder="Min. 8 characters, 1 letter and 1 number"
                     value={account.password}
                     onChange={(e) => setAccount((a) => ({ ...a, password: e.target.value }))}
                     className="w-full rounded-lg border border-line bg-white/80 px-4 py-3 pr-11 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20"
@@ -126,6 +128,7 @@ export default function SignupPage() {
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
+                <p className="mt-1.5 text-xs text-ink-soft">At least 8 characters, with a letter and a number.</p>
               </div>
 
               {status === "error" && (

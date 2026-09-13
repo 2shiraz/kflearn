@@ -17,8 +17,10 @@
 ```json
 { "success": true, "data": { ... } }
 ```
-- Auth-protected routes require header: `Authorization: Bearer <token>` OR the `kf_session` httpOnly cookie set at login.
+- Auth-protected routes require header: `Authorization: Bearer <token>` OR the `kf_session` httpOnly cookie set at login. The frontend SPA uses the cookie exclusively (fetch calls send `credentials: "include"`); the response body still includes `token` for non-browser API clients.
 - Password rules: min 8 chars, 1 number, 1 letter (enforced server-side, SEC-02 bcrypt cost 12).
+- CSRF: cookie-authenticated, state-changing requests (anything but GET/HEAD/OPTIONS) must echo the `XSRF-TOKEN` cookie value in an `X-XSRF-Token` header (double-submit pattern). Requests authenticated via `Authorization: Bearer` are exempt — they aren't a CSRF vector. `register`/`login`/`logout` are exempt too (no session exists yet, or nothing sensitive to protect).
+- Rate limiting: `/api/auth/register` and `/api/auth/login` are limited to 10 requests/IP/minute (SEC-04); the rest of `/api` is limited to 300 requests/IP/minute.
 
 ---
 
@@ -48,9 +50,9 @@ Register a new user (Student, Content Contributor, or Admin-invited).
 }
 ```
 
-**Errors**: `409 EMAIL_TAKEN`, `422 VALIDATION_ERROR`
+**Errors**: `409 EMAIL_TAKEN`, `422 VALIDATION_ERROR`, `429 RATE_LIMITED`
 
-Status: **frontend built (SignupPage.jsx, 3-step flow), awaiting backend** — mock registration auto-logs the user in with no email verification step. Real backend must enforce FR-1.2 verification before login succeeds.
+Status: **built** — request/response shape differs from the original mock-era draft above: no `role` field accepted (public signup always creates `role: "student"`; `roleLabel` is a free-text display label, see `saves to profile` below), and the response returns `{ token, expiresIn, user }` (same shape as login) rather than an `emailVerified` flag — **there is still no email-verification step (FR-1.2 not implemented)**, registration logs the user in immediately. `password` must be 8+ chars with a letter and a number (enforced server-side).
 
 ---
 
@@ -83,9 +85,9 @@ Status: **not yet built**
   }
 }
 ```
-**Errors**: `401 INVALID_CREDENTIALS`, `403 EMAIL_NOT_VERIFIED`, `429 RATE_LIMITED` (SEC-04: max 10 req/IP/min)
+**Errors**: `401 INVALID_CREDENTIALS`, `429 RATE_LIMITED` (SEC-04: max 10 req/IP/min)
 
-Status: **frontend built (SigninPage.jsx), awaiting backend**
+Status: **built** — no `403 EMAIL_NOT_VERIFIED` (no verification step exists yet, see register above).
 
 ---
 
@@ -103,11 +105,11 @@ Status: **not yet built**
 ---
 
 ### `POST /api/auth/logout`
-Invalidates current session token (SEC-11).
+Clears the `kf_session` and `XSRF-TOKEN` cookies server-side (SEC-11). A bearer-token client has nothing to clear server-side — this only invalidates the cookie session; a Bearer JWT remains valid until it expires.
 **Request**: none (uses auth header/cookie)
 **Response `200`**: `{ "success": true }`
 
-Status: **not yet built**
+Status: **built**
 
 ---
 
@@ -132,53 +134,57 @@ Returns current authenticated user. Used by frontend on app load to check sessio
 **Response `200`**: `{ "success": true, "data": { "user": {...} } }`
 **Errors**: `401 UNAUTHENTICATED`
 
-Status: **not yet built**
+Status: **built**
 
 ---
 
-## Frontend mock mode
+## Frontend auth session (no more mock mode)
 
-Until the backend is live, `src/lib/api.js` serves mock responses shaped exactly like the
-contracts above, gated by `USE_MOCK = true` at the top of that file. Backend dev: when your
-route is ready, flip that flag to `false` and the frontend switches to real `fetch` calls with
-zero changes to any page component.
+`src/lib/api.js` no longer has a `USE_MOCK` flag or mock responses — every call is a real
+`fetch` against the backend, with `credentials: "include"` so the `kf_session` cookie travels
+automatically. `getCurrentUser()` reads a cached copy of the profile from `localStorage['kf_user']`
+for synchronous, flash-free page gating; that cache is a display convenience only, never the
+auth mechanism — a viewer can't grant themselves access by editing it, since every request is
+re-authorized server-side from the cookie. `logout()` clears that cache and fires
+`POST /api/auth/logout` (fire-and-forget, `keepalive: true`) to clear the cookie too.
 
-`getCurrentUser()` / `logout()` in the same file read/clear the mock session
-(`sessionStorage['kf_mock_user']`). Replace their internals with a real `GET /api/auth/me` call
-and a real `POST /api/auth/logout` call respectively when wiring the backend — nothing that
-imports them (DashboardPage, SigninPage) needs to change.
+(Historically this cache lived in `sessionStorage`, which is per-tab — opening the app in a new
+tab looked signed-out until the cookie-based session existed. It's `localStorage` now, shared
+across tabs, matching the cookie's actual scope.)
 
-**Demo login credentials (mock mode only):**
-| Email | Password | Role |
-|---|---|---|
-| `student@kflearn.pk` | `Student123` | student |
-| `contributor@kflearn.pk` | `Contrib123` | contributor |
+**Demo/mock login credentials are gone** — there's no mock mode left; register or log in against
+the real backend (seed data doesn't include user accounts).
 
 ## Changelog
 - 2026-08-10: Initial auth spec drafted (register, verify-email, login, google, logout, forgot/reset password, me). Signin page built against `/api/auth/login`.
 - 2026-08-10: Added mock API layer (`src/lib/api.js`) so frontend/signin work independently of backend. `USE_MOCK` flag is the single switch-over point.
 - 2026-08-10: Added `/dashboard` route (mock data), `getCurrentUser()`/`logout()` session helpers, and brand palette changed to indigo/purple per updated design.
+- 2026-09-13: Security hardening pass — register/login/me/logout all built against the real backend (mock mode removed). Auth now cookie-based end-to-end (`kf_session` httpOnly + `XSRF-TOKEN` double-submit CSRF cookie); bcrypt cost 12; password policy enforced server-side; rate limiting on auth endpoints; NoSQL-injection sanitization; masked 5xx error messages in production; fixed the bug where a new tab appeared signed out (session cache moved from `sessionStorage` to `localStorage`).
 
 ---
 
 ## User Profile Module
 
-### `PATCH /api/users/me`
-Update the authenticated user's academic profile.
+### `PATCH /api/auth/me`
+Update the authenticated user's academic profile. (Superscedes the `PATCH /api/users/me` path
+originally sketched below — it was actually built under the auth module, alongside `GET /me`, see above.)
 
 **Request** (any subset of fields)
 ```json
 {
   "fullName": "Ahmed Khan",
-  "institution": "Allama Iqbal Medical College",
-  "programme": "MBBS",
-  "yearLevel": "Year 4",
-  "targetExam": "FCPS Part 1",
-  "expectedExamDate": "2027-03"
+  "roleLabel": "FCPS Candidate",
+  "profile": {
+    "institution": "Allama Iqbal Medical College",
+    "programme": "MBBS",
+    "yearLevel": "Year 4",
+    "targetExam": "FCPS Part 1",
+    "expectedExamDate": "2027-03"
+  }
 }
 ```
 **Response `200`**: `{ "success": true, "data": { "user": {...} } }`
 
-Status: **not yet built** — `SettingsPage.jsx` currently saves to local component state only; changes are lost on reload. Wire this up and swap the mock `handleSave` for a real call.
+Status: **built**, and wired up in `SettingsPage.jsx` — requires the `X-XSRF-Token` CSRF header (see Conventions).
 
 - 2026-08-10: Added `/signup` — 3-step flow (account details → role select → optional academic profile). `registerRequest()` and `saveProfileDetails()` added to `lib/api.js`, same USE_MOCK switch-over pattern as login. Role selection maps to a free-text `roleLabel` for display; internal `role` field stays `"student"` for all signups (contributor accounts are still seeded only, per FR-1.6 — public signup shouldn't grant elevated roles). No email verification gate in mock mode — flag this when wiring the real backend.

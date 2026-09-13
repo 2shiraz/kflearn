@@ -1,9 +1,13 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
 import { env } from "./config/env.js";
 import { authenticate } from "./middleware/auth.js";
+import { csrfProtection } from "./middleware/csrf.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
+import { apiLimiter } from "./middleware/rateLimit.js";
 import authRoutes from "./routes/auth.routes.js";
 import historyRoutes from "./routes/history.routes.js";
 import attemptRoutes from "./routes/historyAttempt.routes.js";
@@ -14,15 +18,23 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 
 export function createApp() {
   const app = express();
+  // Behind a reverse proxy/load balancer in production, so req.ip and req.secure
+  // (used by rate limiting and secure cookies) reflect the real client, not the proxy hop.
+  if (env.isProduction) app.set("trust proxy", 1);
+
   app.use(helmet());
   app.use(cors({ origin: env.frontendUrl, credentials: true }));
   app.use(express.json({ limit: "1mb" }));
+  app.use(cookieParser());
+  app.use(mongoSanitize()); // strips `$`/`.` keys from body/query/params to block NoSQL operator injection
 
   app.get("/api/health", (req, res) => {
     res.json({ success: true, data: { status: "ok" } });
   });
+  app.use("/api", apiLimiter);
   app.use("/api/auth", authRoutes);
   app.use(authenticate);
+  app.use(csrfProtection);
   app.use("/api/dashboard", dashboardRoutes);
   app.use("/api/history/attempts", attemptRoutes);
   app.use("/api/history", historyRoutes);

@@ -4,7 +4,7 @@ import { env } from "../config/env.js";
 const PREFIX = "enc:v1:";
 
 function key() {
-  return crypto.createHash("sha256").update(env.jwtSecret).digest();
+  return crypto.createHash("sha256").update(env.encryptionKey).digest();
 }
 
 export function encryptSecret(value = "") {

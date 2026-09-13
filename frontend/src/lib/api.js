@@ -1,8 +1,17 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
+// Real authentication is the httpOnly `kf_session` cookie the server sets on
+// login/register — the browser attaches it to every request automatically,
+// including from a freshly opened tab, which is what makes sessions survive
+// new tabs. `kf_user` below is just a cached copy of the profile for instant,
+// synchronous UI reads (e.g. "is anyone logged in?" on first render); it is
+// stored in localStorage (shared across tabs) rather than sessionStorage
+// (per-tab, which was the cause of the "new tab signs me out" bug) and is
+// never treated as a credential — every server request is re-authorized from
+// the cookie regardless of what this cache says.
 const SESSION_KEY = "kf_user";
 const LEGACY_SESSION_KEY = "kf_mock_user";
-const TOKEN_KEY = "kf_auth_token";
+const LEGACY_TOKEN_KEY = "kf_auth_token";
 
 export const ROLE_OPTIONS = [
   "MBBS Student",
@@ -12,16 +21,21 @@ export const ROLE_OPTIONS = [
   "Other Medical Learner",
 ];
 
-export function saveAuthSession(data) {
+function clearLegacySessionStorage() {
+  sessionStorage.removeItem(SESSION_KEY);
   sessionStorage.removeItem(LEGACY_SESSION_KEY);
-  if (data?.token) sessionStorage.setItem(TOKEN_KEY, data.token);
-  if (data?.user) sessionStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  sessionStorage.removeItem(LEGACY_TOKEN_KEY);
+}
+
+export function saveAuthSession(data) {
+  clearLegacySessionStorage();
+  if (data?.user) localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
   return data;
 }
 
 export function getCurrentUser() {
-  sessionStorage.removeItem(LEGACY_SESSION_KEY);
-  const raw = sessionStorage.getItem(SESSION_KEY);
+  clearLegacySessionStorage();
+  const raw = localStorage.getItem(SESSION_KEY);
   if (!raw) return null;
   try {
     return JSON.parse(raw);
@@ -31,19 +45,18 @@ export function getCurrentUser() {
   }
 }
 
-export function getAuthToken() {
-  const token = sessionStorage.getItem(TOKEN_KEY);
-  if (token === "mock-jwt-token") {
-    logout();
-    return null;
-  }
-  return token;
+function getCsrfToken() {
+  const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+  return match ? decodeURIComponent(match[1]) : "";
 }
 
 export function logout() {
-  sessionStorage.removeItem(SESSION_KEY);
-  sessionStorage.removeItem(LEGACY_SESSION_KEY);
-  sessionStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(SESSION_KEY);
+  clearLegacySessionStorage();
+  // Best-effort: ask the server to clear the httpOnly cookie too (it can't be
+  // cleared from JS). `keepalive` lets the request finish even though callers
+  // redirect the page away immediately after calling logout().
+  fetch(`${API_BASE}/auth/logout`, { method: "POST", credentials: "include", keepalive: true }).catch(() => {});
 }
 
 export async function registerRequest({ fullName, email, password, roleLabel, profile }) {
@@ -64,7 +77,7 @@ export async function loginRequest({ email, password }) {
 
 export async function fetchCurrentUser() {
   const data = await apiFetch("/auth/me");
-  if (data?.user) sessionStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  if (data?.user) localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
   return data;
 }
 
@@ -73,19 +86,20 @@ export async function updateProfileRequest(payload) {
     method: "PATCH",
     body: JSON.stringify(payload),
   });
-  if (data?.user) sessionStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  if (data?.user) localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
   return data;
 }
 
 export function saveProfileDetails(user, profile) {
   const merged = { ...user, ...profile, profile: { ...(user?.profile || {}), ...profile } };
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(merged));
+  localStorage.setItem(SESSION_KEY, JSON.stringify(merged));
   return merged;
 }
 
 async function publicFetch(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {}),
@@ -99,18 +113,15 @@ async function publicFetch(path, options = {}) {
 }
 
 async function apiFetch(path, options = {}) {
-  const token = getAuthToken();
-  if (!token) {
-    logout();
-    window.location.href = "/signin";
-    throw new Error("Authentication required.");
-  }
-
+  const method = (options.method || "GET").toUpperCase();
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
+    credentials: "include",
     headers: {
       ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
-      Authorization: `Bearer ${token}`,
+      // The session itself travels via the httpOnly cookie (sent automatically);
+      // this header is only the CSRF double-submit check for state-changing requests.
+      ...(method !== "GET" ? { "X-XSRF-Token": getCsrfToken() } : {}),
       ...(options.headers || {}),
     },
   });
