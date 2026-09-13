@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Stethoscope, LayoutGrid, ClipboardList, MessageSquareText, FileText, TrendingUp, Settings, LogOut, Menu, ShieldCheck, X } from "lucide-react";
+import { Stethoscope, LayoutGrid, ClipboardList, FileQuestion, MessageSquareText, FileText, TrendingUp, Settings, LogOut, Menu, ShieldCheck, X } from "lucide-react";
 import { getCurrentUser } from "../lib/api";
 
 export const SECTIONS = [
   { key: "dashboard", label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
   { key: "history", label: "History Taking Guide", icon: ClipboardList, href: "/history-taking" },
   { key: "clinical-exam", label: "Clinical Examination Guide", icon: Stethoscope, href: "/clinical-examination" },
+  { key: "mcqs", label: "MCQs", icon: FileQuestion, href: "/mcqs" },
   { key: "handouts", label: "Handout Notes", icon: FileText, href: "/handout-notes" },
   { key: "stations", label: "OSCE Stations", icon: MessageSquareText, href: "/stations" },
   { key: "progress", label: "Progress", icon: TrendingUp, href: "/progress" },

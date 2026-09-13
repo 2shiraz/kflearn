@@ -75,6 +75,7 @@ export default function App() {
           <Route path="/history" element={<HistoryGuideHome />} />
           <Route path="/clinical-examination" element={<ClinicalExamGuideHome />} />
           <Route path="/clinical-examination/:stationSlug" element={<ClinicalExamGuideStation />} />
+          <Route path="/mcqs" element={<ComingSoonPage sectionKey="mcqs" title="MCQs" />} />
           <Route path="/handout-notes" element={<ComingSoonPage sectionKey="handouts" title="Handout Notes" />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />
           <Route path="*" element={<NotFoundPage />} />

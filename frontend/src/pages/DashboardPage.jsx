@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MessageSquareText, Stethoscope, FileText, ClipboardList, ArrowRight } from "lucide-react";
+import { MessageSquareText, Stethoscope, FileText, FileQuestion, ClipboardList, ArrowRight } from "lucide-react";
 import { getCurrentUser, getDashboardSummary } from "../lib/api";
 import { PageMain, RequireUser } from "../components/AppPage";
 import { topics as historyGuideTopics } from "../data/historyTakingGuide";
@@ -19,6 +19,13 @@ const sections = [
     desc: "The step-by-step order, mnemonics, and findings for every OSCE examination station — core, MSK, neuro, and advanced.",
     staticCount: examStations.length, countLabel: "station", icon: Stethoscope,
     iconStyle: { "--g1": "#7FB8FF", "--g2": "#A6D0FF", "--glow": "rgba(127,184,255,0.35)" },
+    iconText: "text-ink", badgeText: "text-brand",
+  },
+  {
+    key: "mcqs", label: "MCQs", href: "/mcqs",
+    desc: "Single-best-answer practice questions with explanations, organised by specialty.",
+    countKey: "mcqs", icon: FileQuestion,
+    iconStyle: { "--g1": "#FFD84D", "--g2": "#C6A6FF", "--glow": "rgba(198,166,255,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },
   {
