@@ -15,7 +15,7 @@ import {
   Stethoscope,
   Timer,
 } from "lucide-react";
-import Sidebar from "../components/Sidebar";
+import { Breadcrumbs, ErrorMessage, LinkButton, PageMain, Panel, PrimaryButton, RequireUser } from "../components/AppPage";
 import {
   aiAssessHistoryAttempt,
   createAdminHistoryContent,
@@ -35,67 +35,6 @@ import {
   transcribeHistoryAudio,
   updateAiStatus,
 } from "../lib/api";
-import { getCurrentUser, logout } from "../lib/api";
-
-function RequireUser({ children, active = "stations", adminOnly = false }) {
-  const user = getCurrentUser();
-  if (!user) {
-    window.location.href = "/signin";
-    return null;
-  }
-  if (adminOnly && user.role !== "admin") {
-    return (
-      <div className="app-gradient-bg flex min-h-screen">
-        <Sidebar active="admin" onLogout={() => { logout(); window.location.href = "/signin"; }} />
-        <PageMain>
-          <ErrorMessage message="Admin access is required." />
-        </PageMain>
-      </div>
-    );
-  }
-  return (
-    <div className="app-gradient-bg flex min-h-screen">
-      <Sidebar active={active} onLogout={() => { logout(); window.location.href = "/signin"; }} />
-      {children}
-    </div>
-  );
-}
-
-function PageMain({ children }) {
-  return <main className="mx-auto w-full max-w-7xl flex-1 px-5 py-8 lg:px-8">{children}</main>;
-}
-
-function Panel({ children, className = "" }) {
-  return <div className={`glass-surface rounded-lg p-5 ${className}`}>{children}</div>;
-}
-
-function PrimaryButton({ children, className = "", ...props }) {
-  return <button className={`gradient-brand rounded-lg px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50 ${className}`} {...props}>{children}</button>;
-}
-
-function LinkButton({ children, to, className = "" }) {
-  return <Link to={to} className={`gradient-brand inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold text-white ${className}`}>{children}</Link>;
-}
-
-function Breadcrumbs({ items }) {
-  return (
-    <nav aria-label="Breadcrumb" className="mb-7 flex flex-wrap items-center gap-2 text-base text-ink-soft">
-      {items.map((item, index) => {
-        const isLast = index === items.length - 1;
-        return (
-          <span key={`${item.label}-${index}`} className="inline-flex items-center gap-2">
-            {item.to && !isLast ? (
-              <Link to={item.to} className="underline decoration-line underline-offset-2 hover:text-ink">{item.label}</Link>
-            ) : (
-              <span className={isLast ? "font-extrabold text-ink" : ""}>{item.label}</span>
-            )}
-            {!isLast && <span className="text-ink-soft/70">/</span>}
-          </span>
-        );
-      })}
-    </nav>
-  );
-}
 
 function sectionPath(name) {
   return `/stations/section/${encodeURIComponent(name)}`;
@@ -1328,10 +1267,6 @@ function AdminSkeleton() {
       </SkeletonPanel>
     </div>
   );
-}
-
-function ErrorMessage({ message }) {
-  return <div className="rounded-lg border border-rose-100 bg-rose-50 p-4 text-sm text-rose-700">{message}</div>;
 }
 
 function TextInput({ label, value, onChange, ...props }) {

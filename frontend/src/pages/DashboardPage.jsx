@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { MessageSquareText, Stethoscope, FileText, ClipboardList, ArrowRight } from "lucide-react";
 import { getCurrentUser, getDashboardSummary, logout } from "../lib/api";
 import Sidebar from "../components/Sidebar";
+import { topics as historyGuideTopics } from "../data/historyTakingGuide";
 
 const sections = [
   {
-    key: "history", label: "History Taking", href: "/history-taking",
-    desc: "Structured history-taking guides, mnemonics, and reference notes by specialty — coming soon.",
-    countKey: "stations", icon: ClipboardList,
+    key: "history", label: "History Taking Guide", href: "/history-taking",
+    desc: "Mnemonics, question sets, and differentials for every history-taking station, organised by presenting complaint.",
+    staticCount: historyGuideTopics.length, countLabel: "topic", icon: ClipboardList,
     iconStyle: { "--g1": "#FFD84D", "--g2": "#FFE38A", "--glow": "rgba(255,216,77,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },
@@ -91,7 +92,8 @@ export default function DashboardPage() {
         ) : (
           <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
             {sections.map((s, i) => {
-              const count = Number(summary.modules?.[s.countKey] || 0);
+              const count = s.staticCount ?? Number(summary.modules?.[s.countKey] || 0);
+              const label = s.countLabel || "module";
               return (
                 <Link
                   key={s.key}
@@ -104,7 +106,7 @@ export default function DashboardPage() {
                       <s.icon size={20} />
                     </span>
                     <span className={`gradient-pill rounded-lg px-3 py-1 text-xs font-semibold ${s.badgeText}`}>
-                      {count} {count === 1 ? "module" : "modules"}
+                      {count} {count === 1 ? label : `${label}s`}
                     </span>
                   </div>
                   <h2 className="mt-5 font-display text-xl font-extrabold text-ink">{s.label}</h2>

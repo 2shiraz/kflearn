@@ -28,6 +28,7 @@ import {
   SinglePlayerHistory,
   VirtualPatientSession,
 } from "./pages/HistoryTakingPage";
+import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
 
 function LandingPage() {
   return (
@@ -68,8 +69,9 @@ export default function App() {
           <Route path="/stations/attempts/:attemptId/ai-assessment" element={<SelfAssessmentPage />} />
           <Route path="/stations/attempts/:attemptId/results" element={<HistoryResultPage />} />
           <Route path="/admin/stations" element={<AdminHistoryPage />} />
-          <Route path="/history" element={<ComingSoonPage sectionKey="history" title="History Taking" />} />
-          <Route path="/history-taking" element={<ComingSoonPage sectionKey="history" title="History Taking" />} />
+          <Route path="/history-taking" element={<HistoryGuideHome />} />
+          <Route path="/history-taking/:topicSlug" element={<HistoryGuideTopic />} />
+          <Route path="/history" element={<HistoryGuideHome />} />
           <Route path="/clinical-examination" element={<ComingSoonPage sectionKey="clinical-exam" title="Clinical Examination" />} />
           <Route path="/handout-notes" element={<ComingSoonPage sectionKey="handouts" title="Handout Notes" />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />
