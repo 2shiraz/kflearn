@@ -36,7 +36,7 @@ import {
 } from "../lib/api";
 import { getCurrentUser, logout } from "../lib/api";
 
-function RequireUser({ children, active = "history", adminOnly = false }) {
+function RequireUser({ children, active = "stations", adminOnly = false }) {
   const user = getCurrentUser();
   if (!user) {
     window.location.href = "/signin";
@@ -97,7 +97,7 @@ function Breadcrumbs({ items }) {
 }
 
 function sectionPath(name) {
-  return `/history/section/${encodeURIComponent(name)}`;
+  return `/stations/section/${encodeURIComponent(name)}`;
 }
 
 function groupModulesBySpecialty(modules) {
@@ -184,14 +184,14 @@ export function HistoryHome() {
   return (
     <RequireUser>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations" }]} />
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-ink-soft">History Taking</p>
-            <h1 className="mt-1 text-4xl font-extrabold text-ink">History bank</h1>
-            <p className="mt-2 max-w-2xl text-ink-soft">Choose a published history module, practise with instructions or a virtual patient, then assess your performance.</p>
+            <p className="text-sm font-semibold text-ink-soft">OSCE Stations</p>
+            <h1 className="mt-1 text-4xl font-extrabold text-ink">Station bank</h1>
+            <p className="mt-2 max-w-2xl text-ink-soft">Choose a published OSCE station, practise with instructions or a virtual patient, then assess your performance.</p>
           </div>
-          <Link to="/history/attempts" className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-ink">
+          <Link to="/stations/attempts" className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-ink">
             <History size={16} /> Attempts
           </Link>
         </div>
@@ -246,10 +246,10 @@ export function HistorySectionPage() {
   return (
     <RequireUser>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: decodedSectionName || "Section" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: decodedSectionName || "Section" }]} />
         {state.loading && <Loading variant="history-section" />}
         {state.error && <ErrorMessage message={state.error} />}
-        {!state.loading && !state.error && !selectedGroup && <ErrorMessage message="History section not found." />}
+        {!state.loading && !state.error && !selectedGroup && <ErrorMessage message="Station section not found." />}
         {!state.loading && !state.error && selectedGroup && (
           <section>
             <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
@@ -262,7 +262,7 @@ export function HistorySectionPage() {
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {pagedModules.map((module) => (
-                <Link key={module.id} to={`/history/${module.slug}`} className="gradient-card rounded-lg p-5">
+                <Link key={module.id} to={`/stations/${module.slug}`} className="gradient-card rounded-lg p-5">
                   <div className="mb-4 flex items-start justify-between gap-3">
                     <span className="gradient-icon flex h-10 w-10 items-center justify-center rounded-lg text-ink"><Stethoscope size={18} /></span>
                     <span className="gradient-pill rounded-lg px-2.5 py-1 text-xs font-semibold text-ink">{module.difficulty}</span>
@@ -301,17 +301,17 @@ export function HistoryModuleDetail() {
   async function start(mode) {
     setState((s) => ({ ...s, starting: mode }));
     const data = await createHistoryAttempt({ moduleId: state.module.id, mode });
-    if (mode === "single-player") navigate(`/history/${slug}/single-player?attemptId=${data.attempt.id}`);
-    else navigate(`/history/attempts/${data.attempt.id}/session`);
+    if (mode === "single-player") navigate(`/stations/${slug}/single-player?attemptId=${data.attempt.id}`);
+    else navigate(`/stations/attempts/${data.attempt.id}/session`);
   }
 
   return (
     <RequireUser>
       <PageMain>
         {state.module ? (
-          <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: state.module.specialty?.name || "Section", to: sectionPath(state.module.specialty?.name || "General") }, { label: state.module.title }]} />
+          <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: state.module.specialty?.name || "Section", to: sectionPath(state.module.specialty?.name || "General") }, { label: state.module.title }]} />
         ) : (
-          <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Station" }]} />
+          <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Station" }]} />
         )}
         {state.loading && <Loading variant="module-detail" />}
         {state.error && <ErrorMessage message={state.error} />}
@@ -388,7 +388,7 @@ export function SinglePlayerHistory() {
     if (attemptId) {
       await endHistoryAttempt(attemptId, { notes: state.notes, elapsedSeconds: timer.elapsedSeconds });
       await selfAssessHistoryAttempt(attemptId, state.checked);
-      navigate(`/history/attempts/${attemptId}/results`);
+      navigate(`/stations/attempts/${attemptId}/results`);
     }
   }
 
@@ -399,7 +399,7 @@ export function SinglePlayerHistory() {
   return (
     <RequireUser>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Single player" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Single player" }]} />
         {state.loading && <Loading variant="single-player" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.content && (
@@ -576,7 +576,7 @@ export function VirtualPatientSession() {
     if (endRef.current) return;
     endRef.current = true;
     await endHistoryAttempt(attemptId, { elapsedSeconds: timer.elapsedSeconds });
-    navigate(`/history/attempts/${attemptId}/self-assessment`);
+    navigate(`/stations/attempts/${attemptId}/self-assessment`);
   }
 
   useEffect(() => {
@@ -586,7 +586,7 @@ export function VirtualPatientSession() {
   return (
     <RequireUser>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Virtual patient" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Virtual patient" }]} />
         {state.loading && <Loading variant="chat" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.attempt && (
@@ -676,19 +676,19 @@ export function SelfAssessmentPage() {
 
   async function selfAssess() {
     await selfAssessHistoryAttempt(attemptId, state.checked);
-    navigate(`/history/attempts/${attemptId}/results`);
+    navigate(`/stations/attempts/${attemptId}/results`);
   }
 
   async function aiAssess() {
     setState((s) => ({ ...s, aiLoading: true }));
     await aiAssessHistoryAttempt(attemptId);
-    navigate(`/history/attempts/${attemptId}/results`);
+    navigate(`/stations/attempts/${attemptId}/results`);
   }
 
   return (
     <RequireUser>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Assessment" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Assessment" }]} />
         {state.loading && <Loading variant="assessment" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.checklist && (
@@ -720,7 +720,7 @@ export function HistoryResultPage() {
   return (
     <RequireUser>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Results" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Results" }]} />
         {state.loading && <Loading variant="results" />}
         {state.error && <ErrorMessage message={state.error} />}
         {attempt && (
@@ -730,7 +730,7 @@ export function HistoryResultPage() {
               <p className="mt-2 text-5xl font-extrabold text-ink">{attempt.finalScore?.percentage ?? 0}%</p>
               <p className="mt-2 text-sm text-ink-soft">{attempt.finalScore?.rawScore ?? 0} / {attempt.finalScore?.maxRawScore ?? 0} raw marks</p>
               {attempt.aiAssessment?.provider && <p className="mt-2 text-xs font-semibold text-ink-soft">{attempt.aiAssessment.provider} / {attempt.aiAssessment.model}</p>}
-              <LinkButton to="/history/attempts" className="mt-5 w-full">Attempt history</LinkButton>
+              <LinkButton to="/stations/attempts" className="mt-5 w-full">Attempt history</LinkButton>
             </Panel>
             <Panel>
               <h1 className="text-2xl font-extrabold text-ink">Feedback</h1>
@@ -757,13 +757,13 @@ export function AttemptHistoryPage() {
   return (
     <RequireUser>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History bank", to: "/history" }, { label: "Attempts" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Attempts" }]} />
         <h1 className="mb-5 text-3xl font-extrabold text-ink">Attempt history</h1>
         {state.loading && <Loading variant="attempts" />}
         {state.error && <ErrorMessage message={state.error} />}
         <div className="space-y-3">
           {state.attempts.map((attempt) => (
-            <Link key={attempt.id} to={`/history/attempts/${attempt.id}/results`} className="glass-surface block rounded-lg p-4">
+            <Link key={attempt.id} to={`/stations/attempts/${attempt.id}/results`} className="glass-surface block rounded-lg p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="font-bold text-ink">{attempt.module?.title}</p>
@@ -905,7 +905,7 @@ export function AdminHistoryPage() {
   return (
     <RequireUser active="admin" adminOnly>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin", to: "/admin/history" }, { label: "Console" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin", to: "/admin/stations" }, { label: "Console" }]} />
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm font-semibold text-ink-soft">Admin</p>
@@ -929,9 +929,9 @@ export function AdminHistoryPage() {
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 className="text-xl font-extrabold text-ink">Add content</h2>
-                <p className="mt-1 text-sm text-ink-soft">History stations are supported now. Other content types can fit this section later.</p>
+                <p className="mt-1 text-sm text-ink-soft">OSCE stations are supported now. Other content types can fit this section later.</p>
               </div>
-              <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-bold text-ink">History station</span>
+              <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-bold text-ink">OSCE station</span>
             </div>
             <form onSubmit={createDraft} className="mt-5 space-y-5">
               <div className="grid gap-3 md:grid-cols-2">

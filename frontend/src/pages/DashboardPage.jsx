@@ -7,8 +7,8 @@ import Sidebar from "../components/Sidebar";
 const sections = [
   {
     key: "history", label: "History Taking", href: "/history-taking",
-    desc: "Practise structured patient consultations for common presenting complaints across all specialties.",
-    countKey: "history", icon: MessageSquareText,
+    desc: "Structured history-taking guides, mnemonics, and reference notes by specialty — coming soon.",
+    countKey: "stations", icon: ClipboardList,
     iconStyle: { "--g1": "#FFD84D", "--g2": "#FFE38A", "--glow": "rgba(255,216,77,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },
@@ -28,8 +28,8 @@ const sections = [
   },
   {
     key: "stations", label: "OSCE Stations", href: "/stations",
-    desc: "Timed clinical stations with AI evaluation, structured checklists, and viva questions.",
-    countKey: "stations", icon: ClipboardList,
+    desc: "Practise structured patient consultations for common presenting complaints across all specialties, with AI evaluation and viva questions.",
+    countKey: "history", icon: MessageSquareText,
     iconStyle: { "--g1": "#FF8FCF", "--g2": "#FFB3E0", "--glow": "rgba(255,143,207,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },

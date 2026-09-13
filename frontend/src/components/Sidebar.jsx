@@ -4,16 +4,16 @@ import { getCurrentUser } from "../lib/api";
 
 export const SECTIONS = [
   { key: "dashboard", label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
-  { key: "history", label: "History Taking", icon: MessageSquareText, href: "/history" },
+  { key: "history", label: "History Taking", icon: ClipboardList, href: "/history" },
   { key: "clinical-exam", label: "Clinical Examination", icon: Stethoscope, href: "/clinical-examination" },
   { key: "handouts", label: "Handout Notes", icon: FileText, href: "/handout-notes" },
-  { key: "stations", label: "OSCE Stations", icon: ClipboardList, href: "/stations" },
+  { key: "stations", label: "OSCE Stations", icon: MessageSquareText, href: "/stations" },
   { key: "progress", label: "Progress", icon: TrendingUp, href: "/progress" },
 ];
 
 export default function Sidebar({ active = "dashboard", onLogout }) {
   const user = getCurrentUser();
-  const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", icon: ShieldCheck, href: "/admin/history" }] : SECTIONS;
+  const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", icon: ShieldCheck, href: "/admin/stations" }] : SECTIONS;
 
   return (
     <aside className="sticky top-0 flex h-screen w-20 flex-col items-center border-r border-line bg-white/70 py-5 backdrop-blur-xl lg:w-60 lg:items-stretch lg:px-4">
