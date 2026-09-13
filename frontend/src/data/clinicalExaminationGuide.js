@@ -19,10 +19,11 @@ export const universalOpening = {
     { label: "Position the patient correctly", detail: "Angle varies by station — see each station" },
     { label: "Expose appropriately", detail: "Always maintain dignity" },
   ],
+  note: "At the bedside, a quick framework for every station: is the patient A – Alert, B – (normal) Body habitus, C – Comfortable at rest?",
 };
 
-// The one mnemonic the source guide calls "the master mnemonic" — the motor
-// exam order used in every neurological station.
+// The two mnemonics used across every station in this guide — TOP RaCk drives
+// the neurological stations, Look/Feel/Move drives every joint (MSK) station.
 export const coreMnemonic = {
   id: "top-rack",
   name: "TOP RaCk",
@@ -39,6 +40,19 @@ export const coreMnemonic = {
     ["k", "(skip)"],
   ],
   note: "Then always add Sensation after co-ordination.",
+};
+
+export const mskFramework = {
+  id: "look-feel-move",
+  name: "Look, Feel, Move",
+  subtitle: "The universal framework for every joint (MSK) examination — always compare both sides",
+  type: "list",
+  items: [
+    "Look: inspect from front, side, and behind — scars, swelling, deformity, muscle wasting, skin changes",
+    "Feel: temperature, tenderness, effusions, joint margins — check for pain first and start on the normal side",
+    "Move: active movement first, then passive if abnormal, feeling for crepitus",
+    "Special tests: joint-specific provocation tests to confirm a suspected diagnosis",
+  ],
 };
 
 export const masterQuickReference = {
@@ -93,6 +107,7 @@ export const stations = [
   {
     slug: "cardiovascular-examination",
     title: "Cardiovascular Examination",
+    category: "Core",
     icon: "HeartPulse",
     summary: "Hands to murmurs — JVP, apex character, the four auscultation areas, and the Duke criteria for endocarditis.",
     meta: { position: "45 degrees", exposure: "Waist upward" },
@@ -179,6 +194,15 @@ export const stations = [
               ["Bisferiens (double peak)", "AS + AR combined"],
               ["Pulsus alternans", "Left ventricular failure"],
               ["Pulsus paradoxus", "Tamponade, asthma"],
+            ],
+          },
+          {
+            type: "list",
+            heading: "Testing for a collapsing pulse",
+            items: [
+              "Ask whether they have any pain or stiffness in their shoulder first",
+              "With your hand around their wrist/lower forearm muscle bulk, rapidly raise the patient's arm upwards",
+              "You are feeling for a marked bounding sensation — the pulse slapping your hand",
             ],
           },
         ],
@@ -371,6 +395,7 @@ export const stations = [
   {
     slug: "respiratory-examination",
     title: "Respiratory Examination",
+    category: "Core",
     icon: "Wind",
     summary: "Clubbing causes, tactile fremitus, percussion notes, breath sounds, and what sputum colour tells you.",
     meta: { position: "45 degrees", exposure: "Chest fully exposed" },
@@ -407,6 +432,10 @@ export const stations = [
               ["Tremor", "Beta-agonist (salbutamol) use"],
             ],
           },
+          {
+            type: "list",
+            items: ["Check if wrists are painful by light squeeze — indicates pulmonary hypertrophic osteoarthropathy"],
+          },
         ],
       },
       {
@@ -418,6 +447,9 @@ export const stations = [
               "Eyes: Anaemia",
               "Tongue: Central cyanosis",
               "JVP: Raised and pulsatile = cor pulmonale; raised and fixed = SVC obstruction",
+              "Oral candidiasis: Inhaled steroid use",
+              "Plethoric complexion: Carbon dioxide retention",
+              "Butterfly rash: SLE",
             ],
           },
         ],
@@ -534,6 +566,7 @@ export const stations = [
   {
     slug: "abdominal-examination",
     title: "Abdominal Examination",
+    category: "Core",
     icon: "CircleDot",
     summary: "Scars, chronic liver disease signs, Murphy's and Rovsing's signs, and telling the spleen from the left kidney.",
     meta: { position: "Fully flat", exposure: '"Nipples to knees" — maintain dignity' },
@@ -588,6 +621,14 @@ export const stations = [
               ["Left iliac fossa", "Stoma formation"],
             ],
           },
+          {
+            type: "list",
+            heading: "Additional inspection signs",
+            items: [
+              "Cullen's sign: bruising around the umbilicus (haemorrhagic pancreatitis)",
+              "Grey-Turner sign: bruising in the flank (haemorrhagic pancreatitis)",
+            ],
+          },
         ],
       },
       {
@@ -600,8 +641,12 @@ export const stations = [
               ["Clubbing", "Cirrhosis, IBD, coeliac, cystic fibrosis"],
               ["Leuconychia (white nails)", "Cirrhosis, hypoalbuminaemia"],
               ["Koilonychia (spoon nails)", "Iron deficiency anaemia"],
-              ["Palmar erythema", "Chronic liver disease"],
-              ["Dupuytren's contracture", "Liver cirrhosis"],
+              ["Tar staining", "History of smoking"],
+              ["Palmar erythema", "Chronic liver disease, pregnancy, hyperdynamic circulation"],
+              ["Dupuytren's contracture", "Liver cirrhosis (alcoholism), familial"],
+              ["Tendon xanthomata", "Hyperlipidaemia"],
+              ["Pigmentation of palmar creases", "Addison's disease"],
+              ["Finger glucose-monitoring marks", "Diabetes"],
               ["Asterixis (flapping tremor)", "Decompensated hepatic encephalopathy"],
               ["AV fistula scar", "Dialysis patient"],
             ],
@@ -748,8 +793,651 @@ export const stations = [
     ],
   },
   {
+    slug: "gals-examination",
+    title: "GALS Examination",
+    category: "Musculoskeletal",
+    icon: "PersonStanding",
+    summary: "The 90-second screening exam for Gait, Arms, Legs, and Spine, with the gait-pathology differentials.",
+    meta: { exposure: "Down to underwear, maintaining dignity" },
+    order: ["Screening questions", "Gait", "Look", "Spine", "Arms", "Legs"],
+    sections: [
+      {
+        heading: "Screening questions",
+        intro: "Three questions to ask at the start of the exam:",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Do you have any pain or stiffness in your joints, muscles, or back?",
+              "Can you dress yourself without difficulty?",
+              "Do you have any difficulty going up or down stairs?",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Gait",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Ask the patient to walk to the wall, turn around, and walk back",
+              "Check for symmetry, smoothness, and step height",
+              "Observe the gait cycle (heel strike, toe-off) — is the turn smooth and quick?",
+            ],
+          },
+          { type: "paragraph", text: "Gait pathology:" },
+          {
+            type: "table",
+            columns: ["Gait", "What it can indicate"],
+            rows: [
+              ["Antalgic gait", "Stance phase abnormally shortened to reduce time on that foot — implies pain in that leg"],
+              ["Waddling gait", "Upper body moves forwards, drags lower leg — weakness of proximal pelvic muscles (gluteus)"],
+              ["Spastic gait", "Stiffness in the legs, tendency to circumduct the feet — upper motor neuron lesion"],
+              ["Fixed flexion / hyperextended knee", "Occurs in polio, as patients have quadriceps wasting"],
+              ["High-stepping gait", "Foot-drop due to loss of dorsiflexion — damage to the deep fibular nerve"],
+              ["Trendelenburg's gait", "Support the patient's outstretched arms, ask them to stand on one leg — if the unsupported side of the pelvis drops, that's a positive Trendelenburg sign, indicating damage to gluteus medius on the supported side (superior gluteal nerve lesion)"],
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Patient standing — look from front, side, and behind",
+        blocks: [
+          {
+            type: "table",
+            columns: ["View", "Area", "What to look for"],
+            rows: [
+              ["Front", "Posture", "Obvious asymmetry"],
+              ["Front", "Shoulder", "Bulk and symmetry"],
+              ["Front", "Elbow extension", "Carrying angle (normal is 5–15°)"],
+              ["Front", "Leg length", "Leg length inequality"],
+              ["Front", "Quadriceps", "Wasting in chronic joint disease"],
+              ["Front", "Knees", "Erythema / hyperextension"],
+              ["Front", "Ankle", "Swelling and erythema (inflammatory arthritis or sepsis)"],
+              ["Front", "Feet", "Hallux valgus; midfoot deformity (flat feet)"],
+              ["Side", "Cervical spine", "Hyperlordosis (spondylolisthesis, discitis, osteoporosis)"],
+              ["Side", "Thoracic spine", "Hyperkyphosis (Scheuermann's kyphosis)"],
+              ["Side", "Lumbar spine", "Hyperlordosis (sacroiliac joint disease)"],
+              ["Side", "Foot arches", "Pes planus (flat feet) or pes cavus (high-arched feet)"],
+              ["Side", "Toe clawing", "Plantar fascial fibromatosis"],
+              ["Behind", "Shoulders", "Tenderness"],
+              ["Behind", "Spine", "Scoliosis (S-shaped spine)"],
+              ["Behind", "Iliac crest", "ASIS symmetry, pelvic tilt"],
+              ["Behind", "Gluteal", "Wasting of gluteal muscles"],
+              ["Behind", "Popliteal fossa", "Baker's cyst (non-pulsatile) or popliteal aneurysm (pulsatile)"],
+              ["Behind", "Hind-foot", "Thickening of the Achilles' tendon"],
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Spine",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Look at the spine for scoliosis, and from the side for abnormal lordosis/kyphosis",
+              "Assess lateral flexion of the cervical spine: ask patient to tilt head to each side, ear towards shoulder",
+              "Assess range of movement of the TMJ and deviation of the jaw",
+              "Squeeze over the supraspinatus as a trigger point — indicates whether the patient has chronic pain",
+              "Schober's test: mark two points over adjacent lumbar vertebral spines, ask patient to touch their toes, and look for expansion on flexion and the marks coming back together on extension (reduced flexion → ankylosing spondylitis)",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Arms",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Ask the patient to sit on the couch and put their hands behind their head (tests shoulder abduction, external rotation, elbow flexion)",
+              "Ask the patient to hold hands out, palms down, fingers outstretched, to test extension of the joints",
+              "Assess the backs of the hands for asymmetry, joint swelling, and deformity",
+              "Gently squeeze across the metacarpophalangeal joints and assess for discomfort",
+              "Ask the patient to turn their hands over so palms face up",
+              "Assess muscle bulk of the palms for thenar/hypothenar wasting",
+              "Ask the patient to make a fist to test range of movement of the small joints of the fingers",
+              "Assess power and precision grip",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Legs",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Look at the quadriceps muscle bulk and assess for swellings/deformities",
+              "Perform a patellar tap for knee effusion",
+              "Assess passive flexion and extension of the knee",
+              "Assess internal rotation of the hip",
+              "Inspect the feet and squeeze the metatarsophalangeal joints to assess for pain — active inflammatory arthropathy",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Finish",
+        blocks: [
+          { type: "paragraph", text: "Bloods: full blood count, U&Es, ESR, CRP, specific rheumatoid factors, and auto-antibodies." },
+          { type: "paragraph", text: "Imaging: AP and lateral radiographs; MRI for soft tissue damage." },
+          { type: "paragraph", text: "Special tests: joint aspiration and microscopy for crystals." },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "knee-examination",
+    title: "Knee Examination",
+    category: "Musculoskeletal",
+    icon: "Bone",
+    summary: "Varus vs valgus, the lateral bulge and patellar tap tests, and the cruciate, collateral, and meniscal special tests.",
+    meta: { position: "Standing to look, reclined to ~45° to feel", exposure: "Trousers removed" },
+    order: ["Gait", "Look", "Feel", "Move", "Special tests"],
+    sections: [
+      {
+        heading: "Bedside inspection",
+        blocks: [
+          { type: "paragraph", text: "Observe the surroundings: mobility aids, Zimmer frame, shoes (heel raises and supports). Look at the patient's hands discreetly — may indicate OA or RA." },
+        ],
+      },
+      {
+        heading: "Gait",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Ask the patient to walk to the wall, turn around, and walk back",
+              "Check for symmetry, smoothness, and step height",
+              "Observe the gait cycle (heel strike, toe-off) — is the turn smooth and quick?",
+            ],
+          },
+          { type: "paragraph", text: "Gait pathology:" },
+          {
+            type: "table",
+            columns: ["Gait", "What it can indicate"],
+            rows: [
+              ["Antalgic gait", "Stance phase abnormally shortened to reduce time on that foot — implies pain in that leg"],
+              ["Ataxic gait", "Unsteady, staggering, uncoordinated walking — cerebellar lesion"],
+              ["Festinant gait", "Short, accelerating steps, often on tip-toes — increased muscle tension, commonly Parkinson's disease"],
+              ["Fixed flexion / hyperextended knee", "Occurs in polio, as patients have quadriceps wasting"],
+              ["High-stepping gait", "Foot-drop due to loss of dorsiflexion — damage to the deep fibular nerve"],
+              ["Trendelenburg's gait", "Pelvis drops on the unsupported side when standing on one leg — gluteus medius damage (superior gluteal nerve)"],
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Look — inspect from front, side, and behind",
+        blocks: [
+          {
+            type: "table",
+            columns: ["View", "Sign", "What it may indicate"],
+            rows: [
+              ["Front", "Scars", "Previous surgery"],
+              ["Front", "Swelling", "Effusions around the patella: sub- and supra-patellar cysts; psoriatic plaques"],
+              ["Front", "Asymmetry / leg length discrepancy", "Growth arrest in childhood; patellar asymmetry"],
+              ["Front", "Varus vs valgus", "Varus (more common) — medial compartment osteoarthritis; valgus (more common) — rheumatoid arthritis; also check fixed flexion/hyperextension"],
+              ["Front", "Quadriceps bulk", "Wasting (sarcopenia)"],
+              ["Side", "Foot deformity", "Pes cavus (high-arched) or pes planus (flat feet)"],
+              ["Behind", "Asymmetry", "Check if the iliac crests are level"],
+              ["Behind", "Hamstring bulk", "Check for sarcopenia"],
+              ["Behind", "Popliteal swelling", "Popliteal aneurysm, Baker's cyst, semimembranosus cyst"],
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Feel (patient reclined to ~45°)",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Temperature: back of hand, medially and laterally, comparing both knees — increased temperature suggests inflammation",
+              "Offer to measure apparent and true leg length, and quadriceps circumference if there is asymmetry",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Effusion tests",
+            items: [
+              "Lateral bulge test: swipe fluid from the medial knee into the suprapatellar pouch, hold with one hand on the medial side, swipe down into the lateral side with the other — medial sulcus refilling suggests a (small) effusion",
+              "Patellar tap: milk fluid down from the suprapatellar pouch (10cm above the patella), then press on the patella with the other hand — a palpable 'tap' on the underlying femur indicates a large effusion",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Palpate the joint line",
+            items: [
+              "Patella margins: palpate medial and lateral facets for tenderness and swing the patella side to side",
+              "Medial and lateral aspects of the joint line",
+              "Quadriceps tendon insertion into the patella — tenderness suggests tendonitis",
+              "Tibial tuberosity — tenderness seen in Osgood-Schlatter disease",
+              "Head of the fibula — identify any head-of-fibula fractures",
+              "With the knee lax at 30°, feel the popliteal fossa",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Move",
+        blocks: [
+          {
+            type: "list",
+            heading: "Active movement",
+            items: [
+              "Flexion: ask patient to bend the knee as much as possible (normal is 135°)",
+              "Extension: ask patient to straighten the leg and extend the knee as much as possible",
+              "Check for hyperextension: ask patient to lift the heel off the bed (normal is 5°)",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Passive movement",
+            items: [
+              "Passively assess flexion and extension",
+              "Hip internal rotation with the knee bent — excludes hip disease",
+              "Hyperextension: elevate both legs by the heels and note any hyperextension (>10° is abnormal)",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Special tests",
+        blocks: [
+          {
+            type: "list",
+            heading: "Cruciate ligaments (knee flexed to 90°)",
+            items: [
+              "Anterior drawer: grasp the upper tibia (fingers in popliteal fossa, thumbs on tibial tuberosity) and pull forwards — abnormal anterior motion indicates ACL laxity",
+              "Posterior drawer: push the tibia posteriorly to assess PCL laxity",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Collateral ligaments (knee extended to 10°)",
+            items: ["MCL: apply outward pressure on the foot; LCL: apply inward pressure — movement >5–10° is abnormal"],
+          },
+          { type: "paragraph", text: "Meniscus: offer McMurray's test to assess for medial and lateral meniscal tears." },
+        ],
+      },
+      {
+        heading: "Finish",
+        blocks: [
+          { type: "paragraph", text: "Examine the neurovascular state of both limbs (pulse, sensation, proprioception) and the joints above and below (hip and ankle)." },
+          { type: "paragraph", text: "Imaging: AP and lateral radiographs of the knee." },
+        ],
+      },
+    ],
+    examTips: ["McMurray's test assesses meniscal damage but can be painful to perform — warn the patient first."],
+  },
+  {
+    slug: "hip-examination",
+    title: "Hip Examination",
+    category: "Musculoskeletal",
+    icon: "Milestone",
+    summary: "Trendelenburg's and Thomas' tests, true vs apparent leg length, and the same gait-pathology differentials as GALS.",
+    meta: { exposure: "Trousers removed" },
+    order: ["Gait", "Look", "Feel", "Move", "Special tests"],
+    sections: [
+      {
+        heading: "Bedside inspection",
+        blocks: [{ type: "paragraph", text: "Observe the surroundings: mobility aids, Zimmer frame, shoes (heel raises and supports)." }],
+      },
+      {
+        heading: "Gait",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Ask the patient to walk to the wall, turn around, and walk back",
+              "Check for symmetry, smoothness, and step height",
+              "Observe the gait cycle (heel strike, toe-off) — is the turn smooth and quick?",
+            ],
+          },
+          { type: "paragraph", text: "Gait pathology:" },
+          {
+            type: "table",
+            columns: ["Gait", "What it can indicate"],
+            rows: [
+              ["Antalgic gait", "Stance phase abnormally shortened to reduce time on that foot — implies pain in that leg"],
+              ["Waddling gait", "Upper body moves forwards, drags lower leg — weakness of proximal pelvic muscles (gluteus)"],
+              ["Spastic gait", "Stiffness in the legs, tendency to circumduct the feet — upper motor neuron lesion"],
+              ["Fixed flexion / hyperextended knee", "Occurs in polio, as patients have quadriceps wasting"],
+              ["High-stepping gait", "Foot-drop due to loss of dorsiflexion — damage to the deep fibular nerve"],
+              ["Trendelenburg's gait", "Pelvis drops on the unsupported side when standing on one leg — gluteus medius damage (superior gluteal nerve)"],
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Patient standing — look from front, side, and behind",
+        blocks: [
+          {
+            type: "table",
+            columns: ["View", "Sign", "What it may indicate"],
+            rows: [
+              ["Front", "Scars", "Previous surgery"],
+              ["Front", "Pelvic tilt", "Weakness of muscles on one side"],
+              ["Front", "Asymmetry / leg length discrepancy", "Growth arrest in childhood"],
+              ["Front", "Quadriceps wasting", "Wasting in chronic joint disease"],
+              ["Side", "Foot deformity", "Pes cavus (high-arched) or pes planus (flat feet)"],
+              ["Side", "Loss of lumbar lordosis", "Fixed flexion deformity"],
+              ["Behind", "Gluteal wasting / scoliosis", "—"],
+            ],
+          },
+          { type: "paragraph", text: "Asymmetry of the pelvic brim (\"dimples of Venus\"): sagittal symmetrical indentations sometimes visible on the lower back, just above the gluteal cleft, created by a short ligament stretching between the posterior superior iliac spine and the skin." },
+          {
+            type: "list",
+            heading: "Trendelenburg's test",
+            items: [
+              "Stand in front of the patient and ask them to put outstretched hands on your arms for support",
+              "Look for weakness of hip abductors and depression on that side — a positive sign (pelvis drops on the opposite side) suggests weakness of the gluteus medius/minimus",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Feel (patient reclined)",
+        blocks: [
+          { type: "list", items: ["Assess skin for scars and pigmentation", "Assess muscles for wasting and fasciculation"] },
+          {
+            type: "table",
+            columns: ["Measurement", "How", "Meaning if unequal"],
+            rows: [
+              ["Apparent leg length", "Umbilicus to medial malleolus, both sides", "Suggests pelvic tilt from spinal/pelvic deformity"],
+              ["True leg length", "ASIS to ipsilateral medial malleolus, both sides", "Suggests actual limb shortening (fracture, hip disease)"],
+            ],
+          },
+          {
+            type: "list",
+            items: [
+              "Palpate the anterior hip — temperature, tenderness, joint insertions (inflammation/infection)",
+              "Feel for the greater trochanter — thumb on ASIS, move fingers down (trochanteric bursitis)",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Move",
+        blocks: [
+          {
+            type: "list",
+            heading: "Active movement",
+            items: ["Place one hand under the lumbar spine to detect masking of hip movement by the spine", "Flexion: bring knee towards chest (normal ROM 120°)"],
+          },
+          {
+            type: "list",
+            heading: "Passive movement (roll each leg side to side to make the limb floppy)",
+            items: [
+              "Flexion: bring knee towards chest (normal ROM 120°)",
+              "With hip and knee flexed to 90°: internal rotation (normal 30°), external rotation (normal 40°)",
+              "Extension: one hand on the pelvis, lift one leg at a time (normal ROM 10–20°)",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Special tests",
+        blocks: [
+          {
+            type: "list",
+            heading: "Thomas' test — fixed flexion deformity (do not perform on hip replacements — can cause dislocation)",
+            items: [
+              "Place a hand under the patient's lumbar spine",
+              "Ask the patient to bring both knees to their chest to flatten the lumbar lordosis",
+              "Ask them to hold one knee and extend the other leg, then repeat on the other side",
+              "A fixed flexion deformity prevents the leg from straightening (suggests osteoarthritis); the patient may compensate with increased lumbar lordosis (spine lifting off your hand)",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Finish",
+        blocks: [
+          { type: "paragraph", text: "Examine the neurovascular state of both limbs, and the joints above and below (spine and knee), and check for hernias." },
+          { type: "paragraph", text: "Imaging: AP and lateral radiographs." },
+          { type: "paragraph", text: "Special tests: resisted hip flexion, adduction, and sensation of the antero-lateral thigh." },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "shoulder-examination",
+    title: "Shoulder Examination",
+    category: "Musculoskeletal",
+    icon: "Dumbbell",
+    summary: "The rotator cuff special tests — empty can, infraspinatus, teres minor, subscapularis, and the scarf test.",
+    meta: { exposure: "Shirt removed" },
+    order: ["Look", "Feel", "Move", "Special tests"],
+    sections: [
+      {
+        heading: "Look",
+        intro: "Inspect the patient from the front, side, and back, asking them to turn as you do so.",
+        blocks: [
+          {
+            type: "table",
+            columns: ["View", "Sign", "What it can indicate"],
+            rows: [
+              ["Front", "Scars", "Previous surgery"],
+              ["Front", "Asymmetry of shoulder girdle", "Scoliosis, arthritis, trauma"],
+              ["Front", "Swelling", "Inflammatory joint disease"],
+              ["Front", "Deltoid wasting", "Axillary nerve injury"],
+              ["Front", "Arm position", "Internal rotation indicates posterior shoulder dislocation"],
+              ["Behind", "Trapezius muscle bulk", "—"],
+              ["Behind", "Back muscle bulk", "Check for sarcopenia"],
+              ["Behind", "Winged scapula", "Damage to serratus anterior / long thoracic nerve"],
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Feel",
+        intro: "Check for pain first and start on the normal side. Using the back of the hand, check temperature over both shoulders.",
+        blocks: [
+          {
+            type: "list",
+            heading: "Assess the shoulder girdle",
+            items: [
+              "Sternoclavicular joint → along the clavicle → acromioclavicular joint",
+              "Palpate the coracoid process",
+              "Feel the head of humerus, working around the glenohumeral joint",
+              "Start from the spine of scapula, working up to the acromioclavicular joint",
+            ],
+          },
+          {
+            type: "list",
+            items: [
+              "Assess the muscle bulk of supraspinatus, infraspinatus, and deltoid",
+              "Ask the patient to flex the biceps and feel the tendon for biceps tendonitis",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Move",
+        blocks: [
+          {
+            type: "list",
+            heading: "Active movement",
+            items: [
+              "Quick screening test: arms above the head, then behind the back",
+              "Neck movements: flexion, extension, turning, and tilting",
+              'Flexion: "Can you raise your arm keeping it straight" (normal 180°)',
+              "Extension: swing arms back (normal 65°)",
+              "Abduction: raise each arm sideways, holding the inferior pole of the scapula",
+              "Adduction: move arms across the body (normal 50°)",
+              "External rotation: arm flexed to 90°, then turn outwards",
+              "Internal rotation: hand on back, reach as far as possible (normal T4–T8)",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Passive movement (if abnormalities noted on active movement)",
+            items: ["Ask the patient to relax and allow you to move the joint freely, feeling for crepitus", "Passively assess flexion, extension, abduction, adduction, external and internal rotation"],
+          },
+        ],
+      },
+      {
+        heading: "Special tests",
+        blocks: [
+          {
+            type: "list",
+            heading: "Supraspinatus — empty can test",
+            items: ["Flex the shoulder to 90°, thumbs pointing down, elbow slightly bent, resist a downward push on the ulnar side — tests for weakness/impingement of supraspinatus"],
+          },
+          { type: "list", heading: "Infraspinatus", items: ["Resisted external rotation in neutral adduction — pain may suggest infraspinatus tendonitis"] },
+          { type: "list", heading: "Teres minor", items: ["Position the arm in 90° of abduction, bend the elbow to 90°, and passively externally rotate the shoulder to its maximum"] },
+          {
+            type: "list",
+            heading: "Subscapularis",
+            items: [
+              "Ask the patient to place the dorsum of their hand on their lower back",
+              "Apply light resistance towards their back, then ask them to lift their hand off",
+              "Inability to do this indicates subscapularis pathology (tendonitis/tear)",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Scarf test",
+            items: ["Put the patient's hand over their contralateral shoulder — pain over the acromioclavicular joint indicates osteoarthritis"],
+          },
+        ],
+      },
+      {
+        heading: "Finish",
+        blocks: [
+          { type: "paragraph", text: "Assess functional status and effect on activities of daily living." },
+          { type: "paragraph", text: "Examine the joint above and below (cervical spine and elbow), and the neurovascular state of both limbs." },
+          { type: "paragraph", text: "Imaging: AP and lateral radiographs of the shoulder." },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "hand-examination",
+    title: "Hand Examination",
+    category: "Musculoskeletal",
+    icon: "Grip",
+    summary: "Swan-neck, Boutonnière, and Z-thumb deformities, and Tinel's and Phalen's tests for carpal tunnel syndrome.",
+    meta: { exposure: "Sleeves rolled up" },
+    order: ["Look", "Feel", "Move", "Special tests"],
+    sections: [
+      {
+        heading: "Look",
+        intro: "Ask the patient to stand and inspect from the front, side, and back.",
+        blocks: [
+          {
+            type: "table",
+            columns: ["Location", "Sign", "What it may indicate"],
+            rows: [
+              ["Dorsum of hand", "Scars", "Previous surgery/trauma"],
+              ["Dorsum of hand", "Erythema", "Cellulitis, joint sepsis"],
+              ["Dorsum of hand", "Skin thinning", "Long-term steroid use"],
+              ["Dorsum of hand", "Bouchard's / Heberden's nodes", "Osteoarthritis"],
+              ["Dorsum of hand", "Swan-neck / Boutonnière deformity, Z-thumb, ulnar deviation", "Rheumatoid arthritis"],
+              ["Dorsum of hand", "Nail pitting / onycholysis", "Psoriasis"],
+              ["Palms", "Skin colour, scars", "—"],
+              ["Palms", "Thenar/hypothenar wasting", "Carpal tunnel syndrome"],
+              ["Elbow", "Psoriatic plaques", "Psoriasis"],
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Feel",
+        intro: "Check for pain first and start on the normal side.",
+        blocks: [
+          {
+            type: "list",
+            heading: "Palms facing upwards",
+            items: [
+              "Temperature: back of hand, over wrists and small joints",
+              "Radial and ulnar pulses",
+              "Thenar/hypothenar eminence bulk",
+              "Palmar thickening → Dupuytren's contracture",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Palms facing downwards",
+            items: [
+              "Temperature over wrists and small joints",
+              "Squeeze the metacarpophalangeal joints",
+              "Bimanually palpate the joints: MCP → PIP → DIP → carpometacarpal joint",
+              "Palpate the anatomical snuffbox and feel the wrists for tenderness",
+            ],
+          },
+          { type: "list", heading: "Elbows", items: ["Work up from the ulnar border to the elbow, assessing for nodules or psoriatic plaques"] },
+          {
+            type: "list",
+            heading: "Sensation",
+            items: [
+              "Median nerve — thenar eminence, then index finger",
+              "Ulnar nerve — hypothenar eminence, then little finger",
+              "Radial nerve — first dorsal web space",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Move",
+        blocks: [
+          {
+            type: "list",
+            heading: "Active / passive movement",
+            items: [
+              "Flexion: make a fist",
+              "Extension: open the fist and splay the fingers",
+              "Wrist extension: hands together as if praying",
+              "Wrist flexion: backs of the hands together",
+              "Repeat all movements passively",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Motor assessment (against resistance)",
+            items: ["Finger extension → radial nerve", "Finger abduction → ulnar nerve", "Thumb abduction → median nerve"],
+          },
+          {
+            type: "list",
+            heading: "Function",
+            items: ['Power grip: "squeeze my fingers with your hand"', 'Pincer grip: "squeeze my finger between your thumb and index finger"', "Pick up a coin or undo a shirt button"],
+          },
+        ],
+      },
+      {
+        heading: "Special tests",
+        intro: "Both assess for carpal tunnel syndrome.",
+        blocks: [
+          {
+            type: "list",
+            heading: "Tinel's test",
+            items: ["Tap over the carpal tunnel with your finger", "Tingling in the thumb and radial 2½ fingers suggests median nerve irritation/compression"],
+          },
+          {
+            type: "list",
+            heading: "Phalen's test",
+            items: ["Ask the patient to hold their wrist in complete, forced flexion for 60 seconds", "Reproduction of carpal tunnel symptoms is a positive test"],
+          },
+        ],
+      },
+      {
+        heading: "Finish",
+        blocks: [
+          { type: "paragraph", text: "Examine the neurovascular state of the upper limbs and the joint above (elbow)." },
+          { type: "paragraph", text: "Imaging: AP and lateral radiographs of the hand." },
+        ],
+      },
+    ],
+  },
+  {
     slug: "cranial-nerve-examination",
     title: "Cranial Nerve Examination",
+    category: "Neurological",
     icon: "Brain",
     summary: "All twelve nerves in order, the AFRO-C mnemonic for CN II, Bell's palsy, and Horner's syndrome.",
     meta: { position: "Sitting at 90 degrees, facing examiner at eye level" },
@@ -815,6 +1503,11 @@ export const stations = [
           },
           { type: "paragraph", text: "O — Ophthalmoscopy (state you would perform)" },
           { type: "paragraph", text: "C — Colour vision (Ishihara plates)" },
+          {
+            type: "list",
+            heading: "Visual inattention (parietal screen)",
+            items: ["With both eyes open, waggle fingers of right hand, then left, then both together and ask which hand is moving — inattention to one side suggests a contralateral parietal lesion"],
+          },
         ],
       },
       {
@@ -831,6 +1524,23 @@ export const stations = [
             ],
           },
           { type: "paragraph", text: "Internuclear ophthalmoplegia (INO): Cannot adduct ipsilateral eye + contralateral nystagmus = multiple sclerosis" },
+        ],
+      },
+      {
+        heading: "Cranial nerve V — trigeminal",
+        blocks: [
+          { type: "list", items: ["Inspect for temporalis and masseter wasting"] },
+          {
+            type: "list",
+            heading: "Sensory",
+            items: ["Use the sternum as a reference. Test supra-orbital notch, maxilla, and chin, comparing both sides, then touch both sides together to assess for sensory inattention (neglect)"],
+          },
+          {
+            type: "list",
+            heading: "Motor",
+            items: ["Ask patient to clench jaw and feel temporalis and masseter muscle bulk; open and close mouth against resistance"],
+          },
+          { type: "paragraph", text: "Offer the corneal reflex (afferent Va, efferent VII) and jaw jerk reflex." },
         ],
       },
       {
@@ -858,16 +1568,19 @@ export const stations = [
               { term: "'S", detail: "Palsy of all VII muscles ipsilateral" },
             ],
           },
+          { type: "paragraph", text: "Ask if sounds are abnormally loud (hyperacusis = damage to stapedius). Offer to check taste sensation over the anterior 2/3 of the tongue (chorda tympani)." },
         ],
       },
       {
         heading: "Cranial nerve VIII — Rinne's and Weber's",
         blocks: [
+          { type: "list", items: ["Crude hearing test: rustle fingers in one ear and whisper a number into the other — indicates whether there is a hearing deficit in either ear"] },
           { type: "paragraph", text: "Weber's (tuning fork on forehead): Normally central. Lateralises to:" },
           { type: "list", items: ["Same side = conductive loss that side", "Opposite side = sensorineural loss that side"] },
           { type: "paragraph", text: "Rinne's (mastoid then beside ear): Normally air conduction > bone conduction" },
           { type: "list", items: ["Positive (AC > BC) = Normal / sensorineural loss", "Negative (BC > AC) = Conductive loss on that side"] },
           { type: "callout", text: "Easy rule: Bone conduction should NEVER be louder than air conduction — if it is, that ear has conductive hearing loss." },
+          { type: "paragraph", text: "Ask about vertigo/balance and offer Romberg's test, walking on the spot, and the Dix-Hallpike test if there's a history of positional vertigo." },
         ],
       },
       {
@@ -905,6 +1618,7 @@ export const stations = [
   {
     slug: "upper-limb-neurological-examination",
     title: "Upper Limb Neurological Examination",
+    category: "Neurological",
     icon: "Hand",
     summary: "TOP RaCk applied to the arm — tone, power with root values, reflexes, coordination, and dermatomes.",
     meta: { position: "Sitting upright — always check handedness first" },
@@ -912,8 +1626,20 @@ export const stations = [
     sections: [
       {
         heading: "1. Inspection",
+        intro: "Inspect resting position, raise arms to look in the axilla, and from behind. Ask the patient to hold out their arms and close their eyes (reveals tremor and involuntary movements) — mnemonic SWIFT-PH:",
         blocks: [
-          { type: "list", items: ["Muscle wasting, fasciculations, tremor, scars, skin signs"] },
+          {
+            type: "definitions",
+            items: [
+              { term: "S", detail: "Scars — previous surgery or trauma" },
+              { term: "W", detail: "Wasting — loss of innervation to muscles" },
+              { term: "I", detail: "Involuntary movements — chorea, myoclonus, athetosis, pseudoathetosis" },
+              { term: "F", detail: "Fasciculations — lower motor neurone lesions" },
+              { term: "T", detail: "Tremor — fine or coarse; resting tremor in Parkinson's" },
+              { term: "P", detail: "Posture — curvature of the spine" },
+              { term: "H", detail: "Hypertrophy" },
+            ],
+          },
           {
             type: "list",
             items: [
@@ -1015,6 +1741,7 @@ export const stations = [
             ],
           },
           { type: "paragraph", text: "Glove distribution = peripheral neuropathy (diabetes, alcohol)" },
+          { type: "paragraph", text: "Froment's test (ulnar palsy): ask the patient to grip a piece of paper between thumb and index finger — loss of adductor pollicis causes the thumb to flex instead." },
         ],
       },
       {
@@ -1039,11 +1766,30 @@ export const stations = [
   {
     slug: "lower-limb-neurological-examination",
     title: "Lower Limb Neurological Examination",
+    category: "Neurological",
     icon: "Footprints",
     summary: "Root values for hip-to-toe power, the reflex nursery rhyme, gait patterns, and Romberg's test.",
     meta: { position: "45 degrees, then lying flat", exposure: "From waist down" },
     order: ["TOP RaCk", "+ Sensation", "+ Gait", "+ Romberg's"],
     sections: [
+      {
+        heading: "Inspection",
+        intro: "Look closely for plantar foot wasting, dorsal foot guttering (LMN lesion), and bony deformity (pes cavus) — mnemonic SWIFT-PH:",
+        blocks: [
+          {
+            type: "definitions",
+            items: [
+              { term: "S", detail: "Scars — previous surgery or trauma" },
+              { term: "W", detail: "Wasting — loss of innervation to muscles" },
+              { term: "I", detail: "Involuntary movements — chorea, myoclonus, athetosis, pseudoathetosis" },
+              { term: "F", detail: "Fasciculations — lower motor neurone lesions" },
+              { term: "T", detail: "Tremor — fine or coarse; resting tremor in Parkinson's" },
+              { term: "P", detail: "Posture — curvature of the spine" },
+              { term: "H", detail: "Hypertrophy" },
+            ],
+          },
+        ],
+      },
       {
         heading: "1. Power — lower limb root values",
         blocks: [
@@ -1096,6 +1842,13 @@ export const stations = [
         intro: "Ask to walk to end of room, turn, return. Then heel-to-toe.",
         blocks: [
           {
+            type: "list",
+            items: [
+              "Stand on toes — tests S1, sciatic nerve power, plantarflexors",
+              "Stand on heels — tests L4/5; impaired in foot drop",
+            ],
+          },
+          {
             type: "table",
             columns: ["Gait", "Condition"],
             rows: [
@@ -1145,6 +1898,7 @@ export const stations = [
   {
     slug: "cerebellar-examination",
     title: "Cerebellar Examination",
+    category: "Neurological",
     icon: "Compass",
     summary: "The DANISH-Pastry mnemonic, why signs are ipsilateral, and the differentials from stroke to Wilson's disease.",
     sections: [
@@ -1197,6 +1951,13 @@ export const stations = [
               ["Friedrich's ataxia", "Young patient, pes cavus, family history"],
             ],
           },
+          {
+            type: "list",
+            items: [
+              "Unilateral signs: space-occupying lesion (tumour/abscess — a cerebellopontine angle tumour also impairs CN V, VII, VIII and can cause papilloedema) or ischaemia (vertebrobasilar disease)",
+              "Bilateral signs: drugs (phenytoin), alcohol, multiple sclerosis, hypothyroidism, trauma",
+            ],
+          },
         ],
       },
     ],
@@ -1204,6 +1965,7 @@ export const stations = [
   {
     slug: "speech-examination",
     title: "Speech Examination",
+    category: "Special senses & speech",
     icon: "MessageCircle",
     summary: "Telling dysphasia, dysarthria and dysphonia apart, and testing Broca's, Wernicke's, and bulbar palsy.",
     meta: { position: "Sitting upright" },
@@ -1291,6 +2053,7 @@ export const stations = [
   {
     slug: "eye-examination",
     title: "Eye Examination",
+    category: "Special senses & speech",
     icon: "Eye",
     summary: "Visual acuity notation, fundoscopy findings, and grading diabetic and hypertensive retinopathy.",
     meta: { position: "Sitting opposite patient at eye level" },
@@ -1376,6 +2139,7 @@ export const stations = [
   {
     slug: "ear-examination",
     title: "Ear Examination",
+    category: "Special senses & speech",
     icon: "Ear",
     summary: "Free-field hearing, otoscopy technique, tympanic membrane colours, and conductive vs sensorineural loss.",
     meta: { position: "Sitting upright — examine good ear first" },
@@ -1447,6 +2211,7 @@ export const stations = [
   {
     slug: "nose-examination",
     title: "Nose Examination",
+    category: "Special senses & speech",
     icon: "ScanFace",
     summary: "External and internal inspection, sinus palpation, patency testing, and nasopharyngeal carcinoma red flags.",
     meta: { position: "Sitting upright" },
@@ -1525,6 +2290,7 @@ export const stations = [
   {
     slug: "arterial-circulation-examination",
     title: "Arterial Circulation Examination",
+    category: "Advanced",
     icon: "Activity",
     summary: "Arterial vs venous ulcers, peripheral pulses, Buerger's test, and reading the ABPI.",
     meta: { position: "Lying flat", exposure: "Both legs fully" },
@@ -1546,16 +2312,16 @@ export const stations = [
             ],
           },
           { type: "paragraph", text: "Check pressure points: Heel, malleoli, first metatarsal head, between toes" },
-          { type: "paragraph", text: "Arterial vs venous ulcers:" },
+          { type: "paragraph", text: "Arterial vs venous vs diabetic ulcers:" },
           {
             type: "table",
-            columns: ["Feature", "Arterial", "Venous"],
+            columns: ["Feature", "Arterial", "Venous", "Diabetic"],
             rows: [
-              ["Location", "Toes, heel, pressure points", "Gaiter area (above medial malleolus)"],
-              ["Edges", "Punched-out", "Sloping"],
-              ["Base", "Pale, necrotic", "Red, granulation tissue"],
-              ["Pain", "Severe (better with dependent position)", "Ache (better with elevation)"],
-              ["Surrounding skin", "Pale, cold, trophic", "Lipodermatosclerosis, haemosiderin staining"],
+              ["Why it occurs", "Atherosclerosis", "Venous stasis", "Glycosylation of the extracellular matrix"],
+              ["Location", "Toes, heel, pressure points (lateral leg)", "Gaiter area, around the malleoli", "Sole of the foot"],
+              ["Edges / base", "Punched-out, regular margins", "Sloping, irregular margins; pale surrounding skin; haemosiderin pigmentation", "Penetrating ulcer on toes"],
+              ["Painful", "Yes (severe, better dependent)", "Yes (ache, better with elevation)", "No — reduced sensation"],
+              ["Associations", "Cold extremities, trophic changes (shiny skin, hair loss)", "Often peripheral oedema, warm skin", "Reduced sensation in surrounding skin, infected nails (fungal)"],
             ],
           },
         ],
@@ -1595,8 +2361,8 @@ export const stations = [
             type: "list",
             ordered: true,
             items: [
-              "Raise legs to 45 degrees — normally stays pink. Pallor on elevation = critical ischaemia. Note the angle at which pallor occurs — Buerger's angle (normal >90°, <20° = critical ischaemia).",
-              "Sit patient up with legs hanging down. Reactive hyperaemia (bright red/purple flushing) = critical ischaemia — Buerger's positive.",
+              "Raise legs to 45 degrees — normally stays pink. Pallor on elevation = critical ischaemia. Note the angle at which pallor occurs — Buerger's angle (normal >90°, <20° = critical ischaemia). Ideally hold for 2–3 minutes; a practical shortcut is 4 second intervals for each 10° raised.",
+              "Sit patient up with legs hanging down over the edge of the bed. Normal legs turn pink immediately; an ischaemic leg turns pink slowly then becomes dark red/purple after ~2 minutes (reactive hyperaemia from hypoxic vasodilation) — Buerger's positive.",
             ],
           },
         ],
@@ -1639,6 +2405,253 @@ export const stations = [
       {
         heading: "Finish",
         blocks: [{ type: "paragraph", text: "Request: Doppler USS, CT angiography, ABPI, urine dipstick for blood glucose/protein" }],
+      },
+    ],
+  },
+  {
+    slug: "diabetic-foot-examination",
+    title: "Diabetic Foot Examination",
+    category: "Advanced",
+    icon: "Syringe",
+    summary: "Charcot joints, monofilament sensation testing, and the diabetic ulcer pattern on the sole of the foot.",
+    meta: { exposure: "Undress from the waist down, underwear on" },
+    order: ["Gait", "Legs", "Palpation", "Pulses", "Sensation", "Reflexes"],
+    sections: [
+      {
+        heading: "Bedside inspection",
+        blocks: [{ type: "paragraph", text: "Observe the surroundings: walking aids, special footwear, orthotics, blood sugar monitoring." }],
+      },
+      {
+        heading: "Gait",
+        blocks: [
+          { type: "paragraph", text: "Ask the patient to walk to the wall, turn around, and come back — comment on swing, stance, heel strike, turn cycle, and any other abnormalities." },
+          {
+            type: "list",
+            heading: "Romberg's test",
+            items: [
+              "Ask the patient to put feet together and close their eyes while standing",
+              "Reduced stability with eyes closed (+ve) → proprioceptive/dorsal column dysfunction",
+              "Reduced stability with eyes open (-ve) → cerebellar ataxia",
+            ],
+          },
+          { type: "paragraph", text: "Inspect the patient's shoes — soles, padding, worn tread." },
+        ],
+      },
+      {
+        heading: "Legs (patient sits with legs outstretched)",
+        intro: "Inspect front and back of the legs, comparing sides, and inspect between the toes:",
+        blocks: [
+          {
+            type: "table",
+            columns: ["What to look for", "What it can indicate"],
+            rows: [
+              ["Scars", "Vessel harvesting for previous cardiovascular surgery"],
+              ["Colour", "Cyanosis/pallor — peripheral vascular disease"],
+              ["Loss of digits", "May indicate previous critical ischaemia/gangrene"],
+              ["Ulcers", "Describe margin, colour, wet/dry, and location"],
+              ["Skin trophic changes", "Associated with peripheral ischaemia"],
+              ["Charcot joint", "Consequence of diabetic neuropathy"],
+            ],
+          },
+          { type: "paragraph", text: "Gross motor assessment: ask the patient to wiggle their toes — indicates paralysis due to ischaemia." },
+        ],
+      },
+      {
+        heading: "Palpation",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Temperature: back of the hand, toes upwards, comparing sides",
+              "Capillary refill: should be <2s — delayed if poor peripheral circulation",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Pulses",
+        intro: "Poor peripheral pulses suggest ischaemia/poor circulation.",
+        blocks: [
+          {
+            type: "list",
+            ordered: true,
+            items: [
+              "Femoral pulse",
+              "Popliteal pulse",
+              "Posterior tibial — 1cm posterior to the medial malleolus of the tibia",
+              "Dorsalis pedis — dorsum of foot between the 2nd/3rd cuneiforms",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Sensation",
+        blocks: [
+          {
+            type: "list",
+            ordered: true,
+            items: [
+              "Monofilament: pulp of hallux, then pulp of 3rd digit, then metatarsophalangeal joints of 1, 3, and 5",
+              "Vibration on the distal interphalangeal joint of the hallux",
+              "Proprioception of the distal interphalangeal joint of the hallux",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Reflexes",
+        blocks: [{ type: "paragraph", text: "Ankle reflex." }],
+      },
+      {
+        heading: "Finish",
+        blocks: [
+          { type: "paragraph", text: "Offer a full history, full set of observations, and a peripheral vascular and lower limb neurological examination." },
+          { type: "paragraph", text: "Bedside tests: urinalysis + urine albumin:creatinine ratio, blood glucose, fundoscopy, ECG." },
+          { type: "paragraph", text: "Bloods: FBC, U&E, albumin:creatinine ratio, HbA1c, lipid profile." },
+          { type: "paragraph", text: "Further tests (if required): duplex USS with ABPI, CT or MR angiography." },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "parkinsons-examination",
+    title: "Parkinson's Examination",
+    category: "Advanced",
+    icon: "Waves",
+    summary: "Resting vs postural vs kinetic tremor, bradykinesia testing, and the Parkinson-plus red flags.",
+    sections: [
+      {
+        heading: "Focused questions",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "What happened when you first presented with this condition? How is it affecting you?",
+              "When is your tremor worst?",
+              "Do you have any problems with balance or co-ordination, doing up buttons and tying shoelaces, or getting in and out of your car?",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Bedside inspection",
+        blocks: [
+          { type: "paragraph", text: "Observe the surroundings for mobility aids. Do they have a resting tremor?" },
+        ],
+      },
+      {
+        heading: "Gait",
+        intro: "Ask the patient to stand up with arms folded (tests proximal weakness), then walk to the wall, turn around, and come back.",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Check symmetry, smoothness, step height, swing, stance, heel strike, and turn (is it smooth and quick?)",
+              "Shuffling gait (reduced stride length)",
+              "Hesitant (difficulty initiating and turning)",
+              "Festinating (walks faster and faster to avoid falling)",
+              "Lack of arm swing (occasionally due to increased tone)",
+              "Unsteadiness (tendency to fall forward or backward)",
+              "Stooped posture",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Face",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              'Face: hypomimia ("mask face" — blank, expressionless, reduced blinking)',
+              "Eyes: glabellar tap (tap the forehead — Myerson's sign, a sign of frontal release, is abnormal if it doesn't habituate)",
+              "Speech: ask patient to describe the room — hypophonia (soft, faint, slow, hard to understand)",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Tremors",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Resting tremor: typical 'pill-rolling' appearance, asymmetrical, 4–6 Hz",
+              "Postural tremor: occurs maintaining a position against gravity, worsens with active movement",
+              "Kinetic tremor: assess with the finger-nose test — simple kinetic tremor stays constant through movement; intention tremor worsens as the patient approaches the target",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Focused upper limb",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Tone: ask patient to relax so you can passively move them — assess elbow flexion/extension, supinator catch, and wrist flexion/extension/rotation",
+              "An activation manoeuvre can accentuate subtle rigidity in early Parkinson's — ask the patient to tap their thigh with the contralateral arm while you test tone",
+            ],
+          },
+          {
+            type: "table",
+            columns: ["Sign", "Significance"],
+            rows: [
+              ["Supinator catch", "Indicative of UMN lesions"],
+              ["Increased vs decreased tone", "UMN vs LMN lesion"],
+              ["Cogwheel rigidity", "Parkinson's disease (extrapyramidal disorders)"],
+            ],
+          },
+          {
+            type: "list",
+            heading: "Bradykinesia",
+            items: [
+              "Finger tapping: oppose thumb and forefinger repeatedly, as fast as possible",
+              "Hand grip: make a fist and open the hand wide repeatedly, as fast as possible",
+              "Pronation/supination: pronate and supinate the hand repeatedly, as fast as possible",
+              "Watch for: progressive reduction in speed, progressive reduction in amplitude, asymmetry, slowness initiating movement",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Focused lower limb",
+        blocks: [
+          {
+            type: "list",
+            heading: "Bradykinesia",
+            items: ["Toe tap: keep the heel on the ground and tap the toes against the floor while seated, as fast as possible"],
+          },
+        ],
+      },
+      {
+        heading: "Extras",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Writing: ask the patient to write a sentence and draw a spiral, to assess for asymmetric progressive micrographia",
+              "Buttons: ask the patient to undo and do up their top shirt button, to assess dexterity and speed of movement",
+            ],
+          },
+          {
+            type: "list",
+            heading: "Parkinson-plus syndromes",
+            items: [
+              "Assess eye movements with the H-test",
+              "Problems in up/down gaze → progressive supranuclear palsy",
+              "Problems side-to-side with nystagmus → multiple system atrophy",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Finish",
+        blocks: [
+          { type: "paragraph", text: "Full set of observations, including lying and standing blood pressure." },
+          { type: "paragraph", text: "Perform a cerebellar examination and assess eye movements for progressive supranuclear palsy." },
+          { type: "paragraph", text: "Perform a cognitive assessment (e.g. MMSE)." },
+        ],
       },
     ],
   },

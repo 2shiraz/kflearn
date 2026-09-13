@@ -3,18 +3,25 @@ import {
   Activity,
   ArrowLeft,
   ArrowRight,
+  Bone,
   Brain,
   CircleDot,
   Compass,
+  Dumbbell,
   Ear,
   Eye,
   Footprints,
+  Grip,
   Hand,
   HeartPulse,
   ListChecks,
   MessageCircle,
+  Milestone,
+  PersonStanding,
   ScanFace,
   ScrollText,
+  Syringe,
+  Waves,
   Wind,
 } from "lucide-react";
 import { Breadcrumbs, ErrorMessage, PageMain, Panel, RequireUser } from "../components/AppPage";
@@ -25,12 +32,19 @@ import {
   getAdjacentStations,
   getStation,
   masterQuickReference,
+  mskFramework,
   presentationTemplate,
   stations,
   universalOpening,
 } from "../data/clinicalExaminationGuide";
 
-const STATION_ICONS = { HeartPulse, Wind, CircleDot, Brain, Hand, Footprints, Compass, MessageCircle, Eye, Ear, ScanFace, Activity };
+const STATION_ICONS = {
+  HeartPulse, Wind, CircleDot, Brain, Hand, Footprints, Compass, MessageCircle, Eye, Ear, ScanFace, Activity,
+  PersonStanding, Bone, Milestone, Dumbbell, Grip, Syringe, Waves,
+};
+
+// Category display order for the "By station" grid.
+const CATEGORY_ORDER = ["Core", "Musculoskeletal", "Neurological", "Special senses & speech", "Advanced"];
 
 function StationIcon({ name, ...props }) {
   const Icon = STATION_ICONS[name] || ScrollText;
@@ -74,7 +88,7 @@ export function ClinicalExamGuideHome() {
           <p className="text-sm font-semibold text-ink-soft">Static reference</p>
           <h1 className="mt-1 text-4xl font-extrabold text-ink">Clinical Examination Guide</h1>
           <p className="mt-2 max-w-2xl text-ink-soft">
-            The step-by-step order, mnemonics, and findings for all twelve OSCE examination stations.
+            The step-by-step order, mnemonics, and findings for all {stations.length} OSCE examination stations.
           </p>
         </div>
 
@@ -82,6 +96,7 @@ export function ClinicalExamGuideHome() {
           items={[
             { href: "#universal-opening", label: "Universal opening" },
             { href: "#core-mnemonic", label: "TOP RaCk" },
+            { href: "#msk-framework", label: "Look, Feel, Move" },
             { href: "#by-station", label: "By station" },
             { href: "#master-reference", label: "Master reference" },
             { href: "#presentation-template", label: "Presentation template" },
@@ -104,31 +119,50 @@ export function ClinicalExamGuideHome() {
                 </li>
               ))}
             </ol>
+            {universalOpening.note && <p className="mt-3 text-sm font-medium text-ink">{universalOpening.note}</p>}
           </Panel>
 
-          <Panel id="core-mnemonic">
-            <h2 className="font-display text-xl font-extrabold text-ink">{coreMnemonic.name}</h2>
-            <p className="text-sm text-ink-soft">{coreMnemonic.subtitle}</p>
-            <GuideBlock block={coreMnemonic} />
-            {coreMnemonic.note && <p className="mt-3 text-sm font-medium text-ink">{coreMnemonic.note}</p>}
-          </Panel>
+          <div id="core-mnemonic" className="grid gap-5 lg:grid-cols-2">
+            <Panel>
+              <h2 className="font-display text-xl font-extrabold text-ink">{coreMnemonic.name}</h2>
+              <p className="text-sm text-ink-soft">{coreMnemonic.subtitle}</p>
+              <GuideBlock block={coreMnemonic} />
+              {coreMnemonic.note && <p className="mt-3 text-sm font-medium text-ink">{coreMnemonic.note}</p>}
+            </Panel>
+            <Panel id="msk-framework">
+              <h2 className="font-display text-xl font-extrabold text-ink">{mskFramework.name}</h2>
+              <p className="text-sm text-ink-soft">{mskFramework.subtitle}</p>
+              <GuideBlock block={mskFramework} />
+            </Panel>
+          </div>
 
           <div id="by-station">
             <h2 className="mb-1 text-lg font-bold text-ink">By station</h2>
-            <p className="mb-3 text-sm text-ink-soft">All twelve examination stations, in order.</p>
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {stations.map((station) => (
-                <Link key={station.slug} to={`/clinical-examination/${station.slug}`} className="gradient-card group block rounded-lg p-5">
-                  <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-lg text-ink">
-                    <StationIcon name={station.icon} size={20} />
-                  </span>
-                  <h3 className="mt-4 font-display text-lg font-extrabold text-ink">{station.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{station.summary}</p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-ink group-hover:underline">
-                    Read guide <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </Link>
-              ))}
+            <p className="mb-3 text-sm text-ink-soft">All {stations.length} examination stations, grouped by category.</p>
+            <div className="space-y-6">
+              {CATEGORY_ORDER.map((category) => {
+                const categoryStations = stations.filter((station) => station.category === category);
+                if (categoryStations.length === 0) return null;
+                return (
+                  <div key={category}>
+                    <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-ink-soft">{category}</h3>
+                    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                      {categoryStations.map((station) => (
+                        <Link key={station.slug} to={`/clinical-examination/${station.slug}`} className="gradient-card group block rounded-lg p-5">
+                          <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-lg text-ink">
+                            <StationIcon name={station.icon} size={20} />
+                          </span>
+                          <h3 className="mt-4 font-display text-lg font-extrabold text-ink">{station.title}</h3>
+                          <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{station.summary}</p>
+                          <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-ink group-hover:underline">
+                            Read guide <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -190,6 +224,7 @@ export function ClinicalExamGuideStation() {
             <StationIcon name={station.icon} size={26} />
           </span>
           <div>
+            {station.category && <p className="text-xs font-bold uppercase tracking-wide text-ink-soft">{station.category}</p>}
             <h1 className="text-3xl font-extrabold text-ink">{station.title}</h1>
             <p className="mt-1 max-w-2xl text-ink-soft">{station.summary}</p>
           </div>

@@ -16,7 +16,7 @@ const sections = [
   },
   {
     key: "clinical-exam", label: "Clinical Examination Guide", href: "/clinical-examination",
-    desc: "The step-by-step order, mnemonics, and findings for all twelve OSCE examination stations.",
+    desc: "The step-by-step order, mnemonics, and findings for every OSCE examination station — core, MSK, neuro, and advanced.",
     staticCount: examStations.length, countLabel: "station", icon: Stethoscope,
     iconStyle: { "--g1": "#7FB8FF", "--g2": "#A6D0FF", "--glow": "rgba(127,184,255,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
