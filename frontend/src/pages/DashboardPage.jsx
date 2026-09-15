@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { mcqTotalCount } from "../data/mcqs";
 import { Link } from "react-router-dom";
 import { MessageSquareText, Stethoscope, FileText, FileQuestion, ClipboardList, ArrowRight } from "lucide-react";
 import { getCurrentUser, getDashboardSummary } from "../lib/api";
@@ -23,8 +24,8 @@ const sections = [
   },
   {
     key: "mcqs", label: "MCQs", href: "/mcqs",
-    desc: "Single-best-answer practice questions with explanations, organised by specialty.",
-    countKey: "mcqs", icon: FileQuestion,
+    desc: "Single-best-answer practice questions with explanations, organised by MBBS year, module and topic.",
+    staticCount: mcqTotalCount, countLabel: "question", icon: FileQuestion,
     iconStyle: { "--g1": "#FFD84D", "--g2": "#C6A6FF", "--glow": "rgba(198,166,255,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },

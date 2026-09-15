@@ -29,6 +29,7 @@ import {
   VirtualPatientSession,
 } from "./pages/HistoryTakingPage";
 import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
+import { McqPractice, McqsHome, McqYearPage } from "./pages/McqsPage";
 import { ClinicalExamGuideHome, ClinicalExamGuideStation } from "./pages/ClinicalExaminationPage";
 
 function LandingPage() {
@@ -75,7 +76,9 @@ export default function App() {
           <Route path="/history" element={<HistoryGuideHome />} />
           <Route path="/clinical-examination" element={<ClinicalExamGuideHome />} />
           <Route path="/clinical-examination/:stationSlug" element={<ClinicalExamGuideStation />} />
-          <Route path="/mcqs" element={<ComingSoonPage sectionKey="mcqs" title="MCQs" />} />
+          <Route path="/mcqs" element={<McqsHome />} />
+          <Route path="/mcqs/:yearSlug" element={<McqYearPage />} />
+          <Route path="/mcqs/:yearSlug/practice" element={<McqPractice />} />
           <Route path="/handout-notes" element={<ComingSoonPage sectionKey="handouts" title="Handout Notes" />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />
           <Route path="*" element={<NotFoundPage />} />
