@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CheckCircle2, RotateCcw, Shuffle, XCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, ChevronRight, FileQuestion, GraduationCap, Layers, PlayCircle, RotateCcw, Shuffle, XCircle } from "lucide-react";
 import { Breadcrumbs, ErrorMessage, LinkButton, PageMain, Panel, PrimaryButton, RequireUser } from "../components/AppPage";
-import { getBlock, getYear, loadQuestions, mcqTotalCount, mcqYears } from "../data/mcqs";
+import { getBlock, getYear, loadQuestions, mcqTotalCount, mcqYears } from "../data/mcqs/catalog";
 
 // ---- local progress (per browser; practice only, not a graded record) ----
 const PROGRESS_KEY = "kf_mcq_progress";
@@ -44,7 +44,7 @@ function ProgressBar({ answered, total }) {
   return (
     <div className="mt-3">
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/5">
-        <div className="gradient-brand h-full rounded-full" style={{ width: `${pct}%` }} />
+        <div className="gradient-brand h-full rounded-full transition-[width] duration-700 ease-out" style={{ width: `${pct}%` }} />
       </div>
       <p className="mt-1 text-xs text-ink-soft">{answered} of {total} attempted</p>
     </div>
@@ -60,6 +60,22 @@ function shuffle(list) {
   return copy;
 }
 
+// Card colour palettes — same --g1/--g2/--glow variables the dashboard and
+// station-bank cards use with .gradient-card / .gradient-icon.
+const PALETTES = [
+  { "--g1": "#FF8FCF", "--g2": "#FFB3E0", "--glow": "rgba(255,143,207,0.35)" },
+  { "--g1": "#7FB8FF", "--g2": "#A6D0FF", "--glow": "rgba(127,184,255,0.35)" },
+  { "--g1": "#FFD84D", "--g2": "#FFE38A", "--glow": "rgba(255,216,77,0.35)" },
+  { "--g1": "#C6A6FF", "--g2": "#DCC8FF", "--glow": "rgba(198,166,255,0.35)" },
+  { "--g1": "#7FE0C0", "--g2": "#B0F0DA", "--glow": "rgba(127,224,192,0.35)" },
+];
+const palette = (i) => PALETTES[i % PALETTES.length];
+const stagger = (i) => ({ animationDelay: `${80 + i * 60}ms` });
+
+function CountPill({ children }) {
+  return <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-semibold text-ink">{children}</span>;
+}
+
 // ---- /mcqs ----
 export function McqsHome() {
   const progress = readProgress();
@@ -67,22 +83,41 @@ export function McqsHome() {
     <RequireUser active="mcqs">
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "MCQs" }]} />
-        <div className="mb-6">
-          <h1 className="text-4xl font-extrabold text-ink">MCQ Practice</h1>
+        <div className="mb-6 animate-fade-up">
+          <p className="text-sm font-semibold text-ink-soft">MCQs</p>
+          <h1 className="mt-1 text-4xl font-extrabold text-ink">Question bank</h1>
           <p className="mt-2 max-w-2xl text-ink-soft">
             {mcqTotalCount.toLocaleString()} single-best-answer questions with explanations. Choose your year to begin.
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {mcqYears.map((year) => {
+        <p className="mb-3 text-sm text-ink-soft">{mcqYears.length} years available.</p>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {mcqYears.map((year, i) => {
             const p = progressFor(progress, year.year, 0, year.count);
             return (
-              <Link key={year.slug} to={`/mcqs/${year.slug}`} className="block">
-                <Panel className="h-full transition hover:shadow-md">
-                  <h2 className="text-xl font-extrabold text-ink">{year.name}</h2>
-                  <p className="mt-1 text-sm text-ink-soft">{year.blocks.map((b) => b.name).join(" · ")}</p>
-                  <ProgressBar answered={p.answered} total={year.count} />
-                </Panel>
+              <Link
+                key={year.slug}
+                to={`/mcqs/${year.slug}`}
+                style={{ ...palette(i), ...stagger(i) }}
+                className="gradient-card group flex animate-fade-up flex-col rounded-lg p-5"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Year</p>
+                    <h2 className="text-2xl font-extrabold text-ink">{year.name}</h2>
+                  </div>
+                  <span className="gradient-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-ink transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
+                    <GraduationCap size={18} />
+                  </span>
+                </div>
+                <p className="mt-2 line-clamp-2 text-sm text-ink-soft">{year.blocks.map((b) => b.name).join(" · ")}</p>
+                <ProgressBar answered={p.answered} total={year.count} />
+                <div className="mt-4 flex items-center justify-between">
+                  <CountPill>{year.count.toLocaleString()} MCQs</CountPill>
+                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand">
+                    Open <ChevronRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </div>
               </Link>
             );
           })}
@@ -111,55 +146,102 @@ export function McqYearPage() {
     <RequireUser active="mcqs">
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "MCQs", to: "/mcqs" }, { label: year.name }]} />
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-6 flex animate-fade-up flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-extrabold text-ink">{year.name}</h1>
-            <p className="mt-2 text-ink-soft">Practise a single topic, a whole section, or a mixed set from the full year.</p>
+            <p className="text-sm font-semibold text-ink-soft">MCQs</p>
+            <h1 className="mt-1 text-4xl font-extrabold text-ink">{year.name}</h1>
+            <p className="mt-2 text-ink-soft">Read a topic with answers and explanations, or practise it and check yourself.</p>
           </div>
           <LinkButton to={`/mcqs/${year.slug}/practice`}>
             <Shuffle className="mr-2 h-4 w-4" /> Mixed practice
           </LinkButton>
         </div>
 
-        <div className="space-y-5">
-          {year.blocks.map((block) => {
+        <div className="space-y-8">
+          {year.blocks.map((block, blockIndex) => {
             const blockStart = offset;
             const bp = progressFor(progress, year.year, blockStart, block.count);
             let topicOffset = blockStart;
             offset += block.count;
             return (
-              <Panel key={block.slug}>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-xl font-extrabold text-ink">{block.name}</h2>
-                    <p className="text-sm text-ink-soft">
-                      {block.count} MCQs{bp.answered ? ` · ${Math.round((bp.correct / bp.answered) * 100)}% correct so far` : ""}
-                    </p>
+              <section key={block.slug} className="animate-fade-up" style={stagger(blockIndex)}>
+                <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <span
+                      style={palette(blockIndex)}
+                      className="gradient-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink"
+                    >
+                      <Layers size={19} />
+                    </span>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Section</p>
+                      <h2 className="text-2xl font-extrabold text-ink">{block.name}</h2>
+                      <p className="text-sm text-ink-soft">
+                        {block.count} MCQs · {block.topics.length} topics
+                        {bp.answered ? ` · ${Math.round((bp.correct / bp.answered) * 100)}% correct so far` : ""}
+                      </p>
+                    </div>
                   </div>
-                  <Link
-                    to={`/mcqs/${year.slug}/practice?block=${block.slug}`}
-                    className="rounded-lg border border-line px-3 py-2 text-sm font-semibold text-ink hover:bg-white"
-                  >
-                    Practise whole section
-                  </Link>
+                  <div className="flex flex-wrap gap-2">
+                    <Link
+                      to={`/mcqs/${year.slug}/read?block=${block.slug}`}
+                      className="glass-surface inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-ink transition hover:-translate-y-0.5"
+                    >
+                      <BookOpen size={16} /> Read section
+                    </Link>
+                    <Link
+                      to={`/mcqs/${year.slug}/practice?block=${block.slug}`}
+                      className="glass-surface inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-ink transition hover:-translate-y-0.5"
+                    >
+                      <PlayCircle size={16} /> Practise section
+                    </Link>
+                  </div>
                 </div>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {block.topics.map((topic) => {
+
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {block.topics.map((topic, topicIndex) => {
                     const tp = progressFor(progress, year.year, topicOffset, topic.count);
                     topicOffset += topic.count;
+                    const query = `block=${block.slug}&topic=${topic.slug}`;
+                    const done = tp.answered === topic.count;
                     return (
-                      <Link
+                      <div
                         key={topic.slug}
-                        to={`/mcqs/${year.slug}/practice?block=${block.slug}&topic=${topic.slug}`}
-                        className="rounded-lg border border-line bg-white/60 p-3 hover:bg-white"
+                        style={{ ...palette(blockIndex + topicIndex), ...stagger(topicIndex) }}
+                        className="gradient-card group flex animate-fade-up flex-col rounded-lg p-5"
                       >
-                        <p className="font-semibold text-ink">{topic.name}</p>
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Topic</p>
+                            <h3 className="text-lg font-extrabold leading-snug text-ink">{topic.name}</h3>
+                          </div>
+                          <span className="gradient-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-ink transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
+                            {done ? <CheckCircle2 size={18} /> : <FileQuestion size={18} />}
+                          </span>
+                        </div>
                         <ProgressBar answered={tp.answered} total={topic.count} />
-                      </Link>
+                        <div className="mt-4 flex items-center justify-between gap-2 pt-1 md:mt-auto">
+                          <CountPill>{topic.count} MCQs</CountPill>
+                          <div className="flex gap-2">
+                            <Link
+                              to={`/mcqs/${year.slug}/read?${query}`}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white/80 px-3 py-1.5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:bg-white"
+                            >
+                              <BookOpen size={14} /> Read
+                            </Link>
+                            <Link
+                              to={`/mcqs/${year.slug}/practice?${query}`}
+                              className="gradient-brand inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                            >
+                              <PlayCircle size={14} /> Practise
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
-              </Panel>
+              </section>
             );
           })}
         </div>

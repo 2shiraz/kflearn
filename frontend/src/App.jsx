@@ -30,6 +30,7 @@ import {
 } from "./pages/HistoryTakingPage";
 import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
 import { McqPractice, McqsHome, McqYearPage } from "./pages/McqsPage";
+import { McqRead } from "./pages/McqReadPage";
 import { ClinicalExamGuideHome, ClinicalExamGuideStation } from "./pages/ClinicalExaminationPage";
 
 function LandingPage() {
@@ -78,6 +79,7 @@ export default function App() {
           <Route path="/clinical-examination/:stationSlug" element={<ClinicalExamGuideStation />} />
           <Route path="/mcqs" element={<McqsHome />} />
           <Route path="/mcqs/:yearSlug" element={<McqYearPage />} />
+          <Route path="/mcqs/:yearSlug/read" element={<McqRead />} />
           <Route path="/mcqs/:yearSlug/practice" element={<McqPractice />} />
           <Route path="/handout-notes" element={<ComingSoonPage sectionKey="handouts" title="Handout Notes" />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />

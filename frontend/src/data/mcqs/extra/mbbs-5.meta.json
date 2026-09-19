@@ -1,0 +1,286 @@
+{
+  "slug": "mbbs-5",
+  "year": 5,
+  "name": "MBBS Final Year",
+  "count": 1000,
+  "blocks": [
+    {
+      "slug": "foundation-iii",
+      "name": "Foundation-III",
+      "count": 52,
+      "topics": [
+        {
+          "slug": "prime",
+          "name": "PRIME",
+          "count": 10
+        },
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 6
+        },
+        {
+          "slug": "surgery",
+          "name": "Surgery",
+          "count": 21
+        },
+        {
+          "slug": "psychiatry",
+          "name": "Psychiatry",
+          "count": 6
+        },
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 6
+        },
+        {
+          "slug": "radiology",
+          "name": "Radiology",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "slug": "blood-iii",
+      "name": "Blood-III",
+      "count": 74,
+      "topics": [
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 35
+        },
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 35
+        },
+        {
+          "slug": "gynaecology",
+          "name": "Gynaecology",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "slug": "msk-iii",
+      "name": "MSK-III",
+      "count": 124,
+      "topics": [
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 43
+        },
+        {
+          "slug": "orthopaedics",
+          "name": "Orthopaedics",
+          "count": 26
+        },
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 15
+        },
+        {
+          "slug": "dermatology",
+          "name": "Dermatology",
+          "count": 30
+        },
+        {
+          "slug": "plastic-surgery",
+          "name": "Plastic Surgery",
+          "count": 8
+        },
+        {
+          "slug": "psychiatry",
+          "name": "Psychiatry",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "slug": "cardiorespiratory-iii",
+      "name": "Cardiorespiratory-III",
+      "count": 250,
+      "topics": [
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 146
+        },
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 94
+        },
+        {
+          "slug": "surgery",
+          "name": "Surgery",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "slug": "renal-iii",
+      "name": "Renal-III",
+      "count": 83,
+      "topics": [
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 46
+        },
+        {
+          "slug": "urology",
+          "name": "Urology",
+          "count": 21
+        },
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 12
+        },
+        {
+          "slug": "paediatric-surgery",
+          "name": "Paediatric Surgery",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "slug": "endocrine-and-reproduction-iii",
+      "name": "Endocrine & Reproduction-III",
+      "count": 167,
+      "topics": [
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 25
+        },
+        {
+          "slug": "surgery",
+          "name": "Surgery",
+          "count": 16
+        },
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 8
+        },
+        {
+          "slug": "obstetrics",
+          "name": "Obstetrics",
+          "count": 70
+        },
+        {
+          "slug": "gynaecology",
+          "name": "Gynaecology",
+          "count": 48
+        }
+      ]
+    },
+    {
+      "slug": "neurosciences-iii",
+      "name": "Neurosciences-III",
+      "count": 96,
+      "topics": [
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 52
+        },
+        {
+          "slug": "psychiatry",
+          "name": "Psychiatry",
+          "count": 10
+        },
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 16
+        },
+        {
+          "slug": "neurosurgery",
+          "name": "Neurosurgery",
+          "count": 9
+        },
+        {
+          "slug": "paediatric-surgery",
+          "name": "Paediatric Surgery",
+          "count": 4
+        },
+        {
+          "slug": "orthopaedics",
+          "name": "Orthopaedics",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "slug": "git-iii",
+      "name": "GIT-III",
+      "count": 73,
+      "topics": [
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 18
+        },
+        {
+          "slug": "surgery",
+          "name": "Surgery",
+          "count": 31
+        },
+        {
+          "slug": "paediatric-surgery",
+          "name": "Paediatric Surgery",
+          "count": 7
+        },
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 15
+        },
+        {
+          "slug": "gynaecology",
+          "name": "Gynaecology",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "slug": "multisystem-ii",
+      "name": "Multisystem-II",
+      "count": 81,
+      "topics": [
+        {
+          "slug": "medicine",
+          "name": "Medicine",
+          "count": 46
+        },
+        {
+          "slug": "paediatrics",
+          "name": "Paediatrics",
+          "count": 21
+        },
+        {
+          "slug": "surgery",
+          "name": "Surgery",
+          "count": 10
+        },
+        {
+          "slug": "psychiatry",
+          "name": "Psychiatry",
+          "count": 2
+        },
+        {
+          "slug": "gynaecology",
+          "name": "Gynaecology",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

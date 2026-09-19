@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { mcqTotalCount } from "../data/mcqs";
+import { mcqTotalCount } from "../data/mcqs/catalog";
 import { Link } from "react-router-dom";
 import { MessageSquareText, Stethoscope, FileText, FileQuestion, ClipboardList, ArrowRight } from "lucide-react";
 import { getCurrentUser, getDashboardSummary } from "../lib/api";
