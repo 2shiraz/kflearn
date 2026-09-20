@@ -32,6 +32,7 @@ import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
 import { McqPractice, McqsHome, McqYearPage } from "./pages/McqsPage";
 import { McqRead } from "./pages/McqReadPage";
 import { ClinicalExamGuideHome, ClinicalExamGuideStation } from "./pages/ClinicalExaminationPage";
+import { HandoutNotesDetail, HandoutNotesHome } from "./pages/HandoutNotesPage";
 
 function LandingPage() {
   return (
@@ -81,7 +82,8 @@ export default function App() {
           <Route path="/mcqs/:yearSlug" element={<McqYearPage />} />
           <Route path="/mcqs/:yearSlug/read" element={<McqRead />} />
           <Route path="/mcqs/:yearSlug/practice" element={<McqPractice />} />
-          <Route path="/handout-notes" element={<ComingSoonPage sectionKey="handouts" title="Handout Notes" />} />
+          <Route path="/handout-notes" element={<HandoutNotesHome />} />
+          <Route path="/handout-notes/:slug" element={<HandoutNotesDetail />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

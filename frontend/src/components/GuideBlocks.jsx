@@ -85,11 +85,24 @@ export function GuideBlock({ block }) {
 
   // Inline tip, placed exactly where the source calls it out — as opposed to
   // ExamTips below, which collects a page/topic's tips at the end instead.
+  // `items` renders a bulleted list inside the box (e.g. a source's own
+  // "Important considerations" box); `text` renders a single line.
   if (block.type === "callout") {
     return (
       <div className="mt-3 flex gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
         <Lightbulb size={16} className="mt-0.5 shrink-0" />
-        <span>{block.text}</span>
+        {block.items ? (
+          <ul className="space-y-1.5">
+            {block.items.map((item, index) => (
+              <li key={index} className="flex gap-2">
+                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-amber-900/60" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <span>{block.text}</span>
+        )}
       </div>
     );
   }
