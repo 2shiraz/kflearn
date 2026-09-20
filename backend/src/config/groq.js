@@ -7,5 +7,5 @@ export function getGroqClient(apiKey = env.groqApiKey) {
     error.status = 503;
     throw error;
   }
-  return new Groq({ apiKey });
+  return new Groq({ apiKey, timeout: 120_000 });
 }

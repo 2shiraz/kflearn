@@ -12,6 +12,7 @@ export async function createOpenAiResponse(payload, apiKey = env.openaiApiKey) {
   requireOpenAiKey(apiKey);
   const res = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
+    signal: AbortSignal.timeout(120_000),
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",

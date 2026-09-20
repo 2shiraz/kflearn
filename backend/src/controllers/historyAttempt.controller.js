@@ -1,3 +1,5 @@
+import crypto from "node:crypto";
+import mongoose from "mongoose";
 import { HistoryAttempt } from "../models/HistoryAttempt.js";
 import { getModuleClinicalBundle, checklistDto, studentModuleDetailDto } from "../services/history.service.js";
 import { generatePatientResponse } from "../services/virtualPatient.service.js";
@@ -8,6 +10,11 @@ import { messageId } from "../utils/ids.js";
 import { transcribeAudio } from "../services/transcription.service.js";
 
 async function findOwnedAttempt(attemptId, userId) {
+  if (!mongoose.isObjectIdOrHexString(attemptId)) {
+    const error = new Error("Attempt not found.");
+    error.status = 404;
+    throw error;
+  }
   const attempt = await HistoryAttempt.findOne({ _id: attemptId, userId });
   if (!attempt) {
     const error = new Error("Attempt not found.");
@@ -15,6 +22,12 @@ async function findOwnedAttempt(attemptId, userId) {
     throw error;
   }
   return attempt;
+}
+
+function invalidAttemptState() {
+  const error = new Error("Attempt is not in the required state.");
+  error.status = 409;
+  return error;
 }
 
 export async function createAttempt(req, res) {
@@ -50,7 +63,7 @@ export async function getAttempt(req, res) {
     data: {
       attempt: attemptDto(attempt),
       module: { ...studentModuleDetailDto(module), openingStatement: patientScript.openingStatement },
-      checklist: checklistDto(checklist),
+      checklist: attempt.mode === "single-player" || attempt.status !== "active" ? checklistDto(checklist) : undefined,
     },
   });
 }
@@ -79,6 +92,7 @@ export async function listAttempts(req, res) {
 export async function sendPatientMessage(req, res) {
   const { text, inputType = "typed", originalTranscript = "" } = req.body;
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
+  if (attempt.status !== "active" || attempt.mode !== "virtual-patient") throw invalidAttemptState();
   const { module, patientScript } = await getModuleClinicalBundle(attempt.historyModuleId);
   const response = await generatePatientResponse({ patientScript, module, attempt, studentQuestion: text });
 
@@ -100,57 +114,109 @@ export async function sendPatientMessage(req, res) {
     matchedConceptIds: response.matchedConceptIds,
   };
 
-  attempt.messages.push(studentMessage, patientMessage);
-  attempt.internalCoverage.factIds = [...new Set([...(attempt.internalCoverage?.factIds || []), ...response.matchedFactIds])];
-  attempt.internalCoverage.conceptIds = [...new Set([...(attempt.internalCoverage?.conceptIds || []), ...response.matchedConceptIds])];
-  await attempt.save();
+  const updated = await HistoryAttempt.findOneAndUpdate(
+    { _id: attempt._id, userId: req.user.id, status: "active" },
+    {
+      $push: { messages: { $each: [studentMessage, patientMessage] } },
+      $addToSet: {
+        "internalCoverage.factIds": { $each: response.matchedFactIds },
+        "internalCoverage.conceptIds": { $each: response.matchedConceptIds },
+      },
+    },
+    { new: true, runValidators: true },
+  );
+  if (!updated) throw invalidAttemptState();
 
   res.json({
     success: true,
     data: {
       studentMessage: { id: studentMessage.messageId, text: studentMessage.finalText },
       patientMessage: { id: patientMessage.messageId, text: patientMessage.finalText },
-      attempt: attemptDto(attempt),
+      attempt: attemptDto(updated),
     },
   });
 }
 
 export async function endAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
-  attempt.status = "ended";
-  attempt.endedAt = new Date();
-  attempt.elapsedSeconds = req.body.elapsedSeconds || Math.round((attempt.endedAt - attempt.startedAt) / 1000);
-  attempt.timerState = "ended";
-  if (req.body.notes) attempt.notes = req.body.notes;
-  await attempt.save();
-  res.json({ success: true, data: attemptDto(attempt) });
+  if (attempt.status !== "active") throw invalidAttemptState();
+  const endedAt = new Date();
+  const updated = await HistoryAttempt.findOneAndUpdate(
+    { _id: attempt._id, userId: req.user.id, status: "active" },
+    { $set: {
+      status: "ended",
+      endedAt,
+      elapsedSeconds: Math.max(0, Math.round((endedAt - attempt.startedAt) / 1000)),
+      timerState: "ended",
+      ...(req.body?.notes !== undefined ? { notes: req.body.notes } : {}),
+    } },
+    { new: true, runValidators: true },
+  );
+  if (!updated) throw invalidAttemptState();
+  res.json({ success: true, data: attemptDto(updated) });
 }
 
 export async function selfAssessAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
+  if (attempt.status !== "ended") throw invalidAttemptState();
   const { checklist } = await getModuleClinicalBundle(attempt.historyModuleId);
   const result = selfAssessChecklist(checklist, req.body.checkedItemIds || []);
-  attempt.selfAssessment = { checkedItemIds: req.body.checkedItemIds || [], itemScores: result.itemScores };
-  attempt.finalScore = result.finalScore;
-  attempt.feedback = {
+  const feedback = {
     summary: "Self assessment complete.",
     missedItems: checklist.sections.flatMap((section) => section.items.filter((item) => !req.body.checkedItemIds?.includes(item.itemId)).map((item) => item.label)),
   };
-  attempt.status = "self-assessed";
-  await attempt.save();
-  res.json({ success: true, data: { attempt: attemptDto(attempt), result: resultDto(attempt, checklist) } });
+  const updated = await HistoryAttempt.findOneAndUpdate(
+    { _id: attempt._id, userId: req.user.id, status: "ended" },
+    { $set: {
+      selfAssessment: { checkedItemIds: req.body.checkedItemIds || [], itemScores: result.itemScores },
+      finalScore: result.finalScore,
+      feedback,
+      status: "self-assessed",
+    } },
+    { new: true, runValidators: true },
+  );
+  if (!updated) throw invalidAttemptState();
+  res.json({ success: true, data: { attempt: attemptDto(updated), result: resultDto(updated, checklist) } });
 }
 
 export async function aiAssessAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
+  const staleBefore = new Date(Date.now() - 10 * 60 * 1000);
+  if (attempt.status !== "ended" && !(attempt.status === "assessing" && attempt.assessmentStartedAt < staleBefore)) {
+    throw invalidAttemptState();
+  }
   const { module, checklist } = await getModuleClinicalBundle(attempt.historyModuleId);
-  const result = await assessAttemptWithAi({ module, checklist, attempt });
-  attempt.aiAssessment = { itemScores: result.itemScores, model: result.model, provider: result.provider };
-  attempt.finalScore = result.finalScore;
-  attempt.feedback = result.feedback;
-  attempt.status = "ai-assessed";
-  await attempt.save();
-  res.json({ success: true, data: { attempt: attemptDto(attempt), result: resultDto(attempt, checklist) } });
+  const leaseId = crypto.randomUUID();
+  const reserved = await HistoryAttempt.findOneAndUpdate(
+    { _id: attempt._id, userId: req.user.id, $or: [
+      { status: "ended" },
+      { status: "assessing", assessmentStartedAt: { $lt: staleBefore } },
+    ] },
+    { $set: { status: "assessing", assessmentStartedAt: new Date(), assessmentLeaseId: leaseId } },
+    { new: true },
+  );
+  if (!reserved) throw invalidAttemptState();
+  try {
+    const result = await assessAttemptWithAi({ module, checklist, attempt: reserved });
+    const updated = await HistoryAttempt.findOneAndUpdate(
+      { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId },
+      { $set: {
+        aiAssessment: { itemScores: result.itemScores, model: result.model, provider: result.provider },
+        finalScore: result.finalScore,
+        feedback: result.feedback,
+        status: "ai-assessed",
+      }, $unset: { assessmentStartedAt: "", assessmentLeaseId: "" } },
+      { new: true, runValidators: true },
+    );
+    if (!updated) throw invalidAttemptState();
+    res.json({ success: true, data: { attempt: attemptDto(updated), result: resultDto(updated, checklist) } });
+  } catch (error) {
+    await HistoryAttempt.updateOne(
+      { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId },
+      { $set: { status: "ended" }, $unset: { assessmentStartedAt: "", assessmentLeaseId: "" } },
+    );
+    throw error;
+  }
 }
 
 export async function transcribeAttemptAudio(req, res) {
@@ -159,7 +225,8 @@ export async function transcribeAttemptAudio(req, res) {
     error.status = 400;
     throw error;
   }
-  await findOwnedAttempt(req.params.attemptId, req.user.id);
+  const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
+  if (attempt.status !== "active" || attempt.mode !== "virtual-patient") throw invalidAttemptState();
   const text = await transcribeAudio(req.file);
   res.json({ success: true, data: { transcript: text } });
 }

@@ -22,9 +22,11 @@ const historyAttemptSchema = new mongoose.Schema(
     aiProvider: { type: String, enum: ["groq", "openai"], default: "groq" },
     status: {
       type: String,
-      enum: ["started", "active", "ended", "self-assessed", "ai-assessed"],
+      enum: ["started", "active", "ended", "assessing", "self-assessed", "ai-assessed"],
       default: "started",
     },
+    assessmentStartedAt: Date,
+    assessmentLeaseId: String,
     startedAt: { type: Date, default: Date.now },
     endedAt: Date,
     elapsedSeconds: { type: Number, default: 0 },

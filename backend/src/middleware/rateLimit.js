@@ -25,3 +25,15 @@ export const apiLimiter = rateLimit({
   skip: skipInTests,
   message: { success: false, message: "Too many requests. Please slow down.", code: "RATE_LIMITED" },
 });
+
+// Provider-backed actions are expensive. A per-account ceiling also limits
+// abuse from several clients sharing one public IP.
+export const aiActionLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 60,
+  keyGenerator: (req) => req.user.id,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: skipInTests,
+  message: { success: false, message: "AI request limit reached. Please try again later.", code: "RATE_LIMITED" },
+});

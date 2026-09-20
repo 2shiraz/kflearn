@@ -1,6 +1,6 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
-// Real authentication is the httpOnly `kf_session` cookie the server sets on
+// Real authentication is the httpOnly session cookie the server sets on
 // login/register — the browser attaches it to every request automatically,
 // including from a freshly opened tab, which is what makes sessions survive
 // new tabs. `kf_user` below is just a cached copy of the profile for instant,
@@ -10,6 +10,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api
 // never treated as a credential — every server request is re-authorized from
 // the cookie regardless of what this cache says.
 const SESSION_KEY = "kf_user";
+const CSRF_KEY = "kf_csrf";
 const LEGACY_SESSION_KEY = "kf_mock_user";
 const LEGACY_TOKEN_KEY = "kf_auth_token";
 
@@ -30,6 +31,7 @@ function clearLegacySessionStorage() {
 export function saveAuthSession(data) {
   clearLegacySessionStorage();
   if (data?.user) localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  if (data?.csrfToken) localStorage.setItem(CSRF_KEY, data.csrfToken);
   return data;
 }
 
@@ -46,17 +48,26 @@ export function getCurrentUser() {
 }
 
 function getCsrfToken() {
-  const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+  const stored = localStorage.getItem(CSRF_KEY);
+  if (stored) return stored;
+  const match = document.cookie.match(/(?:^|;\s*)(?:__Host-)?XSRF-TOKEN=([^;]*)/);
   return match ? decodeURIComponent(match[1]) : "";
 }
 
 export function logout() {
+  const csrfToken = getCsrfToken();
   localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(CSRF_KEY);
   clearLegacySessionStorage();
   // Best-effort: ask the server to clear the httpOnly cookie too (it can't be
   // cleared from JS). `keepalive` lets the request finish even though callers
   // redirect the page away immediately after calling logout().
-  fetch(`${API_BASE}/auth/logout`, { method: "POST", credentials: "include", keepalive: true }).catch(() => {});
+  fetch(`${API_BASE}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+    keepalive: true,
+    headers: { "X-XSRF-Token": csrfToken },
+  }).catch(() => {});
 }
 
 export async function registerRequest({ fullName, email, password, roleLabel, profile }) {
@@ -78,6 +89,7 @@ export async function loginRequest({ email, password }) {
 export async function fetchCurrentUser() {
   const data = await apiFetch("/auth/me");
   if (data?.user) localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  if (data?.csrfToken) localStorage.setItem(CSRF_KEY, data.csrfToken);
   return data;
 }
 
@@ -120,7 +132,7 @@ async function apiFetch(path, options = {}) {
     headers: {
       ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
       // The session itself travels via the httpOnly cookie (sent automatically);
-      // this header is only the CSRF double-submit check for state-changing requests.
+      // this header proves the request came from the frontend for state changes.
       ...(method !== "GET" ? { "X-XSRF-Token": getCsrfToken() } : {}),
       ...(options.headers || {}),
     },

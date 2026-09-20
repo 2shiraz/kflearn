@@ -1,18 +1,25 @@
-import { currentUser, loginUser, registerUser, updateCurrentUser } from "../services/auth.service.js";
-import { clearAuthCookies, setAuthCookies } from "../utils/authCookies.js";
+import { currentUser, loginUser, registerUser, revokeUserSessions, updateCurrentUser } from "../services/auth.service.js";
+import { clearAuthCookies, CSRF_COOKIE, setAuthCookies } from "../utils/authCookies.js";
 
-function respondWithSession(res, status, { token, expiresInMs, user }) {
-  setAuthCookies(res, { token, expiresInMs });
-  res.status(status).json({
+function respondWithSession(req, res, status, { token, expiresInMs, user }) {
+  const csrfToken = setAuthCookies(res, { token, expiresInMs });
+  // Browser requests carry Origin and use the httpOnly cookie. Keep a Bearer
+  // token in the JSON response only for non-browser API clients.
+  res.set("Cache-Control", "no-store").status(status).json({
     success: true,
-    data: { token, expiresIn: Math.round(expiresInMs / 1000), user },
+    data: {
+      ...(!req.get("Origin") && !req.get("Sec-Fetch-Site") ? { token } : {}),
+      csrfToken,
+      expiresIn: Math.round(expiresInMs / 1000),
+      user,
+    },
   });
 }
 
 export async function register(req, res, next) {
   try {
-    const data = await registerUser(req.body);
-    respondWithSession(res, 201, data);
+    const data = await registerUser(req.body || {});
+    respondWithSession(req, res, 201, data);
   } catch (error) {
     next(error);
   }
@@ -20,22 +27,27 @@ export async function register(req, res, next) {
 
 export async function login(req, res, next) {
   try {
-    const data = await loginUser(req.body);
-    respondWithSession(res, 200, data);
+    const data = await loginUser(req.body || {});
+    respondWithSession(req, res, 200, data);
   } catch (error) {
     next(error);
   }
 }
 
-export async function logout(req, res) {
-  clearAuthCookies(res);
-  res.json({ success: true });
+export async function logout(req, res, next) {
+  try {
+    await revokeUserSessions(req.user.id);
+    clearAuthCookies(res);
+    res.json({ success: true });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function me(req, res, next) {
   try {
     const data = await currentUser(req.user.id);
-    res.json({ success: true, data });
+    res.json({ success: true, data: { ...data, csrfToken: req.cookies?.[CSRF_COOKIE] || "" } });
   } catch (error) {
     next(error);
   }
@@ -43,7 +55,7 @@ export async function me(req, res, next) {
 
 export async function updateMe(req, res, next) {
   try {
-    const data = await updateCurrentUser(req.user.id, req.body);
+    const data = await updateCurrentUser(req.user.id, req.body || {});
     res.json({ success: true, data });
   } catch (error) {
     next(error);

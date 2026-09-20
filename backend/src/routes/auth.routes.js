@@ -11,7 +11,7 @@ const router = Router();
 // route here that needs it — PATCH /me — applies both itself.
 router.post("/register", authLimiter, register);
 router.post("/login", authLimiter, login);
-router.post("/logout", logout);
+router.post("/logout", authenticate, csrfProtection, logout);
 router.get("/me", authenticate, me);
 router.patch("/me", authenticate, csrfProtection, updateMe);
 

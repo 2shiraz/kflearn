@@ -12,6 +12,13 @@ npm run dev
 
 Set `MONGODB_URI` plus at least one AI provider key in `.env`.
 
+In production, set a random `JWT_SECRET` of at least 32 characters. Set a
+separate random `ENCRYPTION_KEY` of at least 32 characters if AI provider keys
+are stored in the admin settings. Set `FRONTEND_URL` to the exact browser origin.
+`TRUST_PROXY_HOPS` defaults to `0`; set it to the exact number of trusted proxy
+hops only when the API is reachable exclusively through those proxies. The API
+binds to `127.0.0.1` outside production unless `HOST` is set.
+
 ```env
 GROQ_API_KEY=
 GROQ_CHAT_MODEL=openai/gpt-oss-20b

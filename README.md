@@ -27,7 +27,7 @@ Set:
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
-Keep `VITE_USE_MOCK_AUTH=true` for local demo auth. Set it to `false` only when real auth endpoints are implemented.
+Authentication uses the backend session cookie; there is no mock auth mode.
 
 ## History Taking
 

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { ContentAuditLog } from "../models/ContentAuditLog.js";
 import { HistoryModule } from "../models/HistoryModule.js";
 import { PatientScript } from "../models/PatientScript.js";
@@ -41,13 +42,18 @@ export async function createHistoryContent(req, res) {
 }
 
 export async function updateModuleStatus(req, res) {
+  if (!mongoose.isObjectIdOrHexString(req.params.id)) {
+    const error = new Error("Module not found.");
+    error.status = 404;
+    throw error;
+  }
   const module = await HistoryModule.findById(req.params.id);
   if (!module) {
     const error = new Error("Module not found.");
     error.status = 404;
     throw error;
   }
-  const { status } = req.body;
+  const { status } = req.body || {};
   if (!["draft", "approved", "published", "archived"].includes(status)) {
     const error = new Error("Invalid status.");
     error.status = 400;

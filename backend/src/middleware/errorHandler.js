@@ -1,4 +1,5 @@
 import { env } from "../config/env.js";
+import multer from "multer";
 
 export function notFound(req, res, next) {
   const error = new Error(`Route not found: ${req.method} ${req.originalUrl}`);
@@ -7,7 +8,9 @@ export function notFound(req, res, next) {
 }
 
 export function errorHandler(error, req, res, next) {
-  const status = error.status || error.statusCode || 500;
+  const status = error instanceof multer.MulterError
+    ? (error.code === "LIMIT_FILE_SIZE" ? 413 : 400)
+    : error.status || error.statusCode || 500;
   if (status >= 500) {
     console.error(error);
   }

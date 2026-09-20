@@ -18,9 +18,9 @@ export async function authenticate(req, res, next) {
     // a request authenticated via an explicit Bearer header is not exploitable that way.
     req.authViaCookie = Boolean(cookieToken);
 
-    const payload = jwt.verify(token, env.jwtSecret);
+    const payload = jwt.verify(token, env.jwtSecret, { algorithms: ["HS256"] });
     const user = await User.findById(payload.sub).lean();
-    if (!user) {
+    if (!user || payload.sv !== (user.sessionVersion || 0)) {
       return res.status(401).json({ success: false, message: "Authentication required." });
     }
 
@@ -31,6 +31,7 @@ export async function authenticate(req, res, next) {
       email: user.email,
       roleLabel: user.roleLabel,
     };
+    res.set("Cache-Control", "no-store");
     return next();
   } catch (error) {
     return res.status(401).json({ success: false, message: "Invalid or expired session." });

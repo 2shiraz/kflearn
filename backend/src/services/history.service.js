@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { HistoryModule } from "../models/HistoryModule.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
@@ -86,6 +87,11 @@ export async function getPublishedModuleBySlug(slug) {
 }
 
 export async function getModuleClinicalBundle(moduleId) {
+  if (!mongoose.isObjectIdOrHexString(moduleId)) {
+    const error = new Error("History module not found.");
+    error.status = 404;
+    throw error;
+  }
   const module = await HistoryModule.findById(moduleId).populate("specialtyId");
   if (!module) {
     const error = new Error("History module not found.");

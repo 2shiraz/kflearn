@@ -2,7 +2,7 @@
 
 > Update this file every time an endpoint is added or changed. One source of truth for frontend + backend.
 > Base URL (dev): `http://localhost:5000/api`
-> Auth scheme: JWT access token (24h expiry, per FR-1.4) returned in response body + set as httpOnly cookie. No localStorage token storage (XSS risk, SEC-05).
+> Auth scheme: JWT session cookie (24h default expiry). Browser auth responses do not include the JWT; non-browser API clients without Origin/Fetch Metadata headers can use the response token as a Bearer credential.
 
 ---
 
@@ -17,10 +17,10 @@
 ```json
 { "success": true, "data": { ... } }
 ```
-- Auth-protected routes require header: `Authorization: Bearer <token>` OR the `kf_session` httpOnly cookie set at login. The frontend SPA uses the cookie exclusively (fetch calls send `credentials: "include"`); the response body still includes `token` for non-browser API clients.
-- Password rules: min 8 chars, 1 number, 1 letter (enforced server-side, SEC-02 bcrypt cost 12).
-- CSRF: cookie-authenticated, state-changing requests (anything but GET/HEAD/OPTIONS) must echo the `XSRF-TOKEN` cookie value in an `X-XSRF-Token` header (double-submit pattern). Requests authenticated via `Authorization: Bearer` are exempt — they aren't a CSRF vector. `register`/`login`/`logout` are exempt too (no session exists yet, or nothing sensitive to protect).
-- Rate limiting: `/api/auth/register` and `/api/auth/login` are limited to 10 requests/IP/minute (SEC-04); the rest of `/api` is limited to 300 requests/IP/minute.
+- Auth-protected routes require header: `Authorization: Bearer <token>` OR the `kf_session` httpOnly cookie set at login. In Secure deployments the cookie is named `__Host-kf_session`. The frontend SPA uses the cookie exclusively (fetch calls send `credentials: "include"`).
+- Password rules: min 8 chars, 1 number, 1 letter, at most 72 UTF-8 bytes (enforced server-side, SEC-02 bcrypt cost 12).
+- CSRF: cookie-authenticated, state-changing requests (anything but GET/HEAD/OPTIONS) must echo the CSRF cookie value in an `X-XSRF-Token` header. Login/register and `/auth/me` return `csrfToken` so a frontend on a different origin can send this header. The cookie is `XSRF-TOKEN` locally and `__Host-XSRF-TOKEN` in Secure deployments. Bearer-only requests are exempt. Logout requires authentication and CSRF validation for cookie sessions.
+- Rate limiting: `/api/auth/register` and `/api/auth/login` are limited to 10 requests/IP/minute; the rest of `/api` is limited to 300 requests/IP/minute, and AI-backed actions to 60 requests/account/hour.
 
 ---
 
@@ -52,7 +52,7 @@ Register a new user (Student, Content Contributor, or Admin-invited).
 
 **Errors**: `409 EMAIL_TAKEN`, `422 VALIDATION_ERROR`, `429 RATE_LIMITED`
 
-Status: **built** — request/response shape differs from the original mock-era draft above: no `role` field accepted (public signup always creates `role: "student"`; `roleLabel` is a free-text display label, see `saves to profile` below), and the response returns `{ token, expiresIn, user }` (same shape as login) rather than an `emailVerified` flag — **there is still no email-verification step (FR-1.2 not implemented)**, registration logs the user in immediately. `password` must be 8+ chars with a letter and a number (enforced server-side).
+Status: **built** — request/response shape differs from the original mock-era draft above: no `role` field accepted (public signup always creates `role: "student"`; `roleLabel` is a display label), and the response returns `{ csrfToken, expiresIn, user }` for browsers, with `token` additionally returned to non-browser clients. **There is still no email-verification step (FR-1.2 not implemented)**; registration logs the user in immediately.
 
 ---
 
@@ -79,7 +79,7 @@ Status: **not yet built**
 {
   "success": true,
   "data": {
-    "token": "jwt...",
+    "csrfToken": "random token...",
     "expiresIn": 86400,
     "user": { "id": "...", "fullName": "...", "email": "...", "role": "student" }
   }
@@ -87,7 +87,7 @@ Status: **not yet built**
 ```
 **Errors**: `401 INVALID_CREDENTIALS`, `429 RATE_LIMITED` (SEC-04: max 10 req/IP/min)
 
-Status: **built** — no `403 EMAIL_NOT_VERIFIED` (no verification step exists yet, see register above).
+Status: **built** — non-browser API clients also receive `token`; browsers receive it only as a httpOnly cookie. There is no `403 EMAIL_NOT_VERIFIED` (no verification step exists yet, see register above).
 
 ---
 
@@ -105,8 +105,8 @@ Status: **not yet built**
 ---
 
 ### `POST /api/auth/logout`
-Clears the `kf_session` and `XSRF-TOKEN` cookies server-side (SEC-11). A bearer-token client has nothing to clear server-side — this only invalidates the cookie session; a Bearer JWT remains valid until it expires.
-**Request**: none (uses auth header/cookie)
+Clears the session and CSRF cookies and revokes all outstanding JWTs for the user.
+**Request**: authenticated; cookie clients must send `X-XSRF-Token`.
 **Response `200`**: `{ "success": true }`
 
 Status: **built**
@@ -131,7 +131,7 @@ Status: **not yet built**
 
 ### `GET /api/auth/me`
 Returns current authenticated user. Used by frontend on app load to check session.
-**Response `200`**: `{ "success": true, "data": { "user": {...} } }`
+**Response `200`**: `{ "success": true, "data": { "user": {...}, "csrfToken": "..." } }`
 **Errors**: `401 UNAUTHENTICATED`
 
 Status: **built**

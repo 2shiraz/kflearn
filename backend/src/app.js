@@ -18,9 +18,9 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 
 export function createApp() {
   const app = express();
-  // Behind a reverse proxy/load balancer in production, so req.ip and req.secure
-  // (used by rate limiting and secure cookies) reflect the real client, not the proxy hop.
-  if (env.isProduction) app.set("trust proxy", 1);
+  // Set this only to the number of trusted proxy hops in the deployment. Trusting
+  // arbitrary X-Forwarded-For values lets clients bypass the IP rate limit.
+  if (env.trustedProxyHops > 0) app.set("trust proxy", env.trustedProxyHops);
 
   app.use(helmet());
   app.use(cors({ origin: env.frontendUrl, credentials: true }));

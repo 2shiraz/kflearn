@@ -104,6 +104,11 @@ test("student cannot access another user's attempt", async () => {
     .get(`/api/history/attempts/${create.body.data.attempt.id}`)
     .set("Authorization", studentB);
   assert.equal(read.status, 404);
+  assert.equal((await request(app).post(`/api/history/attempts/${create.body.data.attempt.id}/end`)
+    .set("Authorization", studentB).send({})).status, 404);
+  assert.equal((await request(app).post(`/api/history/attempts/${create.body.data.attempt.id}/self-assessment`)
+    .set("Authorization", studentB).send({ checkedItemIds: [] })).status, 404);
+  assert.equal((await request(app).get("/api/history/attempts").set("Authorization", studentB)).body.data.length, 0);
 });
 
 test("ended unassessed sessions are hidden from attempt history", async () => {
@@ -273,10 +278,12 @@ test("missing Groq key returns useful AI assessment error", async () => {
     .post("/api/history/attempts")
     .set("Authorization", auth)
     .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient" });
+  await request(app).post(`/api/history/attempts/${create.body.data.attempt.id}/end`).set("Authorization", auth).send({});
   const res = await request(app).post(`/api/history/attempts/${create.body.data.attempt.id}/ai-assessment`).set("Authorization", auth);
   env.groqApiKey = originalKey;
   assert.equal(res.status, 503);
   assert.match(res.body.message, /No AI provider|GROQ_API_KEY|OPENAI_API_KEY/);
+  assert.equal((await HistoryAttempt.findById(create.body.data.attempt.id)).status, "ended");
 });
 
 test("admin can view users and update AI settings", async () => {
@@ -306,6 +313,12 @@ test("admin can view users and update AI settings", async () => {
   const openai = settings.body.data.providers.find((provider) => provider.id === "openai");
   assert.equal(openai.configured, true);
   assert.equal(JSON.stringify(settings.body.data).includes("sk-test"), false);
+  assert.equal((await request(app).patch("/api/admin/history/not-an-id/status").set("Authorization", auth)
+    .send({ status: "published" })).status, 404);
+
+  user.role = "student";
+  await user.save();
+  assert.equal((await request(app).get("/api/admin/users").set("Authorization", auth)).status, 403);
 });
 
 test("protected endpoints reject requests without a real token", async () => {
@@ -314,6 +327,13 @@ test("protected endpoints reject requests without a real token", async () => {
     .post("/api/history/attempts")
     .send({ moduleId: seeded.module._id.toString(), mode: "single-player" });
   assert.equal(res.status, 401);
+});
+
+test("malformed attempt and module identifiers are rejected before MongoDB casting", async () => {
+  const auth = await registerTestUser("bad.ids@example.com");
+  assert.equal((await request(app).post("/api/history/attempts").set("Authorization", auth)
+    .send({ moduleId: 6, mode: "single-player" })).status, 404);
+  assert.equal((await request(app).get("/api/history/attempts/not-an-id").set("Authorization", auth)).status, 404);
 });
 
 test("new user can register, login, update profile, and own attempts", async () => {
@@ -378,6 +398,211 @@ test("new user can register, login, update profile, and own attempts", async () 
   const attempt = await HistoryAttempt.findById(create.body.data.attempt.id);
   const user = await User.findOne({ email });
   assert.equal(attempt.userId, user._id.toString());
+});
+
+test("registration and login reject malformed credentials and bcrypt-truncated passwords", async () => {
+  const malformed = await request(app).post("/api/auth/register").send({
+    fullName: "Test User", email: { $ne: null }, password: "StrongPass123",
+  });
+  assert.equal(malformed.status, 400);
+
+  const tooLong = await request(app).post("/api/auth/register").send({
+    fullName: "Test User", email: "too.long@example.com", password: `${"A".repeat(72)}1`,
+  });
+  assert.equal(tooLong.status, 400);
+  assert.equal(await User.countDocuments({ email: "too.long@example.com" }), 0);
+
+  const login = await request(app).post("/api/auth/login").send({ email: { $ne: null }, password: "StrongPass123" });
+  assert.equal(login.status, 401);
+
+  const oversizedProfile = await request(app).post("/api/auth/register").send({
+    fullName: "Test User", email: "large.profile@example.com", password: "StrongPass123",
+    profile: { institution: "x".repeat(201) },
+  });
+  assert.equal(oversizedProfile.status, 400);
+});
+
+test("logout requires CSRF for cookie sessions and revokes previously issued JWTs", async () => {
+  const agent = request.agent(app);
+  const register = await agent.post("/api/auth/register").send({
+    fullName: "Session User", email: "session@example.com", password: "StrongPass123",
+  });
+  assert.equal(register.status, 201);
+  const token = register.body.data.token;
+
+  const missingCsrf = await agent.post("/api/auth/logout");
+  assert.equal(missingCsrf.status, 403);
+  assert.equal((await agent.get("/api/auth/me")).status, 200);
+
+  const csrfCookie = register.headers["set-cookie"].find((cookie) => cookie.startsWith("XSRF-TOKEN="));
+  const csrfToken = csrfCookie.split(";")[0].split("=")[1];
+  const logout = await agent.post("/api/auth/logout").set("X-XSRF-Token", csrfToken);
+  assert.equal(logout.status, 200);
+  assert.equal((await request(app).get("/api/auth/me").set("Authorization", `Bearer ${token}`)).status, 401);
+  assert.equal((await agent.get("/api/auth/me")).status, 401);
+
+  const login = await request(app).post("/api/auth/login").send({ email: "session@example.com", password: "StrongPass123" });
+  assert.equal(login.status, 200);
+  assert.equal((await request(app).get("/api/auth/me").set("Authorization", `Bearer ${login.body.data.token}`)).status, 200);
+});
+
+test("browser login response keeps its session token in the httpOnly cookie", async () => {
+  await registerTestUser("browser@example.com");
+  const res = await request(app).post("/api/auth/login").set("Origin", env.frontendUrl)
+    .send({ email: "browser@example.com", password: "StrongPass123" });
+  assert.equal(res.status, 200);
+  assert.equal(res.body.data.token, undefined);
+  assert.ok(res.headers["set-cookie"].some((cookie) => cookie.startsWith("kf_session=") && cookie.includes("HttpOnly")));
+  const csrfCookie = res.headers["set-cookie"].find((cookie) => cookie.startsWith("XSRF-TOKEN="));
+  assert.equal(res.body.data.csrfToken, csrfCookie.split(";")[0].split("=")[1]);
+  assert.equal(res.headers["access-control-allow-origin"], env.frontendUrl);
+  assert.equal(res.headers["cache-control"], "no-store");
+});
+
+test("students cannot promote themselves or call admin APIs", async () => {
+  const auth = await registerTestUser("plain.student@example.com");
+  const update = await request(app).patch("/api/auth/me").set("Authorization", auth).send({
+    role: "admin", profile: { institution: "College" },
+  });
+  assert.equal(update.status, 200);
+  assert.equal(update.body.data.user.role, "student");
+  assert.equal((await request(app).patch("/api/auth/me").set("Authorization", auth)
+    .send({ roleLabel: "x".repeat(81) })).status, 400);
+  assert.equal((await request(app).patch("/api/auth/me").set("Authorization", auth)
+    .send({ profile: { institution: "x".repeat(201) } })).status, 400);
+  assert.equal((await request(app).get("/api/admin/users").set("Authorization", auth)).status, 403);
+  assert.equal((await request(app).patch("/api/ai/status").set("Authorization", auth).send({ defaultProvider: "openai" })).status, 403);
+});
+
+test("virtual patient state and checklist cannot be changed after the session ends", async () => {
+  const seeded = await seedHistoryContent();
+  const auth = await registerTestUser("states@example.com");
+  const created = await request(app).post("/api/history/attempts").set("Authorization", auth)
+    .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient" });
+  const id = created.body.data.attempt.id;
+
+  const active = await request(app).get(`/api/history/attempts/${id}`).set("Authorization", auth);
+  assert.equal(active.status, 200);
+  assert.equal(active.body.data.checklist, undefined);
+  assert.equal((await request(app).post(`/api/history/attempts/${id}/self-assessment`).set("Authorization", auth).send({ checkedItemIds: [] })).status, 409);
+  assert.equal((await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
+
+  const ended = await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth)
+    .send({ elapsedSeconds: 999999, notes: "Finished" });
+  assert.equal(ended.status, 200);
+  assert.ok(ended.body.data.elapsedSeconds < 30);
+  assert.equal((await request(app).get(`/api/history/attempts/${id}`).set("Authorization", auth)).body.data.checklist.title, seeded.checklist.title);
+  assert.equal((await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({})).status, 409);
+  assert.equal((await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth).send({ text: "Do you smoke?" })).status, 409);
+  assert.equal((await request(app).post(`/api/history/attempts/${id}/transcribe`).set("Authorization", auth)
+    .attach("audio", Buffer.from("fake audio"), { filename: "clip.webm", contentType: "audio/webm" })).status, 409);
+
+  const scored = await request(app).post(`/api/history/attempts/${id}/self-assessment`).set("Authorization", auth)
+    .send({ checkedItemIds: [] });
+  assert.equal(scored.status, 200);
+  assert.equal((await request(app).post(`/api/history/attempts/${id}/self-assessment`).set("Authorization", auth).send({ checkedItemIds: [] })).status, 409);
+  assert.equal((await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
+  assert.equal((await HistoryAttempt.findById(id)).messages.length, 0);
+});
+
+test("concurrent assessments commit only one result", async () => {
+  const seeded = await seedHistoryContent();
+  const auth = await registerTestUser("race@example.com");
+  const created = await request(app).post("/api/history/attempts").set("Authorization", auth)
+    .send({ moduleId: seeded.module._id.toString(), mode: "single-player" });
+  const id = created.body.data.attempt.id;
+  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
+
+  const scores = await Promise.all([
+    request(app).post(`/api/history/attempts/${id}/self-assessment`).set("Authorization", auth).send({ checkedItemIds: ["duration"] }),
+    request(app).post(`/api/history/attempts/${id}/self-assessment`).set("Authorization", auth).send({ checkedItemIds: ["nocturnal"] }),
+  ]);
+  assert.deepEqual(scores.map((res) => res.status).sort(), [200, 409]);
+  assert.equal((await HistoryAttempt.findById(id)).status, "self-assessed");
+});
+
+test("a stale AI assessment lease can be retried without an old request overwriting it", async () => {
+  const seeded = await seedHistoryContent();
+  const auth = await registerTestUser("stale.lease@example.com");
+  const created = await request(app).post("/api/history/attempts").set("Authorization", auth)
+    .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient" });
+  const id = created.body.data.attempt.id;
+  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
+  await HistoryAttempt.updateOne({ _id: id }, { $set: {
+    status: "assessing", assessmentStartedAt: new Date(Date.now() - 11 * 60 * 1000), assessmentLeaseId: "abandoned",
+  } });
+
+  const originalGroq = env.groqApiKey;
+  const originalOpenAi = env.openaiApiKey;
+  env.groqApiKey = "";
+  env.openaiApiKey = "";
+  try {
+    const retried = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth);
+    assert.equal(retried.status, 503);
+    const attempt = await HistoryAttempt.findById(id);
+    assert.equal(attempt.status, "ended");
+    assert.equal(attempt.assessmentLeaseId, undefined);
+
+    await HistoryAttempt.updateOne({ _id: id }, { $set: {
+      status: "assessing", assessmentStartedAt: new Date(), assessmentLeaseId: "current",
+    } });
+    assert.equal((await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
+  } finally {
+    env.groqApiKey = originalGroq;
+    env.openaiApiKey = originalOpenAi;
+  }
+});
+
+test("message and upload inputs are bounded before database or provider use", async () => {
+  const seeded = await seedHistoryContent();
+  const auth = await registerTestUser("validation@example.com");
+  const created = await request(app).post("/api/history/attempts").set("Authorization", auth)
+    .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient" });
+  const id = created.body.data.attempt.id;
+
+  const badText = await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth)
+    .send({ text: { $gt: "" } });
+  assert.equal(badText.status, 400);
+  const badTranscript = await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth)
+    .send({ text: "Hi", originalTranscript: "x".repeat(641) });
+  assert.equal(badTranscript.status, 400);
+  const badUpload = await request(app).post(`/api/history/attempts/${id}/transcribe`).set("Authorization", auth)
+    .attach("audio", Buffer.from("not audio"), { filename: "clip.txt", contentType: "text/plain" });
+  assert.equal(badUpload.status, 400);
+  const craftedFields = await request(app).post(`/api/history/attempts/${id}/transcribe`).set("Authorization", auth)
+    .field("items[4294967294]", "x").field("items[name]", "y");
+  assert.equal(craftedFields.status, 400);
+  assert.equal((await request(app).get("/api/health")).status, 200);
+  assert.equal((await HistoryAttempt.findById(id)).messages.length, 0);
+});
+
+test("login attempts and provider-backed actions have separate rate limits", async () => {
+  const seeded = await seedHistoryContent();
+  const userA = await registerTestUser("limited.a@example.com");
+  const userB = await registerTestUser("limited.b@example.com");
+  const created = await request(app).post("/api/history/attempts").set("Authorization", userA)
+    .send({ moduleId: seeded.module._id.toString(), mode: "virtual-patient" });
+  const id = created.body.data.attempt.id;
+
+  const previous = env.nodeEnv;
+  env.nodeEnv = "development";
+  try {
+    for (let index = 0; index < 10; index += 1) {
+      const failed = await request(app).post("/api/auth/login").send({ email: "none@example.com", password: "BadPass123" });
+      assert.equal(failed.status, 401);
+    }
+    assert.equal((await request(app).post("/api/auth/login").send({ email: "none@example.com", password: "BadPass123" })).status, 429);
+
+    for (let index = 0; index < 60; index += 1) {
+      const missingAudio = await request(app).post(`/api/history/attempts/${id}/transcribe`).set("Authorization", userA);
+      assert.equal(missingAudio.status, 400);
+    }
+    assert.equal((await request(app).post(`/api/history/attempts/${id}/transcribe`).set("Authorization", userA)).status, 429);
+    assert.equal((await request(app).post(`/api/history/attempts/${id}/transcribe`).set("Authorization", userB)
+      .attach("audio", Buffer.from("fake audio"), { filename: "clip.webm", contentType: "audio/webm" })).status, 404);
+  } finally {
+    env.nodeEnv = previous;
+  }
 });
 
 function baseFact(factId) {
