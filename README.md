@@ -29,14 +29,13 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 Authentication uses the backend session cookie; there is no mock auth mode.
 
-## History Taking
+## OSCE Stations
 
-Seeded content includes:
+The backend seeds interactive OSCE stations with patient scripts and marking
+checklists. Students can use guided self-practice or a credit-funded AI virtual
+patient and assessment. Station attempts and scores are stored in MongoDB.
 
-- Universal history taking guide
-- SOCRATES
-- HOSE PIPERS
-- MJTHREADS
-- ONE RESPS breathlessness guide
-- Maya Khan respiratory/asthma virtual patient case
-- Eight-item asthma smart checklist
+## History Taking Guide
+
+The separate History Taking Guide is static frontend content. It is not the
+interactive OSCE station bank and does not require database seeding.

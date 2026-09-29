@@ -11,13 +11,13 @@ import {
 } from "../controllers/osceAttempt.controller.js";
 import { audioUpload } from "../middleware/upload.js";
 import { aiActionLimiter, attemptCreateLimiter } from "../middleware/rateLimit.js";
-import { requireBodyFields, validateAiProvider, validateAttemptMode, validateEndAttempt, validateSelfAssessment, validateStationId, validateStudentMessageLength } from "../validators/osce.validators.js";
+import { requireBodyFields, validateAiProvider, validateAttemptMode, validateEndAttempt, validateSelfAssessment, validateStudentMessageLength } from "../validators/osce.validators.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const router = Router();
 
 router.get("/", asyncHandler(listAttempts));
-router.post("/", attemptCreateLimiter, requireBodyFields(["mode"]), validateStationId, validateAttemptMode, validateAiProvider, asyncHandler(createAttempt));
+router.post("/", attemptCreateLimiter, requireBodyFields(["stationId", "mode"]), validateAttemptMode, validateAiProvider, asyncHandler(createAttempt));
 router.get("/:attemptId", asyncHandler(getAttempt));
 router.post("/:attemptId/messages", aiActionLimiter, requireBodyFields(["text"]), validateStudentMessageLength, asyncHandler(sendPatientMessage));
 router.post("/:attemptId/end", validateEndAttempt, asyncHandler(endAttempt));

@@ -6,7 +6,7 @@ const sourceReference = "Respiratory OSCE Stations PDF";
 
 export async function seedRespiratoryOsceStations({ respiratory, breathlessnessGuide }) {
   const seeded = [];
-  for (const station of respiratoryHistoryStations) {
+  for (const station of respiratoryOsceStations) {
     const patientScript = await PatientScript.findOneAndUpdate(
       { slug: station.patientScript.slug },
       { $set: station.patientScript },
@@ -35,7 +35,7 @@ export async function seedRespiratoryOsceStations({ respiratory, breathlessnessG
   return seeded;
 }
 
-const respiratoryHistoryStations = [
+const respiratoryOsceStations = [
   {
     module: {
       title: "Suspected Adult Asthma",

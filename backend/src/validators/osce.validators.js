@@ -19,17 +19,6 @@ export function requireBodyFields(fields) {
   };
 }
 
-export function validateStationId(req, res, next) {
-  // Accept the old request field while existing clients migrate to stationId.
-  const stationId = req.body?.stationId ?? req.body?.moduleId;
-  if (!stationId) {
-    reject(next, "stationId is required.");
-    return;
-  }
-  req.body.stationId = stationId;
-  next();
-}
-
 export function validateAttemptMode(req, res, next) {
   if (!["single-player", "virtual-patient"].includes(req.body.mode)) {
     const error = new Error("mode must be single-player or virtual-patient.");

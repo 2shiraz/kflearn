@@ -40,12 +40,8 @@ export function createApp() {
   app.use("/api/credits", creditRoutes);
   app.use("/api/osce/attempts", osceAttemptRoutes);
   app.use("/api/osce", osceRoutes);
-  // Existing clients can keep using the previous paths during the transition.
-  app.use("/api/history/attempts", osceAttemptRoutes);
-  app.use("/api/history", osceRoutes);
   app.use("/api/ai", aiRoutes);
   app.use("/api/admin/osce", adminOsceRoutes);
-  app.use("/api/admin/history", adminOsceRoutes);
   app.use("/api/admin/users", adminUserRoutes);
 
   app.use(notFound);

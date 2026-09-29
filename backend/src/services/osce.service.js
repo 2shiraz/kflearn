@@ -86,13 +86,13 @@ export async function getPublishedStationBySlug(slug) {
   return module;
 }
 
-export async function getStationClinicalBundle(moduleId) {
-  if (!mongoose.isObjectIdOrHexString(moduleId)) {
+export async function getStationClinicalBundle(stationId) {
+  if (!mongoose.isObjectIdOrHexString(stationId)) {
     const error = new Error("OSCE station not found.");
     error.status = 404;
     throw error;
   }
-  const module = await OsceStation.findById(moduleId).populate("specialtyId");
+  const module = await OsceStation.findById(stationId).populate("specialtyId");
   if (!module) {
     const error = new Error("OSCE station not found.");
     error.status = 404;

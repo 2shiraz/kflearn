@@ -76,7 +76,6 @@ export default function App() {
           <Route path="/admin/stations" element={<AdminOscePage />} />
           <Route path="/history-taking" element={<HistoryGuideHome />} />
           <Route path="/history-taking/:topicSlug" element={<HistoryGuideTopic />} />
-          <Route path="/history" element={<HistoryGuideHome />} />
           <Route path="/clinical-examination" element={<ClinicalExamGuideHome />} />
           <Route path="/clinical-examination/:stationSlug" element={<ClinicalExamGuideStation />} />
           <Route path="/mcqs" element={<McqsHome />} />

@@ -9,7 +9,7 @@ export const FEATURES = [
   },
   {
     icon: MessageSquare,
-    title: "History Taking Practice",
+    title: "Virtual Patient Practice",
     desc: "Interactive virtual patient consultations. Ask questions naturally - the patient only reveals what you ask.",
     style: { "--g1": "#C6A6FF", "--g2": "#E0CBFF", "--glow": "rgba(198,166,255,0.35)" },
   },

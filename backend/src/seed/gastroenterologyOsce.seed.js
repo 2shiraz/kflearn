@@ -13,7 +13,7 @@ export async function seedGastroenterologyOsceStations({ universalGuide }) {
       $set: {
         name: "Gastroenterology",
         slug: "gastroenterology",
-        description: "Gastrointestinal history-taking modules.",
+        description: "Gastrointestinal OSCE history-taking stations.",
         icon: "stethoscope",
         order: 4,
         active: true,

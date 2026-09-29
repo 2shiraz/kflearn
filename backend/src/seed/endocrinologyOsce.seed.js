@@ -13,7 +13,7 @@ export async function seedEndocrinologyOsceStations({ universalGuide }) {
       $set: {
         name: "Gynaecology",
         slug: "gynaecology",
-        description: "Gynaecology history-taking modules.",
+        description: "Gynaecology OSCE history-taking stations.",
         icon: "stethoscope",
         order: 2,
         active: true,

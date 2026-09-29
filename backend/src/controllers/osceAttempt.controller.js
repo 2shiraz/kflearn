@@ -368,7 +368,6 @@ export function attemptDto(attempt) {
   return {
     id: attempt._id,
     stationId: attempt.stationId,
-    moduleId: attempt.stationId,
     mode: attempt.mode,
     aiProvider: attempt.aiProvider,
     status: attempt.status,

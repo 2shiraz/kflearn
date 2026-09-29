@@ -93,19 +93,6 @@ test("creating attempt snapshots content versions", async () => {
   assert.equal(attempt.stationVersion, 1);
 });
 
-test("legacy OSCE API path and moduleId request remain compatible", async () => {
-  const seeded = await seedOsceContent();
-  const auth = await registerTestUser("legacy.osce.route@example.com");
-  const oldList = await request(app).get("/api/history").set("Authorization", auth);
-  assert.equal(oldList.status, 200);
-  const created = await request(app).post("/api/history/attempts").set("Authorization", auth)
-    .send({ moduleId: seeded.module._id.toString(), mode: "single-player" });
-  assert.equal(created.status, 201);
-  assert.equal(created.body.data.attempt.stationId, seeded.module._id.toString());
-  assert.equal((await request(app).get("/api/osce/attempts/" + created.body.data.attempt.id)
-    .set("Authorization", auth)).status, 200);
-});
-
 test("creating attempt stores selected AI provider", async () => {
   const seeded = await seedOsceContent();
   const auth = await registerTestUser("provider@example.com");

@@ -34,7 +34,7 @@ export default function AboutPage() {
       <section className="mx-auto max-w-4xl px-6 py-16 lg:px-10">
         <p className="glass-surface rounded-lg p-6 leading-relaxed text-ink-soft">
           KF LearnSmart is a low-cost, web-first platform offering PMDC- and CPSP-aligned OSCE
-          stations, history-taking modules, clinical examination guides, and an AI-powered Virtual
+          stations, a history-taking guide, clinical examination guides, and an AI-powered Virtual
           Examiner and Feedback Coach - built specifically for undergraduate MBBS students and
           postgraduate FCPS/MCPS candidates across Pakistan.
         </p>

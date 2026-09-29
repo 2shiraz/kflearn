@@ -39,28 +39,9 @@ Frontend should use:
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
-## Existing-database rename
-
-The interactive OSCE collections were formerly named `historymodules`,
-`historyattempts`, and `historyguides`. A fresh database needs no migration:
-run `npm run seed` as above. For an existing database, **back it up and stop
-application writes first**, then run:
-
-```bash
-npm run migrate:osce-names
-npm run migrate:osce-names -- --apply
-```
-
-The first command is a read-only preview. The second renames the collections
-and affected fields without changing document IDs. It is safe to rerun after
-completion. The updated app refuses to start against unmigrated collections,
-so it cannot silently show an empty station bank. Verify stations, attempts,
-credits, and admin settings before retiring the backup. Avoid running the seed
-on a populated production database: it updates authored station content.
-
-The API now uses `/api/osce`, `/api/osce/attempts`, and `/api/admin/osce`.
-The former `/api/history` and `/api/admin/history` endpoints remain available
-temporarily for existing clients.
+The OSCE API uses `/api/osce`, `/api/osce/attempts`, and `/api/admin/osce`.
+Avoid running the seed on a populated production database: it updates authored
+station content.
 
 ## Commands
 
