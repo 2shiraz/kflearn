@@ -256,6 +256,10 @@ export async function selfAssessAttempt(req, res) {
 
 export async function aiAssessAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
+  // AI assessment belongs to the paid virtual-patient flow only. Guided
+  // self-practice is self-marked and never reaches this endpoint in the UI;
+  // reject it here so the server enforces that boundary regardless of client.
+  if (attempt.mode !== "virtual-patient") throw invalidAttemptState();
   const staleBefore = new Date(Date.now() - 10 * 60 * 1000);
   if (attempt.status !== "ended" && !(attempt.status === "assessing" && attempt.assessmentStartedAt < staleBefore)) {
     throw invalidAttemptState();

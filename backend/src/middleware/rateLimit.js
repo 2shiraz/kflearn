@@ -37,3 +37,17 @@ export const aiActionLimiter = rateLimit({
   skip: skipInTests,
   message: { success: false, message: "AI request limit reached. Please try again later.", code: "RATE_LIMITED" },
 });
+
+// Starting a session spends credits and writes a DB row. Nothing here reaches a
+// provider, but a per-account ceiling stops scripted session-creation spam
+// (rapid self-drain and row flooding). Kept separate from the AI-action budget
+// so starting a session never eats into a user's message/assessment allowance.
+export const attemptCreateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 40,
+  keyGenerator: (req) => req.user.id,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: skipInTests,
+  message: { success: false, message: "Too many sessions started. Please try again later.", code: "RATE_LIMITED" },
+});

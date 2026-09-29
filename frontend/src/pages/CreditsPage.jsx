@@ -33,8 +33,9 @@ export default function CreditsPage() {
 
   const costs = pricing?.costs;
   const packages = pricing?.packages || [];
+  // Best value = most credits per rupee (no per-station cost is exposed).
   const bestValueId = packages.length
-    ? packages.reduce((best, pkg) => (pkg.pricePerStationPkr < best.pricePerStationPkr ? pkg : best)).id
+    ? packages.reduce((best, pkg) => (pkg.credits / pkg.pricePkr > best.credits / best.pricePkr ? pkg : best)).id
     : null;
   const stationsLeft = costs && balance !== null ? Math.floor(balance / costs.fullStation) : null;
 
@@ -76,7 +77,7 @@ export default function CreditsPage() {
 
           <div>
             <h2 className="mb-1 text-lg font-bold text-ink">Credit packages</h2>
-            <p className="mb-3 text-sm text-ink-soft">1 credit = PKR {pricing?.creditValuePkr ?? 5}. Online payment is coming soon.</p>
+            <p className="mb-3 text-sm text-ink-soft">Online payment is coming soon.</p>
             <div className="grid gap-4 md:grid-cols-3">
               {packages.map((pkg) => (
                 <Panel key={pkg.id} className={pkg.id === bestValueId ? "ring-2 ring-brand" : ""}>
@@ -88,7 +89,6 @@ export default function CreditsPage() {
                   <p className="mt-1 text-sm font-semibold text-ink">{pkg.credits.toLocaleString()} credits</p>
                   <ul className="mt-4 space-y-1.5 text-sm text-ink-soft">
                     <li>{pkg.fullStations} full AI stations</li>
-                    <li>{formatPkr(pkg.pricePerStationPkr)} per station</li>
                   </ul>
                   <button type="button" disabled className="mt-5 inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg border border-line bg-white/70 px-4 py-2.5 text-sm font-semibold text-ink-soft">
                     <Lock size={14} /> Payments coming soon

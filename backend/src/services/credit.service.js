@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { CREDIT_COSTS, CREDIT_PACKAGES, CREDIT_VALUE_PKR, MAX_CREDIT_OPERATION, MAX_STUDENT_MESSAGES_PER_ATTEMPT } from "../config/credits.js";
+import { CREDIT_COSTS, CREDIT_PACKAGES, MAX_CREDIT_OPERATION, MAX_STUDENT_MESSAGES_PER_ATTEMPT } from "../config/credits.js";
 import { CreditTransaction } from "../models/CreditTransaction.js";
 import { User } from "../models/User.js";
 
@@ -86,13 +86,11 @@ export async function listTransactions(userId, limit = 50) {
 export function creditPricing() {
   const fullStation = CREDIT_COSTS.virtualPatient + CREDIT_COSTS.aiAssessment;
   return {
-    creditValuePkr: CREDIT_VALUE_PKR,
     costs: { ...CREDIT_COSTS, fullStation },
     limits: { studentMessagesPerStation: MAX_STUDENT_MESSAGES_PER_ATTEMPT },
     packages: CREDIT_PACKAGES.map((pkg) => ({
       ...pkg,
       fullStations: Math.floor(pkg.credits / fullStation),
-      pricePerStationPkr: Math.round((pkg.pricePkr / Math.floor(pkg.credits / fullStation)) * 100) / 100,
     })),
   };
 }

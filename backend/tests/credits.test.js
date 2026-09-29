@@ -221,6 +221,47 @@ test("parallel AI assessment requests never charge more than once", async () => 
   assert.equal(spends, refunds);
 });
 
+test("a completed AI assessment grades a real station and keeps the charge", { timeout: 30000 }, async () => {
+  const { auth, userId } = await registerUser("assess.success@example.com", 10);
+  const id = (await startSession(auth)).body.data.attempt.id; // -3 (VP) -> 7
+  for (const q of ["When did the wheeze start?", "Do you smoke?", "Any known triggers?"]) {
+    await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth).send({ text: q });
+  }
+  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
+
+  // A provider is configured (so the request is billable) but its live call
+  // fails non-fatally, so the service grades the real transcript against the
+  // real seeded checklist via its deterministic fallback. This exercises the
+  // full success/commit path without depending on a live model's output.
+  const [savedGroq, savedOpenai] = [env.groqApiKey, env.openaiApiKey];
+  env.groqApiKey = "sk-bogus-forces-deterministic-fallback";
+  env.openaiApiKey = "";
+  let res;
+  try {
+    res = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth);
+  } finally {
+    [env.groqApiKey, env.openaiApiKey] = [savedGroq, savedOpenai];
+  }
+
+  assert.equal(res.status, 200);
+  assert.equal(res.body.data.attempt.status, "ai-assessed");
+  assert.equal(res.body.data.credits.charged, 2);
+  assert.ok(res.body.data.result.finalScore, "a real graded score is returned");
+  assert.ok(res.body.data.result.itemScores.length > 0, "the real checklist items are scored");
+
+  // The charge is committed, not refunded: 7 -> 5, one spend, no refund.
+  assert.equal(await balanceOf(userId), 5);
+  assert.equal(await CreditTransaction.countDocuments({ userId, reason: "ai-assessment", type: "spend" }), 1);
+  assert.equal(await CreditTransaction.countDocuments({ userId, reason: "ai-assessment", type: "refund" }), 0);
+  const attempt = await HistoryAttempt.findById(id);
+  assert.equal(attempt.status, "ai-assessed");
+  assert.equal(attempt.billing.aiAssessmentCharged, true);
+
+  // The graded, committed attempt cannot be re-assessed for another charge.
+  assert.equal((await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
+  assert.equal(await balanceOf(userId), 5);
+});
+
 test("retrying a crashed, already-paid assessment does not charge again", async () => {
   const { auth, userId } = await registerUser("crashed@example.com", 3);
   const id = (await startSession(auth)).body.data.attempt.id;
@@ -232,6 +273,64 @@ test("retrying a crashed, already-paid assessment does not charge again", async 
   // (503 here) proves the retry was not billed.
   const res = await withoutAiProviders(() => request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth));
   assert.equal(res.status, 503);
+});
+
+test("AI assessment is refused on a guided self-practice attempt and never charges", async () => {
+  const { auth, userId } = await registerUser("sp.assess@example.com", 10);
+  const created = await startSession(auth, "single-player");
+  const id = created.body.data.attempt.id;
+  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
+  const res = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth);
+  assert.equal(res.status, 409);
+  assert.equal(await balanceOf(userId), 10);
+  assert.equal((await HistoryAttempt.findById(id)).billing.aiAssessmentCharged, false);
+});
+
+test("a user cannot pay to assess another user's attempt", async () => {
+  const alice = await registerUser("idor.alice@example.com", 10);
+  const bob = await registerUser("idor.bob@example.com", 10);
+  const id = (await startSession(alice.auth)).body.data.attempt.id;
+  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", alice.auth).send({});
+  const res = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", bob.auth);
+  assert.equal(res.status, 404);
+  assert.equal(await balanceOf(bob.userId), 10);
+});
+
+test("session creation is rate-limited per account", async () => {
+  const { auth } = await registerUser("ratelimit.a@example.com");
+  const other = await registerUser("ratelimit.b@example.com");
+  const previous = env.nodeEnv;
+  env.nodeEnv = "development"; // switch off the test-only rate-limit bypass
+  try {
+    for (let index = 0; index < 40; index += 1) {
+      assert.equal((await startSession(auth, "single-player")).status, 201);
+    }
+    const blocked = await startSession(auth, "single-player");
+    assert.equal(blocked.status, 429);
+    assert.equal(blocked.body.code, "RATE_LIMITED");
+    // The ceiling is per-account, so a different user is unaffected.
+    assert.equal((await startSession(other.auth, "single-player")).status, 201);
+  } finally {
+    env.nodeEnv = previous;
+  }
+});
+
+test("all credit packages report correct full-station math", async () => {
+  const { auth } = await registerUser("packages@example.com");
+  const { packages } = (await request(app).get("/api/credits").set("Authorization", auth)).body.data;
+  assert.deepEqual(
+    packages.map((pkg) => [pkg.id, pkg.credits, pkg.fullStations]),
+    [["starter", 220, 44], ["standard", 480, 96], ["pro", 730, 146]],
+  );
+});
+
+test("the grant primitive rejects invalid amounts", async () => {
+  const { userId } = await registerUser("grant.validate@example.com");
+  for (const bad of [0, -5, 1.5, 100001, Number.MAX_SAFE_INTEGER + 1, NaN]) {
+    await assert.rejects(() => grantCredits({ userId, amount: bad, note: "bad" }));
+  }
+  assert.equal(await balanceOf(userId), 0);
+  assert.equal(await CreditTransaction.countDocuments({ userId }), 0);
 });
 
 test("users only see their own credit history", async () => {
