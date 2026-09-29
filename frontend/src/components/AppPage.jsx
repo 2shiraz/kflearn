@@ -1,5 +1,5 @@
 // Shared page chrome for signed-in app pages (dashboard, OSCE stations, the
-// history-taking guide, admin, ...). Extracted out of HistoryTakingPage.jsx so
+// history-taking guide, admin, ...). Extracted out of OsceStationsPage.jsx so
 // new sections can reuse the same sidebar/layout/breadcrumb primitives instead
 // of redefining them.
 import { Link } from "react-router-dom";

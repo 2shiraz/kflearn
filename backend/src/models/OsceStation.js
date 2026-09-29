@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const historyModuleSchema = new mongoose.Schema(
+const osceStationSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true, lowercase: true },
@@ -20,7 +20,7 @@ const historyModuleSchema = new mongoose.Schema(
       examinationRequired: { type: Boolean, default: false },
       additionalInstructions: [{ type: String }],
     },
-    historyGuideId: { type: mongoose.Schema.Types.ObjectId, ref: "HistoryGuide" },
+    osceFrameworkId: { type: mongoose.Schema.Types.ObjectId, ref: "OsceFramework" },
     patientScriptId: { type: mongoose.Schema.Types.ObjectId, ref: "PatientScript" },
     smartChecklistId: { type: mongoose.Schema.Types.ObjectId, ref: "SmartChecklist" },
     examinerInstructions: { type: String, default: "" },
@@ -45,4 +45,4 @@ const historyModuleSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const HistoryModule = mongoose.model("HistoryModule", historyModuleSchema);
+export const OsceStation = mongoose.model("OsceStation", osceStationSchema, "oscestations");

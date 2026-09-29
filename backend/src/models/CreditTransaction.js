@@ -14,7 +14,7 @@ const creditTransactionSchema = new mongoose.Schema(
       validate: { validator: (value) => Number.isSafeInteger(value) && value !== 0, message: "amount must be a non-zero integer." },
     },
     balanceAfter: { type: Number, required: true },
-    attemptId: { type: mongoose.Schema.Types.ObjectId, ref: "HistoryAttempt" },
+    attemptId: { type: mongoose.Schema.Types.ObjectId, ref: "OsceAttempt" },
     note: { type: String, default: "", maxlength: 200 },
     createdBy: { type: String, default: "system", maxlength: 120 },
   },

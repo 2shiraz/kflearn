@@ -9,10 +9,10 @@ import { csrfProtection } from "./middleware/csrf.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import authRoutes from "./routes/auth.routes.js";
-import historyRoutes from "./routes/history.routes.js";
-import attemptRoutes from "./routes/historyAttempt.routes.js";
+import osceRoutes from "./routes/osce.routes.js";
+import osceAttemptRoutes from "./routes/osceAttempt.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
-import adminHistoryRoutes from "./routes/adminHistory.routes.js";
+import adminOsceRoutes from "./routes/adminOsce.routes.js";
 import adminUserRoutes from "./routes/adminUser.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import creditRoutes from "./routes/credit.routes.js";
@@ -38,10 +38,14 @@ export function createApp() {
   app.use(csrfProtection);
   app.use("/api/dashboard", dashboardRoutes);
   app.use("/api/credits", creditRoutes);
-  app.use("/api/history/attempts", attemptRoutes);
-  app.use("/api/history", historyRoutes);
+  app.use("/api/osce/attempts", osceAttemptRoutes);
+  app.use("/api/osce", osceRoutes);
+  // Existing clients can keep using the previous paths during the transition.
+  app.use("/api/history/attempts", osceAttemptRoutes);
+  app.use("/api/history", osceRoutes);
   app.use("/api/ai", aiRoutes);
-  app.use("/api/admin/history", adminHistoryRoutes);
+  app.use("/api/admin/osce", adminOsceRoutes);
+  app.use("/api/admin/history", adminOsceRoutes);
   app.use("/api/admin/users", adminUserRoutes);
 
   app.use(notFound);

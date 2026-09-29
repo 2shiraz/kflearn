@@ -1,6 +1,6 @@
 import { UnansweredQuestion } from "../models/UnansweredQuestion.js";
 import { buildVirtualPatientMessages } from "../prompts/virtualPatient.prompt.js";
-import { selectRelevantFacts } from "./historyIntent.service.js";
+import { selectRelevantFacts } from "./osceIntent.service.js";
 import { generateText } from "./llm.service.js";
 import { keywordMatches, normalizeText } from "../utils/text.js";
 
@@ -22,7 +22,7 @@ export async function generatePatientResponse({ patientScript, module, attempt, 
       {
         $setOnInsert: {
           patientScriptId: patientScript._id,
-          historyModuleId: module._id,
+          stationId: module._id,
           question: studentQuestion,
           normalizedQuestion: normalizeText(studentQuestion),
         },

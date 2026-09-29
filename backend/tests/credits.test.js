@@ -4,8 +4,8 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import request from "supertest";
 import { createApp } from "../src/app.js";
-import { seedHistoryContent } from "../src/seed/history.seed.js";
-import { HistoryAttempt } from "../src/models/HistoryAttempt.js";
+import { seedOsceContent } from "../src/seed/osce.seed.js";
+import { OsceAttempt } from "../src/models/OsceAttempt.js";
 import { CreditTransaction } from "../src/models/CreditTransaction.js";
 import { User } from "../src/models/User.js";
 import { grantCredits } from "../src/services/credit.service.js";
@@ -14,7 +14,7 @@ import { env } from "../src/config/env.js";
 
 let mongod;
 let app;
-let moduleId;
+let stationId;
 
 before(async () => {
   mongod = await MongoMemoryServer.create();
@@ -30,8 +30,8 @@ after(async () => {
 beforeEach(async () => {
   await mongoose.connection.db.dropDatabase();
   await CreditTransaction.syncIndexes();
-  const seeded = await seedHistoryContent();
-  moduleId = seeded.module._id.toString();
+  const seeded = await seedOsceContent();
+  stationId = seeded.module._id.toString();
 });
 
 async function registerUser(email, credits = 0) {
@@ -45,7 +45,7 @@ async function registerUser(email, credits = 0) {
 
 const balanceOf = async (userId) => (await User.findById(userId).lean()).creditBalance;
 const startSession = (auth, mode = "virtual-patient", extra = {}) =>
-  request(app).post("/api/history/attempts").set("Authorization", auth).send({ moduleId, mode, ...extra });
+  request(app).post("/api/osce/attempts").set("Authorization", auth).send({ stationId, mode, ...extra });
 
 async function withoutAiProviders(fn) {
   const saved = [env.groqApiKey, env.openaiApiKey];
@@ -79,7 +79,7 @@ test("a virtual patient session cannot be started without credits", async () => 
   const res = await startSession(auth);
   assert.equal(res.status, 402);
   assert.equal(res.body.code, "INSUFFICIENT_CREDITS");
-  assert.equal(await HistoryAttempt.countDocuments({ userId }), 0);
+  assert.equal(await OsceAttempt.countDocuments({ userId }), 0);
   assert.equal(await balanceOf(userId), CREDIT_COSTS.virtualPatient - 1);
 });
 
@@ -96,7 +96,7 @@ test("starting a virtual patient session debits once and records the ledger", as
   assert.equal(res.status, 201);
   assert.deepEqual(res.body.data.credits, { balance: 7, charged: 3 });
   assert.equal(await balanceOf(userId), 7);
-  const attempt = await HistoryAttempt.findById(res.body.data.attempt.id);
+  const attempt = await OsceAttempt.findById(res.body.data.attempt.id);
   assert.equal(attempt.billing.virtualPatientCharged, true);
   const spend = await CreditTransaction.findOne({ userId, type: "spend" }).lean();
   assert.equal(spend.amount, -3);
@@ -108,7 +108,7 @@ test("parallel session starts cannot double-spend the same credits", async () =>
   const results = await Promise.all(Array.from({ length: 8 }, () => startSession(auth)));
   assert.deepEqual(results.map((res) => res.status).sort(), [201, 402, 402, 402, 402, 402, 402, 402]);
   assert.equal(await balanceOf(userId), 0);
-  assert.equal(await HistoryAttempt.countDocuments({ userId }), 1);
+  assert.equal(await OsceAttempt.countDocuments({ userId }), 1);
 });
 
 test("clients cannot set or mint their own credits", async () => {
@@ -129,22 +129,22 @@ test("clients cannot set or mint their own credits", async () => {
   // Client-supplied billing flags are ignored.
   const forged = await startSession(auth, "virtual-patient", { billing: { virtualPatientCharged: true }, _id: new mongoose.Types.ObjectId() });
   assert.equal(forged.status, 402);
-  assert.equal(await HistoryAttempt.countDocuments({ userId }), 0);
+  assert.equal(await OsceAttempt.countDocuments({ userId }), 0);
 });
 
 test("an unpaid session cannot use the AI patient or transcription", async () => {
   const { auth, userId } = await registerUser("unpaid@example.com", 50);
-  const legacy = await HistoryAttempt.create({
-    userId, historyModuleId: moduleId, mode: "virtual-patient", status: "active",
+  const legacy = await OsceAttempt.create({
+    userId, stationId: stationId, mode: "virtual-patient", status: "active",
     billing: { virtualPatientCharged: false },
   });
-  const message = await request(app).post(`/api/history/attempts/${legacy._id}/messages`).set("Authorization", auth).send({ text: "Do you smoke?" });
+  const message = await request(app).post(`/api/osce/attempts/${legacy._id}/messages`).set("Authorization", auth).send({ text: "Do you smoke?" });
   assert.equal(message.status, 402);
   assert.equal(message.body.code, "SESSION_NOT_PAID");
-  const audio = await request(app).post(`/api/history/attempts/${legacy._id}/transcribe`).set("Authorization", auth)
+  const audio = await request(app).post(`/api/osce/attempts/${legacy._id}/transcribe`).set("Authorization", auth)
     .attach("audio", Buffer.from("fake audio"), { filename: "clip.webm", contentType: "audio/webm" });
   assert.equal(audio.status, 402);
-  assert.equal((await HistoryAttempt.findById(legacy._id)).messages.length, 0);
+  assert.equal((await OsceAttempt.findById(legacy._id)).messages.length, 0);
   assert.equal(await balanceOf(userId), 50);
 });
 
@@ -152,20 +152,20 @@ test("a free self-practice session cannot be used to reach the AI patient", asyn
   const { auth } = await registerUser("sneaky@example.com");
   const created = await startSession(auth, "single-player");
   const id = created.body.data.attempt.id;
-  assert.equal((await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth).send({ text: "Hello" })).status, 409);
+  assert.equal((await request(app).post(`/api/osce/attempts/${id}/messages`).set("Authorization", auth).send({ text: "Hello" })).status, 409);
 });
 
 test("one paid session has a hard cap on questions and transcriptions", async () => {
   const { auth } = await registerUser("capped@example.com", 3);
   const id = (await startSession(auth)).body.data.attempt.id;
-  await HistoryAttempt.updateOne({ _id: id }, { $set: {
+  await OsceAttempt.updateOne({ _id: id }, { $set: {
     "usage.studentMessages": MAX_STUDENT_MESSAGES_PER_ATTEMPT,
     "usage.transcriptions": MAX_TRANSCRIPTIONS_PER_ATTEMPT,
   } });
-  const message = await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth).send({ text: "Do you smoke?" });
+  const message = await request(app).post(`/api/osce/attempts/${id}/messages`).set("Authorization", auth).send({ text: "Do you smoke?" });
   assert.equal(message.status, 429);
   assert.equal(message.body.code, "STATION_LIMIT_REACHED");
-  const audio = await request(app).post(`/api/history/attempts/${id}/transcribe`).set("Authorization", auth)
+  const audio = await request(app).post(`/api/osce/attempts/${id}/transcribe`).set("Authorization", auth)
     .attach("audio", Buffer.from("fake audio"), { filename: "clip.webm", contentType: "audio/webm" });
   assert.equal(audio.status, 429);
 });
@@ -173,22 +173,22 @@ test("one paid session has a hard cap on questions and transcriptions", async ()
 test("parallel questions cannot exceed the per-session cap", async () => {
   const { auth } = await registerUser("burst@example.com", 3);
   const id = (await startSession(auth)).body.data.attempt.id;
-  await HistoryAttempt.updateOne({ _id: id }, { $set: { "usage.studentMessages": MAX_STUDENT_MESSAGES_PER_ATTEMPT - 2 } });
+  await OsceAttempt.updateOne({ _id: id }, { $set: { "usage.studentMessages": MAX_STUDENT_MESSAGES_PER_ATTEMPT - 2 } });
   const results = await Promise.all(Array.from({ length: 6 }, () =>
-    request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth).send({ text: "How old are you?" })));
+    request(app).post(`/api/osce/attempts/${id}/messages`).set("Authorization", auth).send({ text: "How old are you?" })));
   assert.equal(results.filter((res) => res.status === 200).length, 2);
   assert.equal(results.filter((res) => res.status === 429).length, 4);
-  assert.equal((await HistoryAttempt.findById(id)).usage.studentMessages, MAX_STUDENT_MESSAGES_PER_ATTEMPT);
+  assert.equal((await OsceAttempt.findById(id)).usage.studentMessages, MAX_STUDENT_MESSAGES_PER_ATTEMPT);
 });
 
 test("AI assessment is refused without credits and leaves the attempt re-assessable", async () => {
   const { auth, userId } = await registerUser("no.assess@example.com", CREDIT_COSTS.virtualPatient + 1);
   const id = (await startSession(auth)).body.data.attempt.id;
-  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
-  const res = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth);
+  await request(app).post(`/api/osce/attempts/${id}/end`).set("Authorization", auth).send({});
+  const res = await request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth);
   assert.equal(res.status, 402);
   assert.equal(res.body.code, "INSUFFICIENT_CREDITS");
-  const attempt = await HistoryAttempt.findById(id);
+  const attempt = await OsceAttempt.findById(id);
   assert.equal(attempt.status, "ended");
   assert.equal(attempt.billing.aiAssessmentCharged, false);
   assert.equal(await balanceOf(userId), 1);
@@ -197,11 +197,11 @@ test("AI assessment is refused without credits and leaves the attempt re-assessa
 test("a failed AI assessment is refunded in full", async () => {
   const { auth, userId } = await registerUser("refund@example.com", 10);
   const id = (await startSession(auth)).body.data.attempt.id;
-  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
-  const res = await withoutAiProviders(() => request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth));
+  await request(app).post(`/api/osce/attempts/${id}/end`).set("Authorization", auth).send({});
+  const res = await withoutAiProviders(() => request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth));
   assert.equal(res.status, 503);
   assert.equal(await balanceOf(userId), 7);
-  const attempt = await HistoryAttempt.findById(id);
+  const attempt = await OsceAttempt.findById(id);
   assert.equal(attempt.status, "ended");
   assert.equal(attempt.billing.aiAssessmentCharged, false);
   const ledger = await CreditTransaction.find({ userId, reason: "ai-assessment" }).sort({ createdAt: 1 }).lean();
@@ -211,9 +211,9 @@ test("a failed AI assessment is refunded in full", async () => {
 test("parallel AI assessment requests never charge more than once", async () => {
   const { auth, userId } = await registerUser("assess.race@example.com", 10);
   const id = (await startSession(auth)).body.data.attempt.id;
-  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
+  await request(app).post(`/api/osce/attempts/${id}/end`).set("Authorization", auth).send({});
   const results = await withoutAiProviders(() => Promise.all(Array.from({ length: 5 }, () =>
-    request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth))));
+    request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth))));
   assert.ok(results.every((res) => [409, 503].includes(res.status)));
   assert.equal(await balanceOf(userId), 7);
   const spends = await CreditTransaction.countDocuments({ userId, reason: "ai-assessment", type: "spend" });
@@ -225,9 +225,9 @@ test("a completed AI assessment grades a real station and keeps the charge", { t
   const { auth, userId } = await registerUser("assess.success@example.com", 10);
   const id = (await startSession(auth)).body.data.attempt.id; // -3 (VP) -> 7
   for (const q of ["When did the wheeze start?", "Do you smoke?", "Any known triggers?"]) {
-    await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth).send({ text: q });
+    await request(app).post(`/api/osce/attempts/${id}/messages`).set("Authorization", auth).send({ text: q });
   }
-  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
+  await request(app).post(`/api/osce/attempts/${id}/end`).set("Authorization", auth).send({});
 
   // A provider is configured (so the request is billable) but its live call
   // fails non-fatally, so the service grades the real transcript against the
@@ -238,7 +238,7 @@ test("a completed AI assessment grades a real station and keeps the charge", { t
   env.openaiApiKey = "";
   let res;
   try {
-    res = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth);
+    res = await request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth);
   } finally {
     [env.groqApiKey, env.openaiApiKey] = [savedGroq, savedOpenai];
   }
@@ -253,25 +253,25 @@ test("a completed AI assessment grades a real station and keeps the charge", { t
   assert.equal(await balanceOf(userId), 5);
   assert.equal(await CreditTransaction.countDocuments({ userId, reason: "ai-assessment", type: "spend" }), 1);
   assert.equal(await CreditTransaction.countDocuments({ userId, reason: "ai-assessment", type: "refund" }), 0);
-  const attempt = await HistoryAttempt.findById(id);
+  const attempt = await OsceAttempt.findById(id);
   assert.equal(attempt.status, "ai-assessed");
   assert.equal(attempt.billing.aiAssessmentCharged, true);
 
   // The graded, committed attempt cannot be re-assessed for another charge.
-  assert.equal((await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
+  assert.equal((await request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
   assert.equal(await balanceOf(userId), 5);
 });
 
 test("retrying a crashed, already-paid assessment does not charge again", async () => {
   const { auth, userId } = await registerUser("crashed@example.com", 3);
   const id = (await startSession(auth)).body.data.attempt.id;
-  await HistoryAttempt.updateOne({ _id: id }, { $set: {
+  await OsceAttempt.updateOne({ _id: id }, { $set: {
     status: "assessing", assessmentStartedAt: new Date(Date.now() - 11 * 60 * 1000),
     assessmentLeaseId: "crashed", "billing.aiAssessmentCharged": true,
   } });
   // Balance is 0, so a second charge would be a 402 — reaching the provider
   // (503 here) proves the retry was not billed.
-  const res = await withoutAiProviders(() => request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth));
+  const res = await withoutAiProviders(() => request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth));
   assert.equal(res.status, 503);
 });
 
@@ -279,19 +279,19 @@ test("AI assessment is refused on a guided self-practice attempt and never charg
   const { auth, userId } = await registerUser("sp.assess@example.com", 10);
   const created = await startSession(auth, "single-player");
   const id = created.body.data.attempt.id;
-  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", auth).send({});
-  const res = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth);
+  await request(app).post(`/api/osce/attempts/${id}/end`).set("Authorization", auth).send({});
+  const res = await request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth);
   assert.equal(res.status, 409);
   assert.equal(await balanceOf(userId), 10);
-  assert.equal((await HistoryAttempt.findById(id)).billing.aiAssessmentCharged, false);
+  assert.equal((await OsceAttempt.findById(id)).billing.aiAssessmentCharged, false);
 });
 
 test("a user cannot pay to assess another user's attempt", async () => {
   const alice = await registerUser("idor.alice@example.com", 10);
   const bob = await registerUser("idor.bob@example.com", 10);
   const id = (await startSession(alice.auth)).body.data.attempt.id;
-  await request(app).post(`/api/history/attempts/${id}/end`).set("Authorization", alice.auth).send({});
-  const res = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", bob.auth);
+  await request(app).post(`/api/osce/attempts/${id}/end`).set("Authorization", alice.auth).send({});
+  const res = await request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", bob.auth);
   assert.equal(res.status, 404);
   assert.equal(await balanceOf(bob.userId), 10);
 });

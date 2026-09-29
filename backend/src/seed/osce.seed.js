@@ -1,14 +1,14 @@
-import { HistoryGuide } from "../models/HistoryGuide.js";
-import { HistoryModule } from "../models/HistoryModule.js";
+import { OsceFramework } from "../models/OsceFramework.js";
+import { OsceStation } from "../models/OsceStation.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 import { Specialty } from "../models/Specialty.js";
-import { seedEndocrinologyHistoryStations } from "./endocrinologyHistory.seed.js";
-import { seedGastroenterologyHistoryStations } from "./gastroenterologyHistory.seed.js";
-import { seedGynaecologyHistoryStations } from "./gynaecologyHistory.seed.js";
-import { seedRespiratoryPdfHistoryStations } from "./respiratoryPdfHistory.seed.js";
+import { seedEndocrinologyOsceStations } from "./endocrinologyOsce.seed.js";
+import { seedGastroenterologyOsceStations } from "./gastroenterologyOsce.seed.js";
+import { seedGynaecologyOsceStations } from "./gynaecologyOsce.seed.js";
+import { seedRespiratoryOsceStations } from "./respiratoryOsce.seed.js";
 
-export async function seedHistoryContent() {
+export async function seedOsceContent() {
   const respiratory = await Specialty.findOneAndUpdate(
     { slug: "respiratory" },
     {
@@ -24,7 +24,7 @@ export async function seedHistoryContent() {
     { upsert: true, new: true },
   );
 
-  const universalGuide = await HistoryGuide.findOneAndUpdate(
+  const universalGuide = await OsceFramework.findOneAndUpdate(
     { slug: "universal-history-taking-framework" },
     {
       $set: {
@@ -130,7 +130,7 @@ export async function seedHistoryContent() {
     { upsert: true, new: true },
   );
 
-  const breathlessnessGuide = await HistoryGuide.findOneAndUpdate(
+  const breathlessnessGuide = await OsceFramework.findOneAndUpdate(
     { slug: "breathlessness-one-resps" },
     {
       $set: {
@@ -286,7 +286,7 @@ export async function seedHistoryContent() {
     { upsert: true, new: true },
   );
 
-  const module = await HistoryModule.findOneAndUpdate(
+  const module = await OsceStation.findOneAndUpdate(
     { slug: "breathlessness-young-adult-asthma" },
     {
       $set: {
@@ -311,7 +311,7 @@ export async function seedHistoryContent() {
           examinationRequired: false,
           additionalInstructions: ["You do not need to perform a physical examination."],
         },
-        historyGuideId: breathlessnessGuide._id,
+        osceFrameworkId: breathlessnessGuide._id,
         patientScriptId: patientScript._id,
         smartChecklistId: checklist._id,
         examinerInstructions: "Assess respiratory history structure, asthma control features, red flags, and communication.",
@@ -335,12 +335,12 @@ export async function seedHistoryContent() {
     { upsert: true, new: true },
   );
 
-  const respiratoryPdfHistoryModules = await seedRespiratoryPdfHistoryStations({ respiratory, breathlessnessGuide });
-  const gynaecologyHistoryModules = await seedGynaecologyHistoryStations({ universalGuide });
-  const endocrinologyHistoryModules = await seedEndocrinologyHistoryStations({ universalGuide });
-  const gastroenterologyHistoryModules = await seedGastroenterologyHistoryStations({ universalGuide });
+  const respiratoryOsceStations = await seedRespiratoryOsceStations({ respiratory, breathlessnessGuide });
+  const gynaecologyOsceStations = await seedGynaecologyOsceStations({ universalGuide });
+  const endocrinologyOsceStations = await seedEndocrinologyOsceStations({ universalGuide });
+  const gastroenterologyOsceStations = await seedGastroenterologyOsceStations({ universalGuide });
 
-  return { respiratory, universalGuide, breathlessnessGuide, patientScript, checklist, module, respiratoryPdfHistoryModules, gynaecologyHistoryModules, endocrinologyHistoryModules, gastroenterologyHistoryModules };
+  return { respiratory, universalGuide, breathlessnessGuide, patientScript, checklist, module, respiratoryOsceStations, gynaecologyOsceStations, endocrinologyOsceStations, gastroenterologyOsceStations };
 }
 
 function fact(factId, section, conceptId, label, value, naturalResponse, revealPolicy, synonyms = []) {

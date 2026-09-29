@@ -1,19 +1,19 @@
 import { connectDatabase, disconnectDatabase } from "../config/database.js";
-import { seedHistoryContent } from "./history.seed.js";
+import { seedOsceContent } from "./osce.seed.js";
 
 await connectDatabase();
-const result = await seedHistoryContent();
-console.log(`Seeded history module: ${result.module.title}`);
-for (const module of result.respiratoryPdfHistoryModules) {
-  console.log(`Seeded history module: ${module.title}`);
+const result = await seedOsceContent();
+console.log(`Seeded OSCE station: ${result.module.title}`);
+for (const module of result.respiratoryOsceStations) {
+  console.log(`Seeded OSCE station: ${module.title}`);
 }
-for (const module of result.gynaecologyHistoryModules) {
-  console.log(`Seeded history module: ${module.title}`);
+for (const module of result.gynaecologyOsceStations) {
+  console.log(`Seeded OSCE station: ${module.title}`);
 }
-for (const module of result.endocrinologyHistoryModules) {
-  console.log(`Seeded history module: ${module.title}`);
+for (const module of result.endocrinologyOsceStations) {
+  console.log(`Seeded OSCE station: ${module.title}`);
 }
-for (const module of result.gastroenterologyHistoryModules) {
-  console.log(`Seeded history module: ${module.title}`);
+for (const module of result.gastroenterologyOsceStations) {
+  console.log(`Seeded OSCE station: ${module.title}`);
 }
 await disconnectDatabase();

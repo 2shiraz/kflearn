@@ -18,16 +18,16 @@ import SampleStationsPage from "./pages/SampleStationsPage";
 import PricingPage from "./pages/PricingPage";
 import AboutPage from "./pages/AboutPage";
 import {
-  AdminHistoryPage,
-  AttemptHistoryPage,
-  HistoryHome,
-  HistoryModuleDetail,
-  HistoryResultPage,
-  HistorySectionPage,
+  AdminOscePage,
+  OsceAttemptHistoryPage,
+  OsceHome,
+  OsceStationDetail,
+  OsceResultPage,
+  OsceSectionPage,
   SelfAssessmentPage,
-  SinglePlayerHistory,
+  SinglePlayerOsce,
   VirtualPatientSession,
-} from "./pages/HistoryTakingPage";
+} from "./pages/OsceStationsPage";
 import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
 import { McqPractice, McqsHome, McqYearPage } from "./pages/McqsPage";
 import { McqRead } from "./pages/McqReadPage";
@@ -64,16 +64,16 @@ export default function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/stations" element={<HistoryHome />} />
-          <Route path="/stations/section/:sectionName" element={<HistorySectionPage />} />
-          <Route path="/stations/:slug" element={<HistoryModuleDetail />} />
-          <Route path="/stations/:slug/single-player" element={<SinglePlayerHistory />} />
-          <Route path="/stations/attempts" element={<AttemptHistoryPage />} />
+          <Route path="/stations" element={<OsceHome />} />
+          <Route path="/stations/section/:sectionName" element={<OsceSectionPage />} />
+          <Route path="/stations/:slug" element={<OsceStationDetail />} />
+          <Route path="/stations/:slug/single-player" element={<SinglePlayerOsce />} />
+          <Route path="/stations/attempts" element={<OsceAttemptHistoryPage />} />
           <Route path="/stations/attempts/:attemptId/session" element={<VirtualPatientSession />} />
           <Route path="/stations/attempts/:attemptId/self-assessment" element={<SelfAssessmentPage />} />
           <Route path="/stations/attempts/:attemptId/ai-assessment" element={<SelfAssessmentPage />} />
-          <Route path="/stations/attempts/:attemptId/results" element={<HistoryResultPage />} />
-          <Route path="/admin/stations" element={<AdminHistoryPage />} />
+          <Route path="/stations/attempts/:attemptId/results" element={<OsceResultPage />} />
+          <Route path="/admin/stations" element={<AdminOscePage />} />
           <Route path="/history-taking" element={<HistoryGuideHome />} />
           <Route path="/history-taking/:topicSlug" element={<HistoryGuideTopic />} />
           <Route path="/history" element={<HistoryGuideHome />} />

@@ -159,20 +159,20 @@ export function getCreditTransactions() {
   return apiFetch("/credits/transactions");
 }
 
-export function listHistoryModules() {
-  return apiFetch("/history");
+export function listOsceStations() {
+  return apiFetch("/osce");
 }
 
 export function getDashboardSummary() {
   return apiFetch("/dashboard/summary");
 }
 
-export function getHistoryModule(slug) {
-  return apiFetch(`/history/${slug}`);
+export function getOsceStation(slug) {
+  return apiFetch(`/osce/${slug}`);
 }
 
 export function getSinglePlayerContent(slug) {
-  return apiFetch(`/history/${slug}/single-player`);
+  return apiFetch(`/osce/${slug}/single-player`);
 }
 
 export function getAiStatus() {
@@ -186,75 +186,75 @@ export function updateAiStatus(payload) {
   });
 }
 
-export function createHistoryAttempt({ moduleId, mode, aiProvider }) {
-  return apiFetch("/history/attempts", {
+export function createOsceAttempt({ stationId, mode, aiProvider }) {
+  return apiFetch("/osce/attempts", {
     method: "POST",
-    body: JSON.stringify({ moduleId, mode, aiProvider }),
+    body: JSON.stringify({ stationId, mode, aiProvider }),
   });
 }
 
-export function getHistoryAttempt(attemptId) {
-  return apiFetch(`/history/attempts/${attemptId}`);
+export function getOsceAttempt(attemptId) {
+  return apiFetch(`/osce/attempts/${attemptId}`);
 }
 
-export function listHistoryAttempts() {
-  return apiFetch("/history/attempts");
+export function listOsceAttempts() {
+  return apiFetch("/osce/attempts");
 }
 
 export function sendPatientMessage(attemptId, payload) {
-  return apiFetch(`/history/attempts/${attemptId}/messages`, {
+  return apiFetch(`/osce/attempts/${attemptId}/messages`, {
     method: "POST",
     body: JSON.stringify(payload),
   });
 }
 
-export function endHistoryAttempt(attemptId, payload = {}) {
-  return apiFetch(`/history/attempts/${attemptId}/end`, {
+export function endOsceAttempt(attemptId, payload = {}) {
+  return apiFetch(`/osce/attempts/${attemptId}/end`, {
     method: "POST",
     body: JSON.stringify(payload),
   });
 }
 
-export function selfAssessHistoryAttempt(attemptId, checkedItemIds) {
-  return apiFetch(`/history/attempts/${attemptId}/self-assessment`, {
+export function selfAssessOsceAttempt(attemptId, checkedItemIds) {
+  return apiFetch(`/osce/attempts/${attemptId}/self-assessment`, {
     method: "POST",
     body: JSON.stringify({ checkedItemIds }),
   });
 }
 
-export function aiAssessHistoryAttempt(attemptId) {
-  return apiFetch(`/history/attempts/${attemptId}/ai-assessment`, {
+export function aiAssessOsceAttempt(attemptId) {
+  return apiFetch(`/osce/attempts/${attemptId}/ai-assessment`, {
     method: "POST",
     body: JSON.stringify({}),
   });
 }
 
-export function transcribeHistoryAudio(attemptId, audioBlob) {
+export function transcribeOsceAudio(attemptId, audioBlob) {
   const form = new FormData();
   form.append("audio", audioBlob, "question.webm");
-  return apiFetch(`/history/attempts/${attemptId}/transcribe`, {
+  return apiFetch(`/osce/attempts/${attemptId}/transcribe`, {
     method: "POST",
     body: form,
   });
 }
 
-export function listAdminHistoryModules() {
-  return apiFetch("/admin/history");
+export function listAdminOsceStations() {
+  return apiFetch("/admin/osce");
 }
 
 export function listAdminUsers() {
   return apiFetch("/admin/users");
 }
 
-export function createAdminHistoryContent(payload) {
-  return apiFetch("/admin/history", {
+export function createAdminOsceContent(payload) {
+  return apiFetch("/admin/osce", {
     method: "POST",
     body: JSON.stringify(payload),
   });
 }
 
-export function publishAdminHistoryModule(id) {
-  return apiFetch(`/admin/history/${id}/status`, {
+export function publishAdminOsceStation(id) {
+  return apiFetch(`/admin/osce/${id}/status`, {
     method: "PATCH",
     body: JSON.stringify({ status: "published" }),
   });

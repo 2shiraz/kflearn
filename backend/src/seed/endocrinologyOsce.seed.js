@@ -1,4 +1,4 @@
-import { HistoryModule } from "../models/HistoryModule.js";
+import { OsceStation } from "../models/OsceStation.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 import { Specialty } from "../models/Specialty.js";
@@ -6,7 +6,7 @@ import { Specialty } from "../models/Specialty.js";
 const sourceReference = "User-provided Abdominal pain 10 station";
 const slug = "dka-abdominal-pain-vomiting-history";
 
-export async function seedEndocrinologyHistoryStations({ universalGuide }) {
+export async function seedEndocrinologyOsceStations({ universalGuide }) {
   const gynaecology = await Specialty.findOneAndUpdate(
     { slug: "gynaecology" },
     {
@@ -33,13 +33,13 @@ export async function seedEndocrinologyHistoryStations({ universalGuide }) {
     { $set: station.checklist },
     { upsert: true, new: true },
   );
-  const module = await HistoryModule.findOneAndUpdate(
+  const module = await OsceStation.findOneAndUpdate(
     { slug: station.module.slug },
     {
       $set: {
         ...station.module,
         specialtyId: gynaecology._id,
-        historyGuideId: universalGuide._id,
+        osceFrameworkId: universalGuide._id,
         patientScriptId: patientScript._id,
         smartChecklistId: checklist._id,
       },

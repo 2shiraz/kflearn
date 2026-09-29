@@ -11,13 +11,13 @@ const scoreSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const historyAttemptSchema = new mongoose.Schema(
+const osceAttemptSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true, index: true },
-    historyModuleId: { type: mongoose.Schema.Types.ObjectId, ref: "HistoryModule", required: true },
+    stationId: { type: mongoose.Schema.Types.ObjectId, ref: "OsceStation", required: true },
     patientScriptVersion: Number,
     checklistVersion: Number,
-    moduleVersion: Number,
+    stationVersion: Number,
     mode: { type: String, enum: ["single-player", "virtual-patient"], required: true },
     aiProvider: { type: String, enum: ["groq", "openai"], default: "groq" },
     status: {
@@ -79,4 +79,4 @@ const historyAttemptSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const HistoryAttempt = mongoose.model("HistoryAttempt", historyAttemptSchema);
+export const OsceAttempt = mongoose.model("OsceAttempt", osceAttemptSchema, "osceattempts");

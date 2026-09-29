@@ -4,7 +4,7 @@
 // study guide (docs/mbbs_history_taking_guide_md.docx). It is intentionally
 // NOT stored in the database: it never changes per-user, isn't authored
 // through the admin CMS, and has no attempts/scoring attached to it — unlike
-// HistoryModule content, it's just a static reference page. Keeping it as a
+// OSCE station content, it's just a static reference page. Keeping it as a
 // bundled data file avoids a network round trip and a loading skeleton for
 // content that is the same for every viewer and rarely edited. If this ever
 // needs in-app editing by non-developers, it can be migrated into the

@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import { HistoryModule } from "../models/HistoryModule.js";
+import { OsceStation } from "../models/OsceStation.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 
-export function moduleListDto(module) {
+export function stationListDto(module) {
   return {
     id: module._id,
     title: module.title,
@@ -18,9 +18,9 @@ export function moduleListDto(module) {
   };
 }
 
-export function studentModuleDetailDto(module) {
+export function studentStationDetailDto(module) {
   return {
-    ...moduleListDto(module),
+    ...stationListDto(module),
     candidateInstructions: module.candidateInstructions,
     practiceOptions: ["single-player", "virtual-patient"],
     learningNotes: module.learningNotes,
@@ -32,7 +32,7 @@ export function studentModuleDetailDto(module) {
 
 export function singlePlayerDto({ module, patientScript, checklist }) {
   return {
-    ...studentModuleDetailDto(module),
+    ...studentStationDetailDto(module),
     patientScript: {
       patientIdentity: patientScript.patientIdentity,
       openingStatement: patientScript.openingStatement,
@@ -76,25 +76,25 @@ export function checklistDto(checklist) {
   };
 }
 
-export async function getPublishedModuleBySlug(slug) {
-  const module = await HistoryModule.findOne({ slug, status: "published" }).populate("specialtyId");
+export async function getPublishedStationBySlug(slug) {
+  const module = await OsceStation.findOne({ slug, status: "published" }).populate("specialtyId");
   if (!module) {
-    const error = new Error("History module not found.");
+    const error = new Error("OSCE station not found.");
     error.status = 404;
     throw error;
   }
   return module;
 }
 
-export async function getModuleClinicalBundle(moduleId) {
+export async function getStationClinicalBundle(moduleId) {
   if (!mongoose.isObjectIdOrHexString(moduleId)) {
-    const error = new Error("History module not found.");
+    const error = new Error("OSCE station not found.");
     error.status = 404;
     throw error;
   }
-  const module = await HistoryModule.findById(moduleId).populate("specialtyId");
+  const module = await OsceStation.findById(moduleId).populate("specialtyId");
   if (!module) {
-    const error = new Error("History module not found.");
+    const error = new Error("OSCE station not found.");
     error.status = 404;
     throw error;
   }
@@ -103,7 +103,7 @@ export async function getModuleClinicalBundle(moduleId) {
     SmartChecklist.findById(module.smartChecklistId),
   ]);
   if (!patientScript || !checklist) {
-    const error = new Error("History module clinical content is incomplete.");
+    const error = new Error("OSCE station clinical content is incomplete.");
     error.status = 409;
     throw error;
   }

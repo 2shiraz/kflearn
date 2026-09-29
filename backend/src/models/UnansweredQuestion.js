@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const unansweredQuestionSchema = new mongoose.Schema(
   {
     patientScriptId: { type: mongoose.Schema.Types.ObjectId, ref: "PatientScript", required: true },
-    historyModuleId: { type: mongoose.Schema.Types.ObjectId, ref: "HistoryModule", required: true },
+    stationId: { type: mongoose.Schema.Types.ObjectId, ref: "OsceStation", required: true },
     question: { type: String, required: true },
     normalizedQuestion: { type: String, required: true },
     count: { type: Number, default: 1 },

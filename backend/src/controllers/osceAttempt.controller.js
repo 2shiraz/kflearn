@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import mongoose from "mongoose";
-import { HistoryAttempt } from "../models/HistoryAttempt.js";
-import { getModuleClinicalBundle, checklistDto, studentModuleDetailDto } from "../services/history.service.js";
+import { OsceAttempt } from "../models/OsceAttempt.js";
+import { getStationClinicalBundle, checklistDto, studentStationDetailDto } from "../services/osce.service.js";
 import { generatePatientResponse } from "../services/virtualPatient.service.js";
 import { assessAttemptWithAi } from "../services/aiAssessment.service.js";
 import { getAiSettings } from "../services/aiSettings.service.js";
@@ -17,7 +17,7 @@ async function findOwnedAttempt(attemptId, userId) {
     error.status = 404;
     throw error;
   }
-  const attempt = await HistoryAttempt.findOne({ _id: attemptId, userId });
+  const attempt = await OsceAttempt.findOne({ _id: attemptId, userId });
   if (!attempt) {
     const error = new Error("Attempt not found.");
     error.status = 404;
@@ -50,7 +50,7 @@ function usageLimitReached(message) {
 // call. The query only matches a paid, active virtual-patient attempt under
 // its cap, so parallel requests can't exceed the cap or use an unpaid session.
 async function reserveUsageSlot(attempt, userId, field, cap, limitMessage) {
-  const reserved = await HistoryAttempt.findOneAndUpdate(
+  const reserved = await OsceAttempt.findOneAndUpdate(
     {
       _id: attempt._id,
       userId,
@@ -63,19 +63,19 @@ async function reserveUsageSlot(attempt, userId, field, cap, limitMessage) {
     { new: true },
   );
   if (reserved) return reserved;
-  const current = await HistoryAttempt.findOne({ _id: attempt._id, userId }).lean();
+  const current = await OsceAttempt.findOne({ _id: attempt._id, userId }).lean();
   if (!current || current.status !== "active" || current.mode !== "virtual-patient") throw invalidAttemptState();
   if (!current.billing?.virtualPatientCharged) throw sessionNotPaid();
   throw usageLimitReached(limitMessage);
 }
 
 async function releaseUsageSlot(attemptId, userId, field) {
-  await HistoryAttempt.updateOne({ _id: attemptId, userId, [`usage.${field}`]: { $gt: 0 } }, { $inc: { [`usage.${field}`]: -1 } });
+  await OsceAttempt.updateOne({ _id: attemptId, userId, [`usage.${field}`]: { $gt: 0 } }, { $inc: { [`usage.${field}`]: -1 } });
 }
 
 export async function createAttempt(req, res) {
-  const { moduleId, mode, aiProvider } = req.body;
-  const { module, patientScript, checklist } = await getModuleClinicalBundle(moduleId);
+  const { stationId, mode, aiProvider } = req.body;
+  const { module, patientScript, checklist } = await getStationClinicalBundle(stationId);
   const aiSettings = await getAiSettings();
   if (module.status !== "published") {
     const error = new Error("Only published modules can be practiced.");
@@ -85,10 +85,10 @@ export async function createAttempt(req, res) {
 
   const fields = {
     userId: req.user.id,
-    historyModuleId: module._id,
+    stationId: module._id,
     patientScriptVersion: patientScript.version,
     checklistVersion: checklist.version,
-    moduleVersion: module.version,
+    stationVersion: module.version,
     mode,
     aiProvider: aiProvider || aiSettings.defaultProvider,
     status: "active",
@@ -96,8 +96,8 @@ export async function createAttempt(req, res) {
   };
 
   if (mode !== "virtual-patient") {
-    const attempt = await HistoryAttempt.create(fields);
-    res.status(201).json({ success: true, data: { attempt: attemptDto(attempt), module: studentModuleDetailDto(module) } });
+    const attempt = await OsceAttempt.create(fields);
+    res.status(201).json({ success: true, data: { attempt: attemptDto(attempt), module: studentStationDetailDto(module) } });
     return;
   }
 
@@ -108,7 +108,7 @@ export async function createAttempt(req, res) {
   const balance = await spendCredits({ userId: req.user.id, amount: cost, reason: "virtual-patient", attemptId });
   let attempt;
   try {
-    attempt = await HistoryAttempt.create({ ...fields, _id: attemptId, billing: { virtualPatientCharged: true } });
+    attempt = await OsceAttempt.create({ ...fields, _id: attemptId, billing: { virtualPatientCharged: true } });
   } catch (error) {
     await refundCredits({ userId: req.user.id, amount: cost, reason: "virtual-patient", attemptId, note: "Session could not be created." });
     throw error;
@@ -116,25 +116,25 @@ export async function createAttempt(req, res) {
 
   res.status(201).json({
     success: true,
-    data: { attempt: attemptDto(attempt), module: studentModuleDetailDto(module), credits: { balance, charged: cost } },
+    data: { attempt: attemptDto(attempt), module: studentStationDetailDto(module), credits: { balance, charged: cost } },
   });
 }
 
 export async function getAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
-  const { module, patientScript, checklist } = await getModuleClinicalBundle(attempt.historyModuleId);
+  const { module, patientScript, checklist } = await getStationClinicalBundle(attempt.stationId);
   res.json({
     success: true,
     data: {
       attempt: attemptDto(attempt),
-      module: { ...studentModuleDetailDto(module), openingStatement: patientScript.openingStatement },
+      module: { ...studentStationDetailDto(module), openingStatement: patientScript.openingStatement },
       checklist: attempt.mode === "single-player" || attempt.status !== "active" ? checklistDto(checklist) : undefined,
     },
   });
 }
 
 export async function listAttempts(req, res) {
-  const attempts = await HistoryAttempt.find({ userId: req.user.id, status: { $in: ["self-assessed", "ai-assessed"] } }).populate("historyModuleId").sort({ createdAt: -1 });
+  const attempts = await OsceAttempt.find({ userId: req.user.id, status: { $in: ["self-assessed", "ai-assessed"] } }).populate("stationId").sort({ createdAt: -1 });
   res.json({
     success: true,
     data: attempts.map((attempt) => ({
@@ -145,10 +145,10 @@ export async function listAttempts(req, res) {
       startedAt: attempt.startedAt,
       endedAt: attempt.endedAt,
       finalScore: attempt.finalScore,
-      module: attempt.historyModuleId ? {
-        title: attempt.historyModuleId.title,
-        slug: attempt.historyModuleId.slug,
-        presentingComplaint: attempt.historyModuleId.presentingComplaint,
+      module: attempt.stationId ? {
+        title: attempt.stationId.title,
+        slug: attempt.stationId.slug,
+        presentingComplaint: attempt.stationId.presentingComplaint,
       } : null,
     })),
   });
@@ -164,7 +164,7 @@ export async function sendPatientMessage(req, res) {
   );
   let response;
   try {
-    const { module, patientScript } = await getModuleClinicalBundle(reserved.historyModuleId);
+    const { module, patientScript } = await getStationClinicalBundle(reserved.stationId);
     response = await generatePatientResponse({ patientScript, module, attempt: reserved, studentQuestion: text });
   } catch (error) {
     await releaseUsageSlot(attempt._id, req.user.id, "studentMessages");
@@ -189,7 +189,7 @@ export async function sendPatientMessage(req, res) {
     matchedConceptIds: response.matchedConceptIds,
   };
 
-  const updated = await HistoryAttempt.findOneAndUpdate(
+  const updated = await OsceAttempt.findOneAndUpdate(
     { _id: attempt._id, userId: req.user.id, status: "active" },
     {
       $push: { messages: { $each: [studentMessage, patientMessage] } },
@@ -216,7 +216,7 @@ export async function endAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
   if (attempt.status !== "active") throw invalidAttemptState();
   const endedAt = new Date();
-  const updated = await HistoryAttempt.findOneAndUpdate(
+  const updated = await OsceAttempt.findOneAndUpdate(
     { _id: attempt._id, userId: req.user.id, status: "active" },
     { $set: {
       status: "ended",
@@ -234,13 +234,13 @@ export async function endAttempt(req, res) {
 export async function selfAssessAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
   if (attempt.status !== "ended") throw invalidAttemptState();
-  const { checklist } = await getModuleClinicalBundle(attempt.historyModuleId);
+  const { checklist } = await getStationClinicalBundle(attempt.stationId);
   const result = selfAssessChecklist(checklist, req.body.checkedItemIds || []);
   const feedback = {
     summary: "Self assessment complete.",
     missedItems: checklist.sections.flatMap((section) => section.items.filter((item) => !req.body.checkedItemIds?.includes(item.itemId)).map((item) => item.label)),
   };
-  const updated = await HistoryAttempt.findOneAndUpdate(
+  const updated = await OsceAttempt.findOneAndUpdate(
     { _id: attempt._id, userId: req.user.id, status: "ended" },
     { $set: {
       selfAssessment: { checkedItemIds: req.body.checkedItemIds || [], itemScores: result.itemScores },
@@ -264,9 +264,9 @@ export async function aiAssessAttempt(req, res) {
   if (attempt.status !== "ended" && !(attempt.status === "assessing" && attempt.assessmentStartedAt < staleBefore)) {
     throw invalidAttemptState();
   }
-  const { module, checklist } = await getModuleClinicalBundle(attempt.historyModuleId);
+  const { module, checklist } = await getStationClinicalBundle(attempt.stationId);
   const leaseId = crypto.randomUUID();
-  const reserved = await HistoryAttempt.findOneAndUpdate(
+  const reserved = await OsceAttempt.findOneAndUpdate(
     { _id: attempt._id, userId: req.user.id, $or: [
       { status: "ended" },
       { status: "assessing", assessmentStartedAt: { $lt: staleBefore } },
@@ -276,7 +276,7 @@ export async function aiAssessAttempt(req, res) {
   );
   if (!reserved) throw invalidAttemptState();
 
-  const releaseLease = () => HistoryAttempt.updateOne(
+  const releaseLease = () => OsceAttempt.updateOne(
     { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId },
     { $set: { status: "ended" }, $unset: { assessmentStartedAt: "", assessmentLeaseId: "" } },
   );
@@ -293,7 +293,7 @@ export async function aiAssessAttempt(req, res) {
       await releaseLease();
       throw error;
     }
-    const marked = await HistoryAttempt.updateOne(
+    const marked = await OsceAttempt.updateOne(
       { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId },
       { $set: { "billing.aiAssessmentCharged": true } },
     );
@@ -306,7 +306,7 @@ export async function aiAssessAttempt(req, res) {
 
   try {
     const result = await assessAttemptWithAi({ module, checklist, attempt: reserved });
-    const updated = await HistoryAttempt.findOneAndUpdate(
+    const updated = await OsceAttempt.findOneAndUpdate(
       { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId },
       { $set: {
         aiAssessment: { itemScores: result.itemScores, model: result.model, provider: result.provider },
@@ -329,7 +329,7 @@ export async function aiAssessAttempt(req, res) {
     // Refund only if this request still owns the lease: the same atomic update
     // releases it and clears the charge flag, so a concurrent retry that took
     // over the lease can never end up with a free assessment.
-    const released = await HistoryAttempt.updateOne(
+    const released = await OsceAttempt.updateOne(
       { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId, "billing.aiAssessmentCharged": true },
       { $set: { status: "ended", "billing.aiAssessmentCharged": false }, $unset: { assessmentStartedAt: "", assessmentLeaseId: "" } },
     );
@@ -367,7 +367,8 @@ export async function transcribeAttemptAudio(req, res) {
 export function attemptDto(attempt) {
   return {
     id: attempt._id,
-    moduleId: attempt.historyModuleId,
+    stationId: attempt.stationId,
+    moduleId: attempt.stationId,
     mode: attempt.mode,
     aiProvider: attempt.aiProvider,
     status: attempt.status,

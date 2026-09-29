@@ -10,7 +10,7 @@ const guideItemSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const historyGuideSchema = new mongoose.Schema(
+const osceFrameworkSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true, lowercase: true },
@@ -46,4 +46,4 @@ const historyGuideSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const HistoryGuide = mongoose.model("HistoryGuide", historyGuideSchema);
+export const OsceFramework = mongoose.model("OsceFramework", osceFrameworkSchema, "osceframeworks");

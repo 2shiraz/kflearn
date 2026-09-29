@@ -1,53 +1,53 @@
 import mongoose from "mongoose";
 import { ContentAuditLog } from "../models/ContentAuditLog.js";
-import { HistoryModule } from "../models/HistoryModule.js";
+import { OsceStation } from "../models/OsceStation.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 import { Specialty } from "../models/Specialty.js";
-import { HistoryGuide } from "../models/HistoryGuide.js";
-import { moduleListDto } from "../services/history.service.js";
+import { OsceFramework } from "../models/OsceFramework.js";
+import { stationListDto } from "../services/osce.service.js";
 
-export async function listAdminModules(req, res) {
-  const modules = await HistoryModule.find().populate("specialtyId").sort({ updatedAt: -1 });
-  res.json({ success: true, data: modules.map(moduleListDto) });
+export async function listAdminStations(req, res) {
+  const modules = await OsceStation.find().populate("specialtyId").sort({ updatedAt: -1 });
+  res.json({ success: true, data: modules.map(stationListDto) });
 }
 
-export async function createHistoryContent(req, res) {
+export async function createOsceContent(req, res) {
   const { specialtySlug, specialtyName, guideSlug, module, patientScript, checklist } = req.body;
   const specialty = await Specialty.findOneAndUpdate(
     { slug: specialtySlug },
     { $set: { name: specialtyName || specialtySlug, slug: specialtySlug, active: true } },
     { upsert: true, new: true },
   );
-  const guide = guideSlug ? await HistoryGuide.findOne({ slug: guideSlug }) : null;
+  const guide = guideSlug ? await OsceFramework.findOne({ slug: guideSlug }) : null;
   const script = await PatientScript.create(patientScript);
   const smartChecklist = await SmartChecklist.create(checklist);
-  const createdModule = await HistoryModule.create({
+  const createdModule = await OsceStation.create({
     ...module,
     specialtyId: specialty._id,
-    historyGuideId: guide?._id,
+    osceFrameworkId: guide?._id,
     patientScriptId: script._id,
     smartChecklistId: smartChecklist._id,
     status: "draft",
     createdBy: req.user.id,
   });
   await ContentAuditLog.create({
-    contentType: "HistoryModule",
+    contentType: "OsceStation",
     contentId: createdModule._id,
     action: "created",
     changedBy: req.user.id,
-    summary: "Created draft history content bundle.",
+    summary: "Created draft OSCE station content bundle.",
   });
   res.status(201).json({ success: true, data: { module: createdModule } });
 }
 
-export async function updateModuleStatus(req, res) {
+export async function updateStationStatus(req, res) {
   if (!mongoose.isObjectIdOrHexString(req.params.id)) {
     const error = new Error("Module not found.");
     error.status = 404;
     throw error;
   }
-  const module = await HistoryModule.findById(req.params.id);
+  const module = await OsceStation.findById(req.params.id);
   if (!module) {
     const error = new Error("Module not found.");
     error.status = 404;
@@ -63,7 +63,7 @@ export async function updateModuleStatus(req, res) {
   if (status === "published") module.publishedAt = new Date();
   await module.save();
   await ContentAuditLog.create({
-    contentType: "HistoryModule",
+    contentType: "OsceStation",
     contentId: module._id,
     version: module.version,
     action: status,

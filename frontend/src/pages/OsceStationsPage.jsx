@@ -18,22 +18,22 @@ import {
 } from "lucide-react";
 import { Breadcrumbs, ErrorMessage, LinkButton, PageMain, Panel, PrimaryButton, RequireUser } from "../components/AppPage";
 import {
-  aiAssessHistoryAttempt,
-  createAdminHistoryContent,
-  createHistoryAttempt,
-  endHistoryAttempt,
+  aiAssessOsceAttempt,
+  createAdminOsceContent,
+  createOsceAttempt,
+  endOsceAttempt,
   getAiStatus,
-  getHistoryAttempt,
-  getHistoryModule,
+  getOsceAttempt,
+  getOsceStation,
   getSinglePlayerContent,
-  listAdminHistoryModules,
+  listAdminOsceStations,
   listAdminUsers,
-  listHistoryAttempts,
-  listHistoryModules,
-  publishAdminHistoryModule,
-  selfAssessHistoryAttempt,
+  listOsceAttempts,
+  listOsceStations,
+  publishAdminOsceStation,
+  selfAssessOsceAttempt,
   sendPatientMessage,
-  transcribeHistoryAudio,
+  transcribeOsceAudio,
   updateAiStatus,
 } from "../lib/api";
 import { isCreditError, refreshCredits, setCreditBalance, useCredits } from "../lib/credits";
@@ -125,11 +125,11 @@ function modeLabel(mode) {
 
 const CHAT_CHAR_LIMIT = 640;
 
-export function HistoryHome() {
+export function OsceHome() {
   const [state, setState] = useState({ loading: true, modules: [], attempts: [], error: "" });
 
   useEffect(() => {
-    Promise.all([listHistoryModules(), listHistoryAttempts()])
+    Promise.all([listOsceStations(), listOsceAttempts()])
       .then(([modulesData, attemptsData]) => setState({ loading: false, modules: modulesData.modules || [], attempts: attemptsData || [], error: "" }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);
@@ -151,11 +151,11 @@ export function HistoryHome() {
           </Link>
         </div>
 
-        {state.loading && <Loading variant="history-bank" />}
+        {state.loading && <Loading variant="osce-bank" />}
         {state.error && <ErrorMessage message={state.error} />}
         {!state.loading && !state.error && (
           <>
-            <div className="mb-4 text-sm text-ink-soft">{state.modules.length} history modules across {groups.length} {groups.length === 1 ? "section" : "sections"}.</div>
+            <div className="mb-4 text-sm text-ink-soft">{state.modules.length} OSCE stations across {groups.length} {groups.length === 1 ? "section" : "sections"}.</div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {groups.map((group) => (
                 <Link key={group.name} to={sectionPath(group.name)} className="gradient-card group rounded-lg p-5 text-left">
@@ -180,7 +180,7 @@ export function HistoryHome() {
   );
 }
 
-export function HistorySectionPage() {
+export function OsceSectionPage() {
   const { sectionName } = useParams();
   const [state, setState] = useState({ loading: true, modules: [], attempts: [], error: "" });
   const [page, setPage] = useState(1);
@@ -188,7 +188,7 @@ export function HistorySectionPage() {
   const decodedSectionName = decodeURIComponent(sectionName || "");
 
   useEffect(() => {
-    Promise.all([listHistoryModules(), listHistoryAttempts()])
+    Promise.all([listOsceStations(), listOsceAttempts()])
       .then(([modulesData, attemptsData]) => setState({ loading: false, modules: modulesData.modules || [], attempts: attemptsData || [], error: "" }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);
@@ -202,7 +202,7 @@ export function HistorySectionPage() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: decodedSectionName || "Section" }]} />
-        {state.loading && <Loading variant="history-section" />}
+        {state.loading && <Loading variant="osce-section" />}
         {state.error && <ErrorMessage message={state.error} />}
         {!state.loading && !state.error && !selectedGroup && <ErrorMessage message="Station section not found." />}
         {!state.loading && !state.error && selectedGroup && (
@@ -242,7 +242,7 @@ export function HistorySectionPage() {
   );
 }
 
-export function HistoryModuleDetail() {
+export function OsceStationDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [state, setState] = useState({ loading: true, module: null, error: "", starting: "", startError: null });
@@ -250,7 +250,7 @@ export function HistoryModuleDetail() {
   const aiCost = pricing?.costs.virtualPatient;
 
   useEffect(() => {
-    getHistoryModule(slug)
+    getOsceStation(slug)
       .then((module) => setState({ loading: false, module, error: "", starting: "", startError: null }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [slug]);
@@ -258,7 +258,7 @@ export function HistoryModuleDetail() {
   async function start(mode) {
     setState((s) => ({ ...s, starting: mode, startError: null }));
     try {
-      const data = await createHistoryAttempt({ moduleId: state.module.id, mode });
+      const data = await createOsceAttempt({ stationId: state.module.id, mode });
       if (data.credits) setCreditBalance(data.credits.balance);
       if (mode === "single-player") navigate(`/stations/${slug}/single-player?attemptId=${data.attempt.id}`);
       else navigate(`/stations/attempts/${data.attempt.id}/session`);
@@ -351,7 +351,7 @@ function PracticeCard({ icon: Icon, title, body, onClick, loading, costLabel = "
   );
 }
 
-export function SinglePlayerHistory() {
+export function SinglePlayerOsce() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const params = new URLSearchParams(window.location.search);
@@ -371,8 +371,8 @@ export function SinglePlayerHistory() {
     if (finishRef.current) return;
     finishRef.current = true;
     if (attemptId) {
-      await endHistoryAttempt(attemptId, { notes: state.notes, elapsedSeconds: timer.elapsedSeconds });
-      await selfAssessHistoryAttempt(attemptId, state.checked);
+      await endOsceAttempt(attemptId, { notes: state.notes, elapsedSeconds: timer.elapsedSeconds });
+      await selfAssessOsceAttempt(attemptId, state.checked);
       navigate(`/stations/attempts/${attemptId}/results`);
     }
   }
@@ -450,7 +450,7 @@ export function VirtualPatientSession() {
   const timer = useCountdown({ limitSeconds: state.module?.timeLimitSeconds || 360, startedAt: state.attempt?.startedAt, enabled: Boolean(state.attempt && state.module) });
 
   useEffect(() => {
-    getHistoryAttempt(attemptId)
+    getOsceAttempt(attemptId)
       .then((data) => setState((s) => ({ ...s, loading: false, attempt: data.attempt, module: data.module })))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [attemptId]);
@@ -561,7 +561,7 @@ export function VirtualPatientSession() {
         stream.getTracks().forEach((track) => track.stop());
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         try {
-          const data = await transcribeHistoryAudio(attemptId, blob);
+          const data = await transcribeOsceAudio(attemptId, blob);
           setState((s) => ({ ...s, transcript: data.transcript || "", recording: false, voiceMode: "" }));
         } catch (err) {
           setState((s) => ({ ...s, error: err.message, recording: false, voiceMode: "" }));
@@ -578,7 +578,7 @@ export function VirtualPatientSession() {
   async function endSession() {
     if (endRef.current) return;
     endRef.current = true;
-    await endHistoryAttempt(attemptId, { elapsedSeconds: timer.elapsedSeconds });
+    await endOsceAttempt(attemptId, { elapsedSeconds: timer.elapsedSeconds });
     navigate(`/stations/attempts/${attemptId}/self-assessment`);
   }
 
@@ -674,14 +674,14 @@ export function SelfAssessmentPage() {
   const aiCost = pricing?.costs.aiAssessment;
 
   useEffect(() => {
-    getHistoryAttempt(attemptId)
+    getOsceAttempt(attemptId)
       .then((data) => setState((s) => ({ ...s, loading: false, attempt: data.attempt, checklist: data.checklist })))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [attemptId]);
 
   async function selfAssess() {
     try {
-      await selfAssessHistoryAttempt(attemptId, state.checked);
+      await selfAssessOsceAttempt(attemptId, state.checked);
       navigate(`/stations/attempts/${attemptId}/results`);
     } catch (err) {
       setState((s) => ({ ...s, spendError: err }));
@@ -691,7 +691,7 @@ export function SelfAssessmentPage() {
   async function aiAssess() {
     setState((s) => ({ ...s, aiLoading: true, spendError: null }));
     try {
-      const data = await aiAssessHistoryAttempt(attemptId);
+      const data = await aiAssessOsceAttempt(attemptId);
       if (Number.isFinite(data.credits?.balance)) setCreditBalance(data.credits.balance);
       navigate(`/stations/attempts/${attemptId}/results`);
     } catch (err) {
@@ -725,11 +725,11 @@ export function SelfAssessmentPage() {
   );
 }
 
-export function HistoryResultPage() {
+export function OsceResultPage() {
   const { attemptId } = useParams();
   const [state, setState] = useState({ loading: true, data: null, error: "" });
   useEffect(() => {
-    getHistoryAttempt(attemptId)
+    getOsceAttempt(attemptId)
       .then((data) => setState({ loading: false, data, error: "" }))
       .catch((err) => setState({ loading: false, data: null, error: err.message }));
   }, [attemptId]);
@@ -765,10 +765,10 @@ export function HistoryResultPage() {
   );
 }
 
-export function AttemptHistoryPage() {
+export function OsceAttemptHistoryPage() {
   const [state, setState] = useState({ loading: true, attempts: [], error: "" });
   useEffect(() => {
-    listHistoryAttempts()
+    listOsceAttempts()
       .then((attempts) => setState({ loading: false, attempts, error: "" }))
       .catch((err) => setState({ loading: false, attempts: [], error: err.message }));
   }, []);
@@ -798,7 +798,7 @@ export function AttemptHistoryPage() {
   );
 }
 
-export function AdminHistoryPage() {
+export function AdminOscePage() {
   const [state, setState] = useState({
     loading: true,
     saving: false,
@@ -839,7 +839,7 @@ export function AdminHistoryPage() {
     },
   });
   useEffect(() => {
-    Promise.all([listAdminHistoryModules(), getAiStatus(), listAdminUsers()])
+    Promise.all([listAdminOsceStations(), getAiStatus(), listAdminUsers()])
       .then(([modules, aiStatus, users]) => setState((s) => ({
         ...s,
         loading: false,
@@ -863,8 +863,8 @@ export function AdminHistoryPage() {
     e.preventDefault();
     setState((s) => ({ ...s, saving: true, error: "", message: "" }));
     try {
-      await createAdminHistoryContent(createAdminPayload(state.form));
-      const modules = await listAdminHistoryModules();
+      await createAdminOsceContent(createAdminPayload(state.form));
+      const modules = await listAdminOsceStations();
       setState((s) => ({
         ...s,
         saving: false,
@@ -892,8 +892,8 @@ export function AdminHistoryPage() {
   }
 
   async function publish(id) {
-    await publishAdminHistoryModule(id);
-    const modules = await listAdminHistoryModules();
+    await publishAdminOsceStation(id);
+    const modules = await listAdminOsceStations();
     setState((s) => ({ ...s, modules, message: "Published." }));
   }
 
@@ -1118,8 +1118,8 @@ function Checklist({ checklist, checked, onChange }) {
 
 function Loading({ variant = "cards" }) {
   const variants = {
-    "history-bank": <CardGridSkeleton cards={6} />,
-    "history-section": <CardGridSkeleton cards={6} withHeader />,
+    "osce-bank": <CardGridSkeleton cards={6} />,
+    "osce-section": <CardGridSkeleton cards={6} withHeader />,
     "module-detail": <ModuleDetailSkeleton />,
     "single-player": <TwoColumnSkeleton leftRows={8} rightRows={7} />,
     chat: <ChatSkeleton />,

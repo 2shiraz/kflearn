@@ -1,12 +1,11 @@
-import { HistoryModule } from "../models/HistoryModule.js";
+import { OsceStation } from "../models/OsceStation.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 
 const sourceReference = "Respiratory OSCE Stations PDF";
 
-export async function seedRespiratoryPdfHistoryStations({ respiratory, breathlessnessGuide }) {
+export async function seedRespiratoryOsceStations({ respiratory, breathlessnessGuide }) {
   const seeded = [];
-  await deleteAdultAsthmaStation();
   for (const station of respiratoryHistoryStations) {
     const patientScript = await PatientScript.findOneAndUpdate(
       { slug: station.patientScript.slug },
@@ -18,13 +17,13 @@ export async function seedRespiratoryPdfHistoryStations({ respiratory, breathles
       { $set: station.checklist },
       { upsert: true, new: true },
     );
-    const module = await HistoryModule.findOneAndUpdate(
+    const module = await OsceStation.findOneAndUpdate(
       { slug: station.module.slug },
       {
         $set: {
           ...station.module,
           specialtyId: respiratory._id,
-          historyGuideId: breathlessnessGuide._id,
+          osceFrameworkId: breathlessnessGuide._id,
           patientScriptId: patientScript._id,
           smartChecklistId: checklist._id,
         },
@@ -34,14 +33,6 @@ export async function seedRespiratoryPdfHistoryStations({ respiratory, breathles
     seeded.push(module);
   }
   return seeded;
-}
-
-async function deleteAdultAsthmaStation() {
-  await Promise.all([
-    HistoryModule.deleteOne({ slug: "pdf-focused-history-diagnostic-planning-suspected-adult-asthma" }),
-    PatientScript.deleteOne({ slug: "pdf-maya-khan-suspected-adult-asthma" }),
-    SmartChecklist.deleteOne({ slug: "pdf-adult-asthma-history-checklist" }),
-  ]);
 }
 
 const respiratoryHistoryStations = [

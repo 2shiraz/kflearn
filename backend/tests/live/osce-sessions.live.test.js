@@ -18,8 +18,8 @@ import { createApp } from "../../src/app.js";
 import { env } from "../../src/config/env.js";
 import { CREDIT_COSTS } from "../../src/config/credits.js";
 import { CreditTransaction } from "../../src/models/CreditTransaction.js";
-import { HistoryAttempt } from "../../src/models/HistoryAttempt.js";
-import { seedHistoryContent } from "../../src/seed/history.seed.js";
+import { OsceAttempt } from "../../src/models/OsceAttempt.js";
+import { seedOsceContent } from "../../src/seed/osce.seed.js";
 import { grantCredits } from "../../src/services/credit.service.js";
 import { generateJson } from "../../src/services/llm.service.js";
 
@@ -37,7 +37,7 @@ before(async () => {
   if (!HAS_AI_KEY) return;
   mongod = await MongoMemoryServer.create();
   await mongoose.connect(mongod.getUri());
-  await seedHistoryContent();
+  await seedOsceContent();
   app = createApp();
 });
 
@@ -68,15 +68,15 @@ async function balanceOf(auth) {
 }
 
 async function stationId(auth, slug) {
-  const res = await request(app).get("/api/history").set("Authorization", auth);
+  const res = await request(app).get("/api/osce").set("Authorization", auth);
   const module = res.body.data.modules.find((item) => item.slug === slug);
   assert.ok(module, `station ${slug} is seeded`);
   return module.id;
 }
 
 async function startSession(auth, slug, mode = "virtual-patient") {
-  const res = await request(app).post("/api/history/attempts").set("Authorization", auth)
-    .send({ moduleId: await stationId(auth, slug), mode });
+  const res = await request(app).post("/api/osce/attempts").set("Authorization", auth)
+    .send({ stationId: await stationId(auth, slug), mode });
   assert.equal(res.status, 201, `start ${mode}: ${res.body.message}`);
   return res.body.data.attempt.id;
 }
@@ -85,7 +85,7 @@ async function startSession(auth, slug, mode = "virtual-patient") {
 async function interview(auth, attemptId, questions) {
   const replies = [];
   for (const question of questions) {
-    const res = await request(app).post(`/api/history/attempts/${attemptId}/messages`)
+    const res = await request(app).post(`/api/osce/attempts/${attemptId}/messages`)
       .set("Authorization", auth).send({ text: question });
     assert.equal(res.status, 200, `"${question}" -> ${res.status} ${res.body.message}`);
     const reply = res.body.data.patientMessage.text;
@@ -96,12 +96,12 @@ async function interview(auth, attemptId, questions) {
 }
 
 async function endSession(auth, attemptId) {
-  const res = await request(app).post(`/api/history/attempts/${attemptId}/end`).set("Authorization", auth).send({});
+  const res = await request(app).post(`/api/osce/attempts/${attemptId}/end`).set("Authorization", auth).send({});
   assert.equal(res.status, 200);
 }
 
 async function aiMark(auth, attemptId) {
-  const res = await request(app).post(`/api/history/attempts/${attemptId}/ai-assessment`).set("Authorization", auth);
+  const res = await request(app).post(`/api/osce/attempts/${attemptId}/ai-assessment`).set("Authorization", auth);
   assert.equal(res.status, 200, `AI assessment: ${res.status} ${res.body.message}`);
   assertRealAiMarking(res.body.data);
   return res.body.data;
@@ -150,7 +150,7 @@ describe("Live OSCE station sessions (real AI patient + real AI marking)", { ski
     assert.equal(await balanceOf(auth), 10 - CREDIT_COSTS.virtualPatient);
 
     // The checklist stays hidden while the virtual-patient session is running.
-    const active = await request(app).get(`/api/history/attempts/${id}`).set("Authorization", auth);
+    const active = await request(app).get(`/api/osce/attempts/${id}`).set("Authorization", auth);
     assert.equal(active.body.data.checklist, undefined);
 
     const replies = await interview(auth, id, [
@@ -173,7 +173,7 @@ describe("Live OSCE station sessions (real AI patient + real AI marking)", { ski
     assert.match(transcript, /vape|vaping/, "patient discloses vaping");
 
     await endSession(auth, id);
-    const ended = await request(app).get(`/api/history/attempts/${id}`).set("Authorization", auth);
+    const ended = await request(app).get(`/api/osce/attempts/${id}`).set("Authorization", auth);
     assert.ok(ended.body.data.checklist, "the checklist is revealed once the session ends");
 
     const marked = await aiMark(auth, id);
@@ -293,20 +293,20 @@ describe("Live OSCE station sessions (real AI patient + real AI marking)", { ski
     const id = await startSession(auth, "breathlessness-young-adult-asthma", "single-player");
     assert.equal(await balanceOf(auth), 0, "self-practice costs nothing");
 
-    const view = await request(app).get(`/api/history/attempts/${id}`).set("Authorization", auth);
+    const view = await request(app).get(`/api/osce/attempts/${id}`).set("Authorization", auth);
     assert.ok(view.body.data.checklist, "the checklist is visible straight away in self-practice");
     const allItems = view.body.data.checklist.sections.flatMap((section) => section.items.map((item) => item.itemId));
     assert.equal(allItems.length, 8);
 
     // The AI patient and AI examiner are not available in this mode.
-    assert.equal((await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth)
+    assert.equal((await request(app).post(`/api/osce/attempts/${id}/messages`).set("Authorization", auth)
       .send({ text: "How long has this been going on?" })).status, 409);
 
     await endSession(auth, id);
-    assert.equal((await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
+    assert.equal((await request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
 
     const ticked = ["duration", "pattern", "triggers", "family_history"];
-    const marked = await request(app).post(`/api/history/attempts/${id}/self-assessment`).set("Authorization", auth)
+    const marked = await request(app).post(`/api/osce/attempts/${id}/self-assessment`).set("Authorization", auth)
       .send({ checkedItemIds: ticked });
     assert.equal(marked.status, 200);
     assert.equal(marked.body.data.attempt.status, "self-assessed");
@@ -326,20 +326,20 @@ describe("Live OSCE station sessions (real AI patient + real AI marking)", { ski
     await endSession(auth, id);
 
     // No credits left: AI marking is refused and the attempt is left intact.
-    const refused = await request(app).post(`/api/history/attempts/${id}/ai-assessment`).set("Authorization", auth);
+    const refused = await request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth);
     assert.equal(refused.status, 402);
     assert.equal(refused.body.code, "INSUFFICIENT_CREDITS");
-    assert.equal((await HistoryAttempt.findById(id)).status, "ended");
+    assert.equal((await OsceAttempt.findById(id)).status, "ended");
 
-    const self = await request(app).post(`/api/history/attempts/${id}/self-assessment`).set("Authorization", auth)
+    const self = await request(app).post(`/api/osce/attempts/${id}/self-assessment`).set("Authorization", auth)
       .send({ checkedItemIds: ["duration", "family_history"] });
     assert.equal(self.status, 200);
     assert.equal(self.body.data.attempt.status, "self-assessed");
 
     // After marking, the session is closed to further questions and appears in history.
-    assert.equal((await request(app).post(`/api/history/attempts/${id}/messages`).set("Authorization", auth)
+    assert.equal((await request(app).post(`/api/osce/attempts/${id}/messages`).set("Authorization", auth)
       .send({ text: "One more question?" })).status, 409);
-    const history = await request(app).get("/api/history/attempts").set("Authorization", auth);
+    const history = await request(app).get("/api/osce/attempts").set("Authorization", auth);
     assert.ok(history.body.data.some((row) => String(row.id) === id && row.status === "self-assessed"));
 
     const ledger = await CreditTransaction.find({ userId }).sort({ createdAt: 1 }).lean();

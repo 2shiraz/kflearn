@@ -40,7 +40,7 @@ const sections = [
   {
     key: "stations", label: "OSCE Stations", href: "/stations",
     desc: "Practise structured patient consultations for common presenting complaints across all specialties, with AI evaluation and viva questions.",
-    countKey: "history", icon: MessageSquareText,
+    countKey: "stations", icon: MessageSquareText,
     iconStyle: { "--g1": "#FF8FCF", "--g2": "#FFB3E0", "--glow": "rgba(255,143,207,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },
