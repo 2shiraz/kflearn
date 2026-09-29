@@ -1,69 +1,71 @@
 import { UnansweredQuestion } from "../models/UnansweredQuestion.js";
 import { buildVirtualPatientMessages } from "../prompts/virtualPatient.prompt.js";
 import { selectRelevantFacts } from "./osceIntent.service.js";
-import { generateText } from "./llm.service.js";
+import { generateJson } from "./llm.service.js";
 import { keywordMatches, normalizeText } from "../utils/text.js";
 
-export async function generatePatientResponse({ patientScript, module, attempt, studentQuestion }) {
-  const conversationalResponse = buildConversationalResponse(patientScript, studentQuestion);
-  if (conversationalResponse) {
-    return {
-      text: conversationalResponse,
-      matchedFactIds: [],
-      matchedConceptIds: [],
-    };
-  }
+function parsePatientReply(text, patientScript) {
+  const parsed = JSON.parse(text);
+  if (typeof parsed.reply !== "string" || !parsed.reply.trim()) throw new Error("AI patient reply was empty.");
+  if (!Array.isArray(parsed.usedFactIds)) throw new Error("AI patient fact references were missing.");
+  const validIds = new Set((patientScript.facts || []).map((fact) => fact.factId));
+  const matchedFactIds = [...new Set(parsed.usedFactIds.filter((id) => typeof id === "string" && validIds.has(id)))];
+  const matchedConceptIds = [...new Set(matchedFactIds.map((id) => patientScript.facts.find((fact) => fact.factId === id)?.conceptId).filter(Boolean))];
+  return { text: parsed.reply.trim(), matchedFactIds, matchedConceptIds };
+}
 
-  const { concepts, facts } = selectRelevantFacts(studentQuestion, patientScript);
-
-  if (facts.length === 0) {
-    await UnansweredQuestion.findOneAndUpdate(
-      { patientScriptId: patientScript._id, normalizedQuestion: normalizeText(studentQuestion) },
-      {
-        $setOnInsert: {
-          patientScriptId: patientScript._id,
-          stationId: module._id,
-          question: studentQuestion,
-          normalizedQuestion: normalizeText(studentQuestion),
-        },
-        $inc: { count: 1 },
-        $set: { lastAskedAt: new Date() },
-      },
-      { upsert: true },
-    );
-    return {
-      text: "I'm not really sure about that. I haven't noticed anything specific.",
-      matchedFactIds: [],
-      matchedConceptIds: concepts,
-    };
-  }
-
+export async function generatePatientResponse({ patientScript, module, attempt, studentQuestion, generate = generateJson }) {
   try {
-    const completion = await generateText({
+    const completion = await generate({
       provider: attempt.aiProvider,
-      maxTokens: 160,
+      modelType: "chat",
+      maxTokens: 450,
       messages: buildVirtualPatientMessages({
         patientScript,
-        relevantFacts: facts,
-        recentMessages: attempt.messages.slice(-8),
+        module,
+        recentMessages: attempt.messages.slice(-12),
         studentQuestion,
       }),
     });
     return {
-      text: completion.text || facts[0].naturalResponse,
-      matchedFactIds: facts.map((fact) => fact.factId),
-      matchedConceptIds: concepts,
+      ...parsePatientReply(completion.text, patientScript),
       aiProvider: completion.provider,
       aiModel: completion.model,
     };
   } catch (error) {
+    // Keep a paid session usable if the provider fails or returns malformed JSON.
+    return fallbackPatientResponse({ patientScript, module, studentQuestion });
+  }
+}
+
+async function fallbackPatientResponse({ patientScript, module, studentQuestion }) {
+  const conversationalResponse = buildConversationalResponse(patientScript, studentQuestion);
+  if (conversationalResponse) return { text: conversationalResponse, matchedFactIds: [], matchedConceptIds: [] };
+
+  const { concepts, facts } = selectRelevantFacts(studentQuestion, patientScript);
+  if (facts.length) {
     return {
       text: facts.map((fact) => fact.naturalResponse).join(" "),
       matchedFactIds: facts.map((fact) => fact.factId),
       matchedConceptIds: concepts,
-      aiProvider: attempt.aiProvider,
     };
   }
+
+  await UnansweredQuestion.findOneAndUpdate(
+    { patientScriptId: patientScript._id, normalizedQuestion: normalizeText(studentQuestion) },
+    {
+      $setOnInsert: {
+        patientScriptId: patientScript._id,
+        stationId: module._id,
+        question: studentQuestion,
+        normalizedQuestion: normalizeText(studentQuestion),
+      },
+      $inc: { count: 1 },
+      $set: { lastAskedAt: new Date() },
+    },
+    { upsert: true },
+  );
+  return { text: "I'm not really sure about that. I haven't noticed anything specific.", matchedFactIds: [], matchedConceptIds: concepts };
 }
 
 function buildConversationalResponse(patientScript, studentQuestion) {

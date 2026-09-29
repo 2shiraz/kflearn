@@ -62,26 +62,28 @@ export async function generateText({ provider, messages, maxTokens = 160 }) {
   };
 }
 
-export async function generateJson({ provider, messages, maxTokens = 5000 }) {
+export async function generateJson({ provider, messages, maxTokens = 5000, modelType = "eval" }) {
   const settings = await getAiSettings();
   const resolvedProvider = resolveAiProvider(provider, settings);
   if (resolvedProvider === "openai") {
+    const model = modelType === "chat" ? settings.openai.chatModel : settings.openai.evalModel;
     const response = await createOpenAiResponse({
-      model: settings.openai.evalModel,
+      model,
       input: toOpenAiInput(messages),
       max_output_tokens: maxTokens,
       text: { format: { type: "json_object" } },
     }, settings.openai.apiKey);
     return {
       text: extractOpenAiText(response),
-      model: settings.openai.evalModel,
+      model,
       provider: resolvedProvider,
     };
   }
 
   const groq = getGroqClient(settings.groq.apiKey);
+  const model = modelType === "chat" ? settings.groq.chatModel : settings.groq.evalModel;
   const completion = await groq.chat.completions.create({
-    model: settings.groq.evalModel,
+    model,
     temperature: 0.1,
     max_tokens: maxTokens,
     response_format: { type: "json_object" },
@@ -89,7 +91,7 @@ export async function generateJson({ provider, messages, maxTokens = 5000 }) {
   });
   return {
     text: completion.choices[0]?.message?.content?.trim() || "",
-    model: settings.groq.evalModel,
+    model,
     provider: resolvedProvider,
   };
 }
