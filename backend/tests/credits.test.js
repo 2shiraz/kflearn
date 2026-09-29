@@ -221,7 +221,7 @@ test("parallel AI assessment requests never charge more than once", async () => 
   assert.equal(spends, refunds);
 });
 
-test("a completed AI assessment grades a real station and keeps the charge", { timeout: 30000 }, async () => {
+test("a configured provider failure refunds AI marking and leaves the attempt retryable", { timeout: 30000 }, async () => {
   const { auth, userId } = await registerUser("assess.success@example.com", 10);
   const id = (await startSession(auth)).body.data.attempt.id; // -3 (VP) -> 7
   for (const q of ["When did the wheeze start?", "Do you smoke?", "Any known triggers?"]) {
@@ -229,10 +229,8 @@ test("a completed AI assessment grades a real station and keeps the charge", { t
   }
   await request(app).post(`/api/osce/attempts/${id}/end`).set("Authorization", auth).send({});
 
-  // A provider is configured (so the request is billable) but its live call
-  // fails non-fatally, so the service grades the real transcript against the
-  // real seeded checklist via its deterministic fallback. This exercises the
-  // full success/commit path without depending on a live model's output.
+  // A key is configured but rejected by the provider. This must never become
+  // a charged deterministic "AI" result.
   const [savedGroq, savedOpenai] = [env.groqApiKey, env.openaiApiKey];
   env.groqApiKey = "sk-bogus-forces-deterministic-fallback";
   env.openaiApiKey = "";
@@ -243,23 +241,20 @@ test("a completed AI assessment grades a real station and keeps the charge", { t
     [env.groqApiKey, env.openaiApiKey] = [savedGroq, savedOpenai];
   }
 
-  assert.equal(res.status, 200);
-  assert.equal(res.body.data.attempt.status, "ai-assessed");
-  assert.equal(res.body.data.credits.charged, 2);
-  assert.ok(res.body.data.result.finalScore, "a real graded score is returned");
-  assert.ok(res.body.data.result.itemScores.length > 0, "the real checklist items are scored");
-
-  // The charge is committed, not refunded: 7 -> 5, one spend, no refund.
-  assert.equal(await balanceOf(userId), 5);
+  assert.equal(res.status, 503);
+  assert.match(res.body.message, /AI marking failed/);
+  assert.equal(await balanceOf(userId), 7);
   assert.equal(await CreditTransaction.countDocuments({ userId, reason: "ai-assessment", type: "spend" }), 1);
-  assert.equal(await CreditTransaction.countDocuments({ userId, reason: "ai-assessment", type: "refund" }), 0);
+  assert.equal(await CreditTransaction.countDocuments({ userId, reason: "ai-assessment", type: "refund" }), 1);
   const attempt = await OsceAttempt.findById(id);
-  assert.equal(attempt.status, "ai-assessed");
-  assert.equal(attempt.billing.aiAssessmentCharged, true);
+  assert.equal(attempt.status, "ended");
+  assert.equal(attempt.billing.aiAssessmentCharged, false);
+  assert.equal(attempt.aiAssessment?.model, undefined);
 
-  // The graded, committed attempt cannot be re-assessed for another charge.
-  assert.equal((await request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth)).status, 409);
-  assert.equal(await balanceOf(userId), 5);
+  // It is eligible for another attempt, not stuck in "assessing" or finalized.
+  const retry = await withoutAiProviders(() => request(app).post(`/api/osce/attempts/${id}/ai-assessment`).set("Authorization", auth));
+  assert.equal(retry.status, 503);
+  assert.equal(await balanceOf(userId), 7);
 });
 
 test("retrying a crashed, already-paid assessment does not charge again", async () => {

@@ -15,7 +15,9 @@ export function errorHandler(error, req, res, next) {
     console.error(error);
   }
   // Don't leak internal error messages (stack traces, driver/library errors) to clients in production.
-  const message = status >= 500 && env.isProduction ? "Something went wrong. Please try again." : error.message || "Server error";
+  const message = status >= 500 && env.isProduction
+    ? error.publicMessage || "Something went wrong. Please try again."
+    : error.message || "Server error";
   res.status(status).json({
     success: false,
     message,
