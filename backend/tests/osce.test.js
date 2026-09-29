@@ -335,6 +335,24 @@ test("admin can view users and update AI settings", async () => {
   assert.equal((await request(app).get("/api/admin/users").set("Authorization", auth)).status, 403);
 });
 
+test("admin can move a station through all supported visibility statuses", async () => {
+  const seeded = await seedOsceContent();
+  const auth = await registerTestUser("admin.statuses@example.com");
+  await User.updateOne({ email: "admin.statuses@example.com" }, { $set: { role: "admin" } });
+  const id = seeded.module._id.toString();
+
+  for (const status of ["draft", "approved", "published", "archived"]) {
+    const changed = await request(app).patch(`/api/admin/osce/${id}/status`).set("Authorization", auth).send({ status });
+    assert.equal(changed.status, 200);
+    assert.equal(changed.body.data.module.status, status);
+    const listed = await request(app).get("/api/admin/osce").set("Authorization", auth);
+    assert.equal(listed.body.data.find((station) => station.id === id)?.status, status);
+  }
+  const student = await registerTestUser("student.statuses@example.com");
+  assert.equal((await request(app).patch(`/api/admin/osce/${id}/status`).set("Authorization", student)
+    .send({ status: "published" })).status, 403);
+});
+
 test("protected endpoints reject requests without a real token", async () => {
   const seeded = await seedOsceContent();
   const res = await request(app)

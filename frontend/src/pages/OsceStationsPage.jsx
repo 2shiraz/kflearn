@@ -11,6 +11,12 @@ import {
   Mic,
   Send,
   ShieldCheck,
+  Search,
+  Settings2,
+  Users,
+  Layers3,
+  Plus,
+  AlertTriangle,
   Sparkles,
   Square,
   Stethoscope,
@@ -30,7 +36,7 @@ import {
   listAdminUsers,
   listOsceAttempts,
   listOsceStations,
-  publishAdminOsceStation,
+  updateAdminOsceStationStatus,
   selfAssessOsceAttempt,
   sendPatientMessage,
   transcribeOsceAudio,
@@ -799,11 +805,16 @@ export function OsceAttemptHistoryPage() {
 }
 
 export function AdminOscePage() {
+  const [stationSearch, setStationSearch] = useState("");
+  const [stationFilter, setStationFilter] = useState("all");
+  const [userSearch, setUserSearch] = useState("");
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [statusBusyId, setStatusBusyId] = useState(null);
   const [state, setState] = useState({
     loading: true,
     saving: false,
     savingAi: false,
-    activeTab: "content",
+    activeTab: "overview",
     modules: [],
     users: [],
     aiStatus: null,
@@ -865,6 +876,9 @@ export function AdminOscePage() {
     try {
       await createAdminOsceContent(createAdminPayload(state.form));
       const modules = await listAdminOsceStations();
+      setShowCreateForm(false);
+      setStationFilter("draft");
+      setStationSearch("");
       setState((s) => ({
         ...s,
         saving: false,
@@ -891,14 +905,25 @@ export function AdminOscePage() {
     }
   }
 
-  async function publish(id) {
-    await publishAdminOsceStation(id);
-    const modules = await listAdminOsceStations();
-    setState((s) => ({ ...s, modules, message: "Published." }));
+  async function changeStatus(id, status) {
+    if (status === "archived" && !window.confirm("Archive this station? It will no longer appear to students.")) return;
+    setStatusBusyId(id);
+    setState((s) => ({ ...s, error: "", message: "" }));
+    try {
+      await updateAdminOsceStationStatus(id, status);
+      const modules = await listAdminOsceStations();
+      setState((s) => ({ ...s, modules, message: `Station ${status}.` }));
+    } catch (err) {
+      setState((s) => ({ ...s, error: err.message }));
+    } finally {
+      setStatusBusyId(null);
+    }
   }
 
   async function saveAiSettings(e) {
     e.preventDefault();
+    if ((state.aiForm.groqApiKey === "__CLEAR__" || state.aiForm.openaiApiKey === "__CLEAR__") &&
+      !window.confirm("Remove the selected API key? Sessions using that provider may stop working.")) return;
     setState((s) => ({ ...s, savingAi: true, error: "", message: "" }));
     try {
       const aiStatus = await updateAiStatus(aiFormToPayload(state.aiForm));
@@ -915,39 +940,107 @@ export function AdminOscePage() {
   }
 
   const tabs = [
-    { id: "content", label: "Content" },
-    { id: "ai", label: "AI settings" },
-    { id: "users", label: "Users" },
+    { id: "overview", label: "Overview", icon: Layers3 },
+    { id: "stations", label: "OSCE stations", icon: Stethoscope },
+    { id: "ai", label: "AI & models", icon: Settings2 },
+    { id: "users", label: "Accounts", icon: Users },
   ];
+  const counts = Object.fromEntries(["draft", "approved", "published", "archived"].map((status) => [status, state.modules.filter((station) => station.status === status).length]));
+  const visibleStations = state.modules.filter((station) =>
+    (stationFilter === "all" || (stationFilter === "review" ? ["draft", "approved"].includes(station.status) : station.status === stationFilter)) &&
+    `${station.title} ${station.slug} ${station.specialty?.name || ""}`.toLowerCase().includes(stationSearch.toLowerCase().trim()),
+  );
+  const visibleUsers = state.users.filter((user) =>
+    `${user.fullName} ${user.email} ${user.role}`.toLowerCase().includes(userSearch.toLowerCase().trim()),
+  );
+  const defaultProvider = state.aiStatus?.providers?.find((provider) => provider.id === state.aiStatus.defaultProvider);
 
   return (
     <RequireUser active="admin" adminOnly>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin", to: "/admin/stations" }, { label: "Console" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin console" }]} />
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm font-semibold text-ink-soft">Admin</p>
             <h1 className="mt-1 text-4xl font-extrabold text-ink">Admin console</h1>
-            <p className="mt-2 max-w-2xl text-ink-soft">Manage content, AI inference settings, and user accounts from one place.</p>
+            <p className="mt-2 max-w-2xl text-ink-soft">Stations, AI configuration, and accounts in one workspace.</p>
           </div>
           <span className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-ink"><ShieldCheck size={16} /> Admin only</span>
         </div>
-        <div className="mb-5 flex flex-wrap gap-2">
+        <nav aria-label="Admin sections" className="mb-5 flex gap-2 overflow-x-auto pb-2">
           {tabs.map((tab) => (
-            <button key={tab.id} type="button" onClick={() => setState((s) => ({ ...s, activeTab: tab.id }))} className={`rounded-lg px-4 py-2 text-sm font-bold ${state.activeTab === tab.id ? "gradient-brand text-white" : "glass-surface text-ink"}`}>
-              {tab.label}
+            <button key={tab.id} type="button" aria-current={state.activeTab === tab.id ? "page" : undefined} onClick={() => setState((s) => ({ ...s, activeTab: tab.id, error: "", message: "" }))} className={`inline-flex shrink-0 items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-bold transition ${state.activeTab === tab.id ? "gradient-brand text-white shadow-sm" : "glass-surface text-ink hover:bg-white"}`}>
+              <tab.icon size={16} /> {tab.label}
             </button>
           ))}
-        </div>
+        </nav>
         {state.loading && <Loading variant="admin" />}
         {state.error && <ErrorMessage message={state.error} />}
         {state.message && <p className="mt-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">{state.message}</p>}
-        {!state.loading && state.activeTab === "content" && <div className="mt-6 grid gap-5 xl:grid-cols-[1fr_420px]">
+        {!state.loading && state.activeTab === "overview" && (
+          <div className="mt-6 space-y-5">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {[
+                { label: "Published stations", value: counts.published, detail: "Visible to students", target: "stations", filter: "published" },
+                { label: "Needs review", value: counts.draft + counts.approved, detail: "Draft or approved", target: "stations", filter: "review" },
+                { label: "Accounts", value: state.users.length, detail: "Registered users", target: "users" },
+                { label: "AI provider", value: defaultProvider?.label || "Not set", detail: defaultProvider?.configured ? "Key configured" : "Key missing", target: "ai" },
+              ].map((card) => (
+                <button key={card.label} type="button" onClick={() => { if (card.filter) setStationFilter(card.filter); setState((s) => ({ ...s, activeTab: card.target })); }} className="gradient-card rounded-lg p-5 text-left transition hover:-translate-y-0.5">
+                  <span className="text-xs font-bold uppercase tracking-wide text-ink-soft">{card.label}</span>
+                  <span className="mt-3 block font-display text-3xl font-extrabold text-ink">{card.value}</span>
+                  <span className="mt-1 block text-sm text-ink-soft">{card.detail}</span>
+                </button>
+              ))}
+            </div>
+            <div className="grid gap-5 lg:grid-cols-2">
+              <Panel>
+                <h2 className="text-lg font-extrabold text-ink">Station workflow</h2>
+                <p className="mt-1 text-sm text-ink-soft">Create a draft, review it, then make it visible to students.</p>
+                <div className="mt-5 grid grid-cols-4 gap-2 text-center">
+                  {Object.entries(counts).map(([status, count]) => <div key={status} className="rounded-lg bg-white/70 p-3"><p className="text-xl font-extrabold text-ink">{count}</p><p className="mt-1 text-xs capitalize text-ink-soft">{status}</p></div>)}
+                </div>
+                <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "stations" }))} className="mt-5 text-sm font-bold text-brand hover:underline">Manage stations →</button>
+              </Panel>
+              <Panel>
+                <h2 className="text-lg font-extrabold text-ink">Configuration</h2>
+                <p className="mt-1 text-sm text-ink-soft">Virtual patient, assessment, and speech-to-text models are configured under AI &amp; models.</p>
+                {!defaultProvider?.configured && <p className="mt-4 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"><AlertTriangle size={17} className="shrink-0" /> The default provider has no configured key. AI sessions may be unavailable.</p>}
+                <p className="mt-4 text-sm text-ink-soft">Credit prices and usage caps are server configuration. Grants remain CLI-only and are recorded in the credit ledger.</p>
+                <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "ai" }))} className="mt-5 text-sm font-bold text-brand hover:underline">Review AI settings →</button>
+              </Panel>
+            </div>
+          </div>
+        )}
+        {!state.loading && state.activeTab === "stations" && <div className="mt-6 space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div><h2 className="text-2xl font-extrabold text-ink">OSCE stations</h2><p className="text-sm text-ink-soft">Search, review, publish, or archive station content.</p></div>
+            <PrimaryButton type="button" onClick={() => setShowCreateForm((open) => !open)} className="inline-flex items-center gap-2"><Plus size={16} /> {showCreateForm ? "Close editor" : "New station"}</PrimaryButton>
+          </div>
           <Panel>
+            <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_180px]">
+              <label className="relative"><span className="sr-only">Search stations</span><Search size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-soft" /><input value={stationSearch} onChange={(e) => setStationSearch(e.target.value)} placeholder="Search title, slug, or specialty" className="w-full rounded-lg border border-line bg-white/90 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-brand" /></label>
+              <label><span className="sr-only">Filter by status</span><select value={stationFilter} onChange={(e) => setStationFilter(e.target.value)} className="w-full rounded-lg border border-line bg-white/90 p-2.5 text-sm outline-none focus:border-brand"><option value="all">All statuses</option><option value="review">Needs review</option>{Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}</select></label>
+            </div>
+            <div className="mt-4 divide-y divide-line">
+              {visibleStations.map((station) => (
+                <div key={station.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
+                  <div className="min-w-0 flex-1"><p className="font-semibold text-ink">{station.title}</p><p className="break-all text-xs text-ink-soft">{station.specialty?.name || "General"} · {station.slug}</p></div>
+                  <span className="gradient-pill rounded-lg px-2.5 py-1 text-xs font-bold capitalize text-ink">{station.status}</span>
+                  <label className="sr-only" htmlFor={`station-status-${station.id}`}>Change status for {station.title}</label>
+                  <select id={`station-status-${station.id}`} aria-label={`Change status for ${station.title}`} value={station.status} disabled={statusBusyId === station.id} onChange={(e) => changeStatus(station.id, e.target.value)} className="rounded-lg border border-line bg-white p-2 text-sm text-ink disabled:opacity-50">
+                    {Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}
+                  </select>
+                </div>
+              ))}
+              {visibleStations.length === 0 && <p className="py-5 text-center text-sm text-ink-soft">No stations match this search.</p>}
+            </div>
+          </Panel>
+          {showCreateForm && <Panel>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="text-xl font-extrabold text-ink">Add content</h2>
-                <p className="mt-1 text-sm text-ink-soft">OSCE stations are supported now. Other content types can fit this section later.</p>
+                <h2 className="text-xl font-extrabold text-ink">Create station draft</h2>
+                <p className="mt-1 text-sm text-ink-soft">Drafts are hidden from students until published. Review the patient facts and checklist before publishing.</p>
               </div>
               <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-bold text-ink">OSCE station</span>
             </div>
@@ -977,22 +1070,11 @@ export function AdminOscePage() {
                 <TextInput label="Patient age" type="number" min="0" value={state.form.patientAge} onChange={(value) => updateForm("patientAge", value)} required />
                 <TextInput label="Patient opening line" value={state.form.patientOpening} onChange={(value) => updateForm("patientOpening", value)} required />
               </div>
-              <TextArea label="Patient facts" helper="One per line: Section | Label | Answer. Example: HPC | Duration | Three weeks." value={state.form.patientFacts} onChange={(value) => updateForm("patientFacts", value)} required rows={6} />
+              <TextArea label="Patient facts" helper="One per line: Section | Label | Answer. Example: HPC | Duration | Three weeks. Sections: PC, HPC, PMH, DH, FH, SH, ROS, ICE, RED_FLAG, OTHER." value={state.form.patientFacts} onChange={(value) => updateForm("patientFacts", value)} required rows={6} />
               <TextArea label="Checklist items" helper="One per line: Label | Description. Example: Opening | Introduces self and gains consent." value={state.form.checklistItems} onChange={(value) => updateForm("checklistItems", value)} required rows={6} />
               <PrimaryButton type="submit" disabled={state.saving} className="w-full">{state.saving ? "Saving draft..." : "Save draft"}</PrimaryButton>
             </form>
-          </Panel>
-          <Panel>
-            <h2 className="text-xl font-extrabold text-ink">Drafts and modules</h2>
-            <div className="mt-3 space-y-2">
-              {state.modules.map((module) => (
-                <div key={module.id} className="flex items-center justify-between rounded-lg border border-line bg-white/80 p-3">
-                  <div><p className="font-semibold text-ink">{module.title}</p><p className="text-xs text-ink-soft">{module.slug}</p></div>
-                  <PrimaryButton onClick={() => publish(module.id)} disabled={module.status === "published"}>{module.status === "published" ? "Published" : "Publish"}</PrimaryButton>
-                </div>
-              ))}
-            </div>
-          </Panel>
+          </Panel>}
         </div>}
         {!state.loading && state.activeTab === "ai" && (
           <Panel className="ai-panel">
@@ -1000,7 +1082,7 @@ export function AdminOscePage() {
               <div>
                 <AiBadge>AI control</AiBadge>
                 <h2 className="mt-3 text-2xl font-extrabold text-ink">Inference settings</h2>
-                <p className="mt-1 max-w-2xl text-sm text-ink-soft">Controls the provider and models used by virtual patients and AI assessment. API keys are write-only.</p>
+                <p className="mt-1 max-w-2xl text-sm text-ink-soft">Choose the provider and models for virtual patients, assessment, and voice transcription. API keys are write-only.</p>
               </div>
               <div className="text-right text-xs font-semibold text-ink-soft">
                 {(state.aiStatus?.providers || []).map((provider) => (
@@ -1009,6 +1091,7 @@ export function AdminOscePage() {
               </div>
             </div>
             <form onSubmit={saveAiSettings} className="mt-6 space-y-5">
+              <p className="rounded-lg border border-line bg-white/70 p-3 text-sm text-ink-soft">Changes apply to new AI requests. Removing a saved key does not remove a key supplied through server environment variables.</p>
               <div className="grid gap-3 md:grid-cols-2">
                 <label className="block text-sm font-semibold text-ink">Default provider
                   <select className="mt-1 w-full rounded-lg border border-line bg-white/90 p-2.5" value={state.aiForm.defaultProvider} onChange={(e) => updateAiForm("defaultProvider", e.target.value)}>
@@ -1018,11 +1101,14 @@ export function AdminOscePage() {
                 </label>
                 <TextInput label="Per-message token limit" type="number" min="20" max="2000" value={state.aiForm.maxStudentMessageTokens} onChange={(value) => updateAiForm("maxStudentMessageTokens", value)} />
               </div>
+              {!(state.aiStatus?.providers || []).find((provider) => provider.id === state.aiForm.defaultProvider)?.configured && !state.aiForm[`${state.aiForm.defaultProvider}ApiKey`] &&
+                <p className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"><AlertTriangle size={17} className="shrink-0" /> This provider has no API key. Add one before using AI sessions.</p>}
               <div className="grid gap-5 xl:grid-cols-2">
                 <div className="rounded-lg border border-line bg-white/80 p-4">
                   <h3 className="font-extrabold text-ink">Groq</h3>
                   <div className="mt-3 space-y-3">
-                    <TextInput label="Groq API key" type="password" value={state.aiForm.groqApiKey} onChange={(value) => updateAiForm("groqApiKey", value)} placeholder="Leave blank to keep existing" />
+                    <TextInput label="Groq API key" type="password" autoComplete="new-password" value={state.aiForm.groqApiKey === "__CLEAR__" ? "" : state.aiForm.groqApiKey} onChange={(value) => updateAiForm("groqApiKey", value)} placeholder={state.aiForm.groqApiKey === "__CLEAR__" ? "Removal pending" : "Leave blank to keep existing"} />
+                    {state.aiStatus?.providers?.find((provider) => provider.id === "groq")?.configured && <button type="button" onClick={() => updateAiForm("groqApiKey", state.aiForm.groqApiKey === "__CLEAR__" ? "" : "__CLEAR__")} className="text-xs font-semibold text-rose-700 hover:underline">{state.aiForm.groqApiKey === "__CLEAR__" ? "Undo key removal" : "Remove saved key on save"}</button>}
                     <TextInput label="Chat model" value={state.aiForm.groqChatModel} onChange={(value) => updateAiForm("groqChatModel", value)} />
                     <TextInput label="Assessment model" value={state.aiForm.groqEvalModel} onChange={(value) => updateAiForm("groqEvalModel", value)} />
                     <TextInput label="Speech-to-text model" value={state.aiForm.groqSttModel} onChange={(value) => updateAiForm("groqSttModel", value)} />
@@ -1031,7 +1117,8 @@ export function AdminOscePage() {
                 <div className="rounded-lg border border-line bg-white/80 p-4">
                   <h3 className="font-extrabold text-ink">OpenAI</h3>
                   <div className="mt-3 space-y-3">
-                    <TextInput label="OpenAI API key" type="password" value={state.aiForm.openaiApiKey} onChange={(value) => updateAiForm("openaiApiKey", value)} placeholder="Leave blank to keep existing" />
+                    <TextInput label="OpenAI API key" type="password" autoComplete="new-password" value={state.aiForm.openaiApiKey === "__CLEAR__" ? "" : state.aiForm.openaiApiKey} onChange={(value) => updateAiForm("openaiApiKey", value)} placeholder={state.aiForm.openaiApiKey === "__CLEAR__" ? "Removal pending" : "Leave blank to keep existing"} />
+                    {state.aiStatus?.providers?.find((provider) => provider.id === "openai")?.configured && <button type="button" onClick={() => updateAiForm("openaiApiKey", state.aiForm.openaiApiKey === "__CLEAR__" ? "" : "__CLEAR__")} className="text-xs font-semibold text-rose-700 hover:underline">{state.aiForm.openaiApiKey === "__CLEAR__" ? "Undo key removal" : "Remove saved key on save"}</button>}
                     <TextInput label="Chat model" value={state.aiForm.openaiChatModel} onChange={(value) => updateAiForm("openaiChatModel", value)} />
                     <TextInput label="Assessment model" value={state.aiForm.openaiEvalModel} onChange={(value) => updateAiForm("openaiEvalModel", value)} />
                   </div>
@@ -1043,18 +1130,19 @@ export function AdminOscePage() {
         )}
         {!state.loading && state.activeTab === "users" && (
           <Panel>
-            <h2 className="text-2xl font-extrabold text-ink">Users</h2>
-            <p className="mt-1 text-sm text-ink-soft">{state.users.length} registered accounts.</p>
+            <h2 className="text-2xl font-extrabold text-ink">Accounts</h2>
+            <p className="mt-1 text-sm text-ink-soft">{state.users.length} registered accounts. Account roles and credit balances are read-only here; grants use the audited CLI.</p>
+            <label className="relative mt-5 block max-w-md"><span className="sr-only">Search accounts</span><Search size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-soft" /><input value={userSearch} onChange={(e) => setUserSearch(e.target.value)} placeholder="Search name, email, or role" className="w-full rounded-lg border border-line bg-white/90 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-brand" /></label>
             {/* Phones: one card per user — a 5-column table has no room to breathe below sm. */}
             <div className="mt-5 space-y-2 sm:hidden">
-              {state.users.map((user) => (
+              {visibleUsers.map((user) => (
                 <div key={user.id} className="rounded-lg border border-line bg-white/60 p-3 text-sm">
                   <div className="flex items-center justify-between gap-2">
                     <p className="font-semibold text-ink">{user.fullName}</p>
                     <span className="gradient-pill shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold text-ink">{user.role}</span>
                   </div>
                   <p className="mt-1 break-all text-ink-soft">{user.email}</p>
-                  <p className="mt-1 text-ink-soft">{user.roleLabel || user.profile?.programme || "-"} · Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</p>
+                  <p className="mt-1 text-ink-soft">{user.roleLabel || user.profile?.programme || "-"} · {user.creditBalance} credits · Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</p>
                 </div>
               ))}
             </div>
@@ -1066,22 +1154,25 @@ export function AdminOscePage() {
                     <th className="border-b border-line py-3 pr-3">Email</th>
                     <th className="border-b border-line py-3 pr-3">Role</th>
                     <th className="border-b border-line py-3 pr-3">Profile</th>
+                    <th className="border-b border-line py-3 pr-3">Credits</th>
                     <th className="border-b border-line py-3 pr-3">Joined</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {state.users.map((user) => (
+                  {visibleUsers.map((user) => (
                     <tr key={user.id}>
                       <td className="border-b border-line py-3 pr-3 font-semibold text-ink">{user.fullName}</td>
                       <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.email}</td>
                       <td className="border-b border-line py-3 pr-3"><span className="gradient-pill rounded-lg px-2.5 py-1 text-xs font-bold text-ink">{user.role}</span></td>
                       <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.roleLabel || user.profile?.programme || "-"}</td>
+                      <td className="border-b border-line py-3 pr-3 font-semibold text-ink">{user.creditBalance}</td>
                       <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            {visibleUsers.length === 0 && <p className="py-5 text-center text-sm text-ink-soft">No accounts match this search.</p>}
           </Panel>
         )}
       </PageMain>
@@ -1370,10 +1461,12 @@ function splitLines(value) {
 
 function parsePatientFacts(value, slug) {
   return splitLines(value).map((line, index) => {
-    const [sectionRaw, labelRaw, answerRaw] = line.split("|").map((part) => part?.trim());
-    const section = sectionRaw || "OTHER";
-    const label = labelRaw || `Fact ${index + 1}`;
-    const answer = answerRaw || "";
+    const parts = line.split("|").map((part) => part.trim());
+    if (parts.length !== 3 || parts.some((part) => !part)) throw new Error(`Patient fact line ${index + 1} must be: Section | Label | Answer.`);
+    const [section, label, answer] = parts;
+    if (!["PC", "HPC", "PMH", "DH", "FH", "SH", "ROS", "ICE", "RED_FLAG", "OTHER"].includes(section)) {
+      throw new Error(`Patient fact line ${index + 1} has an invalid section. Use PC, HPC, PMH, DH, FH, SH, ROS, ICE, RED_FLAG, or OTHER.`);
+    }
     const conceptId = slugify(label) || `fact_${index + 1}`;
     return {
       factId: `${slug}_${conceptId}_${index + 1}`,
@@ -1392,9 +1485,9 @@ function parsePatientFacts(value, slug) {
 
 function parseChecklistItems(value, slug) {
   return splitLines(value).map((line, index) => {
-    const [labelRaw, descriptionRaw] = line.split("|").map((part) => part?.trim());
-    const label = labelRaw || `Checklist item ${index + 1}`;
-    const description = descriptionRaw || label;
+    const parts = line.split("|").map((part) => part.trim());
+    if (parts.length !== 2 || parts.some((part) => !part)) throw new Error(`Checklist line ${index + 1} must be: Label | Description.`);
+    const [label, description] = parts;
     const itemId = `${slug}_${slugify(label) || `item_${index + 1}`}_${index + 1}`;
     return {
       itemId,

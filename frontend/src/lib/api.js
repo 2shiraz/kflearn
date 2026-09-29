@@ -253,9 +253,9 @@ export function createAdminOsceContent(payload) {
   });
 }
 
-export function publishAdminOsceStation(id) {
+export function updateAdminOsceStationStatus(id, status) {
   return apiFetch(`/admin/osce/${id}/status`, {
     method: "PATCH",
-    body: JSON.stringify({ status: "published" }),
+    body: JSON.stringify({ status }),
   });
 }
