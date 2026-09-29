@@ -143,9 +143,20 @@ async function apiFetch(path, options = {}) {
     window.location.href = "/signin";
   }
   if (!res.ok || data.success === false) {
-    throw new Error(data.message || "Request failed.");
+    const error = new Error(data.message || "Request failed.");
+    error.status = res.status;
+    error.code = data.code;
+    throw error;
   }
   return data.data;
+}
+
+export function getCredits() {
+  return apiFetch("/credits");
+}
+
+export function getCreditTransactions() {
+  return apiFetch("/credits/transactions");
 }
 
 export function listHistoryModules() {

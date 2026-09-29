@@ -33,6 +33,7 @@ import { McqPractice, McqsHome, McqYearPage } from "./pages/McqsPage";
 import { McqRead } from "./pages/McqReadPage";
 import { ClinicalExamGuideHome, ClinicalExamGuideStation } from "./pages/ClinicalExaminationPage";
 import { HandoutNotesDetail, HandoutNotesHome } from "./pages/HandoutNotesPage";
+import CreditsPage from "./pages/CreditsPage";
 
 function LandingPage() {
   return (
@@ -85,6 +86,7 @@ export default function App() {
           <Route path="/handout-notes" element={<HandoutNotesHome />} />
           <Route path="/handout-notes/:slug" element={<HandoutNotesDetail />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />
+          <Route path="/credits" element={<CreditsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

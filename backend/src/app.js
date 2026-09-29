@@ -15,6 +15,7 @@ import aiRoutes from "./routes/ai.routes.js";
 import adminHistoryRoutes from "./routes/adminHistory.routes.js";
 import adminUserRoutes from "./routes/adminUser.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import creditRoutes from "./routes/credit.routes.js";
 
 export function createApp() {
   const app = express();
@@ -36,6 +37,7 @@ export function createApp() {
   app.use(authenticate);
   app.use(csrfProtection);
   app.use("/api/dashboard", dashboardRoutes);
+  app.use("/api/credits", creditRoutes);
   app.use("/api/history/attempts", attemptRoutes);
   app.use("/api/history", historyRoutes);
   app.use("/api/ai", aiRoutes);

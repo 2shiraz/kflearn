@@ -8,6 +8,8 @@ import { getAiSettings } from "../services/aiSettings.service.js";
 import { selfAssessChecklist } from "../services/scoring.service.js";
 import { messageId } from "../utils/ids.js";
 import { transcribeAudio } from "../services/transcription.service.js";
+import { refundCredits, spendCredits } from "../services/credit.service.js";
+import { CREDIT_COSTS, MAX_STUDENT_MESSAGES_PER_ATTEMPT, MAX_TRANSCRIPTIONS_PER_ATTEMPT } from "../config/credits.js";
 
 async function findOwnedAttempt(attemptId, userId) {
   if (!mongoose.isObjectIdOrHexString(attemptId)) {
@@ -30,6 +32,47 @@ function invalidAttemptState() {
   return error;
 }
 
+function sessionNotPaid() {
+  const error = new Error("This session was not paid for. Start a new AI Virtual Patient session.");
+  error.status = 402;
+  error.code = "SESSION_NOT_PAID";
+  return error;
+}
+
+function usageLimitReached(message) {
+  const error = new Error(message);
+  error.status = 429;
+  error.code = "STATION_LIMIT_REACHED";
+  return error;
+}
+
+// Atomically claims one slot of a per-attempt usage counter before a provider
+// call. The query only matches a paid, active virtual-patient attempt under
+// its cap, so parallel requests can't exceed the cap or use an unpaid session.
+async function reserveUsageSlot(attempt, userId, field, cap, limitMessage) {
+  const reserved = await HistoryAttempt.findOneAndUpdate(
+    {
+      _id: attempt._id,
+      userId,
+      status: "active",
+      mode: "virtual-patient",
+      "billing.virtualPatientCharged": true,
+      [`usage.${field}`]: { $not: { $gte: cap } },
+    },
+    { $inc: { [`usage.${field}`]: 1 } },
+    { new: true },
+  );
+  if (reserved) return reserved;
+  const current = await HistoryAttempt.findOne({ _id: attempt._id, userId }).lean();
+  if (!current || current.status !== "active" || current.mode !== "virtual-patient") throw invalidAttemptState();
+  if (!current.billing?.virtualPatientCharged) throw sessionNotPaid();
+  throw usageLimitReached(limitMessage);
+}
+
+async function releaseUsageSlot(attemptId, userId, field) {
+  await HistoryAttempt.updateOne({ _id: attemptId, userId, [`usage.${field}`]: { $gt: 0 } }, { $inc: { [`usage.${field}`]: -1 } });
+}
+
 export async function createAttempt(req, res) {
   const { moduleId, mode, aiProvider } = req.body;
   const { module, patientScript, checklist } = await getModuleClinicalBundle(moduleId);
@@ -40,7 +83,7 @@ export async function createAttempt(req, res) {
     throw error;
   }
 
-  const attempt = await HistoryAttempt.create({
+  const fields = {
     userId: req.user.id,
     historyModuleId: module._id,
     patientScriptVersion: patientScript.version,
@@ -50,9 +93,31 @@ export async function createAttempt(req, res) {
     aiProvider: aiProvider || aiSettings.defaultProvider,
     status: "active",
     messages: [],
-  });
+  };
 
-  res.status(201).json({ success: true, data: { attempt: attemptDto(attempt), module: studentModuleDetailDto(module) } });
+  if (mode !== "virtual-patient") {
+    const attempt = await HistoryAttempt.create(fields);
+    res.status(201).json({ success: true, data: { attempt: attemptDto(attempt), module: studentModuleDetailDto(module) } });
+    return;
+  }
+
+  // Pay first, then create: the attempt only exists (and is only marked paid)
+  // once the debit has succeeded. If creation fails, the debit is refunded.
+  const attemptId = new mongoose.Types.ObjectId();
+  const cost = CREDIT_COSTS.virtualPatient;
+  const balance = await spendCredits({ userId: req.user.id, amount: cost, reason: "virtual-patient", attemptId });
+  let attempt;
+  try {
+    attempt = await HistoryAttempt.create({ ...fields, _id: attemptId, billing: { virtualPatientCharged: true } });
+  } catch (error) {
+    await refundCredits({ userId: req.user.id, amount: cost, reason: "virtual-patient", attemptId, note: "Session could not be created." });
+    throw error;
+  }
+
+  res.status(201).json({
+    success: true,
+    data: { attempt: attemptDto(attempt), module: studentModuleDetailDto(module), credits: { balance, charged: cost } },
+  });
 }
 
 export async function getAttempt(req, res) {
@@ -93,8 +158,18 @@ export async function sendPatientMessage(req, res) {
   const { text, inputType = "typed", originalTranscript = "" } = req.body;
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
   if (attempt.status !== "active" || attempt.mode !== "virtual-patient") throw invalidAttemptState();
-  const { module, patientScript } = await getModuleClinicalBundle(attempt.historyModuleId);
-  const response = await generatePatientResponse({ patientScript, module, attempt, studentQuestion: text });
+  const reserved = await reserveUsageSlot(
+    attempt, req.user.id, "studentMessages", MAX_STUDENT_MESSAGES_PER_ATTEMPT,
+    `You've reached the ${MAX_STUDENT_MESSAGES_PER_ATTEMPT}-question limit for this station. End the session to be assessed.`,
+  );
+  let response;
+  try {
+    const { module, patientScript } = await getModuleClinicalBundle(reserved.historyModuleId);
+    response = await generatePatientResponse({ patientScript, module, attempt: reserved, studentQuestion: text });
+  } catch (error) {
+    await releaseUsageSlot(attempt._id, req.user.id, "studentMessages");
+    throw error;
+  }
 
   const studentMessage = {
     messageId: messageId("student"),
@@ -196,6 +271,35 @@ export async function aiAssessAttempt(req, res) {
     { new: true },
   );
   if (!reserved) throw invalidAttemptState();
+
+  const releaseLease = () => HistoryAttempt.updateOne(
+    { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId },
+    { $set: { status: "ended" }, $unset: { assessmentStartedAt: "", assessmentLeaseId: "" } },
+  );
+
+  // Charge once per attempt, inside the lease (only one request can hold it).
+  // If a previous run was charged and then crashed, a stale-lease retry is free.
+  const cost = CREDIT_COSTS.aiAssessment;
+  let chargedNow = false;
+  let balance;
+  if (!reserved.billing?.aiAssessmentCharged) {
+    try {
+      balance = await spendCredits({ userId: req.user.id, amount: cost, reason: "ai-assessment", attemptId: attempt._id });
+    } catch (error) {
+      await releaseLease();
+      throw error;
+    }
+    const marked = await HistoryAttempt.updateOne(
+      { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId },
+      { $set: { "billing.aiAssessmentCharged": true } },
+    );
+    if (marked.modifiedCount !== 1) {
+      await refundCredits({ userId: req.user.id, amount: cost, reason: "ai-assessment", attemptId: attempt._id, note: "Assessment lease was lost." });
+      throw invalidAttemptState();
+    }
+    chargedNow = true;
+  }
+
   try {
     const result = await assessAttemptWithAi({ module, checklist, attempt: reserved });
     const updated = await HistoryAttempt.findOneAndUpdate(
@@ -209,12 +313,27 @@ export async function aiAssessAttempt(req, res) {
       { new: true, runValidators: true },
     );
     if (!updated) throw invalidAttemptState();
-    res.json({ success: true, data: { attempt: attemptDto(updated), result: resultDto(updated, checklist) } });
+    res.json({
+      success: true,
+      data: {
+        attempt: attemptDto(updated),
+        result: resultDto(updated, checklist),
+        credits: chargedNow ? { balance, charged: cost } : { charged: 0 },
+      },
+    });
   } catch (error) {
-    await HistoryAttempt.updateOne(
-      { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId },
-      { $set: { status: "ended" }, $unset: { assessmentStartedAt: "", assessmentLeaseId: "" } },
+    // Refund only if this request still owns the lease: the same atomic update
+    // releases it and clears the charge flag, so a concurrent retry that took
+    // over the lease can never end up with a free assessment.
+    const released = await HistoryAttempt.updateOne(
+      { _id: attempt._id, userId: req.user.id, status: "assessing", assessmentLeaseId: leaseId, "billing.aiAssessmentCharged": true },
+      { $set: { status: "ended", "billing.aiAssessmentCharged": false }, $unset: { assessmentStartedAt: "", assessmentLeaseId: "" } },
     );
+    if (released.modifiedCount === 1) {
+      await refundCredits({ userId: req.user.id, amount: cost, reason: "ai-assessment", attemptId: attempt._id, note: "AI assessment failed." });
+    } else {
+      await releaseLease();
+    }
     throw error;
   }
 }
@@ -227,7 +346,17 @@ export async function transcribeAttemptAudio(req, res) {
   }
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
   if (attempt.status !== "active" || attempt.mode !== "virtual-patient") throw invalidAttemptState();
-  const text = await transcribeAudio(req.file);
+  await reserveUsageSlot(
+    attempt, req.user.id, "transcriptions", MAX_TRANSCRIPTIONS_PER_ATTEMPT,
+    "Voice transcription limit reached for this station. Type your questions instead.",
+  );
+  let text;
+  try {
+    text = await transcribeAudio(req.file);
+  } catch (error) {
+    await releaseUsageSlot(attempt._id, req.user.id, "transcriptions");
+    throw error;
+  }
   res.json({ success: true, data: { transcript: text } });
 }
 

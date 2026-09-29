@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "seed": "node src/seed/seed.js",
     "make-admin": "node src/scripts/makeAdmin.js",
+    "grant-credits": "node src/scripts/grantCredits.js",
     "test": "NODE_ENV=test node --test tests/*.test.js"
   },
   "dependencies": {

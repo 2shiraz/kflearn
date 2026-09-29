@@ -12,6 +12,7 @@ import { HistoryAttempt } from "../src/models/HistoryAttempt.js";
 import { User } from "../src/models/User.js";
 import { assessChecklistFromTranscript, calculateScore, selfAssessChecklist } from "../src/services/scoring.service.js";
 import { env } from "../src/config/env.js";
+import { grantCredits } from "../src/services/credit.service.js";
 
 let mongod;
 let app;
@@ -651,7 +652,9 @@ function baseItem(itemId) {
   };
 }
 
-async function registerTestUser(email) {
+// Credits are covered in credits.test.js; these tests exercise station
+// behaviour, so give every test user enough to start paid sessions.
+async function registerTestUser(email, { credits = 100 } = {}) {
   const res = await request(app)
     .post("/api/auth/register")
     .send({
@@ -661,5 +664,6 @@ async function registerTestUser(email) {
       roleLabel: "MBBS Student",
     });
   assert.equal(res.status, 201);
+  if (credits > 0) await grantCredits({ userId: res.body.data.user.id, amount: credits, note: "test" });
   return `Bearer ${res.body.data.token}`;
 }

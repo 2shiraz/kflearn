@@ -4,6 +4,7 @@ import {
   Bot,
   ChevronLeft,
   ChevronRight,
+  Coins,
   Eye,
   FileText,
   History,
@@ -35,6 +36,20 @@ import {
   transcribeHistoryAudio,
   updateAiStatus,
 } from "../lib/api";
+import { isCreditError, refreshCredits, setCreditBalance, useCredits } from "../lib/credits";
+
+// Shows a spend error; credit errors get a direct link to the packages page.
+function SpendError({ error }) {
+  if (!error) return null;
+  if (!isCreditError(error)) return <ErrorMessage message={error.message} />;
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+      <Coins size={16} className="shrink-0" />
+      <span className="flex-1">{error.message}</span>
+      <Link to="/credits" className="font-bold underline">Get credits</Link>
+    </div>
+  );
+}
 
 function sectionPath(name) {
   return `/stations/section/${encodeURIComponent(name)}`;
@@ -230,19 +245,27 @@ export function HistorySectionPage() {
 export function HistoryModuleDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [state, setState] = useState({ loading: true, module: null, error: "", starting: "" });
+  const [state, setState] = useState({ loading: true, module: null, error: "", starting: "", startError: null });
+  const { balance, pricing } = useCredits();
+  const aiCost = pricing?.costs.virtualPatient;
 
   useEffect(() => {
     getHistoryModule(slug)
-      .then((module) => setState({ loading: false, module, error: "", starting: "" }))
+      .then((module) => setState({ loading: false, module, error: "", starting: "", startError: null }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [slug]);
 
   async function start(mode) {
-    setState((s) => ({ ...s, starting: mode }));
-    const data = await createHistoryAttempt({ moduleId: state.module.id, mode });
-    if (mode === "single-player") navigate(`/stations/${slug}/single-player?attemptId=${data.attempt.id}`);
-    else navigate(`/stations/attempts/${data.attempt.id}/session`);
+    setState((s) => ({ ...s, starting: mode, startError: null }));
+    try {
+      const data = await createHistoryAttempt({ moduleId: state.module.id, mode });
+      if (data.credits) setCreditBalance(data.credits.balance);
+      if (mode === "single-player") navigate(`/stations/${slug}/single-player?attemptId=${data.attempt.id}`);
+      else navigate(`/stations/attempts/${data.attempt.id}/session`);
+    } catch (err) {
+      setState((s) => ({ ...s, starting: "", startError: err }));
+      if (isCreditError(err)) refreshCredits().catch(() => {});
+    }
   }
 
   return (
@@ -264,8 +287,18 @@ export function HistoryModuleDetail() {
               <CandidateInstructions module={state.module} />
             </Panel>
             <div className="space-y-4">
-              <PracticeCard icon={FileText} title="Guided Self-Practice" body="Reveal the patient script and checklist for self-marked practice." onClick={() => start("single-player")} loading={state.starting === "single-player"} />
-              <PracticeCard icon={Bot} title="AI Virtual Patient" body="Talk to the patient without seeing hidden facts or checklist answers." onClick={() => start("virtual-patient")} loading={state.starting === "virtual-patient"} ai />
+              <PracticeCard icon={FileText} title="Guided Self-Practice" body="Reveal the patient script and checklist for self-marked practice." onClick={() => start("single-player")} loading={state.starting === "single-player"} costLabel="Free" />
+              <PracticeCard
+                icon={Bot}
+                title="AI Virtual Patient"
+                body="Talk to the patient without seeing hidden facts or checklist answers."
+                onClick={() => start("virtual-patient")}
+                loading={state.starting === "virtual-patient"}
+                costLabel={aiCost ? `${aiCost} credits` : ""}
+                shortfall={aiCost && balance !== null && balance < aiCost ? `You have ${balance} credit${balance === 1 ? "" : "s"}.` : ""}
+                ai
+              />
+              <SpendError error={state.startError} />
             </div>
           </div>
         )}
@@ -291,7 +324,7 @@ function CandidateInstructions({ module }) {
   );
 }
 
-function PracticeCard({ icon: Icon, title, body, onClick, loading, ai = false }) {
+function PracticeCard({ icon: Icon, title, body, onClick, loading, costLabel = "", shortfall = "", ai = false }) {
   return (
     <Panel className={ai ? "ai-panel" : ""}>
       <div className="flex items-start justify-between gap-3">
@@ -300,9 +333,20 @@ function PracticeCard({ icon: Icon, title, body, onClick, loading, ai = false })
       </div>
       <h3 className="mt-4 text-xl font-extrabold text-ink">{title}</h3>
       <p className="mt-1 text-sm text-ink-soft">{body}</p>
-      <PrimaryButton onClick={onClick} disabled={loading} className={`mt-5 w-full ${ai ? "ai-button" : ""}`}>
-        {loading ? "Starting..." : "Start"}
-      </PrimaryButton>
+      {costLabel && (
+        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-900 ring-1 ring-amber-200">
+          <Coins size={13} /> {costLabel}
+        </p>
+      )}
+      {shortfall ? (
+        <p className="mt-4 text-sm text-ink-soft">
+          {shortfall} <Link to="/credits" className="font-bold text-ink underline">Get credits</Link> to start.
+        </p>
+      ) : (
+        <PrimaryButton onClick={onClick} disabled={loading} className={`mt-5 w-full ${ai ? "ai-button" : ""}`}>
+          {loading ? "Starting..." : "Start"}
+        </PrimaryButton>
+      )}
     </Panel>
   );
 }
@@ -625,7 +669,9 @@ export function VirtualPatientSession() {
 export function SelfAssessmentPage() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
-  const [state, setState] = useState({ loading: true, attempt: null, checklist: null, checked: [], aiLoading: false, error: "" });
+  const [state, setState] = useState({ loading: true, attempt: null, checklist: null, checked: [], aiLoading: false, error: "", spendError: null });
+  const { pricing } = useCredits();
+  const aiCost = pricing?.costs.aiAssessment;
 
   useEffect(() => {
     getHistoryAttempt(attemptId)
@@ -634,14 +680,24 @@ export function SelfAssessmentPage() {
   }, [attemptId]);
 
   async function selfAssess() {
-    await selfAssessHistoryAttempt(attemptId, state.checked);
-    navigate(`/stations/attempts/${attemptId}/results`);
+    try {
+      await selfAssessHistoryAttempt(attemptId, state.checked);
+      navigate(`/stations/attempts/${attemptId}/results`);
+    } catch (err) {
+      setState((s) => ({ ...s, spendError: err }));
+    }
   }
 
   async function aiAssess() {
-    setState((s) => ({ ...s, aiLoading: true }));
-    await aiAssessHistoryAttempt(attemptId);
-    navigate(`/stations/attempts/${attemptId}/results`);
+    setState((s) => ({ ...s, aiLoading: true, spendError: null }));
+    try {
+      const data = await aiAssessHistoryAttempt(attemptId);
+      if (Number.isFinite(data.credits?.balance)) setCreditBalance(data.credits.balance);
+      navigate(`/stations/attempts/${attemptId}/results`);
+    } catch (err) {
+      setState((s) => ({ ...s, aiLoading: false, spendError: err }));
+      refreshCredits().catch(() => {});
+    }
   }
 
   return (
@@ -657,8 +713,11 @@ export function SelfAssessmentPage() {
             <Checklist checklist={state.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
             <div className="mt-5 flex flex-wrap gap-3">
               <PrimaryButton onClick={selfAssess}>Submit Self Assessment</PrimaryButton>
-              <PrimaryButton onClick={aiAssess} disabled={state.aiLoading} className="ai-button inline-flex items-center gap-2"><Sparkles size={16} /> {state.aiLoading ? "Assessing..." : "AI Assessment"}</PrimaryButton>
+              <PrimaryButton onClick={aiAssess} disabled={state.aiLoading} className="ai-button inline-flex items-center gap-2">
+                <Sparkles size={16} /> {state.aiLoading ? "Assessing..." : `AI Assessment${aiCost ? ` · ${aiCost} credits` : ""}`}
+              </PrimaryButton>
             </div>
+            <SpendError error={state.spendError} />
           </Panel>
         )}
       </PageMain>

@@ -27,6 +27,16 @@ const historyAttemptSchema = new mongoose.Schema(
     },
     assessmentStartedAt: Date,
     assessmentLeaseId: String,
+    // Set only by the server after an atomic credit debit. Provider-backed
+    // endpoints refuse to run unless the matching flag is true.
+    billing: {
+      virtualPatientCharged: { type: Boolean, default: false },
+      aiAssessmentCharged: { type: Boolean, default: false },
+    },
+    usage: {
+      studentMessages: { type: Number, default: 0 },
+      transcriptions: { type: Number, default: 0 },
+    },
     startedAt: { type: Date, default: Date.now },
     endedAt: Date,
     elapsedSeconds: { type: Number, default: 0 },

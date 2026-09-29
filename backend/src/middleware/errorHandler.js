@@ -19,6 +19,7 @@ export function errorHandler(error, req, res, next) {
   res.status(status).json({
     success: false,
     message,
+    code: error.code && typeof error.code === "string" && status < 500 ? error.code : undefined,
     details: env.isProduction ? undefined : error.details,
   });
 }

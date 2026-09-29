@@ -11,6 +11,7 @@ export async function listAdminUsers(req, res) {
       role: user.role,
       roleLabel: user.roleLabel,
       profile: user.profile,
+      creditBalance: user.creditBalance ?? 0,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     })),
