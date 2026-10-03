@@ -130,13 +130,37 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {sectionOpen(site, "stations", user) && <FeaturedOsce loading={summary.loading} count={stationCount} osce={osce} />}
-
-        <div className="mt-4 grid gap-4 md:grid-cols-6">
-          {withSpans(sections.filter((s) => sectionOpen(site, s.key, user))).map((s, i) => (
-            <SectionTile key={s.key} section={s} index={i} />
-          ))}
-        </div>
+        {(() => {
+          // Two labelled rows, matching the sidebar groups: practice (OSCE,
+          // MCQs, OSPE) and guides and notes. A row with nothing open is left out.
+          const open = sections.filter((s) => sectionOpen(site, s.key, user));
+          const practice = open.filter((s) => s.large);
+          const guides = open.filter((s) => !s.large);
+          const showOsce = sectionOpen(site, "stations", user);
+          return (
+            <>
+              {(showOsce || practice.length > 0) && (
+                <section aria-labelledby="dash-practice" className="mt-10">
+                  <RowHeading id="dash-practice">Practice</RowHeading>
+                  {showOsce && <FeaturedOsce loading={summary.loading} count={stationCount} osce={osce} />}
+                  {practice.length > 0 && (
+                    <div className="mt-4 grid gap-4 md:grid-cols-6">
+                      {withSpans(practice).map((s, i) => <SectionTile key={s.key} section={s} index={i} />)}
+                    </div>
+                  )}
+                </section>
+              )}
+              {guides.length > 0 && (
+                <section aria-labelledby="dash-guides" className="mt-10">
+                  <RowHeading id="dash-guides">Guides and notes</RowHeading>
+                  <div className="grid gap-4 md:grid-cols-6">
+                    {withSpans(guides).map((s, i) => <SectionTile key={s.key} section={s} index={i + practice.length} />)}
+                  </div>
+                </section>
+              )}
+            </>
+          );
+        })()}
       </PageMain>
     </RequireUser>
   );
@@ -150,7 +174,7 @@ function FeaturedOsce({ loading, count, osce }) {
     <section
       aria-labelledby="featured-osce-title"
       style={{ "--rise-delay": "80ms" }}
-      className="site-rise relative mt-8 grid grid-cols-1 gap-8 overflow-hidden rounded-3xl bg-s-accent p-6 text-s-on-accent sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] md:items-center"
+      className="site-rise relative grid grid-cols-1 gap-8 overflow-hidden rounded-3xl bg-s-accent p-6 text-s-on-accent sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] md:items-center"
     >
       <span className="pointer-events-none absolute -bottom-10 -left-10 text-s-on-accent opacity-[0.08]" aria-hidden="true">
         <HealthIcon name="stethoscope" size={220} />
@@ -164,7 +188,7 @@ function FeaturedOsce({ loading, count, osce }) {
             count > 0 && <p className="text-4xl font-semibold tracking-tight">{plus(count)}</p>
           )}
         </div>
-        <h2 id="featured-osce-title" className="mt-1 text-2xl font-semibold tracking-tight">Practise on a patient who talks back</h2>
+        <h3 id="featured-osce-title" className="mt-1 text-2xl font-semibold tracking-tight">Practise on a patient who talks back</h3>
         <p className="mt-2 max-w-lg leading-relaxed text-s-on-accent/85">
           Run full stations by voice or text, then get marked on the examiner checklist.
         </p>
@@ -186,7 +210,7 @@ function OscePanel({ osce }) {
   return (
     <div className="relative rounded-3xl bg-s-card p-4 text-s-ink site-shadow sm:p-5">
       <div className="flex items-center justify-between gap-3 px-1">
-        <h3 className="text-sm font-semibold">{osce.loading ? <Skeleton className="h-4 w-36" /> : hasHistory ? "Your latest stations" : "Good first stations"}</h3>
+        <h4 className="text-sm font-semibold">{osce.loading ? <Skeleton className="h-4 w-36" /> : hasHistory ? "Your latest stations" : "Good first stations"}</h4>
         {!osce.loading && (
           <Link to={hasHistory ? "/progress" : "/stations"} className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-s-accent hover:underline">
             {hasHistory ? "Progress" : "All stations"} <ArrowRight size={14} strokeWidth={2} aria-hidden="true" />
@@ -256,6 +280,10 @@ function starterStations(stations) {
   return [...bySpecialty.values()].sort((a, b) => b.length - a.length).slice(0, 3).map((list) => list[0]);
 }
 
+function RowHeading({ id, children }) {
+  return <h2 id={id} className="mb-4 text-xl font-semibold tracking-tight text-s-ink">{children}</h2>;
+}
+
 function SectionTile({ section: s, index }) {
   const look = SECTION_LOOK[s.key];
   const t = TONES[look.tone];
@@ -283,7 +311,7 @@ function SectionTile({ section: s, index }) {
         {plus(s.staticCount)}
         <span className="ml-2 text-base font-normal tracking-normal text-s-mute">{s.countLabel}</span>
       </p>
-      <h2 className="relative mt-1.5 text-lg font-medium text-s-ink">{s.label}</h2>
+      <h3 className="relative mt-1.5 text-lg font-medium text-s-ink">{s.label}</h3>
       <p className="relative mt-1.5 max-w-md flex-1 text-sm leading-relaxed text-s-mute">{s.desc}</p>
       <span className="relative mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-s-ink">
         Open <ArrowRight size={15} strokeWidth={2} className={`${t.text} transition-transform group-hover:translate-x-0.5`} />

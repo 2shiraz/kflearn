@@ -48,6 +48,16 @@ const osceStationSchema = new mongoose.Schema(
       },
     ],
     sourceReferences: [{ type: String }],
+    // Which parts of the station review students see after the station.
+    // Missing or true means shown.
+    reviewVisibility: {
+      learningNotes: { type: Boolean, default: true },
+      keyAnswerGuide: { type: Boolean, default: true },
+      suggestedCandidateApproach: { type: Boolean, default: true },
+      examinerInstructions: { type: Boolean, default: true },
+      vivaQuestions: { type: Boolean, default: true },
+      criticalSafetyErrors: { type: Boolean, default: true },
+    },
     status: { type: String, enum: ["draft", "approved", "published", "archived"], default: "draft" },
     version: { type: Number, default: 1 },
     createdBy: { type: String, default: "" },

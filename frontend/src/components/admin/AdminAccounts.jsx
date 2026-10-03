@@ -56,7 +56,7 @@ export default function AdminAccounts() {
   };
 
   return (
-    <div className="mt-6 space-y-5">
+    <div className="space-y-5">
       <SectionHeading title="Accounts" description={`${counts.all} accounts. Open one to rename it, change its role, add or remove AI credits, suspend it or delete it.`} />
       <InlineError>{error}</InlineError>
       <Panel>
@@ -110,7 +110,7 @@ export default function AdminAccounts() {
 function AccountDialog({ id, isSelf, onClose, onChanged }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
-  const [profile, setProfile] = useState({ fullName: "", role: "student" });
+  const [profile, setProfile] = useState({ fullName: "", role: "student", password: "" });
   const [savedNote, setSavedNote] = useState("");
   const [busy, setBusy] = useState("");
   const [credit, setCredit] = useState({ amount: "", note: "" });
@@ -124,7 +124,7 @@ function AccountDialog({ id, isSelf, onClose, onChanged }) {
     setCredit({ amount: "", note: "" });
     setConfirmDelete("");
     getAdminUser(id)
-      .then((d) => { setData(d); setProfile({ fullName: d.user.fullName, role: d.user.role }); })
+      .then((d) => { setData(d); setProfile({ fullName: d.user.fullName, role: d.user.role, password: "" }); })
       .catch((err) => setError(err.message));
   }, [id]);
 
@@ -175,11 +175,16 @@ function AccountDialog({ id, isSelf, onClose, onChanged }) {
                 {Object.entries(ROLE_LABELS).map(([value, label]) => <option key={value} value={value} disabled={isSelf && value !== "admin"}>{label}</option>)}
               </Select>
             </div>
-            {profile.role === "admin" && user.role !== "admin" && <p className="text-sm text-s-mute">Admins can change every setting here, including other accounts.</p>}
+            {(profile.role === "admin") !== (user.role === "admin") && (
+              <div className="space-y-2 rounded-2xl bg-sun-soft/60 p-4">
+                <p className="text-sm text-s-ink">{profile.role === "admin" ? "Admins can change every setting, including other accounts." : "This removes their admin access."} Enter your own password to confirm.</p>
+                <Field label="Your password" type="password" autoComplete="current-password" value={profile.password} onChange={(v) => setProfile((p) => ({ ...p, password: v }))} />
+              </div>
+            )}
             <PrimaryButton
               type="button"
-              disabled={busy === "profile" || (profile.fullName.trim() === user.fullName && profile.role === user.role)}
-              onClick={() => run("profile", () => updateAdminUser(id, { fullName: profile.fullName, role: profile.role }), "Profile saved")}
+              disabled={busy === "profile" || (profile.fullName.trim() === user.fullName && profile.role === user.role) || ((profile.role === "admin") !== (user.role === "admin") && !profile.password)}
+              onClick={() => run("profile", () => updateAdminUser(id, { fullName: profile.fullName, role: profile.role, ...(profile.password ? { password: profile.password } : {}) }), "Profile saved").then((ok) => ok && setProfile((p) => ({ ...p, password: "" })))}
             >
               {busy === "profile" ? "Saving..." : "Save profile"}
             </PrimaryButton>

@@ -61,7 +61,7 @@ export default function AdminPricing() {
   const fullStation = (toInt(form?.virtualPatient) || 0) + (toInt(form?.aiAssessment) || 0);
 
   return (
-    <div className="mt-6 space-y-5">
+    <div className="space-y-5">
       <SectionHeading title="Pricing" description="Changes apply straight away to new sessions, signups and the public pricing page. Past purchases and balances are not changed." />
       <InlineError>{error}</InlineError>
       {form && (

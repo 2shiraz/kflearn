@@ -28,6 +28,18 @@ export const apiLimiter = rateLimit({
 
 // Provider-backed actions are expensive. A per-account ceiling also limits
 // abuse from several clients sharing one public IP.
+// Admin changes: generous for real work, tight enough to stop a stolen
+// session from bulk-editing the site.
+export const adminWriteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 150,
+  keyGenerator: (req) => req.user.id,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => skipInTests() || ["GET", "HEAD", "OPTIONS"].includes(req.method),
+  message: { success: false, message: "Too many admin changes in a short time. Please wait a few minutes.", code: "RATE_LIMITED" },
+});
+
 export const aiActionLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   limit: 60,

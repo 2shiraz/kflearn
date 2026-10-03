@@ -87,7 +87,7 @@ export default function AdminAnnouncements() {
   const set = (key, value) => setEditing((f) => ({ ...f, [key]: value }));
 
   return (
-    <div className="mt-6 space-y-5">
+    <div className="space-y-5">
       <SectionHeading
         title="Announcements"
         description="Short messages at the top of every student's dashboard, such as exam dates, new stations or downtime. Up to three live ones show at once."

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
-import { getPublicSite, registerRequest, ROLE_OPTIONS, YEAR_LEVEL_OPTIONS } from "../lib/api";
+import { registerRequest, ROLE_OPTIONS, YEAR_LEVEL_OPTIONS } from "../lib/api";
+import { usePublicSite } from "../lib/branding";
+import { Skeleton } from "../components/Skeleton";
 import { SignupAside } from "../components/AuthAside";
 import AuthShell, { FormError, inputClass, primaryButtonClass, secondaryButtonClass } from "../components/AuthShell";
 
@@ -13,7 +15,8 @@ export default function SignupPage() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
-  const [signupsOpen, setSignupsOpen] = useState(true);
+  // Known from the cached public settings; null only on a first-ever visit.
+  const { signupsOpen } = usePublicSite();
   const [account, setAccount] = useState({ fullName: "", email: "", password: "" });
   const [role, setRole] = useState("");
   const [profile, setProfile] = useState({
@@ -48,9 +51,18 @@ export default function SignupPage() {
     }
   }
 
-  useEffect(() => {
-    getPublicSite().then((data) => setSignupsOpen(data?.signupsOpen !== false)).catch(() => {});
-  }, []);
+  if (signupsOpen === null) {
+    return (
+      <AuthShell aside={<SignupAside />}>
+        <div className="mt-6 space-y-4" aria-busy="true">
+          <Skeleton className="h-8 w-56" />
+          <Skeleton className="h-5 w-64" />
+          <Skeleton className="mt-6 h-12 w-full rounded-xl" />
+          <Skeleton className="h-12 w-full rounded-xl" />
+        </div>
+      </AuthShell>
+    );
+  }
 
   if (!signupsOpen) {
     return (

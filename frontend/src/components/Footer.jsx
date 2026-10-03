@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import BrandMark from "./BrandMark";
 import { SIGNUP_LABEL } from "../site/siteContent";
+import { SiteName } from "../lib/branding";
 
 const columns = [
   {
@@ -29,7 +30,7 @@ export default function Footer() {
           <div className="max-w-sm">
             <Link to="/" className="flex min-h-11 items-center gap-2.5">
               <BrandMark size={30} />
-              <span className="text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
+              <span className="text-[15px] font-semibold tracking-tight text-s-ink"><SiteName /></span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-s-mute">
               OSCE, OSPE and MCQ preparation for medical students in Pakistan, with an AI virtual patient for every OSCE station.
@@ -55,7 +56,7 @@ export default function Footer() {
           <p className="max-w-3xl">
             KF LearnSmart is a self-practice tool for medical students. It is not affiliated with any examining body, and AI feedback is formative: it is not a clinical result, diagnosis or certification.
           </p>
-          <p className="mt-3">&copy; {new Date().getFullYear()} KF LearnSmart</p>
+          <p className="mt-3">&copy; {new Date().getFullYear()} <SiteName /></p>
         </div>
       </div>
     </footer>

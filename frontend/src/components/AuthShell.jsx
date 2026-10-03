@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import BrandMark from "./BrandMark";
 import { HealthIcon } from "../site/Illustrations";
+import { SiteName } from "../lib/branding";
 
 // Sign in and sign up. With `aside`, a vertical split screen on large
 // screens: an indigo content half on the left and the form on the right. On
@@ -10,7 +11,7 @@ export default function AuthShell({ children, footer, aside }) {
     <div className="w-full max-w-md">
       <Link to="/" className={`mb-8 flex min-h-11 w-fit items-center gap-2.5 ${aside ? "lg:hidden" : "mx-auto"}`} aria-label="KF LearnSmart home">
         <BrandMark />
-        <span className="text-base font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
+        <span className="text-base font-semibold tracking-tight text-s-ink"><SiteName /></span>
       </Link>
       <div className={`site-rise ${aside ? "" : "site-shadow rounded-3xl border border-s-line bg-s-card p-6 sm:p-8"}`}>{children}</div>
       {footer && <div className={`mt-6 text-sm text-s-mute ${aside ? "" : "text-center"}`}>{footer}</div>}
@@ -32,7 +33,7 @@ export default function AuthShell({ children, footer, aside }) {
         <div className="relative mx-auto flex h-full max-w-xl flex-col px-6 py-10 sm:px-10 lg:py-12">
           <Link to="/" className="hidden min-h-11 w-fit items-center gap-2.5 lg:flex" aria-label="KF LearnSmart home">
             <img src="/logo-white.svg" alt="" width={36} height={36} />
-            <span className="text-base font-semibold tracking-tight">KF LearnSmart</span>
+            <span className="text-base font-semibold tracking-tight"><SiteName /></span>
           </Link>
           <div className="lg:my-auto lg:py-12">{aside}</div>
         </div>

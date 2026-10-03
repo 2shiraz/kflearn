@@ -1,6 +1,9 @@
-// The KF LearnSmart logo: the KF monogram with the graduation cap, drawn on
-// its own with no tile behind it (public/logo.svg). The favicon and app icons
-// keep the indigo tile so they stay legible in browser tabs.
+import { logoUrl, useBranding } from "../lib/branding";
+
+// The site logo: the admin's uploaded logo when there is one, otherwise the
+// KF monogram (public/logo.svg) with no tile behind it. The favicon and app
+// icons keep the indigo tile so they stay legible in browser tabs.
 export default function BrandMark({ size = 34 }) {
-  return <img src="/logo.svg" alt="" width={size} height={size} className="shrink-0 select-none" draggable="false" />;
+  const branding = useBranding();
+  return <img src={logoUrl(branding)} alt="" width={size} height={size} className="shrink-0 select-none object-contain" draggable="false" />;
 }

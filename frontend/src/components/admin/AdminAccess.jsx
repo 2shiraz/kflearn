@@ -48,7 +48,7 @@ export default function AdminAccess() {
   const setFlag = (key, value) => { setSite((s) => ({ ...s, [key]: value })); setStatus("idle"); };
 
   return (
-    <div className="mt-6 space-y-5">
+    <div className="space-y-5">
       <SectionHeading title="Site access" description="Choose what students can use. Switched-off sections disappear from their menu and dashboard. You still see everything as an admin." />
       <InlineError>{error}</InlineError>
       {site && (

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Check, X } from "lucide-react";
 
 // Small shared pieces for the admin screens, in the app's own style: pill
@@ -78,21 +79,28 @@ export function SectionHeading({ title, description, actions }) {
 }
 
 // Native modal: focus trap, Escape and an inert page behind it for free.
+// Rendered into <body> and pinned to the viewport, so it always opens in
+// front of the page however far the admin has scrolled. The page behind
+// doesn't scroll while it's open.
 export function AdminDialog({ open, title, description, onClose, children, wide = false }) {
   const ref = useRef(null);
   useEffect(() => {
     const dialog = ref.current;
-    if (!dialog) return;
+    if (!dialog) return undefined;
     if (open && !dialog.open) dialog.showModal();
     if (!open && dialog.open) dialog.close();
+    if (!open) return undefined;
+    const previous = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    return () => { document.documentElement.style.overflow = previous; };
   }, [open]);
-  return (
+  return createPortal(
     <dialog
       ref={ref}
       aria-labelledby="admin-dialog-title"
       onCancel={(e) => { e.preventDefault(); onClose(); }}
       onClick={(e) => e.target === ref.current && onClose()}
-      className={`m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] ${wide ? "max-w-3xl" : "max-w-lg"} overflow-y-auto rounded-3xl border border-s-line bg-s-card p-0 text-s-ink shadow-2xl backdrop:bg-s-ink/40 backdrop:backdrop-blur-sm`}
+      className={`site fixed inset-0 m-auto h-fit max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] ${wide ? "max-w-3xl" : "max-w-lg"} overflow-y-auto overscroll-contain rounded-3xl border border-s-line bg-s-card p-0 text-s-ink shadow-2xl backdrop:bg-s-ink/40 backdrop:backdrop-blur-sm`}
     >
       {open && (
         <div className="p-6">
@@ -108,6 +116,25 @@ export function AdminDialog({ open, title, description, onClose, children, wide 
           <div className="mt-5">{children}</div>
         </div>
       )}
-    </dialog>
+    </dialog>,
+    document.body,
+  );
+}
+
+// One-click show or hide for every station review part. `visibility` maps
+// each part to true (shown) or false (hidden).
+export function ShowAllToggle({ visibility, onChange }) {
+  const keys = Object.keys(visibility);
+  const shown = keys.filter((k) => visibility[k] !== false).length;
+  const allShown = shown === keys.length;
+  const setAll = (value) => onChange(Object.fromEntries(keys.map((k) => [k, value])));
+  return (
+    <div className="flex shrink-0 items-center gap-3">
+      <span className="font-chart text-xs text-s-mute">{shown} of {keys.length} shown</span>
+      <div className="inline-flex rounded-full border border-s-line bg-s-card p-0.5" role="group" aria-label="Show or hide all review parts">
+        <button type="button" aria-pressed={allShown} onClick={() => setAll(true)} className={`site-press min-h-9 rounded-full px-3 text-xs font-semibold ${allShown ? "bg-s-accent text-s-on-accent" : "text-s-mute hover:text-s-ink"}`}>Show all</button>
+        <button type="button" aria-pressed={shown === 0} onClick={() => setAll(false)} className={`site-press min-h-9 rounded-full px-3 text-xs font-semibold ${shown === 0 ? "bg-s-ink text-s-on-accent" : "text-s-mute hover:text-s-ink"}`}>Hide all</button>
+      </div>
+    </div>
   );
 }

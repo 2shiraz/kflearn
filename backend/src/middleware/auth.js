@@ -24,6 +24,11 @@ export async function authenticate(req, res, next) {
       return res.status(401).json({ success: false, message: "Authentication required." });
     }
 
+    // Record activity, but write at most once every 5 minutes per account.
+    if (!user.lastActiveAt || Date.now() - new Date(user.lastActiveAt).getTime() > 5 * 60 * 1000) {
+      User.updateOne({ _id: user._id }, { $set: { lastActiveAt: new Date() } }).catch(() => {});
+    }
+
     req.user = {
       id: user._id.toString(),
       role: user.role,

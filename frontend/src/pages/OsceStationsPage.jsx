@@ -6,6 +6,11 @@ import AdminAnnouncements from "../components/admin/AdminAnnouncements";
 import AdminPricing from "../components/admin/AdminPricing";
 import AdminAccess from "../components/admin/AdminAccess";
 import StationEditDialog from "../components/admin/StationEditDialog";
+import NewStationDialog from "../components/admin/NewStationDialog";
+import AdminOverview from "../components/admin/AdminOverview";
+import AdminBranding from "../components/admin/AdminBranding";
+import AdminActivity from "../components/admin/AdminActivity";
+import ImportStationsDialog from "../components/admin/ImportStationsDialog";
 import { useLeaveStationGuard } from "../hooks/useLeaveStationGuard";
 import { OSCE_CATEGORIES, displayTitle } from "../lib/osceFilters.js";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -32,6 +37,9 @@ import {
   ToggleRight,
   Megaphone,
   Pencil,
+  Palette,
+  ScrollText,
+  FileJson,
   X,
 } from "lucide-react";
 import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
@@ -40,7 +48,6 @@ import { ScoreRing, scoreTone } from "../components/StudyKit";
 import { Character, HealthIcon, MedIcon, VoiceBars } from "../site/Illustrations";
 import {
   aiAssessOsceAttempt,
-  createAdminOsceContent,
   createOsceAttempt,
   endOsceAttempt,
   getAiStatus,
@@ -990,12 +997,23 @@ const STATUS_STYLES = {
   archived: "bg-s-tint text-s-mute",
 };
 
+const time = (value) => (value ? new Date(value).getTime() : 0);
+const STATION_SORTS = {
+  newest: { label: "Newest first", compare: (a, b) => time(b.createdAt) - time(a.createdAt) },
+  updated: { label: "Recently edited", compare: (a, b) => time(b.updatedAt) - time(a.updatedAt) },
+  oldest: { label: "Oldest first", compare: (a, b) => time(a.createdAt) - time(b.createdAt) },
+  title: { label: "Title A to Z", compare: (a, b) => a.title.localeCompare(b.title) },
+  specialty: { label: "Specialty", compare: (a, b) => (a.specialty?.name || "").localeCompare(b.specialty?.name || "") || a.title.localeCompare(b.title) },
+};
+
 export function AdminOscePage() {
   const [stationSearch, setStationSearch] = useState("");
   const [stationFilter, setStationFilter] = useState("all");
   const [stationCategoryFilter, setStationCategoryFilter] = useState("");
   const [stationModeFilter, setStationModeFilter] = useState("");
   const [editStationId, setEditStationId] = useState(null);
+  const [importOpen, setImportOpen] = useState(false);
+  const [stationSort, setStationSort] = useState("newest");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [statusBusyId, setStatusBusyId] = useState(null);
   const [state, setState] = useState({
@@ -1019,25 +1037,6 @@ export function AdminOscePage() {
       openaiChatModel: "gpt-5.6-luna",
       openaiEvalModel: "gpt-5.6-luna",
     },
-    form: {
-      section: "Respiratory",
-      title: "",
-      slug: "",
-      presentingComplaint: "",
-      shortDescription: "",
-      difficulty: "beginner",
-      timeLimitMinutes: "6",
-      category: "history",
-      aiVirtualPatient: true,
-      candidateContext: "",
-      patientSummary: "",
-      tasks: "",
-      patientName: "",
-      patientAge: "",
-      patientOpening: "",
-      patientFacts: "",
-      checklistItems: "",
-    },
   });
   useEffect(() => {
     Promise.all([listAdminOsceStations(), getAiStatus(), listAdminUsers()])
@@ -1052,47 +1051,8 @@ export function AdminOscePage() {
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);
 
-  function updateForm(field, value) {
-    setState((s) => ({ ...s, form: { ...s.form, [field]: value } }));
-  }
-
   function updateAiForm(field, value) {
     setState((s) => ({ ...s, aiForm: { ...s.aiForm, [field]: value } }));
-  }
-
-  async function createDraft(e) {
-    e.preventDefault();
-    setState((s) => ({ ...s, saving: true, error: "", message: "" }));
-    try {
-      await createAdminOsceContent(createAdminPayload(state.form));
-      const modules = await listAdminOsceStations();
-      setShowCreateForm(false);
-      setStationFilter("draft");
-      setStationSearch("");
-      setState((s) => ({
-        ...s,
-        saving: false,
-        modules,
-        message: "Draft created.",
-        form: {
-          ...s.form,
-          title: "",
-          slug: "",
-          presentingComplaint: "",
-          shortDescription: "",
-          candidateContext: "",
-          patientSummary: "",
-          tasks: "",
-          patientName: "",
-          patientAge: "",
-          patientOpening: "",
-          patientFacts: "",
-          checklistItems: "",
-        },
-      }));
-    } catch (err) {
-      setState((s) => ({ ...s, saving: false, error: err.message }));
-    }
   }
 
   async function changeStatus(id, status) {
@@ -1129,22 +1089,30 @@ export function AdminOscePage() {
     }
   }
 
+  // Grouped so the vertical menu reads as: content, people, settings.
   const tabs = [
-    { id: "overview", label: "Overview", icon: Layers3 },
-    { id: "stations", label: "OSCE stations", icon: Stethoscope },
-    { id: "users", label: "Accounts", icon: Users },
-    { id: "announcements", label: "Announcements", icon: Megaphone },
-    { id: "pricing", label: "Pricing", icon: Coins },
-    { id: "access", label: "Site access", icon: ToggleRight },
-    { id: "ai", label: "AI & models", icon: Settings2 },
+    { id: "overview", label: "Overview", icon: Layers3, group: "" },
+    { id: "stations", label: "OSCE stations", icon: Stethoscope, group: "Content" },
+    { id: "announcements", label: "Announcements", icon: Megaphone, group: "Content" },
+    { id: "users", label: "Accounts", icon: Users, group: "People" },
+    { id: "activity", label: "Activity log", icon: ScrollText, group: "People" },
+    { id: "access", label: "Site access", icon: ToggleRight, group: "Settings" },
+    { id: "pricing", label: "Pricing", icon: Coins, group: "Settings" },
+    { id: "branding", label: "Branding", icon: Palette, group: "Settings" },
+    { id: "ai", label: "AI & models", icon: Settings2, group: "Settings" },
   ];
+  const goTo = (tab, filter) => {
+    if (filter) setStationFilter(filter);
+    setState((s) => ({ ...s, activeTab: tab, error: "", message: "" }));
+    window.scrollTo({ top: 0 });
+  };
   const counts = Object.fromEntries(["draft", "approved", "published", "archived"].map((status) => [status, state.modules.filter((station) => station.status === status).length]));
   const visibleStations = state.modules.filter((station) =>
     (!stationCategoryFilter || station.category === stationCategoryFilter) &&
     (!stationModeFilter || station.aiVirtualPatientAvailable === (stationModeFilter === "ai")) &&
     (stationFilter === "all" || (stationFilter === "review" ? ["draft", "approved"].includes(station.status) : station.status === stationFilter)) &&
     `${station.title} ${station.slug} ${station.specialty?.name || ""}`.toLowerCase().includes(stationSearch.toLowerCase().trim()),
-  );
+  ).sort(STATION_SORTS[stationSort].compare);
   const defaultProvider = state.aiStatus?.providers?.find((provider) => provider.id === state.aiStatus.defaultProvider);
 
   return (
@@ -1153,75 +1121,46 @@ export function AdminOscePage() {
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin console" }]} />
         <PageHeader
           title="Admin console"
-          description="Stations, AI configuration and accounts in one workspace."
+          description="Content, accounts and site settings in one place."
         />
-        <nav aria-label="Admin sections" className="mb-5 flex gap-2 overflow-x-auto pb-2">
-          {tabs.map((tab) => (
-            <button key={tab.id} type="button" aria-current={state.activeTab === tab.id ? "page" : undefined} onClick={() => setState((s) => ({ ...s, activeTab: tab.id, error: "", message: "" }))} className={`site-press inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-medium ${state.activeTab === tab.id ? "bg-s-accent text-s-on-accent" : "border border-s-line bg-s-card text-s-mute hover:border-s-accent/40 hover:text-s-ink"}`}>
-              <tab.icon size={16} strokeWidth={2} aria-hidden="true" /> {tab.label}
-            </button>
+        <div className="grid gap-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-8">
+        <nav aria-label="Admin sections" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:sticky lg:top-6 lg:mx-0 lg:flex-col lg:gap-0.5 lg:self-start lg:overflow-visible lg:px-0 lg:pb-0">
+          {tabs.map((tab, i) => (
+            <div key={tab.id} className="contents">
+              {tab.group && tab.group !== tabs[i - 1]?.group && <p className="hidden px-3 pb-1 pt-4 text-xs font-medium text-s-mute/80 lg:block">{tab.group}</p>}
+              <button type="button" aria-current={state.activeTab === tab.id ? "page" : undefined} onClick={() => goTo(tab.id)} className={`site-press inline-flex min-h-11 shrink-0 items-center gap-2.5 rounded-full px-4 text-sm font-medium lg:w-full lg:px-3 ${state.activeTab === tab.id ? "bg-s-accent-soft text-s-ink" : "border border-s-line bg-s-card text-s-mute hover:text-s-ink lg:border-transparent lg:bg-transparent lg:hover:bg-s-tint/70"}`}>
+                <tab.icon size={17} strokeWidth={1.9} className={state.activeTab === tab.id ? "text-s-accent" : ""} aria-hidden="true" /> {tab.label}
+              </button>
+            </div>
           ))}
         </nav>
+        <div className="min-w-0">
         {state.loading && <Loading variant="admin" />}
-        {state.error && <div className="mt-4"><ErrorMessage message={state.error} /></div>}
-        {state.message && <p role="status" className="mt-4 flex items-center gap-2 rounded-2xl bg-mint-soft p-3.5 text-sm text-s-good"><Check size={16} strokeWidth={2.5} aria-hidden="true" />{state.message}</p>}
-        {!state.loading && state.activeTab === "overview" && (
-          <div className="mt-6 space-y-5">
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {[
-                { label: "Published stations", value: counts.published, detail: "Visible to students", target: "stations", filter: "published" },
-                { label: "Needs review", value: counts.draft + counts.approved, detail: "Draft or approved", target: "stations", filter: "review" },
-                { label: "Accounts", value: state.users.length, detail: "Registered users", target: "users" },
-                { label: "AI provider", value: defaultProvider?.label || "Not set", detail: defaultProvider?.configured ? "Key configured" : "Key missing", target: "ai" },
-              ].map((card) => (
-                <button key={card.label} type="button" onClick={() => { if (card.filter) setStationFilter(card.filter); setState((s) => ({ ...s, activeTab: card.target })); }} className="site-grid site-press rounded-3xl border border-s-line p-5 text-left hover:border-s-accent/40">
-                  <span className="font-chart text-xs text-s-mute">{card.label}</span>
-                  <span className="mt-3 block text-3xl font-semibold tracking-tight text-s-ink">{card.value}</span>
-                  <span className="mt-1 block text-sm text-s-mute">{card.detail}</span>
-                </button>
-              ))}
-            </div>
-            <div className="grid gap-5 lg:grid-cols-2">
-              <Panel>
-                <h2 className="text-lg font-semibold tracking-tight text-s-ink">Station workflow</h2>
-                <p className="mt-1 text-sm text-s-mute">Create a draft, review it, then make it visible to students.</p>
-                <div className="mt-5 grid grid-cols-4 gap-2 text-center">
-                  {Object.entries(counts).map(([status, count]) => <div key={status} className="rounded-2xl bg-s-tint/60 p-3"><p className="text-xl font-semibold text-s-ink">{count}</p><p className="mt-1 text-xs capitalize text-s-mute">{status}</p></div>)}
-                </div>
-                <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "stations" }))} className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Manage stations <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
-              </Panel>
-              <Panel>
-                <h2 className="text-lg font-semibold tracking-tight text-s-ink">Configuration</h2>
-                <p className="mt-1 text-sm text-s-mute">Virtual patient, assessment, and speech-to-text models are configured under AI &amp; models.</p>
-                {!defaultProvider?.configured && <p className="mt-4 flex items-start gap-2 rounded-2xl bg-sun-soft p-3.5 text-sm text-s-ink"><AlertTriangle size={17} strokeWidth={2} className="shrink-0 text-sun" aria-hidden="true" /> The default provider has no configured key. AI sessions may be unavailable.</p>}
-                <p className="mt-4 text-sm text-s-mute">AI credit prices, signup credits and packages are under Pricing. Which sections students can use, signups and the AI patient switch are under Site access.</p>
-                <div className="mt-2 flex flex-wrap gap-x-4">
-                  <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "ai" }))} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">AI settings <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
-                  <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "pricing" }))} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Pricing <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
-                  <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "access" }))} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Site access <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
-                </div>
-              </Panel>
-            </div>
-          </div>
-        )}
-        {!state.loading && state.activeTab === "stations" && <div className="mt-6 space-y-5">
+        {state.error && <div className="mb-4"><ErrorMessage message={state.error} /></div>}
+        {state.message && <p role="status" className="mb-4 flex items-center gap-2 rounded-2xl bg-mint-soft p-3.5 text-sm text-s-good"><Check size={16} strokeWidth={2.5} aria-hidden="true" />{state.message}</p>}
+        {!state.loading && state.activeTab === "overview" && <AdminOverview counts={counts} defaultProvider={defaultProvider} onNavigate={goTo} />}
+        {!state.loading && state.activeTab === "stations" && <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div><h2 className="text-2xl font-semibold tracking-tight text-s-ink">OSCE stations</h2><p className="text-sm text-s-mute">Search, review, publish, or archive station content.</p></div>
-            <PrimaryButton type="button" onClick={() => setShowCreateForm((open) => !open)}><Plus size={16} strokeWidth={2} aria-hidden="true" /> {showCreateForm ? "Close editor" : "New station"}</PrimaryButton>
+            <div><h2 className="text-2xl font-semibold tracking-tight text-s-ink">OSCE stations</h2><p className="text-sm text-s-mute">Search, edit, review, publish or archive stations.</p></div>
+            <div className="flex flex-wrap gap-2">
+              <SecondaryButton onClick={() => setShowCreateForm(true)}><Plus size={16} strokeWidth={2} aria-hidden="true" /> Write one</SecondaryButton>
+              <PrimaryButton type="button" onClick={() => setImportOpen(true)}><FileJson size={16} strokeWidth={2} aria-hidden="true" /> Import JSON</PrimaryButton>
+            </div>
           </div>
           <Panel>
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="relative"><span className="sr-only">Search stations</span><Search size={17} strokeWidth={2} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-s-mute" aria-hidden="true" /><input value={stationSearch} onChange={(e) => setStationSearch(e.target.value)} placeholder="Search title, slug, or specialty" className="w-full min-h-11 rounded-xl border border-s-line bg-s-card py-2.5 pl-10 pr-3 text-sm text-s-ink outline-none placeholder:text-s-mute focus:border-s-accent" /></label>
               <label><span className="sr-only">Filter by status</span><select value={stationFilter} onChange={(e) => setStationFilter(e.target.value)} className="w-full min-h-11 rounded-xl border border-s-line bg-s-card p-2.5 text-sm text-s-ink outline-none focus:border-s-accent"><option value="all">All statuses</option><option value="review">Needs review</option>{Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}</select></label>
             </div>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              <label className="text-sm text-s-mute">Sort by<select className="mt-1 min-h-11 w-full rounded-xl border border-s-line bg-s-card px-3 text-s-ink" value={stationSort} onChange={(e) => setStationSort(e.target.value)}>{Object.entries(STATION_SORTS).map(([value, { label }]) => <option key={value} value={value}>{label}</option>)}</select></label>
               <label className="text-sm text-s-mute">Category<select className="mt-1 min-h-11 w-full rounded-xl border border-s-line bg-s-card px-3 text-s-ink" value={stationCategoryFilter} onChange={(e) => setStationCategoryFilter(e.target.value)}><option value="">All categories</option>{OSCE_CATEGORIES.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}</select></label>
               <label className="text-sm text-s-mute">Practice availability<select className="mt-1 min-h-11 w-full rounded-xl border border-s-line bg-s-card px-3 text-s-ink" value={stationModeFilter} onChange={(e) => setStationModeFilter(e.target.value)}><option value="">All stations</option><option value="ai">AI virtual patient available</option><option value="guided">Guided practice only</option></select></label>
             </div>
             <div className="mt-4 divide-y divide-s-line">
               {visibleStations.map((station) => (
                 <div key={station.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
-                  <div className="min-w-0 flex-1"><p className="font-semibold text-s-ink">{station.title}</p><p className="break-all text-xs text-s-mute">{station.specialty?.name || "General"} / {station.slug}</p><p className="my-1 text-xs text-s-mute">{station.categoryLabel}</p><StationAvailability station={station} /></div>
+                  <div className="min-w-0 flex-1"><p className="font-semibold text-s-ink">{station.title}</p><p className="break-all text-xs text-s-mute">{station.specialty?.name || "General"} / {station.slug}</p><p className="my-1 text-xs text-s-mute">{station.categoryLabel}{station.createdAt && <span> / added {new Date(station.createdAt).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</span>}</p><StationAvailability station={station} /></div>
                   <span className={`rounded-full px-2.5 py-1 font-chart text-xs capitalize ${STATUS_STYLES[station.status] || "bg-s-tint text-s-mute"}`}>{station.status}</span>
                   <SecondaryButton onClick={() => setEditStationId(station.id)} className="px-4"><Pencil size={15} strokeWidth={2} aria-hidden="true" /> Edit</SecondaryButton>
                   <label className="sr-only" htmlFor={`station-status-${station.id}`}>Change status for {station.title}</label>
@@ -1233,51 +1172,16 @@ export function AdminOscePage() {
               {visibleStations.length === 0 && <p className="py-5 text-center text-sm text-s-mute">No stations match this search.</p>}
             </div>
           </Panel>
-          {showCreateForm && <Panel>
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <h2 className="text-xl font-semibold tracking-tight text-s-ink">Create station draft</h2>
-                <p className="mt-1 text-sm text-s-mute">Drafts are hidden from students until published. Review the patient facts and checklist before publishing.</p>
-              </div>
-              <span className="rounded-full bg-s-accent-soft px-3 py-1.5 font-chart text-xs text-s-accent-strong">OSCE station</span>
-            </div>
-            <form onSubmit={createDraft} className="mt-5 space-y-5">
-              <div className="grid gap-3 md:grid-cols-2">
-                <TextInput label="Main section" value={state.form.section} onChange={(value) => updateForm("section", value)} required />
-                <label className="block text-sm font-medium text-s-ink">Category
-                  <select className="mt-2 min-h-11 w-full rounded-xl border border-s-line bg-s-card p-2.5" value={state.form.category} onChange={(e) => updateForm("category", e.target.value)}>
-                    {OSCE_CATEGORIES.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
-                  </select>
-                </label>
-                <label className="flex min-h-11 items-center gap-3 text-sm text-s-ink"><input type="checkbox" checked={state.form.aiVirtualPatient} onChange={(e) => updateForm("aiVirtualPatient", e.target.checked)} /> Enable AI virtual patient (requires a complete patient script)</label>
-                <TextInput label="Station title" value={state.form.title} onChange={(value) => updateForm("title", value)} required />
-                <TextInput label="Slug" value={state.form.slug} onChange={(value) => updateForm("slug", slugify(value))} placeholder="auto-created if blank" />
-                <TextInput label="Presenting complaint" value={state.form.presentingComplaint} onChange={(value) => updateForm("presentingComplaint", value)} required />
-                <label className="block text-sm font-medium text-s-ink">Difficulty
-                  <select className="mt-2 min-h-11 w-full rounded-xl border border-s-line bg-s-card p-2.5 text-sm font-normal text-s-ink outline-none focus:border-s-accent" value={state.form.difficulty} onChange={(e) => updateForm("difficulty", e.target.value)}>
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                  </select>
-                </label>
-                <TextInput label="Time limit minutes" type="number" min="1" value={state.form.timeLimitMinutes} onChange={(value) => updateForm("timeLimitMinutes", value)} required />
-              </div>
-              <TextArea label="Short description" value={state.form.shortDescription} onChange={(value) => updateForm("shortDescription", value)} required rows={2} />
-              <div className="grid gap-3 md:grid-cols-2">
-                <TextArea label="Candidate context" value={state.form.candidateContext} onChange={(value) => updateForm("candidateContext", value)} required rows={3} />
-                <TextArea label="Patient summary" value={state.form.patientSummary} onChange={(value) => updateForm("patientSummary", value)} required rows={3} />
-              </div>
-              <TextArea label="Candidate tasks" helper="One task per line." value={state.form.tasks} onChange={(value) => updateForm("tasks", value)} required rows={4} />
-              <div className="grid gap-3 md:grid-cols-3">
-                <TextInput label="Patient name" value={state.form.patientName} onChange={(value) => updateForm("patientName", value)} required />
-                <TextInput label="Patient age" type="number" min="0" value={state.form.patientAge} onChange={(value) => updateForm("patientAge", value)} required />
-                <TextInput label="Patient opening line" value={state.form.patientOpening} onChange={(value) => updateForm("patientOpening", value)} required />
-              </div>
-              <TextArea label="Patient facts" helper="One per line: Section | Label | Answer. Example: HPC | Duration | Three weeks. Sections: PC, HPC, PMH, DH, FH, SH, ROS, ICE, RED_FLAG, OTHER." value={state.form.patientFacts} onChange={(value) => updateForm("patientFacts", value)} required rows={6} />
-              <TextArea label="Checklist items" helper="One per line: Label | Description. Example: Opening | Introduces self and gains consent." value={state.form.checklistItems} onChange={(value) => updateForm("checklistItems", value)} required rows={6} />
-              <PrimaryButton type="submit" disabled={state.saving} className="w-full">{state.saving ? "Saving draft..." : "Save draft"}</PrimaryButton>
-            </form>
-          </Panel>}
+          <NewStationDialog
+            open={showCreateForm}
+            onClose={() => setShowCreateForm(false)}
+            onCreated={async (created) => {
+              const modules = await listAdminOsceStations();
+              setStationFilter("draft");
+              setStationSearch("");
+              setState((s) => ({ ...s, modules, message: `"${created[0]?.title}" saved as a draft. Review it, then publish.` }));
+            }}
+          />
         </div>}
         {!state.loading && state.activeTab === "ai" && (
           <Panel>
@@ -1335,6 +1239,20 @@ export function AdminOscePage() {
         {!state.loading && state.activeTab === "announcements" && <AdminAnnouncements />}
         {!state.loading && state.activeTab === "pricing" && <AdminPricing />}
         {!state.loading && state.activeTab === "access" && <AdminAccess />}
+        {!state.loading && state.activeTab === "branding" && <AdminBranding />}
+        {!state.loading && state.activeTab === "activity" && <AdminActivity />}
+        </div>
+        </div>
+        <ImportStationsDialog
+          open={importOpen}
+          onClose={() => setImportOpen(false)}
+          onImported={async (created) => {
+            const modules = await listAdminOsceStations();
+            setStationFilter("draft");
+            setStationSearch("");
+            setState((s) => ({ ...s, modules, message: `Imported ${created.length} ${created.length === 1 ? "station" : "stations"} as drafts. Review, then publish.` }));
+          }}
+        />
         <StationEditDialog
           stationId={editStationId}
           onClose={() => setEditStationId(null)}
@@ -1484,71 +1402,6 @@ function TextInput({ label, value, onChange, ...props }) {
   );
 }
 
-function TextArea({ label, helper, value, onChange, rows = 4, ...props }) {
-  return (
-    <label className="block text-sm font-medium text-s-ink">
-      {label}
-      {helper && <span className="mt-0.5 block text-xs font-normal leading-relaxed text-s-mute">{helper}</span>}
-      <textarea className={fieldClass} rows={rows} value={value} onChange={(e) => onChange(e.target.value)} {...props} />
-    </label>
-  );
-}
-
-function slugify(value) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
-
-function splitLines(value) {
-  return value.split("\n").map((line) => line.trim()).filter(Boolean);
-}
-
-function parsePatientFacts(value, slug) {
-  return splitLines(value).map((line, index) => {
-    const parts = line.split("|").map((part) => part.trim());
-    if (parts.length !== 3 || parts.some((part) => !part)) throw new Error(`Patient fact line ${index + 1} must be: Section | Label | Answer.`);
-    const [section, label, answer] = parts;
-    if (!["PC", "HPC", "PMH", "DH", "FH", "SH", "ROS", "ICE", "RED_FLAG", "OTHER"].includes(section)) {
-      throw new Error(`Patient fact line ${index + 1} has an invalid section. Use PC, HPC, PMH, DH, FH, SH, ROS, ICE, RED_FLAG, or OTHER.`);
-    }
-    const conceptId = slugify(label) || `fact_${index + 1}`;
-    return {
-      factId: `${slug}_${conceptId}_${index + 1}`,
-      section,
-      conceptId,
-      label,
-      value: answer,
-      naturalResponse: answer,
-      revealPolicy: "IF_RELEVANT_QUESTION",
-      triggerConcepts: [conceptId],
-      synonyms: [label],
-      relatedChecklistItemIds: [],
-    };
-  });
-}
-
-function parseChecklistItems(value, slug, category = "history") {
-  return splitLines(value).map((line, index) => {
-    const parts = line.split("|").map((part) => part.trim());
-    if (parts.length !== 2 || parts.some((part) => !part)) throw new Error(`Checklist line ${index + 1} must be: Label | Description.`);
-    const [label, description] = parts;
-    const itemId = `${slug}_${slugify(label) || `item_${index + 1}`}_${index + 1}`;
-    return {
-      itemId,
-      label,
-      description,
-      category,
-      expectedConcepts: [slugify(label) || itemId],
-      relatedFactIds: [],
-      weightCategory: "major",
-      maxRawScore: 1,
-      allowPartial: true,
-      criticalSafetyItem: false,
-      remediationText: description,
-      order: index + 1,
-    };
-  });
-}
-
 function aiStatusToForm(status = {}) {
   const groq = status.providers?.find((provider) => provider.id === "groq") || {};
   const openai = status.providers?.find((provider) => provider.id === "openai") || {};
@@ -1579,63 +1432,3 @@ function aiFormToPayload(form) {
   };
 }
 
-function createAdminPayload(form) {
-  const slug = form.slug || slugify(form.title);
-  const sectionSlug = slugify(form.section);
-  const tasks = splitLines(form.tasks);
-  const facts = parsePatientFacts(form.patientFacts, slug);
-  const checklistItems = parseChecklistItems(form.checklistItems, slug, form.category);
-  return {
-    specialtySlug: sectionSlug,
-    specialtyName: form.section,
-    module: {
-      title: form.title,
-      slug,
-      presentingComplaint: form.presentingComplaint,
-      systemOrTopic: form.section,
-      category: form.category,
-      stationType: form.category === "procedure" ? "examination" : form.category,
-      practiceModes: form.aiVirtualPatient ? ["single-player", "virtual-patient"] : ["single-player"],
-      taskTags: [form.category, sectionSlug],
-      difficulty: form.difficulty,
-      shortDescription: form.shortDescription,
-      candidateInstructions: {
-        context: form.candidateContext,
-        patientSummary: form.patientSummary,
-        tasks,
-        examinationRequired: ["examination", "procedure"].includes(form.category),
-        additionalInstructions: [],
-      },
-      timeLimitSeconds: Number(form.timeLimitMinutes || 6) * 60,
-    },
-    patientScript: {
-      name: `${form.patientName} - ${form.title}`,
-      slug: `${slug}-patient`,
-      openingStatement: form.patientOpening,
-      patientIdentity: { name: form.patientName, age: Number(form.patientAge), sex: "", occupation: "", pronouns: "" },
-      facts: [
-        {
-          factId: `${slug}_opening`,
-          section: "PC",
-          conceptId: "opening_statement",
-          label: "Opening Statement",
-          value: form.patientOpening,
-          naturalResponse: form.patientOpening,
-          revealPolicy: "OPENING",
-          triggerConcepts: ["opening_statement"],
-          synonyms: ["opening statement"],
-          relatedChecklistItemIds: [],
-        },
-        ...facts,
-      ],
-      status: "draft",
-    },
-    checklist: {
-      title: `${form.title} Checklist`,
-      slug: `${slug}-checklist`,
-      sourceScoring: { maxRawScore: checklistItems.length, description: "Admin-entered checklist" },
-      sections: [{ sectionId: "station_checklist", title: "Station checklist", items: checklistItems }],
-      status: "draft",
-    },
-  };
-}

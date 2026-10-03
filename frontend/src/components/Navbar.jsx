@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import BrandMark from "./BrandMark";
 import { Character, MedIcon } from "../site/Illustrations";
+import { useBranding } from "../lib/branding";
 import {
   EXAM_GUIDE_COUNT,
   HANDOUT_COUNT,
@@ -32,8 +33,8 @@ const MODULES = [
 
 // Full-width bar. Transparent over the top of the page, then a frosted
 // background and hairline once the page scrolls (watched with an
-// IntersectionObserver on a sentinel, not a scroll listener). Desktop links sit
-// on a tinted track with a white indicator that slides to the hovered or
+// IntersectionObserver on a sentinel, not a scroll listener). Desktop links are
+// plain text with a thin accent underline that slides to the hovered or
 // current link. "Features" opens a panel listing every part of the app.
 export default function Navbar() {
   const { pathname } = useLocation();
@@ -81,10 +82,10 @@ export default function Navbar() {
         }`}
       >
         <nav aria-label="Main" className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link to="/" className="flex min-h-11 shrink-0 items-center gap-2.5" aria-label="KF LearnSmart home">
+          <Link to="/" className="flex min-h-11 shrink-0 items-center gap-2.5" aria-label="Home">
             <BrandMark size={36} />
             <span className="text-[15px] font-semibold tracking-tight text-s-ink">
-              KF <span className="text-s-accent">LearnSmart</span>
+              <NavbarName />
             </span>
           </Link>
 
@@ -96,7 +97,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/signup"
-              className="site-press group hidden items-center gap-1.5 whitespace-nowrap rounded-full bg-s-ink py-2.5 pl-4 pr-3 text-sm font-semibold text-s-on-accent hover:bg-s-accent sm:inline-flex"
+              className="site-press group hidden items-center gap-1.5 whitespace-nowrap rounded-full bg-s-accent py-2.5 pl-4 pr-3 text-sm font-semibold text-s-on-accent hover:bg-s-accent-strong sm:inline-flex"
             >
               {SIGNUP_LABEL}
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-s-on-accent/15 transition-transform duration-300 group-hover:translate-x-0.5">
@@ -146,7 +147,7 @@ function DesktopLinks({ pathname, menuOpen, setMenuOpen }) {
   }, [measure]);
 
   const itemClass = (key) =>
-    `relative z-10 flex min-h-10 items-center gap-1 rounded-full px-4 text-sm font-medium transition-colors ${
+    `relative flex min-h-11 items-center gap-1 px-3.5 text-sm font-medium transition-colors ${
       target === key ? "text-s-ink" : "text-s-mute hover:text-s-ink"
     }`;
 
@@ -154,13 +155,13 @@ function DesktopLinks({ pathname, menuOpen, setMenuOpen }) {
     <div
       ref={trackRef}
       onMouseLeave={() => setHovered(null)}
-      className="relative hidden items-center rounded-full border border-s-line/70 bg-s-tint/70 p-1 lg:flex"
+      className="relative hidden items-center lg:flex"
     >
       {indicator && (
         <span
           aria-hidden="true"
-          className="absolute bottom-1 top-1 rounded-full bg-s-card shadow-[0_1px_2px_rgba(35,41,110,0.08),0_4px_12px_-6px_rgba(35,41,110,0.25)] transition-[transform,width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
-          style={{ width: indicator.width, transform: `translateX(${indicator.left - 4}px)`, left: 4 }}
+          className="absolute bottom-1 left-0 h-0.5 bg-s-accent transition-[transform,width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+          style={{ width: indicator.width - 28, transform: `translateX(${indicator.left + 14}px)` }}
         />
       )}
       <button
@@ -275,11 +276,18 @@ function MobileMenu({ onNavigate }) {
           <Link to="/signin" className="flex min-h-12 items-center justify-center rounded-full border border-s-line text-sm font-semibold text-s-ink">
             Sign in
           </Link>
-          <Link to="/signup" className="flex min-h-12 items-center justify-center rounded-full bg-s-ink px-3 text-center text-sm font-semibold text-s-on-accent">
+          <Link to="/signup" className="flex min-h-12 items-center justify-center rounded-full bg-s-accent px-3 text-center text-sm font-semibold text-s-on-accent hover:bg-s-accent-strong">
             {SIGNUP_LABEL}
           </Link>
         </div>
       </div>
     </div>
   );
+}
+
+// The default name keeps its two-tone look; a custom name shows as set.
+function NavbarName() {
+  const { siteName } = useBranding();
+  if (siteName === "KF LearnSmart") return <>KF <span className="text-s-accent">LearnSmart</span></>;
+  return siteName;
 }

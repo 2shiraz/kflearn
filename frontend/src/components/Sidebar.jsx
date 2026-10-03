@@ -9,6 +9,7 @@ import { UserAvatar } from "../site/Illustrations";
 import { getCurrentUser, USER_EVENT } from "../lib/api";
 import { useCredits } from "../lib/credits";
 import { sectionOpen, useSite } from "../lib/site";
+import { SiteName } from "../lib/branding";
 
 function formatBalance(balance) {
   return balance === null ? "..." : balance.toLocaleString();
@@ -254,7 +255,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
           </button>
           <Link to="/dashboard" className="flex min-h-11 min-w-0 flex-1 items-center gap-2">
             <BrandMark size={30} />
-            <span className="truncate text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
+            <span className="truncate text-[15px] font-semibold tracking-tight text-s-ink"><SiteName /></span>
           </Link>
           <Link to="/credits" data-tour="credits" aria-label={`AI credits: ${formatBalance(balance)}`} className="site-press flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-2.5 font-chart text-xs text-s-ink hover:bg-s-tint/70">
             <Zap size={16} strokeWidth={1.75} fill="currentColor" className="text-sun" aria-hidden="true" /> {formatBalance(balance)}
@@ -289,7 +290,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
           </button>
           <Link to="/dashboard" aria-label="KF LearnSmart dashboard" className={`mb-5 flex min-h-11 items-center justify-center gap-2.5 ${collapsed ? "" : "lg:justify-start lg:px-1.5"}`}>
             <BrandMark size={34} />
-            <span className={`hidden whitespace-nowrap text-[15px] font-semibold tracking-tight text-s-ink ${collapsed ? "" : "lg:block"}`}>KF LearnSmart</span>
+            <span className={`hidden whitespace-nowrap text-[15px] font-semibold tracking-tight text-s-ink ${collapsed ? "" : "lg:block"}`}><SiteName /></span>
           </Link>
 
           <nav aria-label="App" className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
@@ -323,7 +324,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
           <div className="mb-4 flex items-center justify-between gap-2">
             <Link to="/dashboard" onClick={close} className="flex min-h-11 items-center gap-2.5 px-1.5">
               <BrandMark size={34} />
-              <span className="text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
+              <span className="text-[15px] font-semibold tracking-tight text-s-ink"><SiteName /></span>
             </Link>
             <button type="button" aria-label="Close menu" onClick={close} className="site-press flex h-11 w-11 items-center justify-center rounded-full text-s-ink hover:bg-s-tint/70">
               <X size={20} strokeWidth={1.75} />

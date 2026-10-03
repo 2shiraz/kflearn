@@ -60,7 +60,12 @@ export function RequireUser({ children, active = "stations", adminOnly = false }
       </AppFrame>
     );
   }
-  if (site.loaded && SWITCHABLE_SECTIONS.includes(active) && !sectionOpen(site, active, user)) {
+  // Hold a switchable section back until the switches are known, so it never
+  // shows and then disappears. They're cached from sign-in, so this is rare.
+  if (SWITCHABLE_SECTIONS.includes(active) && user.role !== "admin" && !site.loaded) {
+    return <AppFrame active={active}><PageMain /></AppFrame>;
+  }
+  if (SWITCHABLE_SECTIONS.includes(active) && !sectionOpen(site, active, user)) {
     return (
       <AppFrame active={active}>
         <PageMain>

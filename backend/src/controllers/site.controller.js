@@ -1,5 +1,5 @@
 import { Announcement } from "../models/Announcement.js";
-import { getPricing, getSiteSettings, updatePricing, updateSiteSettings } from "../services/siteSettings.service.js";
+import { getBranding, getLogo, getPricing, getSiteSettings, updateBranding, updatePricing, updateSiteSettings } from "../services/siteSettings.service.js";
 
 function notFound(message) {
   const error = new Error(message);
@@ -26,8 +26,24 @@ const liveFilter = () => ({ active: true, $or: [{ endsAt: null }, { endsAt: { $e
 
 // ---- For everyone ----
 export async function getPublicSite(req, res) {
-  const { signupsOpen } = await getSiteSettings();
-  res.json({ success: true, data: { signupsOpen } });
+  const [{ signupsOpen }, branding] = await Promise.all([getSiteSettings(), getBranding()]);
+  res.json({ success: true, data: { signupsOpen, branding } });
+}
+
+export async function getPublicLogo(req, res) {
+  const logo = await getLogo();
+  if (!logo) {
+    res.status(404).end();
+    return;
+  }
+  res.set({
+    "Content-Type": logo.type,
+    "Cache-Control": "public, max-age=86400",
+    "X-Content-Type-Options": "nosniff",
+    "Content-Security-Policy": "default-src 'none'",
+    "Cross-Origin-Resource-Policy": "cross-origin",
+  });
+  res.send(logo.bytes);
 }
 
 // What the signed-in app needs: visible sections, feature switches and the
@@ -42,8 +58,12 @@ export async function getSite(req, res) {
 
 // ---- Admin ----
 export async function adminGetSettings(req, res) {
-  const [site, pricing] = await Promise.all([getSiteSettings(), getPricing()]);
-  res.json({ success: true, data: { site, pricing } });
+  const [site, pricing, branding] = await Promise.all([getSiteSettings(), getPricing(), getBranding()]);
+  res.json({ success: true, data: { site, pricing, branding } });
+}
+
+export async function adminUpdateBranding(req, res) {
+  res.json({ success: true, data: { branding: await updateBranding(req.body || {}) } });
 }
 
 export async function adminUpdateSite(req, res) {

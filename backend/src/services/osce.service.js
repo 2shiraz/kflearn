@@ -27,23 +27,29 @@ export function stationListDto(module) {
   };
 }
 
+export const REVIEW_PARTS = ["learningNotes", "keyAnswerGuide", "suggestedCandidateApproach", "examinerInstructions", "vivaQuestions", "criticalSafetyErrors"];
+
+// A review part is shown unless the admin switched it off for this station.
+const reviewShown = (module, key) => module.reviewVisibility?.[key] !== false;
+
 export function studentStationDetailDto(module, { includeReview = false } = {}) {
   const hasPostStationReview = Boolean(module.assessmentDesign?.length);
+  const show = (key, value) => (reviewShown(module, key) ? value : undefined);
   return {
     ...stationListDto(module),
     candidateInstructions: module.candidateInstructions,
     candidateHandout: module.candidateHandout || [],
     practiceOptions: stationPracticeOptions(module),
-    learningNotes: !hasPostStationReview || includeReview ? module.learningNotes : undefined,
+    learningNotes: !hasPostStationReview || includeReview ? show("learningNotes", module.learningNotes) : undefined,
     commonMistakes: module.commonMistakes,
     keyDifferentials: module.keyDifferentials,
-    vivaQuestions: !hasPostStationReview || includeReview ? module.vivaQuestions : undefined,
+    vivaQuestions: !hasPostStationReview || includeReview ? show("vivaQuestions", module.vivaQuestions) : undefined,
     ...(includeReview ? {
-      examinerInstructions: module.examinerInstructions,
-      keyAnswerGuide: module.keyAnswerGuide,
-      suggestedCandidateApproach: module.suggestedCandidateApproach,
+      examinerInstructions: show("examinerInstructions", module.examinerInstructions),
+      keyAnswerGuide: show("keyAnswerGuide", module.keyAnswerGuide),
+      suggestedCandidateApproach: show("suggestedCandidateApproach", module.suggestedCandidateApproach),
       expectedCompetencies: module.expectedCompetencies,
-      criticalSafetyErrors: module.criticalSafetyErrors,
+      criticalSafetyErrors: show("criticalSafetyErrors", module.criticalSafetyErrors),
       globalRatingOptions: module.globalRatingOptions,
       assessmentDesign: module.assessmentDesign,
       facultyNote: module.facultyNote,

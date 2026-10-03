@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { CreditTransaction } from "../models/CreditTransaction.js";
 import { OsceAttempt } from "../models/OsceAttempt.js";
 import { User } from "../models/User.js";
@@ -22,6 +23,7 @@ function userDto(user) {
     profile: user.profile,
     creditBalance: user.creditBalance ?? 0,
     suspended: Boolean(user.suspended),
+    lastActiveAt: user.lastActiveAt || null,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
@@ -40,6 +42,16 @@ async function guardAdminChange(req, user, { demoting = false, suspending = fals
   if (user.role === "admin" && (demoting || deleting)) {
     const admins = await User.countDocuments({ role: "admin", suspended: { $ne: true } });
     if (admins <= 1) throw httpError(409, "There must always be at least one admin.");
+  }
+}
+
+// Giving or removing admin rights is the most powerful change in the app, so
+// it needs the acting admin's own password, not just a valid session.
+async function confirmActorPassword(req) {
+  const password = req.body?.password;
+  const actor = await User.findById(req.user.id).select("passwordHash");
+  if (typeof password !== "string" || !actor || !(await bcrypt.compare(password, actor.passwordHash))) {
+    throw httpError(403, "Enter your own password to change admin access.");
   }
 }
 
@@ -70,6 +82,7 @@ export async function updateAdminUser(req, res) {
     if (!ROLES.includes(body.role)) throw httpError(400, "Invalid role.");
     if (body.role !== user.role) {
       await guardAdminChange(req, user, { demoting: user.role === "admin" });
+      if (body.role === "admin" || user.role === "admin") await confirmActorPassword(req);
       user.role = body.role;
       user.sessionVersion = (user.sessionVersion || 0) + 1; // permissions changed: sign in again
     }

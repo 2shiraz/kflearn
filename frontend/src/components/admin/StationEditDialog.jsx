@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { getAdminStation, listAdminSpecialties, updateAdminStation } from "../../lib/api";
 import { OSCE_CATEGORIES } from "../../lib/osceFilters";
 import { PrimaryButton, SecondaryButton } from "../AppPage";
-import { AdminDialog, Area, Field, InlineError, Select, Toggle } from "./AdminKit";
+import { AdminDialog, Area, Field, InlineError, Select, ShowAllToggle, Toggle } from "./AdminKit";
 
 const lines = (text) => text.split("\n").map((l) => l.trim()).filter(Boolean);
 
@@ -25,11 +26,20 @@ function toForm(s) {
     examinerInstructions: s.examinerInstructions,
     criticalSafetyErrors: s.criticalSafetyErrors.join("\n"),
     learningNotes: s.learningNotes,
+    vivaQuestions: s.vivaQuestions.map((q) => (q.answer ? `${q.question} | ${q.answer}` : q.question)).join("\n"),
+    reviewVisibility: { ...s.reviewVisibility },
+    checklist: s.checklist.sections.map((sec) => ({
+      sectionId: sec.sectionId,
+      title: sec.title,
+      items: sec.items.map((i) => ({ ...i })),
+    })),
   };
 }
 
-// Edits what students read about a station. The patient script and the
-// marking checklist are not edited here.
+export const newItem = () => ({ label: "", description: "", marks: 1, critical: false });
+
+// Edits a station: what students read, the marking checklist and which parts
+// of the review they see. The AI patient's script is not edited here.
 export default function StationEditDialog({ stationId, onClose, onSaved }) {
   const [form, setForm] = useState(null);
   const [initial, setInitial] = useState("");
@@ -84,6 +94,20 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
         examinerInstructions: form.examinerInstructions,
         criticalSafetyErrors: lines(form.criticalSafetyErrors),
         learningNotes: form.learningNotes,
+        vivaQuestions: lines(form.vivaQuestions).map((line) => {
+          const [question, ...rest] = line.split("|");
+          return { question: question.trim(), answer: rest.join("|").trim() };
+        }),
+        reviewVisibility: form.reviewVisibility,
+        ...(form.checklist.length ? {
+          checklist: {
+            sections: form.checklist.map((sec) => ({
+              sectionId: sec.sectionId,
+              title: sec.title,
+              items: sec.items.map(({ itemId, label, description, marks, weight, critical }) => ({ itemId, label, description, marks: Number(marks), weight, critical })),
+            })),
+          },
+        } : {}),
       });
       onSaved();
       onClose();
@@ -133,14 +157,35 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
             <Area label="Tasks" helper="One task per line." rows={4} value={form.tasks} onChange={(v) => set("tasks", v)} />
           </section>
 
-          <section className="space-y-4 border-t border-s-line pt-5">
-            <h3 className="font-semibold text-s-ink">Station review</h3>
-            <p className="-mt-2 text-sm text-s-mute">Shown to students after they finish the station.</p>
-            <Area label="Answer guide" rows={5} maxLength={6000} value={form.keyAnswerGuide} onChange={(v) => set("keyAnswerGuide", v)} />
-            <Area label="Suggested approach" helper="One step per line." rows={4} value={form.suggestedCandidateApproach} onChange={(v) => set("suggestedCandidateApproach", v)} />
-            <Area label="What examiners look for" rows={3} maxLength={6000} value={form.examinerInstructions} onChange={(v) => set("examinerInstructions", v)} />
-            <Area label="Critical safety errors" helper="One per line." rows={3} value={form.criticalSafetyErrors} onChange={(v) => set("criticalSafetyErrors", v)} />
-            <Area label="Review notes" rows={3} maxLength={6000} value={form.learningNotes} onChange={(v) => set("learningNotes", v)} />
+          <ChecklistEditor sections={form.checklist} onChange={(next) => set("checklist", next)} />
+
+          <section className="space-y-5 border-t border-s-line pt-5">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div className="min-w-0">
+                <h3 className="font-semibold text-s-ink">Station review</h3>
+                <p className="mt-0.5 text-sm text-s-mute">Shown to students after they finish. Hidden parts are kept for AI marking.</p>
+              </div>
+              <ShowAllToggle visibility={form.reviewVisibility} onChange={(v) => set("reviewVisibility", v)} />
+            </div>
+            {[
+              ["keyAnswerGuide", "Answer guide", { rows: 5, maxLength: 6000 }],
+              ["suggestedCandidateApproach", "Suggested approach", { rows: 4, helper: "One step per line." }],
+              ["examinerInstructions", "What examiners look for", { rows: 3, maxLength: 6000 }],
+              ["vivaQuestions", "Questions an examiner may ask", { rows: 4, helper: "One per line. Add the answer after a | if you have one: Question | Answer" }],
+              ["criticalSafetyErrors", "Critical safety errors", { rows: 3, helper: "One per line." }],
+              ["learningNotes", "Review notes", { rows: 3, maxLength: 6000 }],
+            ].map(([key, label, props]) => {
+              const shown = form.reviewVisibility[key] !== false;
+              return (
+                <div key={key} className={shown ? "" : "opacity-60"}>
+                  <Area label={label} {...props} value={form[key]} onChange={(v) => set(key, v)} />
+                  <label className="mt-1.5 inline-flex min-h-9 cursor-pointer items-center gap-2 text-sm text-s-mute">
+                    <input type="checkbox" className="h-4 w-4 accent-[var(--s-accent)]" checked={shown} onChange={(e) => set("reviewVisibility", { ...form.reviewVisibility, [key]: e.target.checked })} />
+                    Show to students
+                  </label>
+                </div>
+              );
+            })}
           </section>
 
           <InlineError>{error}</InlineError>
@@ -151,5 +196,83 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
         </form>
       )}
     </AdminDialog>
+  );
+}
+
+// The marking checklist: sections of items. Each item is either a tick
+// (1 mark, done or not) or graded (0 up to its marks, partial credit allowed).
+// Critical items weigh most in the final percentage.
+export function ChecklistEditor({ sections, onChange }) {
+  if (!sections.length) return null;
+  const total = sections.reduce((sum, s) => sum + s.items.reduce((t, i) => t + (Number(i.marks) || 0), 0), 0);
+  const count = sections.reduce((sum, s) => sum + s.items.length, 0);
+  const updateSection = (si, patch) => onChange(sections.map((s, i) => (i === si ? { ...s, ...patch } : s)));
+  const updateItem = (si, ii, patch) => updateSection(si, { items: sections[si].items.map((it, j) => (j === ii ? { ...it, ...patch } : it)) });
+  const moveItem = (si, ii, dir) => {
+    const items = [...sections[si].items];
+    const to = ii + dir;
+    if (to < 0 || to >= items.length) return;
+    [items[ii], items[to]] = [items[to], items[ii]];
+    updateSection(si, { items });
+  };
+
+  return (
+    <section className="space-y-4 border-t border-s-line pt-5">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h3 className="font-semibold text-s-ink">Marking checklist</h3>
+          <p className="mt-0.5 text-sm text-s-mute">Used for self-marking and AI marking. A tick item is done or not (1 mark). A graded item can earn partial marks.</p>
+        </div>
+        <span className="rounded-full bg-s-tint px-3 py-1 font-chart text-xs text-s-ink">{count} items / {total} marks</span>
+      </div>
+
+      {sections.map((section, si) => (
+        <div key={section.sectionId || `new-${si}`} className="space-y-3 rounded-2xl border border-s-line p-4">
+          <div className="flex items-end gap-2">
+            <Field className="flex-1" label="Section title" maxLength={120} value={section.title} onChange={(v) => updateSection(si, { title: v })} />
+            {sections.length > 1 && (
+              <button type="button" aria-label={`Remove section ${section.title || si + 1}`} onClick={() => window.confirm("Remove this section and its items?") && onChange(sections.filter((_, i) => i !== si))} className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-mute hover:bg-coral-soft/60 hover:text-s-miss">
+                <Trash2 size={16} strokeWidth={2} />
+              </button>
+            )}
+          </div>
+          <ol className="space-y-2">
+            {section.items.map((item, ii) => (
+              <li key={item.itemId || `new-${si}-${ii}`} className="rounded-xl bg-s-tint/50 p-3">
+                <div className="flex items-start gap-2">
+                  <span className="mt-3 w-5 shrink-0 text-right font-chart text-xs text-s-mute">{ii + 1}</span>
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <label className="sr-only" htmlFor={`item-${si}-${ii}`}>Checklist point</label>
+                    <input id={`item-${si}-${ii}`} value={item.label} maxLength={300} onChange={(e) => updateItem(si, ii, { label: e.target.value })} placeholder="What the student should do" className="min-h-11 w-full rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent" />
+                    <input aria-label="Details (optional)" value={item.description} maxLength={600} onChange={(e) => updateItem(si, ii, { description: e.target.value })} placeholder="Details for the marker (optional)" className="min-h-10 w-full rounded-xl border border-s-line bg-s-card px-3 text-xs text-s-ink outline-none placeholder:text-s-mute focus:border-s-accent" />
+                    <div className="flex flex-wrap items-center gap-3">
+                      <select aria-label="Marking type" value={item.marks} onChange={(e) => updateItem(si, ii, { marks: Number(e.target.value) })} className="min-h-10 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent">
+                        <option value={1}>Tick, 1 mark</option>
+                        {[2, 3, 4, 5].map((n) => <option key={n} value={n}>Graded, 0 to {n} marks</option>)}
+                      </select>
+                      <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 text-sm text-s-ink">
+                        <input type="checkbox" className="h-4 w-4 accent-[var(--s-accent)]" checked={item.critical} onChange={(e) => updateItem(si, ii, { critical: e.target.checked })} />
+                        Critical safety point
+                      </label>
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 flex-col">
+                    <button type="button" aria-label="Move up" disabled={ii === 0} onClick={() => moveItem(si, ii, -1)} className="flex h-9 w-9 items-center justify-center rounded-full text-s-mute hover:bg-s-card hover:text-s-ink disabled:opacity-30"><ArrowUp size={15} strokeWidth={2} /></button>
+                    <button type="button" aria-label="Move down" disabled={ii === section.items.length - 1} onClick={() => moveItem(si, ii, 1)} className="flex h-9 w-9 items-center justify-center rounded-full text-s-mute hover:bg-s-card hover:text-s-ink disabled:opacity-30"><ArrowDown size={15} strokeWidth={2} /></button>
+                    <button type="button" aria-label="Remove item" disabled={section.items.length === 1} onClick={() => updateSection(si, { items: section.items.filter((_, j) => j !== ii) })} className="flex h-9 w-9 items-center justify-center rounded-full text-s-mute hover:bg-coral-soft/60 hover:text-s-miss disabled:opacity-30"><Trash2 size={15} strokeWidth={2} /></button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <button type="button" onClick={() => updateSection(si, { items: [...section.items, newItem()] })} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-s-accent hover:underline">
+            <Plus size={15} strokeWidth={2} aria-hidden="true" /> Add item
+          </button>
+        </div>
+      ))}
+      <button type="button" onClick={() => onChange([...sections, { title: "", items: [newItem()] }])} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-s-accent hover:underline">
+        <Plus size={15} strokeWidth={2} aria-hidden="true" /> Add section
+      </button>
+    </section>
   );
 }

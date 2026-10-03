@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { adjustAdminUserCredits, deleteAdminUser, getAdminUser, listAdminUsers, updateAdminUser } from "../controllers/adminUser.controller.js";
 import { requireRole } from "../middleware/role.js";
+import { adminWriteLimiter } from "../middleware/rateLimit.js";
+import { auditAdminChanges } from "../middleware/adminAudit.js";
 import { validateObjectIdParam } from "../middleware/objectId.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const router = Router();
 
-router.use(requireRole("admin"));
+router.use(requireRole("admin"), adminWriteLimiter, auditAdminChanges);
 router.get("/", asyncHandler(listAdminUsers));
 router.get("/:id", validateObjectIdParam("id"), asyncHandler(getAdminUser));
 router.patch("/:id", validateObjectIdParam("id"), asyncHandler(updateAdminUser));

@@ -1,3 +1,5 @@
+import { clearSite, storeSite } from "./site";
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 // Real authentication is the httpOnly session cookie the server sets on
@@ -52,6 +54,7 @@ export function saveAuthSession(data) {
   clearLegacySessionStorage();
   if (data?.user) storeUser(data.user);
   if (data?.csrfToken) localStorage.setItem(CSRF_KEY, data.csrfToken);
+  if (data?.site) storeSite(data.site);
   return data;
 }
 
@@ -79,6 +82,7 @@ export function logout() {
   localStorage.removeItem(SESSION_KEY);
   localStorage.removeItem(CSRF_KEY);
   clearLegacySessionStorage();
+  clearSite();
   // Best-effort: ask the server to clear the httpOnly cookie too (it can't be
   // cleared from JS). `keepalive` lets the request finish even though callers
   // redirect the page away immediately after calling logout().
@@ -109,6 +113,7 @@ export async function loginRequest({ email, password }) {
 export async function fetchCurrentUser() {
   const data = await apiFetch("/auth/me");
   if (data?.user) storeUser(data.user);
+  if (data?.site) storeSite(data.site);
   if (data?.csrfToken) localStorage.setItem(CSRF_KEY, data.csrfToken);
   return data;
 }
@@ -347,6 +352,22 @@ export function updateAdminAnnouncement(id, payload) {
 
 export function deleteAdminAnnouncement(id) {
   return apiFetch(`/admin/announcements/${id}`, { method: "DELETE" });
+}
+
+export function updateAdminBranding(payload) {
+  return apiFetch("/admin/settings/branding", { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export function getAdminStats(days = 30) {
+  return apiFetch(`/admin/stats?days=${days}`);
+}
+
+export function getAdminActivity() {
+  return apiFetch("/admin/activity");
+}
+
+export function importAdminStations(stations, dryRun = false) {
+  return apiFetch("/admin/osce/import", { method: "POST", body: JSON.stringify({ stations, dryRun }) });
 }
 
 // ---- Admin: accounts ----

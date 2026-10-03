@@ -18,7 +18,7 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 import creditRoutes from "./routes/credit.routes.js";
 import siteRoutes from "./routes/site.routes.js";
 import adminSettingsRoutes from "./routes/adminSettings.routes.js";
-import { getPublicSite } from "./controllers/site.controller.js";
+import { getPublicLogo, getPublicSite } from "./controllers/site.controller.js";
 import { asyncHandler } from "./utils/asyncHandler.js";
 import { getPublicCreditPackages } from "./controllers/credit.controller.js";
 
@@ -41,6 +41,7 @@ export function createApp() {
   app.use("/api/auth", authRoutes);
   app.get("/api/public/credit-packages", asyncHandler(getPublicCreditPackages));
   app.get("/api/public/site", asyncHandler(getPublicSite));
+  app.get("/api/public/logo", asyncHandler(getPublicLogo));
   app.use(authenticate);
   app.use(csrfProtection);
   app.use("/api/dashboard", dashboardRoutes);

@@ -6,11 +6,13 @@ import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 import { Specialty } from "../models/Specialty.js";
 import { OsceFramework } from "../models/OsceFramework.js";
-import { stationListDto } from "../services/osce.service.js";
+import { REVIEW_PARTS, stationListDto } from "../services/osce.service.js";
+import { importStations, parseImport } from "../services/osceImport.service.js";
 
 export async function listAdminStations(req, res) {
-  const modules = await OsceStation.find().populate("specialtyId").sort({ updatedAt: -1 });
-  res.json({ success: true, data: modules.map(stationListDto) });
+  const modules = await OsceStation.find().populate("specialtyId").sort({ createdAt: -1 });
+  // Dates let the admin list sort by newest or recently edited.
+  res.json({ success: true, data: modules.map((m) => ({ ...stationListDto(m), createdAt: m.createdAt, updatedAt: m.updatedAt })) });
 }
 
 export async function createOsceContent(req, res) {
@@ -105,7 +107,27 @@ async function findStation(id) {
   return station;
 }
 
-function editableDto(station) {
+// The marking checklist as the editor sees it: sections of items, each with
+// its marks (1 = tick, 2 or more = graded with partial marks) and weight.
+function checklistEditDto(checklist) {
+  if (!checklist) return { sections: [] };
+  return {
+    sections: checklist.sections.map((section) => ({
+      sectionId: section.sectionId,
+      title: section.title,
+      items: section.items.map((item) => ({
+        itemId: item.itemId,
+        label: item.label,
+        description: item.description || "",
+        marks: item.maxRawScore || 1,
+        weight: item.weightCategory || "major",
+        critical: Boolean(item.criticalSafetyItem),
+      })),
+    })),
+  };
+}
+
+function editableDto(station, checklist) {
   return {
     id: station._id,
     slug: station.slug,
@@ -129,7 +151,62 @@ function editableDto(station) {
     learningNotes: station.learningNotes || "",
     suggestedCandidateApproach: station.suggestedCandidateApproach || [],
     criticalSafetyErrors: station.criticalSafetyErrors || [],
+    vivaQuestions: (station.vivaQuestions || []).map((q) => ({ question: q.question || "", answer: q.modelAnswerOutline || "" })),
+    reviewVisibility: Object.fromEntries(REVIEW_PARTS.map((key) => [key, station.reviewVisibility?.[key] !== false])),
+    checklist: checklistEditDto(checklist),
   };
+}
+
+const WEIGHTS = ["critical", "major", "minor"];
+
+// Applies the edited checklist. Existing items keep their ids (and their
+// matching keywords and feedback text), so past results still line up.
+function applyChecklist(checklist, input, slug) {
+  if (!input || !Array.isArray(input.sections) || !input.sections.length || input.sections.length > 12) throw badRequest("The checklist needs 1 to 12 sections.");
+  const previous = new Map(checklist.sections.flatMap((s) => s.items.map((item) => [item.itemId, item.toObject ? item.toObject() : item])));
+  const used = new Set();
+  let order = 0;
+  let next = Date.now() % 100000;
+  const sections = input.sections.map((section, si) => {
+    const title = typeof section?.title === "string" ? section.title.trim() : "";
+    if (!title || title.length > 120) throw badRequest(`Checklist section ${si + 1} needs a title.`);
+    if (!Array.isArray(section.items) || !section.items.length || section.items.length > 40) throw badRequest(`"${title}" needs 1 to 40 items.`);
+    const sectionId = typeof section.sectionId === "string" && /^[\w-]{1,80}$/.test(section.sectionId) ? section.sectionId : `section_${si + 1}`;
+    return {
+      sectionId,
+      title,
+      items: section.items.map((item, ii) => {
+        const label = typeof item?.label === "string" ? item.label.trim() : "";
+        if (!label || label.length > 300) throw badRequest(`"${title}" item ${ii + 1} needs a label of up to 300 characters.`);
+        if (!Number.isInteger(item.marks) || item.marks < 1 || item.marks > 10) throw badRequest(`"${label}" must be worth 1 to 10 marks.`);
+        if (item.weight !== undefined && !WEIGHTS.includes(item.weight)) throw badRequest("Invalid weight.");
+        const description = typeof item.description === "string" ? item.description.trim().slice(0, 600) : "";
+        let itemId = typeof item.itemId === "string" && previous.has(item.itemId) && !used.has(item.itemId) ? item.itemId : null;
+        while (!itemId || used.has(itemId)) itemId = `${slug}_c${(next += 1)}`;
+        used.add(itemId);
+        const before = previous.get(itemId) || {};
+        const critical = item.critical === true;
+        order += 1;
+        return {
+          ...before,
+          itemId,
+          label,
+          description,
+          maxRawScore: item.marks,
+          allowPartial: item.marks > 1,
+          weightCategory: critical ? "critical" : item.weight || before.weightCategory || "major",
+          criticalSafetyItem: critical,
+          order,
+        };
+      }),
+    };
+  });
+  checklist.sections = sections;
+  checklist.sourceScoring = {
+    ...(checklist.sourceScoring?.toObject ? checklist.sourceScoring.toObject() : checklist.sourceScoring),
+    maxRawScore: sections.reduce((sum, s) => sum + s.items.reduce((t, i) => t + i.maxRawScore, 0), 0),
+  };
+  checklist.version = (checklist.version || 1) + 1;
 }
 
 export async function listSpecialties(req, res) {
@@ -138,7 +215,9 @@ export async function listSpecialties(req, res) {
 }
 
 export async function getAdminStation(req, res) {
-  res.json({ success: true, data: editableDto(await findStation(req.params.id)) });
+  const station = await findStation(req.params.id);
+  const checklist = station.smartChecklistId ? await SmartChecklist.findById(station.smartChecklistId) : null;
+  res.json({ success: true, data: editableDto(station, checklist) });
 }
 
 export async function updateAdminStation(req, res) {
@@ -189,10 +268,34 @@ export async function updateAdminStation(req, res) {
   for (const [key, label] of [["suggestedCandidateApproach", "Suggested approach"], ["criticalSafetyErrors", "Critical safety errors"]]) {
     if (body[key] !== undefined) station[key] = list(body[key], label);
   }
+  if (body.vivaQuestions !== undefined) {
+    if (!Array.isArray(body.vivaQuestions) || body.vivaQuestions.length > 15) throw badRequest("Up to 15 examiner questions.");
+    station.vivaQuestions = body.vivaQuestions
+      .map((q) => ({ question: text(q?.question ?? "", "Question", 400), modelAnswerOutline: text(q?.answer ?? "", "Answer", 1500) }))
+      .filter((q) => q.question);
+  }
+  if (body.reviewVisibility !== undefined) {
+    if (typeof body.reviewVisibility !== "object" || body.reviewVisibility === null) throw badRequest("Invalid review settings.");
+    for (const [key, value] of Object.entries(body.reviewVisibility)) {
+      if (!REVIEW_PARTS.includes(key) || typeof value !== "boolean") throw badRequest("Invalid review settings.");
+      station.set(`reviewVisibility.${key}`, value);
+    }
+  }
 
-  if (!station.isModified()) {
-    res.json({ success: true, data: editableDto(await station.populate("specialtyId")) });
+  let checklist = station.smartChecklistId ? await SmartChecklist.findById(station.smartChecklistId) : null;
+  if (body.checklist !== undefined) {
+    if (!checklist) throw badRequest("This station has no checklist to edit.");
+    applyChecklist(checklist, body.checklist, station.slug);
+    await checklist.validate();
+  }
+
+  if (!station.isModified() && !checklist?.isModified()) {
+    res.json({ success: true, data: editableDto(await station.populate("specialtyId"), checklist) });
     return;
+  }
+  if (checklist?.isModified()) {
+    await checklist.save();
+    if (!station.isModified()) station.markModified("version");
   }
   station.version = (station.version || 1) + 1;
   await station.save();
@@ -204,5 +307,37 @@ export async function updateAdminStation(req, res) {
     changedBy: req.user.id,
     summary: "Edited station content from the admin area.",
   });
-  res.json({ success: true, data: editableDto(await station.populate("specialtyId")) });
+  res.json({ success: true, data: editableDto(await station.populate("specialtyId"), checklist) });
+}
+
+// ---- Import from JSON ----
+// dryRun checks the JSON and returns a summary without saving anything.
+export async function importOsceStations(req, res) {
+  const { stations, dryRun } = req.body || {};
+  if (stations === undefined) {
+    const error = new Error("Paste the station JSON first.");
+    error.status = 400;
+    throw error;
+  }
+  const parsed = parseImport(stations);
+  if (dryRun === true) {
+    res.json({
+      success: true,
+      data: {
+        preview: parsed.map((p) => ({
+          title: p.module.title,
+          specialty: p.specialty,
+          category: p.module.category,
+          tasks: p.module.candidateInstructions.tasks.length,
+          facts: p.patientScript.facts.length - 1,
+          checklistItems: p.checklist.sections.reduce((n, sec) => n + sec.items.length, 0),
+          marks: p.checklist.sourceScoring.maxRawScore,
+          aiPatient: p.module.practiceModes.includes("virtual-patient"),
+        })),
+      },
+    });
+    return;
+  }
+  const created = await importStations(parsed, req.user.id);
+  res.status(201).json({ success: true, data: { created } });
 }

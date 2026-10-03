@@ -105,3 +105,82 @@ export async function updatePricing(payload = {}) {
   await AppSetting.findOneAndUpdate({ key: PRICING_KEY }, { $set: { value: next } }, { upsert: true });
   return next;
 }
+
+// ---- Branding ----
+// The app name, browser title, search description, theme colour and logo.
+// The logo is kept as image bytes in its own setting and served from
+// /api/public/logo, so the branding object stays small.
+const BRANDING_KEY = "branding";
+const LOGO_KEY = "branding-logo";
+export const ACCENTS = ["indigo", "blue", "teal", "emerald", "rose", "violet", "slate"];
+const MAX_LOGO_BYTES = 200 * 1024;
+
+const DEFAULT_BRANDING = {
+  siteName: "KF LearnSmart",
+  metaTitle: "KF LearnSmart",
+  metaDescription: "OSCE practice with an AI patient, past paper MCQs and OSPE stations, history taking and clinical exam guides.",
+  accent: "indigo",
+  logoVersion: 0,
+};
+
+export async function getBranding() {
+  const stored = (await AppSetting.findOne({ key: BRANDING_KEY }).lean())?.value || {};
+  return {
+    ...DEFAULT_BRANDING,
+    ...Object.fromEntries(Object.entries(stored).filter(([key]) => key in DEFAULT_BRANDING)),
+    accent: ACCENTS.includes(stored.accent) ? stored.accent : DEFAULT_BRANDING.accent,
+  };
+}
+
+const LOGO_TYPES = {
+  "image/png": (b) => b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47,
+  "image/jpeg": (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff,
+  "image/webp": (b) => b.subarray(0, 4).toString("ascii") === "RIFF" && b.subarray(8, 12).toString("ascii") === "WEBP",
+};
+
+// Only PNG, JPEG or WebP, checked by their actual bytes. SVG is refused
+// because it can carry scripts.
+function parseLogo(dataUrl) {
+  const match = /^data:(image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl || "");
+  if (!match) throw badRequest("The logo must be a PNG, JPEG or WebP image.");
+  const bytes = Buffer.from(match[2], "base64");
+  if (bytes.length > MAX_LOGO_BYTES) throw badRequest("The logo must be under 200 KB.");
+  if (!LOGO_TYPES[match[1]](bytes)) throw badRequest("That file isn't a valid image.");
+  return { type: match[1], data: bytes.toString("base64") };
+}
+
+export async function updateBranding(payload = {}) {
+  const current = await getBranding();
+  const next = { ...current };
+  const text = (key, max, required = false) => {
+    if (payload[key] === undefined) return;
+    if (typeof payload[key] !== "string" || payload[key].trim().length > max) throw badRequest(`${key} must be up to ${max} characters.`);
+    if (required && !payload[key].trim()) throw badRequest(`${key} can't be empty.`);
+    next[key] = payload[key].trim();
+  };
+  text("siteName", 40, true);
+  text("metaTitle", 70, true);
+  text("metaDescription", 160);
+  if (payload.accent !== undefined) {
+    if (!ACCENTS.includes(payload.accent)) throw badRequest("Pick one of the theme colours.");
+    next.accent = payload.accent;
+  }
+  if (payload.logo !== undefined) {
+    if (payload.logo === null) {
+      await AppSetting.deleteOne({ key: LOGO_KEY });
+      next.logoVersion = 0;
+    } else {
+      const logo = parseLogo(payload.logo);
+      await AppSetting.findOneAndUpdate({ key: LOGO_KEY }, { $set: { value: logo } }, { upsert: true });
+      next.logoVersion = Date.now();
+    }
+  }
+  await AppSetting.findOneAndUpdate({ key: BRANDING_KEY }, { $set: { value: next } }, { upsert: true });
+  return next;
+}
+
+export async function getLogo() {
+  const stored = (await AppSetting.findOne({ key: LOGO_KEY }).lean())?.value;
+  if (!stored?.data || !LOGO_TYPES[stored.type]) return null;
+  return { type: stored.type, bytes: Buffer.from(stored.data, "base64") };
+}

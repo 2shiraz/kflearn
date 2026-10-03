@@ -1,14 +1,17 @@
 import { Router } from "express";
-import { createOsceContent, getAdminStation, listAdminStations, listSpecialties, updateAdminStation, updateStationStatus } from "../controllers/adminOsce.controller.js";
+import { createOsceContent, getAdminStation, importOsceStations, listAdminStations, listSpecialties, updateAdminStation, updateStationStatus } from "../controllers/adminOsce.controller.js";
 import { requireRole } from "../middleware/role.js";
+import { adminWriteLimiter } from "../middleware/rateLimit.js";
+import { auditAdminChanges } from "../middleware/adminAudit.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const router = Router();
 
-router.use(requireRole("admin"));
+router.use(requireRole("admin"), adminWriteLimiter, auditAdminChanges);
 router.get("/", asyncHandler(listAdminStations));
 router.post("/", asyncHandler(createOsceContent));
 router.get("/specialties", asyncHandler(listSpecialties));
+router.post("/import", asyncHandler(importOsceStations));
 router.get("/:id", asyncHandler(getAdminStation));
 router.patch("/:id", asyncHandler(updateAdminStation));
 router.patch("/:id/status", asyncHandler(updateStationStatus));
