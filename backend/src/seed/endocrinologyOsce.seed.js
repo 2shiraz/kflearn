@@ -7,15 +7,15 @@ const sourceReference = "User-provided Abdominal pain 10 station";
 const slug = "dka-abdominal-pain-vomiting-history";
 
 export async function seedEndocrinologyOsceStations({ universalGuide }) {
-  const gynaecology = await Specialty.findOneAndUpdate(
-    { slug: "gynaecology" },
+  const endocrinology = await Specialty.findOneAndUpdate(
+    { slug: "endocrinology" },
     {
-      $set: {
-        name: "Gynaecology",
-        slug: "gynaecology",
-        description: "Gynaecology OSCE history-taking stations.",
+      $setOnInsert: {
+        name: "Endocrinology",
+        slug: "endocrinology",
+        description: "Endocrinology OSCE stations.",
         icon: "stethoscope",
-        order: 2,
+        order: 6,
         active: true,
       },
     },
@@ -38,7 +38,7 @@ export async function seedEndocrinologyOsceStations({ universalGuide }) {
     {
       $set: {
         ...station.module,
-        specialtyId: gynaecology._id,
+        specialtyId: endocrinology._id,
         osceFrameworkId: universalGuide._id,
         patientScriptId: patientScript._id,
         smartChecklistId: checklist._id,

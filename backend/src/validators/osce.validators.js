@@ -74,5 +74,13 @@ export function validateSelfAssessment(req, res, next) {
     return;
   }
   req.body.checkedItemIds = [...new Set(ids)];
+  const scores = req.body.itemScores;
+  if (scores !== undefined && (!Array.isArray(scores) || scores.length > 200 || scores.some((score) =>
+    !score || typeof score.itemId !== "string" || score.itemId.length > 128 ||
+    !Number.isInteger(score.rawScore) || score.rawScore < 0 || score.rawScore > 20
+  ) || new Set(scores.map((score) => score.itemId)).size !== scores.length)) {
+    reject(next, "itemScores must contain unique item IDs and integer scores from 0 to 20.");
+    return;
+  }
   next();
 }

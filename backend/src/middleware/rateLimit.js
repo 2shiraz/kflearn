@@ -51,3 +51,15 @@ export const attemptCreateLimiter = rateLimit({
   skip: skipInTests,
   message: { success: false, message: "Too many sessions started. Please try again later.", code: "RATE_LIMITED" },
 });
+
+// Password changes and account deletion re-check the password, so cap guesses
+// per account as well as per IP (authLimiter).
+export const accountSecurityLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  keyGenerator: (req) => req.user.id,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: skipInTests,
+  message: { success: false, message: "Too many attempts. Please try again in 15 minutes.", code: "RATE_LIMITED" },
+});

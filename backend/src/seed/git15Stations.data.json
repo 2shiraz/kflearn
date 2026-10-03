@@ -1,0 +1,1770 @@
+{
+  "metadata": {
+    "title": "GASTROINTESTINAL SYSTEM (GIT) OSCE",
+    "subtitle": "15 Evidence-Corrected Stations",
+    "audienceAndScoring": "Final-Year MBBS • 8 minutes per station • 20-point analytic checklist",
+    "facultyNote": "This manual contains exactly 15 standalone final-year MBBS gastrointestinal-system OSCE stations, written for KMU- pattern final-year MBBS and postgraduate (CPSP) examinations. Stations 1–10 are clinically revised versions of the candidate's own supplied GIT teaching material (viral hepatitis, dyspepsia/peptic ulcer disease, irritable bowel syndrome, constipation, acute viral gastroenteritis, bacterial food poisoning, chronic diarrhoea, inflammatory bowel disease, neonatal jaundice) — patient names throughout have been changed from the source material. Stations 11– 15 broaden coverage across upper GI bleeding, acute pancreatitis, adult jaundice/abnormal liver blood tests, coeliac disease, and acute appendicitis. Local protocols supersede imported guidance. NICE, British Society of Gastroenterology (BSG), WHO/AASLD-IDSA, and WSES recommendations are used as identified evidence standards. They do not create Pakistani legal, licensing, prescribing, referral, or service obligations. Faculty must replace imported operational details with the current approved institutional, provincial, and national protocols before summative use. Resource constraints may shape implementation but must not reduce emergency safety.",
+    "assessmentDesign": [
+      "Each station is designed for 8 minutes and uses a 20-point analytic checklist (10 observable items scored 0, 1, or 2).",
+      "Score 2 = clearly and independently achieved; 1 = partially achieved or achieved only after a standard prompt; 0 = omitted, incorrect, or unsafe.",
+      "The analytic score and global rating must be recorded independently. No numerical pass mark is prescribed; use an approved standard-setting process.",
+      "Critical safety errors require examiner review and may justify failure when they create material danger. A minor omission alone should not automatically fail a candidate.",
+      "Candidate learning notes are intended for release after the station unless faculty deliberately uses the page for formative open-book teaching.",
+      "Standardised prompts restore progress without revealing the answer. Record every prompt and apply the same scoring rule to every candidate."
+    ],
+    "printingAndAssembly": [
+      "Each station begins on a new page. Candidate-facing material precedes a marked \"Examiner confidential\" break.",
+      "Remove or cover the Learning Note paragraph if the handout is used during a summative station.",
+      "Verify medicines, emergency charts, laboratory reference ranges, referral contacts, and equipment against the local site before use."
+    ],
+    "contents": [
+      "All stations: 8 minutes • 20 analytic marks",
+      "1. Chronic Hepatitis B — History, serology interpretation, and counselling",
+      "2. Hepatitis C — Diagnosis and antiviral cure counselling",
+      "3. Dyspepsia, GORD & Peptic Ulcer Disease — History, differential diagnosis, and management",
+      "4. Irritable Bowel Syndrome — History, diagnosis, and counselling",
+      "5. Chronic Constipation — Assessment and management planning",
+      "6. Acute Viral Gastroenteritis — History and management",
+      "7. Bacterial Food Poisoning — History and management",
+      "8. Chronic Diarrhoea — Focused history and investigation planning",
+      "9. Inflammatory Bowel Disease (UC vs Crohn's) — Differential diagnosis",
+      "10. Neonatal Jaundice — Counselling and safety-netting",
+      "11. Acute Upper Gastrointestinal Bleeding — Acute-management simulation",
+      "12. Acute Pancreatitis — Acute-management simulation",
+      "13. Adult Jaundice / Abnormal Liver Blood Tests — Data interpretation and referral planning",
+      "14. Coeliac Disease — History, investigation, and counselling",
+      "15. Acute Appendicitis — History, examination, and management planning"
+    ]
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Chronic Hepatitis B",
+      "primaryCompetency": "Focused history, serology interpretation, and counselling",
+      "format": "History and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Waqas Ilyas, aged 34 years, attends after a routine blood donation screen returned a positive hepatitis B surface antigen.",
+        "In 8 minutes: take a focused history, interpret the supplied serology panel, and counsel him on diagnosis, infectivity, transmission prevention, and follow-up.",
+        "Do not name a specific antiviral dose; discuss treatment at a class/pathway level."
+      ],
+      "candidateHandout": [
+        "Serology: HBsAg positive, HBeAg positive (high infectivity), anti-HBc IgM negative (suggesting a picture more consistent with chronic than acute infection, to be confirmed on repeat testing at 6 months), liver function tests mildly elevated.",
+        "No current jaundice, no ascites, no encephalopathy; feels well; found only because of the blood-donation screen."
+      ],
+      "learningNotes": [
+        "Learning note (release after the station): NICE CG165 (Hepatitis B: chronic diagnosis and management) supports confirming chronicity (HBsAg persisting beyond 6 months), assessing viral replication (HBeAg, HBV DNA) and liver damage (LFTs, fibrosis assessment), and referral to a specialist hepatology/infectious-disease service for consideration of antiviral therapy (e.g. a nucleos(t)ide analogue or pegylated interferon) when indicated. Sexual and household contacts need testing and vaccination if non-immune; safe-sex advice, avoidance of blood/razor/toothbrush sharing, and universal precautions are essential. All pregnancies in an affected woman need discussion of neonatal immunoprophylaxis to prevent vertical transmission."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I was told my blood donation test came back positive for hepatitis B. I feel completely fine.\"",
+        "If asked: no jaundice, no abdominal swelling, no confusion, no unintentional weight loss; no known IV drug use; had unprotected sex with more than one partner in the past; no tattoos; not vaccinated against hepatitis B; married, wife's status unknown.",
+        "ICE: worried about infecting his wife and future children; frightened this means his liver is already failing; wants to know if this is curable."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to explain chronic infection versus a resolving acute infection, explicitly plan repeat testing to confirm chronicity, and correctly identify HBeAg positivity as marking high infectivity.",
+        "Expect referral for specialist assessment rather than a primary-care antiviral decision, and explicit advice about testing/vaccinating the wife and future children (neonatal immunoprophylaxis).",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of risk factors (unprotected sex, needle-stick/tattoo exposure, family history), symptom screen (jaundice, weight loss, ascites, encephalopathy), and reproductive plans.",
+        "Interpret the serology: HBsAg-positive with HBeAg-positive indicates active viral replication and high infectivity; explain that chronicity is confirmed once HBsAg persists beyond 6 months, so repeat testing is needed.",
+        "Explain that hepatitis B is generally a manageable, sometimes suppressible but not always curable chronic infection; refer to hepatology/infectious disease for HBV DNA, fibrosis assessment, and consideration of antiviral therapy.",
+        "Advise safe sex, avoidance of sharing razors/toothbrushes, and testing and vaccination of household/sexual contacts, including his wife.",
+        "Discuss that future pregnancies need neonatal hepatitis B immunoprophylaxis (vaccine ± immunoglobulin) to prevent vertical transmission, and arrange follow-up."
+      ],
+      "suggestedApproach": [
+        "Explore the patient's understanding and specific fears.",
+        "Take a focused risk-factor and symptom history.",
+        "Interpret the serology in plain language.",
+        "Explain chronicity confirmation and the referral pathway.",
+        "Counsel on contact testing/vaccination and reproductive planning.",
+        "Arrange follow-up and check understanding."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Explores the patient's understanding and specific concerns before explaining."
+        },
+        {
+          "order": 2,
+          "criterion": "Takes a focused risk-factor history (sexual, needle/tattoo exposure, family history)."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens for symptoms of liver disease (jaundice, weight loss, ascites, encephalopathy)."
+        },
+        {
+          "order": 4,
+          "criterion": "Correctly interprets HBsAg/HBeAg positivity as active replication with high infectivity."
+        },
+        {
+          "order": 5,
+          "criterion": "Explains that chronicity requires HBsAg to persist beyond 6 months and plans repeat testing."
+        },
+        {
+          "order": 6,
+          "criterion": "Refers appropriately to hepatology/infectious disease rather than deciding antiviral therapy alone."
+        },
+        {
+          "order": 7,
+          "criterion": "Advises safe sex and avoidance of shared razors/toothbrushes/blood exposure."
+        },
+        {
+          "order": 8,
+          "criterion": "Advises testing and vaccination of household and sexual contacts."
+        },
+        {
+          "order": 9,
+          "criterion": "Discusses neonatal immunoprophylaxis for future pregnancies."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges follow-up and checks the patient's understanding and emotional response."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What does HBeAg positivity tell you?\"",
+        "\"What would you tell him about his wife and future children?\"",
+        "\"When can you call this a chronic infection?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Interpretation",
+        "Clinical reasoning",
+        "Counselling",
+        "Referral planning",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to advise testing/vaccination of the wife/household contacts.",
+        "Decides on antiviral therapy without specialist referral.",
+        "Fails to interpret HBeAg positivity as marking high infectivity."
+      ],
+      "sourceNote": [
+        "NICE CG165 — Hepatitis B (chronic): diagnosis and management. https://www.nice.org.uk/guidance/cg165 Accessed September 2026. Recommendations from UK/international bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Hepatitis C",
+      "primaryCompetency": "Diagnosis explanation and antiviral cure counselling",
+      "format": "History and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Rizwan Sadiq, aged 41 years, has tested anti-HCV positive after a pre-surgical screen, with HCV RNA confirming active infection.",
+        "In 8 minutes: take a focused history, explain the diagnosis, and counsel on modern curative antiviral treatment and prevention of transmission.",
+        "Do not name a specific antiviral regimen duration/dose beyond \"a curative all-oral tablet course\"; refer detailed regimen selection to specialist care."
+      ],
+      "candidateHandout": [
+        "History: had a blood transfusion years ago during a surgical procedure; no current jaundice, fatigue is mild; no known cirrhosis.",
+        "Investigations: anti-HCV positive, HCV RNA positive (confirms active/current infection, not just past exposure), liver function tests mildly elevated."
+      ],
+      "learningNotes": [
+        "Learning note: Modern hepatitis C treatment uses short courses (typically around 8–12 weeks) of direct-acting antiviral tablets (e.g. sofosbuvir-based combinations), achieving cure (sustained virological response) in the great majority of patients, per WHO and AASLD-IDSA guidance. Unlike hepatitis B, hepatitis C is now considered curable in most cases with these regimens. Pre-treatment assessment includes degree of liver fibrosis/cirrhosis, genotype where locally relevant, and screening for other blood-borne infections. Prevention counselling covers safe injection practices, avoiding shared razors/needles, and blood-product screening; sexual transmission risk is low but not zero."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, they found hepatitis C in my blood before my operation. Is this something serious?\"",
+        "If asked: transfusion during surgery many years ago; no IV drug use; mild tiredness only; no jaundice, no abdominal swelling; not aware of any other affected family member.",
+        "ICE: assumes hepatitis C is a lifelong incurable illness like he has heard about hepatitis B; worried about needing lifelong injections; worried about infecting his family."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to correctly and clearly state that modern treatment is curative in most patients (distinguishing this from the chronic-suppression model of hepatitis B) and to describe treatment at the class level (short oral antiviral course) without needing to specify an exact regimen.",
+        "Expect referral for genotype/fibrosis assessment and treatment initiation by a specialist service, plus advice on preventing transmission to others. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of exposure risk (transfusion, IV drug use, tattoos, needle-stick), symptoms of liver disease, and family/contact risk.",
+        "Explain that HCV RNA positivity confirms active current infection, distinct from anti-HCV alone (which can reflect past exposure).",
+        "Correct the patient's assumption: explain that, unlike hepatitis B, most hepatitis C infection is now curable with a short course of modern oral antiviral tablets, with cure confirmed by an undetectable HCV RNA some weeks after finishing treatment.",
+        "Refer to a specialist hepatology/infectious-disease service for fibrosis assessment, genotype testing where relevant, and treatment initiation.",
+        "Counsel on preventing transmission (no sharing razors/needles, safe injection practices if relevant, low but non-zero sexual transmission risk) and arrange follow-up."
+      ],
+      "suggestedApproach": [
+        "Explore the patient's understanding and correct any false assumption about incurability.",
+        "Take a focused exposure and symptom history.",
+        "Explain the diagnosis and the curative treatment pathway.",
+        "Refer for specialist fibrosis/genotype assessment and treatment.",
+        "Counsel on transmission prevention.",
+        "Arrange follow-up and check understanding."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Explores the patient's existing understanding and corrects the \"incurable\" assumption."
+        },
+        {
+          "order": 2,
+          "criterion": "Takes a focused history of exposure risk (transfusion, IV drug use, tattoos)."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens for symptoms/signs of chronic liver disease."
+        },
+        {
+          "order": 4,
+          "criterion": "Correctly explains the difference between anti-HCV and HCV RNA positivity."
+        },
+        {
+          "order": 5,
+          "criterion": "Explains that modern antiviral treatment is curative in most patients."
+        },
+        {
+          "order": 6,
+          "criterion": "Describes treatment at the correct level (short oral antiviral course) without inventing a specific regimen."
+        },
+        {
+          "order": 7,
+          "criterion": "Refers appropriately for fibrosis/genotype assessment and specialist treatment initiation."
+        },
+        {
+          "order": 8,
+          "criterion": "Advises on preventing transmission to family/contacts."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains how cure is confirmed (undetectable HCV RNA after treatment)."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges follow-up and checks the patient's understanding and emotional response."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"Is hepatitis C curable, and how would you know if he's cured?\"",
+        "\"What's the difference between anti-HCV and HCV RNA?\"",
+        "\"What would you tell him about protecting his family?\""
+      ],
+      "expectedCompetencies": [
+        "Communication",
+        "Interpretation",
+        "Clinical reasoning",
+        "Counselling",
+        "Referral planning",
+        "Health promotion"
+      ],
+      "criticalSafetyErrors": [
+        "States hepatitis C is incurable or requires lifelong injections.",
+        "Fails to distinguish anti-HCV from HCV RNA positivity.",
+        "Gives no transmission-prevention advice."
+      ],
+      "sourceNote": [
+        "WHO — Hepatitis C fact sheet and testing/treatment guidance. https://www.who.int/news-room/fact-sheets/detail/hepatitis-c",
+        "AASLD–IDSA 2023 HCV Guidance. https://www.idsociety.org/practice-guideline/hcv-guidance/ Accessed September 2026. Recommendations from international bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Dyspepsia, GORD & Peptic Ulcer Disease",
+      "primaryCompetency": "Focused history, differential diagnosis, and stepwise management",
+      "format": "History, differential diagnosis, and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Sarmad Yousaf presents with epigastric pain and burning behind the chest, with bloating, wind, nausea, and occasional vomiting.",
+        "In 8 minutes: take a focused history, screen for red flags, and outline a stepwise lifestyle-then-drug management plan.",
+        "Do not perform endoscopy yourself; describe when it would be arranged."
+      ],
+      "candidateHandout": [
+        "Symptoms for several weeks: epigastric burning, worse with certain foods, bloating, wind, nausea, occasional vomiting; no reported weight loss, no black stools, no persistent vomiting, no palpable mass.",
+        "Personal history: smoker, drinks alcohol regularly, fond of coffee/chocolate/spicy food; takes occasional over-the-counter ibuprofen for headaches."
+      ],
+      "learningNotes": [
+        "Learning note: NICE CG184 (Gastro-oesophageal reflux disease and dyspepsia in adults) supports lifestyle advice (weight loss, smaller meals, avoiding late meals, raising the head of the bed, reducing trigger foods/alcohol/smoking) as first-line, then a full-dose proton pump inhibitor trial (e.g. omeprazole) for 4 weeks. Test-and-treat for Helicobacter pylori (urea breath test or stool antigen; avoid endoscopy purely to test) is offered if the PPI trial fails or before starting the PPI, followed by eradication therapy (a PPI plus two antibiotics) if positive. Red flags (dysphagia, weight loss, persistent vomiting, GI bleeding, epigastric mass, age with new onset) mandate urgent referral for endoscopy rather than continued empirical treatment."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I've had this burning pain behind my chest and in my stomach area, with a lot of bloating and wind.\"",
+        "If asked: pain is worse after spicy/fatty food and coffee; sometimes feels food/acid coming back into his mouth; no difficulty swallowing; no black stools; no unintentional weight loss; takes occasional ibuprofen for headaches.",
+        "If asked about timing: pain both soon after eating and sometimes a couple of hours later (candidate should ask, not assume, and reason about gastric vs duodenal pattern where relevant).",
+        "ICE: worried he might have stomach cancer because a friend was recently diagnosed; wants a quick fix, ideally without long-term tablets."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require explicit red-flag screening (dysphagia, weight loss, GI bleeding, persistent vomiting, epigastric mass) before reassuring, and identification of NSAID use as a relevant contributing drug.",
+        "Accept lifestyle advice plus a PPI trial as the correct first step, with H. pylori test-and-treat and endoscopy reserved appropriately as above. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of the pain's timing, character, relation to food and posture, and associated symptoms (bloating, wind, nausea, vomiting, reflux sensation).",
+        "Explicitly screen red flags: dysphagia, unintentional weight loss, persistent vomiting, evidence of GI bleeding (black stool), epigastric mass — any of these warrants urgent referral for endoscopy rather than empirical treatment.",
+        "Review personal and drug history: smoking, alcohol, caffeine, trigger foods, and NSAID/other ulcerogenic drug use, addressing NSAID use directly.",
+        "Advise lifestyle measures (diet, weight, reducing trigger foods/alcohol/smoking, raising the head of the bed, earlier evening meals) as first-line, then a 4-week full-dose PPI trial.",
+        "If symptoms persist: test for H. pylori (breath/stool test) and treat with eradication therapy if positive; if the picture still does not resolve, or red flags emerge, refer for endoscopy; also refer routinely if the patient remains anxious about cancer or needs ongoing NSAID treatment."
+      ],
+      "suggestedApproach": [
+        "Take a structured pain and symptom history.",
+        "Screen red flags explicitly before reassuring.",
+        "Review lifestyle and drug contributors, including NSAID use.",
+        "Advise lifestyle measures first.",
+        "Offer a PPI trial, then H. pylori test-and-treat if needed.",
+        "Explain when endoscopy would be arranged and safety-net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a structured history of pain character, timing, and relation to food/posture."
+        },
+        {
+          "order": 2,
+          "criterion": "Explores associated symptoms: bloating, wind, nausea, vomiting, reflux sensation."
+        },
+        {
+          "order": 3,
+          "criterion": "Explicitly screens red flags (dysphagia, weight loss, bleeding, persistent vomiting, mass)."
+        },
+        {
+          "order": 4,
+          "criterion": "Reviews smoking, alcohol, caffeine, and dietary triggers."
+        },
+        {
+          "order": 5,
+          "criterion": "Identifies NSAID (ibuprofen) use as a relevant contributing factor."
+        },
+        {
+          "order": 6,
+          "criterion": "Advises appropriate lifestyle measures as first-line management."
+        },
+        {
+          "order": 7,
+          "criterion": "Offers a correctly dosed/duration PPI trial (e.g. 4 weeks)."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains H. pylori test-and-treat appropriately in the sequence."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains when endoscopy would be arranged (red flags, treatment failure, persistent cancer anxiety, ongoing NSAID need)."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses the patient's cancer anxiety honestly and checks understanding."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What red flags would change your plan immediately?\"",
+        "\"What in his drug history could be contributing?\"",
+        "\"What is the correct order of test-and-treat versus endoscopy here?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Differential diagnosis",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Counselling",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to screen for red flags before reassuring/treating empirically.",
+        "Misses NSAID use as a contributing and modifiable factor.",
+        "Arranges endoscopy as the first step instead of lifestyle/PPI/test-and-treat, or conversely never considers it despite red flags."
+      ],
+      "sourceNote": [
+        "NICE CG184 — Gastro-oesophageal reflux disease and dyspepsia in adults: investigation and management. https://www.nice.org.uk/guidance/cg184 Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Irritable Bowel Syndrome",
+      "primaryCompetency": "Focused history, positive diagnosis, and holistic counselling",
+      "format": "History, diagnosis, and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms Rabia Hameed, aged 24 years, has had abdominal pain and altered bowel habit for 5 years. Prior investigations have all been normal.",
+        "In 8 minutes: take a focused history using a positive-diagnosis approach, screen red flags and differentials, and counsel on a stepwise management plan.",
+        "Do not order repeat extensive investigation without justification; explain IBS as a positive diagnosis, not one of exclusion alone."
+      ],
+      "candidateHandout": [
+        "Symptoms for 5 years: abdominal pain relieved by defecation, bloating/distension, altered bowel habit (looser stools with urgency-free straining pattern), sensation of incomplete evacuation, passage of mucus, symptoms worse after eating.",
+        "No blood in stool, no nocturnal diarrhoea, no fever, no unintentional weight loss; family history of an anxious mother; periods are heavy and painful (relevant differential)."
+      ],
+      "learningNotes": [
+        "Learning note: NICE CG61 (Irritable bowel syndrome in adults) supports a positive diagnosis based on abdominal pain/discomfort with at least two of: relief with defecation, altered stool frequency, or altered stool form, plus at least two of: altered stool passage, bloating, worse after eating, or mucus passage — once red flags are excluded. First-line investigations (in patients under about 40 without red flags) are limited to FBC, ESR/CRP, and coeliac serology. Management combines dietary/lifestyle advice, first-line antispasmodics or laxatives/antimotility agents matched to the predominant symptom, and low-dose tricyclic antidepressants as a second-line option for pain, with psychological therapies reserved for refractory cases."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I've had stomach pain and irregular bowel movements for years. All my tests have come back normal.\"",
+        "If asked: pain improves after opening bowels; bloating is prominent; no blood in stool; no weight loss; no night-time diarrhoea; periods are heavy and painful; mother was \"always an anxious person.\"",
+        "Differential screening: no worsening with wheat specifically beyond general dietary sensitivity; no vaginal discharge or pain during intercourse; no particular heat/cold intolerance.",
+        "ICE: frustrated at being told \"it's just stress\"; worried there's a missed diagnosis; wants to know if this will ever go away."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to build a positive diagnosis (pain + defecation-related pattern + at least two supporting features) rather than simply excluding disease, while still screening the relevant red flags and gynaecological/thyroid differentials.",
+        "Accept FBC/ESR-CRP/coeliac serology as sufficient first-line testing for a patient under 40 without red flags; do not reward ordering colonoscopy routinely at this age/presentation.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history using the ABC framework (abdominal pain, bloating, change in bowel habit) plus the supporting features (incomplete evacuation, mucus, worse after eating) to build a positive diagnosis.",
+        "Screen red flags (blood in stool, weight loss, fever, nocturnal diarrhoea, new onset over 40 with a change in bowel habit, family history of bowel/ovarian cancer) and relevant differentials (coeliac disease, gynaecological disease, thyroid disease).",
+        "Explain that first-line testing (FBC, ESR/CRP, coeliac serology ± further tests if over 40 or red flags present) is enough given the reassuring history, and that IBS is a positive diagnosis, not one reached only by exclusion.",
+        "Counsel on diet/lifestyle (regular meals, adequate fluid, tailored fibre, stress management), and offer first-line drug therapy matched to symptom pattern (antispasmodic for pain, a laxative if constipation-predominant, an antimotility agent if diarrhoea-predominant), with low-dose tricyclic as a second-line pain option.",
+        "Validate the patient's frustration, avoid dismissive language, and safety-net for the return of any red-flag feature; offer referral if diagnosis remains in doubt or treatment fails."
+      ],
+      "suggestedApproach": [
+        "Take an ABC-structured history to build a positive diagnosis.",
+        "Screen red flags and relevant differentials.",
+        "Explain the diagnosis in validating, non-dismissive language.",
+        "Justify limited first-line investigation.",
+        "Offer stepwise diet/lifestyle and drug management matched to symptom pattern.",
+        "Safety-net and arrange follow-up/referral if needed."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a structured ABC history (abdominal pain, bloating, change in bowel habit)."
+        },
+        {
+          "order": 2,
+          "criterion": "Elicits supporting features (incomplete evacuation, mucus, worse after eating)."
+        },
+        {
+          "order": 3,
+          "criterion": "Explicitly screens red flags (blood in stool, weight loss, fever, nocturnal diarrhoea, age >40 with new symptoms)."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens relevant differentials (coeliac disease, gynaecological disease, thyroid disease)."
+        },
+        {
+          "order": 5,
+          "criterion": "Explains IBS as a positive diagnosis rather than one of exclusion alone."
+        },
+        {
+          "order": 6,
+          "criterion": "Justifies limited first-line investigation (FBC, ESR/CRP, coeliac serology) rather than over-investigating."
+        },
+        {
+          "order": 7,
+          "criterion": "Advises appropriate diet/lifestyle measures."
+        },
+        {
+          "order": 8,
+          "criterion": "Offers a first-line drug matched to the predominant symptom pattern."
+        },
+        {
+          "order": 9,
+          "criterion": "Mentions low-dose tricyclic as a second-line pain option and psychological therapy for refractory cases."
+        },
+        {
+          "order": 10,
+          "criterion": "Validates the patient's frustration, avoids dismissive language, and safety-nets appropriately."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What makes this a positive diagnosis of IBS rather than just 'normal tests'?\"",
+        "\"What red flags would change your approach?\"",
+        "\"What would you offer first for her pain?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Differential diagnosis",
+        "Clinical reasoning",
+        "Counselling",
+        "Prescribing safety",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to screen red flags before diagnosing IBS.",
+        "Over-investigates (e.g. routine colonoscopy) without red flags or age-based indication.",
+        "Dismisses the patient's symptoms as \"just stress\" without a positive diagnostic framework."
+      ],
+      "sourceNote": [
+        "NICE CG61 — Irritable bowel syndrome in adults: diagnosis and management. https://www.nice.org.uk/guidance/cg61 Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Chronic Constipation",
+      "primaryCompetency": "Focused assessment, red-flag screening, and stepwise laxative management",
+      "format": "Assessment and management planning",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Iftikhar Zaman, aged 52 years, reports passing hard, infrequent stools with straining for the past several months.",
+        "In 8 minutes: take a focused history, screen for organic/red-flag causes appropriate to his age, and outline a stepwise management plan.",
+        "Do not skip rectal examination in your description; verbalise it as part of your assessment plan."
+      ],
+      "candidateHandout": [
+        "Symptoms: fewer than 2 bowel movements per week, hard/lumpy stool, straining, sensation of incomplete evacuation, for more than 3 months.",
+        "No blood in stool, no unintentional weight loss, no nocturnal diarrhoea, no family history of bowel cancer; takes a calcium-channel blocker (verapamil) for blood pressure, which the candidate should recognise as a possible contributor."
+      ],
+      "learningNotes": [
+        "Learning note: In a patient over 40 with a new, sustained change in bowel habit, red flags (blood in stool, weight loss, anaemia, abdominal/rectal mass, family history of colorectal cancer) must be actively excluded, and abdominal plus rectal examination is part of the assessment (to check for faecal impaction and exclude a low rectal mass). Reversible contributors (rate-limiting calcium-channel blockers such as verapamil/diltiazem, opioids, iron, anticholinergics, hypothyroidism, hypercalcaemia) should be reviewed. Management is stepwise: lifestyle (fluid, fibre, activity) first, then an osmotic laxative (e.g. a macrogol), adding or switching to a stimulant laxative (e.g. senna) if needed, with rectal measures (suppositories) or an enema considered for refractory impaction."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I've been terribly constipated for months now — I strain a lot and don't feel properly empty afterwards.\"",
+        "If asked: no blood in stool, no weight loss, no family history of bowel problems; drinks little water during the workday; sedentary desk job; takes verapamil for blood pressure.",
+        "If asked for examination: state abdomen soft and non-tender with no palpable mass; rectal examination (if requested) shows hard stool in the rectum, no mass, normal tone.",
+        "ICE: worried this might be cancer because a colleague was recently diagnosed with bowel cancer; wants \"a strong medicine to sort it out quickly.\""
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require explicit red-flag screening given his age (over 40 with a new symptom), identification of verapamil as a reversible contributor, and verbalising abdominal and rectal examination.",
+        "Accept a stepwise osmotic-then-stimulant laxative plan; do not reward jumping straight to an enema or a stimulant laxative as first-line without trying lifestyle/osmotic measures first, unless faecal impaction is described.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history confirming the constipation definition (frequency, consistency, straining, incomplete evacuation) and its duration.",
+        "Actively screen red flags given his age (blood in stool, weight loss, family history, anaemia symptoms) — any positive finding warrants further investigation/referral.",
+        "Review medicines and identify verapamil as a possible contributor, alongside other causes (hypothyroidism, hypercalcaemia, low fluid/fibre intake, immobility).",
+        "Verbalise abdominal examination for masses/hepatomegaly and rectal examination to exclude impaction or a low rectal mass.",
+        "Manage stepwise: lifestyle advice (fluid, fibre, activity) first; if insufficient, an osmotic laxative; add or switch to a stimulant laxative if still inadequate; consider rectal measures for impaction; review/adjust the contributing medicine where clinically appropriate rather than stopping it unilaterally."
+      ],
+      "suggestedApproach": [
+        "Confirm the constipation pattern and duration.",
+        "Screen red flags given his age.",
+        "Review medicines and other reversible causes.",
+        "Examine abdomen and rectum (verbalised).",
+        "Give stepwise lifestyle-then-laxative management.",
+        "Address his cancer concern honestly and arrange follow-up."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms the constipation pattern (frequency, consistency, straining, incomplete evacuation) and duration."
+        },
+        {
+          "order": 2,
+          "criterion": "Explicitly screens red flags appropriate to age over 40 with a new symptom."
+        },
+        {
+          "order": 3,
+          "criterion": "Reviews medicines and identifies verapamil as a possible contributor."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens other reversible causes (thyroid, calcium, fluid/fibre intake, immobility)."
+        },
+        {
+          "order": 5,
+          "criterion": "Verbalises abdominal examination for masses/organomegaly."
+        },
+        {
+          "order": 6,
+          "criterion": "Verbalises rectal examination to exclude impaction/low rectal mass."
+        },
+        {
+          "order": 7,
+          "criterion": "Advises appropriate lifestyle measures (fluid, fibre, activity) as first step."
+        },
+        {
+          "order": 8,
+          "criterion": "Escalates appropriately to an osmotic laxative, then stimulant laxative if needed."
+        },
+        {
+          "order": 9,
+          "criterion": "Considers rectal measures only where impaction is described, not as a routine first step."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses the patient's cancer concern honestly and arranges appropriate follow-up."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What in his drug history could be contributing?\"",
+        "\"What examination is essential here, and why?\"",
+        "\"What would make you investigate further rather than just treat?\""
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Counselling",
+        "Safety-netting",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to screen red flags in a patient over 40 with a new bowel-habit change.",
+        "Omits rectal examination from the assessment plan entirely.",
+        "Misses verapamil as a reversible contributing cause."
+      ],
+      "sourceNote": [
+        "NICE Clinical Knowledge Summary — Constipation. https://cks.nice.org.uk/topics/constipation/ Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Acute Viral Gastroenteritis",
+      "primaryCompetency": "Focused history, dehydration assessment, and supportive management",
+      "format": "History and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Kashif Rauf, visiting from abroad, presents with 2 days of watery diarrhoea, vomiting, and generalised weakness.",
+        "In 8 minutes: take a focused history, assess for dehydration, and outline supportive management, safety-netting, and occupational advice (he works as a chef).",
+        "Do not prescribe an antibiotic; explain why one is not indicated here."
+      ],
+      "candidateHandout": [
+        "Symptoms for 2 days: watery (non-bloody) diarrhoea, 3–4 stools/day, vomiting, generalised weakness; no blood or mucus in stool; a household contact has similar symptoms.",
+        "No fever documented; mild signs of dehydration (dry mouth, thirst) but alert and able to drink."
+      ],
+      "learningNotes": [
+        "Learning note: Most acute watery diarrhoea with vomiting in a well-looking adult is viral gastroenteritis and is self-limiting; management is supportive — oral rehydration solution, gradual reintroduction of bland food, avoiding antimotility agents if fever/bloody stool is present, and antiemetics/antispasmodics for symptom relief as needed. Antibiotics are not indicated for viral gastroenteritis. As a food handler, current guidance is to stay off work handling food until symptom-free for 48 hours (viral shedding can persist beyond symptom resolution, so hygiene advice remains important even after return to work)."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I've had loose motions and vomiting for two days and I feel very weak.\"",
+        "If asked: watery stools, no blood, no mucus; mild tummy pain; thirsty, dry mouth, feels tired and a bit dizzy on standing; a family member travelling with him has the same symptoms; works as a chef in a restaurant.",
+        "Red flag screening answers: no blood in stool, no high fever, no severe abdominal pain, passing at least some urine.",
+        "ICE: wants \"a strong antibiotic to fix it quickly\" and is anxious about missing work."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require explicit dehydration assessment and correct food-handler advice (no food handling until 48 hours symptom-free), plus an honest, clear explanation of why an antibiotic is not being given.",
+        "Do not reward antibiotic prescription for uncomplicated viral gastroenteritis. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of stool character, frequency, associated symptoms, contacts with similar illness, and recent food/travel exposure.",
+        "Assess for dehydration (thirst, dry mucous membranes, postural symptoms, urine output) and reassure that this appears mild/moderate and manageable with oral rehydration.",
+        "Explain the likely viral cause and that antibiotics are not indicated, addressing the patient's expectation directly and honestly.",
+        "Advise oral rehydration solution, gradual reintroduction of bland food, and symptomatic relief (antiemetic/antispasmodic) as needed; avoid antimotility agents if fever or blood in stool is present.",
+        "Give correct occupational advice as a food handler (no food handling until 48 hours symptom-free) and safety-net for red flags (blood in stool, high fever, signs of severe dehydration, no urine output, worsening symptoms) requiring urgent review."
+      ],
+      "suggestedApproach": [
+        "Take a focused history of the illness and contacts.",
+        "Assess dehydration.",
+        "Explain the viral cause and why antibiotics aren't needed.",
+        "Advise rehydration and symptomatic care.",
+        "Give food-handler-specific occupational advice.",
+        "Safety-net and check understanding."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a focused history of stool character, frequency, and associated symptoms."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks about contacts with similar illness and recent food/travel exposure."
+        },
+        {
+          "order": 3,
+          "criterion": "Explicitly assesses for dehydration (thirst, mucous membranes, postural symptoms, urine output)."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens red flags (blood in stool, high fever, severe pain, signs of severe dehydration)."
+        },
+        {
+          "order": 5,
+          "criterion": "Explains the likely viral cause in plain language."
+        },
+        {
+          "order": 6,
+          "criterion": "Explicitly explains why an antibiotic is not indicated, addressing the patient's expectation."
+        },
+        {
+          "order": 7,
+          "criterion": "Advises oral rehydration solution and appropriate dietary reintroduction."
+        },
+        {
+          "order": 8,
+          "criterion": "Offers appropriate symptomatic relief without inappropriate antimotility use."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives correct food-handler occupational advice (48 hours symptom-free before returning to food handling)."
+        },
+        {
+          "order": 10,
+          "criterion": "Gives clear safety-netting for red-flag deterioration."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"Why is an antibiotic not appropriate here?\"",
+        "\"What would make you worry this isn't simple viral gastroenteritis?\"",
+        "\"When can he go back to work handling food?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Counselling",
+        "Safety-netting",
+        "Public health awareness"
+      ],
+      "criticalSafetyErrors": [
+        "Prescribes an antibiotic for uncomplicated viral gastroenteritis.",
+        "Fails to assess for dehydration.",
+        "Gives incorrect or no food-handler occupational advice."
+      ],
+      "sourceNote": [
+        "NICE CG84 — Diarrhoea and vomiting caused by gastroenteritis (principles extrapolated to adult care from paediatric-focused NICE guidance in the absence of a dedicated adult NICE guideline). https://www.nice.org.uk/guidance/cg84 Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Bacterial Food Poisoning",
+      "primaryCompetency": "Focused history, dehydration assessment, and correct antibiotic decision-making",
+      "format": "History and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Samina Toqeer, aged 48 years, developed diarrhoea, vomiting, and weakness a few hours after eating barbecued meat at a restaurant.",
+        "In 8 minutes: take a focused history, assess severity/dehydration, and decide on the correct management, including whether an antibiotic is indicated.",
+        "Justify your antibiotic decision explicitly — do not prescribe one reflexively because the patient asks for it or because she has an important commitment."
+      ],
+      "candidateHandout": [
+        "Onset 1–6 hours after eating barbecued meat, with several other family members who ate the same meal similarly affected — a pattern consistent with a preformed bacterial toxin (e.g. Staphylococcus aureus) rather than an invasive bacterial infection.",
+        "Passing 6–8 watery stools/day with vomiting and weakness; no blood in stool; no high fever."
+      ],
+      "learningNotes": [
+        "Learning note: Toxin-mediated food poisoning (short incubation of 1–6 hours, clustering among people who shared the same meal, watery non-bloody diarrhoea) is typically self-limiting over 24–48 hours and does not require antibiotics, because the illness is caused by preformed toxin rather than ongoing bacterial invasion — antibiotics do not shorten it and are not routinely indicated. Management is rehydration (oral rehydration solution, or IV fluids and hospital admission if there is significant dehydration/high stool frequency such as this patient's), antiemetic/antispasmodic symptom relief, and safety-netting. Antibiotics are reserved for specific invasive bacterial diarrhoeal illness with systemic features, immunocompromise, or specific stool-culture-identified pathogens where guidelines support treatment (e.g. severe Campylobacter, invasive Shigella) — not given empirically for a classic short-incubation toxin-mediated picture."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I've had bad diarrhoea and vomiting since the barbecue last night, and I feel very weak. I have an important meeting tomorrow — can you give me a strong antibiotic?\"",
+        "If asked: several family members who ate the same barbecued meat are also unwell; 6–8 watery stools since last night; no blood in stool; no high fever; feels weak and mildly dizzy on standing.",
+        "If pressed for antibiotics: still hoping for \"something strong\" even after initial explanation — gives the candidate an opportunity to explain further rather than simply comply.",
+        "ICE: wants to recover quickly for tomorrow's meeting; assumes an antibiotic is always the \"strong\" and correct treatment for any bacterial-sounding illness."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to correctly identify the short-incubation, clustered, toxin-mediated pattern and to explicitly decline empirical antibiotics while explaining why, rather than prescribing ciprofloxacin or similar simply because the patient requests it or has a deadline.",
+        "Given 6–8 stools/day with weakness and dizziness, expect the candidate to consider same-day assessment for dehydration/possible admission for IV fluids rather than treating this as mild.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of onset timing relative to the meal, stool frequency/character, associated symptoms, and who else is affected, recognising the short-incubation clustered pattern as suggestive of a preformed-toxin illness.",
+        "Assess dehydration severity; with 6–8 stools/day and postural symptoms, recognise this as more than mild illness and consider same-day review/admission for IV rehydration rather than oral fluids alone.",
+        "Explain clearly that antibiotics are not indicated for this presentation because the illness is toxin-mediated and self-limiting, and that antibiotics would not speed recovery — directly addressing the patient's request rather than avoiding the conversation.",
+        "Offer supportive care: rehydration (oral or IV depending on severity), antiemetic and antispasmodic symptom relief, and gradual return to normal diet.",
+        "Safety-net for red flags (blood in stool, high fever, worsening dehydration, no urine output) and give practical advice about her upcoming commitment without compromising safe care."
+      ],
+      "suggestedApproach": [
+        "Take a focused history and recognise the toxin-mediated pattern.",
+        "Assess dehydration severity accurately.",
+        "Explain clearly why an antibiotic is not being given, addressing her request directly.",
+        "Offer appropriate rehydration and symptomatic care.",
+        "Consider escalation to admission if dehydration is significant.",
+        "Safety-net and check understanding."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a focused history of onset timing relative to the meal and the pattern among other affected people."
+        },
+        {
+          "order": 2,
+          "criterion": "Correctly recognises the short-incubation, clustered pattern as consistent with toxin-mediated food poisoning."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses stool frequency, associated symptoms, and dehydration severity accurately."
+        },
+        {
+          "order": 4,
+          "criterion": "Recognises 6–8 stools/day with postural symptoms as more than mild and considers escalation/admission for IV fluids."
+        },
+        {
+          "order": 5,
+          "criterion": "Explicitly declines empirical antibiotics and explains why, rather than avoiding the topic."
+        },
+        {
+          "order": 6,
+          "criterion": "Directly and respectfully addresses the patient's specific request for \"a strong antibiotic.\""
+        },
+        {
+          "order": 7,
+          "criterion": "Offers appropriate rehydration (oral or IV as indicated by severity)."
+        },
+        {
+          "order": 8,
+          "criterion": "Offers appropriate antiemetic/antispasmodic symptomatic relief."
+        },
+        {
+          "order": 9,
+          "criterion": "Advises appropriate gradual dietary reintroduction."
+        },
+        {
+          "order": 10,
+          "criterion": "Gives clear safety-netting for red-flag deterioration and practical advice for her commitment without compromising safety."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"Why doesn't this need an antibiotic?\"",
+        "\"What makes you think this is toxin-mediated rather than an invasive infection?\"",
+        "\"At what point would you admit her?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Communication under pressure",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Prescribes an antibiotic for classic toxin-mediated food poisoning without justification.",
+        "Fails to recognise significant dehydration (6–8 stools/day with postural symptoms) as needing escalation.",
+        "Gives no safety-netting for red-flag deterioration."
+      ],
+      "sourceNote": [
+        "General principles of managing suspected bacterial gastrointestinal infection, consistent with UK Health Security Agency and NICE CKS guidance on infectious diarrhoea in adults. https://www.gov.uk/government/organisations/uk-health-security-agency Accessed September 2026. This station deliberately corrects a common misconception (routine antibiotic use for toxin-mediated food poisoning) rather than following that assumption uncritically; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Chronic Diarrhoea",
+      "primaryCompetency": "Focused history and structured investigation planning",
+      "format": "Focused history and investigation planning",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Adeel Farooq, aged 38 years, reports loose stools for the past 3 months, more frequent than his usual pattern.",
+        "In 8 minutes: take a focused history covering the organic-disease red flags, and outline a structured investigation plan.",
+        "Do not diagnose IBS by default; consider and screen the organic differential first."
+      ],
+      "candidateHandout": [
+        "Symptoms for 3 months: loose stools most days, occasional pale, foul-smelling, difficult-to-flush stool; mild joint aches; no formal skin or eye symptoms volunteered (ask directly); no fever.",
+        "No prior gallbladder surgery, no known diabetes or thyroid disease; no family history volunteered (ask directly)."
+      ],
+      "learningNotes": [
+        "Learning note: The British Society of Gastroenterology (3rd edition) guideline on investigation of chronic diarrhoea in adults supports a structured red-flag approach (symptom duration under 3 months, nocturnal symptoms, continuous symptoms, weight loss, blood in stool, and features suggesting malabsorption such as pale/greasy/foul-smelling stool that is difficult to flush) alongside a systematic review for associated joint (reactive arthritis), eye (uveitis), and skin (erythema nodosum) features and past surgical/endocrine history. First-line investigations typically include FBC, inflammatory markers, coeliac serology, thyroid function, stool studies (culture, ova/cysts/parasites, calprotectin where available), with colonoscopy/imaging guided by red flags and initial results."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, my stools have been loose for three months now, more than what's normal for me.\"",
+        "If asked: some pale, greasy-looking stools that are hard to flush (features of possible malabsorption); mild aching in his knees recently; no eye redness or pain volunteered unless specifically asked (then reports none currently); no rash; no gallbladder surgery; no known thyroid or diabetes history; no clear family history.",
+        "Red flag screening: no blood in stool; some nights are disturbed by the urge to open his bowels (a red flag the candidate should pick up); no fever.",
+        "ICE: worried this might be \"something serious in the bowel\"; wants a clear plan rather than being told to \"wait and see.\""
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to use a structured symptom/red-flag screen (including the JEWS-style associated-feature screen: joints, eyes, weight, skin) and to correctly identify nocturnal symptoms and pale/malabsorptive stool as red flags warranting active investigation rather than a default IBS label.",
+        "Accept the first-line investigation panel described in the answer guide; do not require the candidate to name colonoscopy as the very first step given the described picture, but expect it to be mentioned as part of the pathway if initial tests are unrevealing or red flags persist.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history covering duration, stool frequency/consistency, colour, and specifically ask about nocturnal symptoms, continuity, and features of malabsorption (pale, greasy, foul-smelling, difficult-to-flush stool).",
+        "Systematically screen associated features: joint pains, eye symptoms, skin changes, weight loss, and relevant past surgical/endocrine history (gallbladder surgery, diabetes, thyroid disease).",
+        "Identify nocturnal symptoms and malabsorptive stool character as red flags supporting organic disease investigation rather than a default diagnosis of IBS.",
+        "Arrange first-line investigations: FBC, inflammatory markers (ESR/CRP), coeliac serology, thyroid function tests, and stool studies (culture, ova/cysts/parasites, faecal calprotectin where available).",
+        "Explain that colonoscopy/further imaging would be arranged if initial tests are abnormal, red flags persist, or the picture remains unclear, and give honest safety-netting and a clear follow-up plan rather than \"wait and see.\""
+      ],
+      "suggestedApproach": [
+        "Take a structured chronic-diarrhoea history.",
+        "Screen the JEWS-style associated features and red flags.",
+        "Review relevant past medical/surgical history.",
+        "Arrange appropriate first-line investigations.",
+        "Explain the further-investigation pathway.",
+        "Address the patient's concern honestly and safety-net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a structured history of duration, frequency, and stool consistency/colour."
+        },
+        {
+          "order": 2,
+          "criterion": "Specifically screens for nocturnal symptoms and continuity of symptoms."
+        },
+        {
+          "order": 3,
+          "criterion": "Identifies features suggestive of malabsorption (pale, greasy, foul-smelling, difficult-to-flush stool)."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens associated joint, eye, skin, and weight-change features."
+        },
+        {
+          "order": 5,
+          "criterion": "Reviews relevant past surgical/endocrine history (gallbladder surgery, diabetes, thyroid disease)."
+        },
+        {
+          "order": 6,
+          "criterion": "Correctly identifies red flags present and does not default to an IBS diagnosis."
+        },
+        {
+          "order": 7,
+          "criterion": "Arranges appropriate first-line blood investigations (FBC, inflammatory markers, coeliac serology, TFTs)."
+        },
+        {
+          "order": 8,
+          "criterion": "Arranges appropriate stool studies."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains the pathway to colonoscopy/further imaging if indicated."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses the patient's concern honestly and gives a clear plan rather than \"wait and see.\""
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What features in his stool description worry you?\"",
+        "\"What associated symptoms would you specifically screen for?\"",
+        "\"What would your first-line investigations be?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Interpretation",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Communication",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Defaults to an IBS diagnosis without screening red flags.",
+        "Misses nocturnal symptoms or malabsorptive stool character as red flags.",
+        "Offers no investigation plan or arranges none despite red flags."
+      ],
+      "sourceNote": [
+        "British Society of Gastroenterology — Guidelines for the investigation of chronic diarrhoea in adults, 3rd edition. https://www.bsg.org.uk/clinical-resource/bsg-guidelines-chronic-diarrhoea Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Inflammatory Bowel Disease (Ulcerative Colitis vs Crohn's Disease)",
+      "primaryCompetency": "Focused history and differential diagnosis between the two major inflammatory bowel diseases",
+      "format": "Differential diagnosis",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms Kiran Abbasi, aged 27 years, presents with several weeks of bloody diarrhoea, abdominal pain, and weight loss.",
+        "In 8 minutes: take a focused history and examination-oriented assessment to differentiate ulcerative colitis from Crohn's disease, and outline the initial investigation and referral plan.",
+        "Do not commit to one diagnosis without justifying it from the history; acknowledge where overlap exists."
+      ],
+      "candidateHandout": [
+        "Symptoms: bloody, mucoid diarrhoea for several weeks, lower abdominal cramping pain, low-grade fever, tiredness, and unintentional weight loss; no mouth ulcers, no perianal symptoms volunteered (ask directly).",
+        "No prior surgery; non-smoker; no family history volunteered (ask directly)."
+      ],
+      "learningNotes": [
+        "Learning note: Ulcerative colitis more typically presents with continuous, blood/mucus-predominant diarrhoea confined to colonic mucosa, is more common in non-smokers (smoking appears protective), and is associated with primary sclerosing cholangitis and continuous relapse in the same bowel segment. Crohn's disease more typically presents with abdominal pain/cramping (transmural, skip lesions anywhere from mouth to anus), is a risk-increasing habit in smokers, and is associated with perianal fistulae/abscesses, mouth ulcers, malabsorption, and stricture/bowel obstruction. Both share extra-intestinal features (arthritis, uveitis/iritis, erythema nodosum) and constitutional symptoms. Initial work-up includes FBC, inflammatory markers, stool calprotectin and culture (to exclude infection), followed by colonoscopy with biopsy for definitive diagnosis; management follows NICE NG130 (ulcerative colitis) and NG129 (Crohn's disease) once confirmed."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I've had bloody diarrhoea and stomach cramps for weeks, and I've lost some weight.\"",
+        "If asked: blood and mucus present in most stools; pain is crampy in the lower abdomen; low-grade fever; tiredness; no mouth ulcers on direct questioning; no perianal pain/discharge; non-smoker; no known family history of bowel disease.",
+        "If asked about extra-intestinal features: mild joint aches in the knees; no eye redness/pain; no skin nodules currently.",
+        "ICE: frightened this could be cancer; wants to know exactly which disease this is today."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to correctly reason through the differentiating features (continuous blood/mucus-predominant pattern, non-smoker, no perianal/mouth involvement — favouring ulcerative colitis over Crohn's disease here) while being honest that colonoscopy with biopsy is needed for a definitive diagnosis.",
+        "Do not require a final, certain diagnosis to be given to the patient today; expect the candidate to explain that both are possible pending investigation, with the history currently favouring one over the other.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of stool characteristics (blood/mucus, continuous vs patchy symptoms), pain pattern, constitutional symptoms, and specifically ask about mouth ulcers and perianal symptoms (favouring Crohn's) versus a purely colonic, continuous, blood-predominant pattern (favouring ulcerative colitis).",
+        "Ask about smoking status (protective in ulcerative colitis, a risk factor in Crohn's disease) and screen extra-intestinal features common to both (joints, eyes, skin).",
+        "Explain to the patient, honestly, that the pattern described is more typical of one condition (ulcerative colitis, given this handout) but that colonoscopy with biopsy is required for definitive diagnosis, since the two conditions can overlap.",
+        "Arrange initial investigations: FBC, inflammatory markers, stool calprotectin and culture (to exclude an infective cause), and refer for colonoscopy with biopsy.",
+        "Reassure appropriately about the cancer concern while being honest about the seriousness of significant bloody diarrhoea and weight loss, and arrange urgent gastroenterology referral given the systemic symptoms."
+      ],
+      "suggestedApproach": [
+        "Take a history focused on differentiating features.",
+        "Ask specifically about mouth ulcers, perianal symptoms, and smoking status.",
+        "Screen extra-intestinal features common to both conditions.",
+        "Explain the differential honestly without over-committing.",
+        "Arrange first-line investigations and colonoscopy referral.",
+        "Address the patient's cancer concern and arrange urgent follow-up."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a history of stool blood/mucus content and pattern (continuous vs patchy)."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises the abdominal pain pattern."
+        },
+        {
+          "order": 3,
+          "criterion": "Specifically asks about mouth ulcers and perianal symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Asks about smoking status and its relevance to each condition."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens extra-intestinal features (joints, eyes, skin) common to both conditions."
+        },
+        {
+          "order": 6,
+          "criterion": "Reasons correctly toward the more likely diagnosis based on the history, while acknowledging overlap."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains honestly that colonoscopy with biopsy is required for definitive diagnosis."
+        },
+        {
+          "order": 8,
+          "criterion": "Arranges appropriate first-line investigations (FBC, inflammatory markers, stool calprotectin/culture)."
+        },
+        {
+          "order": 9,
+          "criterion": "Arranges urgent gastroenterology referral given systemic symptoms and weight loss."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses the patient's cancer concern honestly and checks understanding."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What features would point more toward Crohn's disease instead?\"",
+        "\"What test would give you a definitive diagnosis?\"",
+        "\"Why does smoking status matter here?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Differential diagnosis",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Communication",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Commits to a definitive diagnosis without investigation.",
+        "Fails to ask about mouth ulcers/perianal symptoms or smoking status.",
+        "Fails to recognise the need for urgent referral given weight loss and systemic symptoms."
+      ],
+      "sourceNote": [
+        "NICE NG130 — Ulcerative colitis: management. https://www.nice.org.uk/guidance/ng130",
+        "NICE NG129 — Crohn's disease: management. https://www.nice.org.uk/guidance/ng129 Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Neonatal Jaundice",
+      "primaryCompetency": "Counselling a family member and safety-netting for neonatal jaundice",
+      "format": "Counselling and safety-netting",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Naseem Akhtar, aged 55 years, attends to discuss her 6-day-old grandson, who developed yellow discoloration of the skin and eyes from day 3 of life.",
+        "In 8 minutes: take a focused history, interpret the supplied bilirubin trend, and counsel on management and safety-netting.",
+        "Do not give a definitive management plan without asking about onset timing — jaundice within the first 24 hours changes everything."
+      ],
+      "candidateHandout": [
+        "Baby born at term, uneventful pregnancy and normal vaginal delivery; jaundice first noticed on day 3 of life (not within the first 24 hours); currently day 6.",
+        "Two bilirubin measurements available: day-3 level was raised; day-6 level is falling. Mother is Rhesus-negative, baby is Rhesus-positive, anti-D was given appropriately; mother's hepatitis B status is negative; baby is breastfeeding well and otherwise well, passing normal-coloured urine and stool."
+      ],
+      "learningNotes": [
+        "Learning note: NICE CG98 (Jaundice in newborn babies under 28 days) treats jaundice appearing within the first 24 hours of life as always pathological, requiring urgent same-day paediatric assessment (for causes such as haemolysis or infection). Jaundice appearing from day 2 onward and resolving by around day 14 (day 21 in preterm infants) is usually physiological, but should still be assessed with a bilirubin measurement and plotted against a treatment threshold chart; phototherapy is used if the level crosses the threshold for the baby's age in hours, and exchange transfusion is reserved for very high, rapidly rising, or phototherapy-unresponsive levels. Any jaundice at any time associated with an unwell baby, pale stools, or dark urine needs prompt paediatric referral, as does jaundice persisting beyond 14 days (21 in preterm infants)."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, my grandson has gone yellow — his eyes and skin. He was born fine, but this started a few days later.\"",
+        "If asked: jaundice began on day 3, not day 1; baby feeding well at the breast, alert, normal-coloured stool, no dark urine; no fever, no seizures reported; mother Rhesus-negative and received anti-D; mother's hepatitis B status is negative.",
+        "ICE: worried this means something is seriously wrong with the baby's liver; anxious about whether breastfeeding should stop; wants clear guidance on what to watch for."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to explicitly establish that onset was NOT within the first 24 hours (a critical distinguishing question) before reassuring, and to correctly interpret the falling bilirubin trend as reassuring.",
+        "Expect clear safety-netting for an unwell baby, pale stools, dark urine, or jaundice persisting beyond 14 days, and correct reassurance that breastfeeding should continue.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Establish the exact timing of onset (day 3, not within the first 24 hours) — this is the single most important branching question, since first-day jaundice is always pathological and needs urgent same-day assessment.",
+        "Ask about feeding, alertness, stool colour, urine colour, temperature, and birth/maternal history (Rhesus status, anti-D, maternal hepatitis B status) as relevant risk factors for pathological causes.",
+        "Interpret the two bilirubin measurements: a raised day-3 level that is now falling by day 6 is reassuring and consistent with physiological jaundice, plotted against the age-specific treatment threshold rather than an absolute cut-off.",
+        "Explain physiological jaundice in plain, reassuring language, confirm breastfeeding should continue, and explain that most cases resolve within about 2 weeks without treatment.",
+        "Give clear safety-netting: an unwell baby, pale stools, dark urine staining the nappy, or jaundice still present beyond 14 days should prompt prompt paediatric review; jaundice appearing on day 1 of life (not relevant to this baby, but worth stating as a general safety point) always needs same-day assessment."
+      ],
+      "suggestedApproach": [
+        "Establish exact onset timing first.",
+        "Take a focused feeding/wellbeing and maternal-risk-factor history.",
+        "Interpret the bilirubin trend.",
+        "Explain physiological jaundice and reassure about breastfeeding.",
+        "Give clear, specific safety-netting.",
+        "Check understanding and offer written information."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Explicitly establishes the exact day of onset before proceeding."
+        },
+        {
+          "order": 2,
+          "criterion": "Recognises that day-1 onset would be a pathological emergency (contrasted correctly with this baby's day-3 onset)."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks about feeding, alertness, stool colour, and urine colour."
+        },
+        {
+          "order": 4,
+          "criterion": "Reviews relevant maternal/birth risk factors (Rhesus status, anti-D, maternal hepatitis B)."
+        },
+        {
+          "order": 5,
+          "criterion": "Correctly interprets the falling bilirubin trend as reassuring."
+        },
+        {
+          "order": 6,
+          "criterion": "Explains that levels are plotted against an age-specific treatment threshold, not a fixed cut-off."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains physiological jaundice in plain, reassuring language."
+        },
+        {
+          "order": 8,
+          "criterion": "Correctly reassures that breastfeeding should continue."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives clear safety-netting for an unwell baby, pale stools, or dark urine."
+        },
+        {
+          "order": 10,
+          "criterion": "Safety-nets for jaundice persisting beyond 14 days and checks understanding."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"Why does the exact day jaundice started matter so much?\"",
+        "\"What would make you refer this baby back to hospital today?\"",
+        "\"Should breastfeeding continue?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Interpretation",
+        "Clinical reasoning",
+        "Counselling",
+        "Safety-netting",
+        "Communication with a family member"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to ask about the exact day of onset and misses first-day jaundice as an emergency (in a station variant where onset is day 1).",
+        "Advises stopping breastfeeding without clinical justification.",
+        "Gives no safety-netting for an unwell baby or persistent jaundice."
+      ],
+      "sourceNote": [
+        "NICE CG98 — Jaundice in newborn babies under 28 days. https://www.nice.org.uk/guidance/cg98 Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Acute Upper Gastrointestinal Bleeding",
+      "primaryCompetency": "Emergency recognition, risk stratification, and protocol-based initial management",
+      "format": "Acute-management simulation",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Bilal Sarwar, aged 54 years, is brought in vomiting blood and passing black tarry stool.",
+        "In 8 minutes: lead immediate assessment and management, verbalising all orders to the nurse/examiner.",
+        "Do not delay resuscitation to complete a full history."
+      ],
+      "candidateHandout": [
+        "A–E: airway patent; breathing normal rate; circulation shows tachycardia and borderline-low blood pressure; patient pale, clammy, and anxious but conscious and orientated.",
+        "History available on request: known heavy alcohol use; takes regular over-the-counter ibuprofen for back pain; one episode of fresh haematemesis and one episode of melaena so far."
+      ],
+      "learningNotes": [
+        "Learning note: NICE CG141 (Acute upper gastrointestinal bleeding) supports immediate A–E resuscitation with IV access (two large-bore cannulae), crystalloid fluid resuscitation, and group-and-save/crossmatch, using a validated risk score (e.g. Glasgow-Blatchford at first assessment) to guide urgency, with restrictive red-cell transfusion (generally a threshold-based approach rather than reflexive transfusion) unless the patient is in shock or has ongoing major bleeding. Endoscopy is arranged urgently (within 24 hours, immediately if unstable) after resuscitation, and IV proton pump inhibitor therapy and correction of coagulopathy are considered per local protocol. A history of alcohol use and NSAID use both raise suspicion for variceal and peptic ulcer causes respectively, which changes pre-endoscopy management (e.g. terlipressin/antibiotics if variceal bleeding is suspected)."
+      ],
+      "simulationScript": [
+        "Nurse opening: \"This patient has vomited blood and passed black stool. He looks pale and his blood pressure is low.\"",
+        "If asked: heavy alcohol use for years; regular ibuprofen use for chronic back pain; no known liver disease diagnosis previously; one large haematemesis, one melaena episode; feels lightheaded.",
+        "After IV access, fluids, and bloods (including crossmatch) are ordered: state a further small haematemesis occurs; blood pressure remains borderline.",
+        "If the candidate asks about suspected cause: state stigmata of chronic liver disease are present on brief examination if requested (e.g. mild scleral icterus), which should raise possible variceal bleeding as well as peptic ulcer disease given the NSAID history.",
+        "If the candidate delays resuscitation for full history-taking: condition worsens; provide the emergency stall prompt."
+      ],
+      "examinerInstructions": [
+        "Act as the nurse. Expect immediate A–E, two large-bore IV cannulae, crystalloid fluids, urgent bloods (FBC, U&E, LFTs, clotting, group-and-save/crossmatch), and continuous monitoring.",
+        "Full marks require the candidate to consider both peptic ulcer (NSAID-related) and variceal (alcohol-related) causes given the history, and to state urgent endoscopy referral and escalation for senior/gastroenterology and critical-care input given ongoing bleeding and hypotension.",
+        "Do not require the candidate to calculate a numeric Glasgow-Blatchford score if they correctly identify the patient as high-risk from hypotension, ongoing bleeding, and history. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Recognise haematemesis and melaena with tachycardia/hypotension as a medical emergency; call for senior/gastroenterology help immediately.",
+        "Apply A–E: secure two large-bore IV cannulae, start crystalloid fluid resuscitation, send urgent bloods including group-and-save/crossmatch, and apply continuous monitoring.",
+        "Take a focused history of alcohol use, NSAID use, and prior GI bleeding/liver disease, recognising both variceal and peptic ulcer disease as possible causes here.",
+        "Arrange urgent endoscopy (immediately if unstable, within 24 hours otherwise) and discuss empirical measures per local protocol if variceal bleeding is suspected (e.g. vasoactive drug, antibiotic prophylaxis) alongside IV proton pump inhibitor therapy.",
+        "Use a restrictive transfusion approach guided by clinical status rather than transfusing reflexively, and correct any coagulopathy; reassess continuously and escalate for critical-care input if instability persists."
+      ],
+      "suggestedApproach": [
+        "Recognise the emergency and call for help.",
+        "A–E, IV access, fluids, urgent bloods including crossmatch.",
+        "Take a focused history of cause (alcohol, NSAIDs, prior bleeding).",
+        "Consider both variceal and peptic ulcer causes.",
+        "Arrange urgent endoscopy and appropriate pre-endoscopy therapy.",
+        "Reassess continuously and escalate as needed."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises haematemesis/melaena with haemodynamic compromise as an emergency."
+        },
+        {
+          "order": 2,
+          "criterion": "Calls for senior/gastroenterology help and applies an A–E approach."
+        },
+        {
+          "order": 3,
+          "criterion": "Secures two large-bore IV cannulae and starts crystalloid fluid resuscitation."
+        },
+        {
+          "order": 4,
+          "criterion": "Sends urgent bloods including group-and-save/crossmatch and coagulation screen."
+        },
+        {
+          "order": 5,
+          "criterion": "Takes a focused history of alcohol and NSAID use as relevant causes."
+        },
+        {
+          "order": 6,
+          "criterion": "Considers both variceal and peptic ulcer disease as possible causes given the history."
+        },
+        {
+          "order": 7,
+          "criterion": "Arranges urgent endoscopy at the correct timing for this severity."
+        },
+        {
+          "order": 8,
+          "criterion": "Discusses appropriate pre-endoscopy measures (IV PPI, and variceal-bleed-specific measures if suspected)."
+        },
+        {
+          "order": 9,
+          "criterion": "Uses a restrictive, clinically guided approach to transfusion rather than transfusing reflexively."
+        },
+        {
+          "order": 10,
+          "criterion": "Reassesses continuously and escalates for critical-care input given ongoing instability."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: \"He has vomited blood again and his blood pressure is falling further. What now?\"",
+        "\"What in his history makes you consider a variceal cause?\""
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Interpretation",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Team communication"
+      ],
+      "criticalSafetyErrors": [
+        "Delays IV access/fluid resuscitation to complete history-taking.",
+        "Fails to consider variceal bleeding despite a significant alcohol history.",
+        "Transfuses reflexively without a clinical threshold, or fails to transfuse when clearly indicated by shock."
+      ],
+      "sourceNote": [
+        "NICE CG141 — Acute upper gastrointestinal bleeding in over 16s: management. https://www.nice.org.uk/guidance/cg141 Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Acute Pancreatitis",
+      "primaryCompetency": "Emergency recognition, diagnostic reasoning, and protocol-based initial management",
+      "format": "Acute-management simulation",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Yasir Chaudhry, aged 45 years, presents with severe epigastric pain radiating to the back, with vomiting, after a heavy meal and alcohol the night before.",
+        "In 8 minutes: lead assessment, interpret the supplied investigation findings, and outline initial emergency management.",
+        "Do not wait for imaging before starting resuscitation."
+      ],
+      "candidateHandout": [
+        "A–E: airway patent; breathing mildly increased rate; circulation shows tachycardia and borderline blood pressure; patient in obvious pain, unable to lie still, vomiting.",
+        "Investigation available on request: serum amylase/lipase significantly elevated (more than three times the upper limit of normal), consistent with acute pancreatitis; history of gallstones is unknown (ask directly) and alcohol intake is heavy."
+      ],
+      "learningNotes": [
+        "Learning note: NICE NG104 (Pancreatitis) supports diagnosis from two of three features (typical pain, amylase/lipase more than three times the upper limit of normal, or characteristic imaging findings) — a definite biochemical diagnosis here does not require imaging to confirm the diagnosis itself, though imaging (ultrasound for gallstones, contrast CT later if severity assessment or complications are in question) is still used to establish the cause and assess severity/complications. Initial management is aggressive IV fluid resuscitation, analgesia, antiemetics, oxygen if hypoxic, monitoring for organ dysfunction, and early nutrition (oral/enteral as tolerated rather than routine prolonged fasting) once stabilising; severity scoring (e.g. Glasgow-Imrie criteria) guides the need for HDU/ICU care. Gallstones and alcohol are the two leading causes and should both be actively assessed for, since gallstone pancreatitis may need early ERCP/cholecystectomy planning."
+      ],
+      "simulationScript": [
+        "Nurse opening: \"This patient has severe abdominal pain radiating to the back and keeps vomiting. His heart rate is up and blood pressure is borderline.\"",
+        "If asked: pain started after a heavy fatty meal and alcohol the previous night; no prior similar episodes; no known gallstone diagnosis (ask directly — none known); heavy alcohol use for years.",
+        "After amylase/lipase result is requested: give the elevated result as per handout.",
+        "If IV fluids, analgesia, and antiemetic are ordered: state some improvement in comfort, vital signs remain to be reassessed.",
+        "If the candidate delays treatment to await imaging: condition/pain worsens; provide the emergency stall prompt."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to state the diagnosis can be made from the clinical picture plus the amylase/lipase result alone (without needing imaging first), to give aggressive IV fluids/analgesia/antiemetic promptly, and to actively ask about both gallstones and alcohol as the two leading causes.",
+        "Expect appropriate severity assessment/monitoring and early nutrition planning (not prolonged fasting) rather than an outdated \"nil by mouth until pain-free\" approach. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Recognise severe epigastric pain radiating to the back, with vomiting, as suggestive of acute pancreatitis, and call for senior help while beginning resuscitation.",
+        "Apply A–E: IV access, aggressive crystalloid fluid resuscitation, oxygen if hypoxic, analgesia, and an antiemetic; do not wait for imaging to begin treatment.",
+        "Interpret amylase/lipase more than three times the upper limit of normal, combined with the typical pain, as sufficient to diagnose acute pancreatitis without requiring imaging confirmation of the diagnosis itself.",
+        "Actively ask about and investigate for gallstones (ultrasound) and alcohol use as the two leading causes, since gallstone pancreatitis may need early ERCP/cholecystectomy planning.",
+        "Apply a severity-scoring approach (e.g. Glasgow-Imrie criteria) to guide the level of monitoring/care (ward vs HDU/ICU), and plan early oral/enteral nutrition as tolerated rather than prolonged fasting, with ongoing reassessment for local/systemic complications."
+      ],
+      "suggestedApproach": [
+        "Recognise the emergency and call for help.",
+        "A–E, IV fluids, analgesia, antiemetic, oxygen if needed.",
+        "Interpret amylase/lipase alongside the clinical picture to diagnose without delay.",
+        "Investigate for gallstones and alcohol as leading causes.",
+        "Apply severity assessment and appropriate level of monitoring.",
+        "Plan early nutrition and reassess for complications."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises severe epigastric pain radiating to the back with vomiting as suggestive of acute pancreatitis."
+        },
+        {
+          "order": 2,
+          "criterion": "Calls for senior help and applies an A–E approach."
+        },
+        {
+          "order": 3,
+          "criterion": "Starts aggressive IV fluid resuscitation promptly."
+        },
+        {
+          "order": 4,
+          "criterion": "Gives adequate analgesia and an antiemetic without delay."
+        },
+        {
+          "order": 5,
+          "criterion": "Correctly interprets amylase/lipase >3x upper limit of normal as diagnostic alongside the clinical picture, without requiring imaging first."
+        },
+        {
+          "order": 6,
+          "criterion": "Actively investigates for gallstones (e.g. ultrasound) as a leading cause."
+        },
+        {
+          "order": 7,
+          "criterion": "Actively asks about alcohol use as a leading cause."
+        },
+        {
+          "order": 8,
+          "criterion": "Applies a severity-scoring approach to guide level of care."
+        },
+        {
+          "order": 9,
+          "criterion": "Plans early oral/enteral nutrition as tolerated rather than prolonged fasting."
+        },
+        {
+          "order": 10,
+          "criterion": "Reassesses for local/systemic complications and escalates appropriately."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: \"His pain is worsening and he's more tachycardic. What do you do now?\"",
+        "\"Do you need a CT scan to make this diagnosis?\"",
+        "\"What are the two causes you must actively look for?\""
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Interpretation",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Team communication"
+      ],
+      "criticalSafetyErrors": [
+        "Delays fluid resuscitation/analgesia while awaiting imaging.",
+        "States imaging is required to make the diagnosis when the biochemical/clinical criteria are already met.",
+        "Fails to investigate for gallstones or alcohol as the leading causes."
+      ],
+      "sourceNote": [
+        "NICE NG104 — Pancreatitis. https://www.nice.org.uk/guidance/ng104 Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Adult Jaundice / Abnormal Liver Blood Tests",
+      "primaryCompetency": "Data interpretation and structured referral planning",
+      "format": "Data interpretation and referral planning",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Farah Naveed, aged 46 years, attends with yellowing of the eyes and dark urine for one week; blood tests have been done.",
+        "In 8 minutes: take a focused history, interpret the supplied liver blood test pattern, and outline the referral/investigation pathway.",
+        "Do not commit to a single cause without reasoning from the pattern of results supplied."
+      ],
+      "candidateHandout": [
+        "Results: bilirubin raised; alkaline phosphatase and gamma-GT disproportionately raised compared with ALT/AST (a cholestatic/obstructive pattern rather than a hepatocellular one).",
+        "History: pale stool and dark urine reported; itching present; mild right-upper-quadrant discomfort; no fever; no known alcohol excess; no new medicines started recently (ask directly)."
+      ],
+      "learningNotes": [
+        "Learning note: The British Society of Gastroenterology guideline on abnormal liver blood tests supports classifying the pattern as hepatocellular (ALT/AST disproportionately raised) versus cholestatic (ALP/GGT disproportionately raised) as the first step, since this determines the imaging and referral pathway. A cholestatic pattern with pale stool, dark urine, itching, and right-upper-quadrant discomfort raises suspicion of biliary obstruction (e.g. gallstone in the common bile duct, or a pancreatic/biliary mass in an older patient) and warrants urgent abdominal ultrasound, with MRCP/ERCP and hepatobiliary referral depending on findings. New-onset painless jaundice in an older adult, or jaundice with weight loss, needs urgent cancer-pathway referral to exclude a pancreaticobiliary malignancy."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, my eyes have gone yellow and my urine is very dark, and I'm terribly itchy.\"",
+        "If asked: pale stool for about a week; mild ache under the right ribs; no fever; no known alcohol excess; no new medicines, herbal remedies, or supplements started recently; no unintentional weight loss reported (ask directly — none volunteered).",
+        "ICE: worried this is liver cancer; wants to know why she's so itchy and what happens next."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to correctly classify the pattern as cholestatic (not hepatocellular) from the ALP/GGT-versus-ALT/AST relationship, and to connect this to the pale stool/dark urine/itching triad as biliary obstruction.",
+        "Expect urgent ultrasound as the correct first-line imaging step, with MRCP/ERCP and hepatobiliary or gastroenterology referral as next steps depending on findings, rather than a generic \"routine referral.\"",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of onset, associated pale stool/dark urine/itching, pain, medicines/supplements, alcohol use, and constitutional symptoms (weight loss, appetite).",
+        "Correctly classify the supplied liver blood test pattern as cholestatic (ALP/GGT disproportionately raised relative to ALT/AST) rather than hepatocellular, and explain this distinction to the patient in plain language.",
+        "Connect the cholestatic pattern and pale stool/dark urine/itching triad to likely biliary obstruction (e.g. gallstone, stricture, or a mass) as the working differential.",
+        "Arrange urgent abdominal ultrasound as first-line imaging; explain that MRCP/ERCP and specialist (hepatobiliary/gastroenterology) referral would follow depending on findings.",
+        "Address the patient's cancer concern honestly, explain the reason for the itching (bile salt accumulation), and safety-net for any worsening (fever, confusion, worsening jaundice) requiring urgent review."
+      ],
+      "suggestedApproach": [
+        "Take a focused jaundice-pattern history.",
+        "Correctly classify the liver blood test pattern.",
+        "Connect the pattern to the likely cause.",
+        "Arrange first-line imaging.",
+        "Explain the further referral pathway.",
+        "Address concerns honestly and safety-net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a history of onset, stool/urine colour change, itching, and pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Reviews medicines, supplements, and alcohol use."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens constitutional symptoms (weight loss, appetite, fever)."
+        },
+        {
+          "order": 4,
+          "criterion": "Correctly classifies the liver blood test pattern as cholestatic rather than hepatocellular."
+        },
+        {
+          "order": 5,
+          "criterion": "Explains the hepatocellular-versus-cholestatic distinction in plain language."
+        },
+        {
+          "order": 6,
+          "criterion": "Connects the cholestatic pattern and symptom triad to likely biliary obstruction."
+        },
+        {
+          "order": 7,
+          "criterion": "Arranges urgent abdominal ultrasound as the correct first-line imaging."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains the further pathway (MRCP/ERCP, hepatobiliary/gastroenterology referral) appropriately."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains the mechanism of itching (bile salt accumulation) to the patient."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses the cancer concern honestly and gives appropriate safety-netting."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"Is this pattern hepatocellular or cholestatic, and how do you know?\"",
+        "\"What is your first-line investigation, and why?\"",
+        "\"Why is she so itchy?\""
+      ],
+      "expectedCompetencies": [
+        "Interpretation",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Communication",
+        "Referral planning"
+      ],
+      "criticalSafetyErrors": [
+        "Misclassifies a clearly cholestatic pattern as hepatocellular (or vice versa).",
+        "Fails to arrange urgent imaging for likely biliary obstruction.",
+        "Gives no explanation or safety-netting for a possible malignant cause in an at-risk presentation."
+      ],
+      "sourceNote": [
+        "British Society of Gastroenterology — Guidelines on the management of abnormal liver blood tests. https://www.bsg.org.uk/clinical-resource/guidelines-on-abnormal-liver-blood-tests Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Coeliac Disease",
+      "primaryCompetency": "Focused history, correct investigation sequencing, and dietary counselling",
+      "format": "History, investigation, and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms Amna Riasat, aged 29 years, presents with bloating, loose stools, tiredness, and unexplained low iron levels found on a recent blood test.",
+        "In 8 minutes: take a focused history, explain correct serological testing, and counsel on management if coeliac disease is confirmed.",
+        "Do not advise her to start a gluten-free diet before testing is complete — this is a common and important error."
+      ],
+      "candidateHandout": [
+        "Symptoms: bloating, loose stools, tiredness, and unexplained iron-deficiency anaemia on recent bloods; mild weight loss; no blood in stool; family history of a sibling with a similar bowel problem.",
+        "Currently eating a normal, gluten-containing diet."
+      ],
+      "learningNotes": [
+        "Learning note: NICE NG20 (Coeliac disease: recognition, assessment and management) supports first-line serological testing with IgA tissue transglutaminase antibody (with total IgA to exclude IgA deficiency, which can cause a false-negative result), while the patient continues eating gluten-containing food for the duration of testing — stopping gluten before testing can cause a false-negative result and is a common, important error to avoid. A positive serology is followed by endoscopic duodenal biopsy to confirm the diagnosis. Once confirmed, management is a lifelong strict gluten-free diet with dietitian input, monitoring of nutritional status (iron, calcium, vitamin D, B12/folate), bone health assessment, and pneumococcal vaccination (due to hyposplenism risk) per local protocol."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I've been bloated and tired for months, and my iron came back low without an obvious reason.\"",
+        "If asked: loose stools most days; some unintentional weight loss; a sibling has \"some kind of bowel problem\" that required a special diet; currently eating normally, including bread and wheat products.",
+        "If she mentions researching this online: says she read that cutting out gluten might help and asks if she should start today.",
+        "ICE: worried about something being \"wrong with her gut long-term\"; wants a quick fix and is tempted to self-start a gluten-free diet immediately."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Full marks require the candidate to explicitly instruct her to continue eating gluten until testing (serology ± biopsy) is complete, and to correctly sequence tTG-IgA (with total IgA) before endoscopic biopsy.",
+        "Expect discussion of nutritional and bone-health monitoring and dietitian involvement if confirmed, plus mention of the family history as a relevant risk factor. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of GI symptoms, weight change, fatigue/anaemia, and family history (a first-degree relative with a similar bowel problem is a recognised risk factor for coeliac disease).",
+        "Explicitly instruct her to keep eating gluten-containing food until testing is complete, correcting her plan to self-start a gluten-free diet, and explain why (false-negative risk).",
+        "Arrange first-line serology: IgA tissue transglutaminase antibody with a total IgA level (to exclude IgA deficiency causing a false negative).",
+        "Explain that a positive serology is followed by endoscopic duodenal biopsy for definitive diagnosis.",
+        "If confirmed, explain the need for a lifelong strict gluten-free diet with dietitian support, monitoring of iron/calcium/vitamin D/B12, bone health assessment, and vaccination considerations (e.g. pneumococcal) per local protocol; safety-net for persistent symptoms despite diet (possible non-adherence or, rarely, complications)."
+      ],
+      "suggestedApproach": [
+        "Take a focused history including family history.",
+        "Correct any plan to self-start a gluten-free diet before testing.",
+        "Explain and arrange correct serological testing sequence.",
+        "Explain the role of biopsy for confirmation.",
+        "Counsel on lifelong dietary management and monitoring if confirmed.",
+        "Check understanding and safety-net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a history of GI symptoms, weight change, and fatigue/anaemia."
+        },
+        {
+          "order": 2,
+          "criterion": "Identifies the family history as a relevant risk factor."
+        },
+        {
+          "order": 3,
+          "criterion": "Explicitly advises continuing gluten intake until testing is complete."
+        },
+        {
+          "order": 4,
+          "criterion": "Explains why stopping gluten early would compromise testing."
+        },
+        {
+          "order": 5,
+          "criterion": "Correctly names tTG-IgA with total IgA as the first-line serological test."
+        },
+        {
+          "order": 6,
+          "criterion": "Explains that endoscopic duodenal biopsy follows positive serology for confirmation."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains the lifelong strict gluten-free diet requirement if confirmed."
+        },
+        {
+          "order": 8,
+          "criterion": "Mentions dietitian involvement and nutritional monitoring (iron, calcium, vitamin D, B12)."
+        },
+        {
+          "order": 9,
+          "criterion": "Mentions bone health assessment and relevant vaccination considerations."
+        },
+        {
+          "order": 10,
+          "criterion": "Checks understanding and gives appropriate safety-netting."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"Why shouldn't she start a gluten-free diet today?\"",
+        "\"What blood test would you order, and what else must you check alongside it?\"",
+        "\"What happens if the blood test is positive?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Prescribing/testing safety",
+        "Counselling"
+      ],
+      "criticalSafetyErrors": [
+        "Advises starting a gluten-free diet before testing is complete.",
+        "Orders tTG-IgA without total IgA, risking a missed IgA-deficient false negative.",
+        "Fails to arrange biopsy confirmation after positive serology."
+      ],
+      "sourceNote": [
+        "NICE NG20 — Coeliac disease: recognition, assessment and management. https://www.nice.org.uk/guidance/ng20 Accessed September 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Acute Appendicitis",
+      "primaryCompetency": "Focused history, focused abdominal examination, and safe surgical referral",
+      "format": "History, examination, and management planning",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Danish Iqbal, aged 22 years, presents with abdominal pain that started around the umbilicus and has moved to the right lower quadrant over the past day.",
+        "In 8 minutes: take a focused history, describe a focused abdominal examination, interpret the supplied findings, and outline the management/referral plan.",
+        "Do not delay surgical referral to complete extensive additional investigation in a classic presentation."
+      ],
+      "candidateHandout": [
+        "History: pain started peri-umbilically and migrated to the right iliac fossa over 24 hours; associated with nausea, one episode of vomiting, low-grade fever, and reduced appetite; pain worse on movement/coughing.",
+        "Examination on request: low-grade fever, tenderness and guarding at McBurney's point, rebound tenderness present, positive cough/hop test (pain on coughing or hopping), Rovsing's sign positive (pain in the right iliac fossa on palpating the left); no palpable mass; no signs of generalised peritonitis (diffuse rigidity) at this point."
+      ],
+      "learningNotes": [
+        "Learning note: The WSES (World Society of Emergency Surgery) 2020 Jerusalem guidelines support diagnosing acute appendicitis primarily on the clinical picture (migratory periumbilical-to-right-iliac-fossa pain, anorexia, low-grade fever, localised right iliac fossa tenderness with guarding/rebound) supported by inflammatory markers and, where diagnostic doubt remains (e.g. in women of reproductive age or atypical presentations), ultrasound or CT imaging. Management of confirmed or high-probability appendicitis is prompt surgical referral for appendicectomy (open or laparoscopic per local practice) with pre-operative analgesia, IV fluids, and antibiotics per local protocol; a clearly perforated/peritonitic presentation needs more urgent resuscitation and escalation. Non-operative antibiotic-only management is an evolving option in selected uncomplicated cases per some protocols, but remains a specialist surgical decision, not a primary-care one."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, my stomach pain started around my belly button yesterday, and now it's moved to my right side and it's much worse.\"",
+        "If asked: nausea and one episode of vomiting; reduced appetite; mild fever; pain worse with movement, coughing, and on the car ride over (bumps in the road worsened it).",
+        "If asked for examination: as per handout — tenderness/guarding at McBurney's point, rebound tenderness, positive cough/hop test, positive Rovsing's sign, no mass, no diffuse rigidity.",
+        "ICE: worried about needing \"a big operation\" and asks if it will definitely need surgery or if tablets could be tried instead."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Provide examination findings only on request, and confirm findings as listed if the correct examination manoeuvre is performed/described.",
+        "Full marks require the candidate to recognise the classic migratory pain pattern, correctly interpret the examination findings as supporting appendicitis, and arrange prompt surgical referral with appropriate pre-referral supportive measures (analgesia, IV fluids, keeping the patient nil by mouth in anticipation of possible surgery).",
+        "Accept a brief, honest answer to the \"tablets instead of surgery\" question that correctly frames antibiotic-only management as a specialist/selected-case decision, not a routine alternative offered from primary care. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history of the migratory pain pattern, associated anorexia/nausea/vomiting, fever, and pain aggravated by movement/coughing — the classic pattern for appendicitis.",
+        "Describe a focused abdominal examination: inspection, gentle palpation starting away from the painful area, specific tests (McBurney's point tenderness, rebound tenderness, Rovsing's sign, cough/hop test, psoas/obturator signs if locally taught), and assessment for signs of perforation/peritonitis (diffuse rigidity, systemic illness).",
+        "Interpret the findings as supporting a diagnosis of acute appendicitis, and explain that this is a clinical diagnosis supported by these findings, with imaging reserved for atypical presentations or diagnostic uncertainty.",
+        "Arrange prompt surgical referral, keep the patient nil by mouth in case of imminent surgery, give IV fluids and analgesia (adequate analgesia does not mask surgical decision-making and should not be withheld), and start antibiotics per local pre-operative protocol.",
+        "Answer the \"tablets instead of surgery\" question honestly: antibiotic-only management exists as an option in selected, specialist-assessed, uncomplicated cases in some protocols, but is a surgical team decision, not a primary-care alternative to referral."
+      ],
+      "suggestedApproach": [
+        "Take a history of the classic migratory pain pattern and associated symptoms.",
+        "Describe a systematic, gentle focused examination.",
+        "Interpret findings and recognise the clinical diagnosis.",
+        "Give appropriate pre-referral supportive care (analgesia, fluids, nil by mouth).",
+        "Arrange prompt surgical referral.",
+        "Answer the patient's question about non-operative treatment honestly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a history establishing the migratory peri-umbilical-to-right-iliac-fossa pain pattern."
+        },
+        {
+          "order": 2,
+          "criterion": "Elicits associated anorexia, nausea/vomiting, and fever."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks about aggravating factors (movement, coughing, bumps in a vehicle)."
+        },
+        {
+          "order": 4,
+          "criterion": "Describes a systematic, gentle abdominal examination sequence."
+        },
+        {
+          "order": 5,
+          "criterion": "Correctly elicits/interprets McBurney's point tenderness and rebound tenderness."
+        },
+        {
+          "order": 6,
+          "criterion": "Correctly elicits/interprets Rovsing's sign and the cough/hop test."
+        },
+        {
+          "order": 7,
+          "criterion": "Screens for signs of perforation/peritonitis (diffuse rigidity, systemic illness)."
+        },
+        {
+          "order": 8,
+          "criterion": "Recognises this as a clinical diagnosis, reserving imaging for atypical/uncertain cases."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives appropriate pre-referral supportive care (analgesia without withholding it, IV fluids, nil by mouth) and arranges prompt surgical referral."
+        },
+        {
+          "order": 10,
+          "criterion": "Answers the non-operative-treatment question honestly, framing it as a specialist decision."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What examination findings support your diagnosis?\"",
+        "\"Does he need a scan before he can go to surgery?\"",
+        "\"Would withholding analgesia help the surgical team assess him better?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Focused examination",
+        "Clinical reasoning",
+        "Management planning",
+        "Communication",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Withholds analgesia in the belief this preserves diagnostic accuracy.",
+        "Delays surgical referral to pursue unnecessary additional investigation in a classic presentation.",
+        "Misses signs of perforation/peritonitis or fails to escalate urgency if present."
+      ],
+      "sourceNote": [
+        "Diagnosis and treatment of acute appendicitis: 2020 update of the WSES Jerusalem guidelines. https://wjes.biomedcentral.com/articles/10.1186/s13017-020-00306-3 Accessed September 2026. Recommendations from international bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    }
+  ]
+}

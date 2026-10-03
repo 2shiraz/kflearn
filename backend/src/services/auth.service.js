@@ -2,6 +2,9 @@ import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
+import { avatarFor, isAvatarId, randomAvatarId } from "../config/avatars.js";
+import { CreditTransaction } from "../models/CreditTransaction.js";
+import { OsceAttempt } from "../models/OsceAttempt.js";
 import { User } from "../models/User.js";
 
 function toUserDto(user) {
@@ -12,17 +15,14 @@ function toUserDto(user) {
     email: user.email,
     role: user.role,
     roleLabel: user.roleLabel || "",
+    avatar: avatarFor(user),
     institution: profile.institution || "",
     programme: profile.programme || "",
     yearLevel: profile.yearLevel || "",
-    targetExam: profile.targetExam || "",
-    expectedExamDate: profile.expectedExamDate || "",
     profile: {
       institution: profile.institution || "",
       programme: profile.programme || "",
       yearLevel: profile.yearLevel || "",
-      targetExam: profile.targetExam || "",
-      expectedExamDate: profile.expectedExamDate || "",
     },
   };
 }
@@ -41,8 +41,6 @@ const PROFILE_LIMITS = {
   institution: 200,
   programme: 120,
   yearLevel: 80,
-  targetExam: 120,
-  expectedExamDate: 80,
 };
 
 function badProfile() {
@@ -97,6 +95,7 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     passwordHash,
     role: "student",
     roleLabel: String(roleLabel || "").trim(),
+    avatar: randomAvatarId(),
     profile: safeProfile,
   });
 
@@ -157,8 +156,68 @@ export async function updateCurrentUser(userId, payload) {
     if (typeof payload.roleLabel !== "string" || payload.roleLabel.length > 80) throw badProfile();
     user.roleLabel = payload.roleLabel.trim();
   }
+  if (payload.avatar !== undefined) {
+    if (!isAvatarId(payload.avatar)) throw badProfile();
+    user.avatar = payload.avatar;
+  }
   if (payload.profile !== undefined) user.profile = { ...user.profile, ...cleanProfile(payload.profile) };
 
   await user.save();
   return { user: toUserDto(user) };
+}
+
+function httpError(status, message, code) {
+  const error = new Error(message);
+  error.status = status;
+  if (code) error.code = code;
+  return error;
+}
+
+// Re-checks the account password before a sensitive change. Uses 400, not
+// 401, so a typo doesn't look like an expired session to the client.
+async function verifyPassword(user, password) {
+  if (typeof password !== "string" || !password || Buffer.byteLength(password, "utf8") > 1024 ||
+      !(await bcrypt.compare(password, user.passwordHash || ""))) {
+    throw httpError(400, "Your current password is incorrect.", "WRONG_PASSWORD");
+  }
+}
+
+// Changing the password signs out every other session (sessionVersion bump)
+// and returns a fresh token so this one stays signed in.
+export async function changePassword(userId, { currentPassword, newPassword } = {}) {
+  const user = await User.findById(userId);
+  if (!user) throw httpError(404, "User not found.");
+  await verifyPassword(user, currentPassword);
+
+  if (typeof newPassword !== "string" || Buffer.byteLength(newPassword, "utf8") > 72) {
+    throw httpError(400, "New password is too long.");
+  }
+  if (!PASSWORD_RULE.test(newPassword)) {
+    throw httpError(400, "Password must be at least 8 characters and include a letter and a number.");
+  }
+  if (await bcrypt.compare(newPassword, user.passwordHash)) {
+    throw httpError(400, "Choose a password different from your current one.");
+  }
+
+  user.passwordHash = await bcrypt.hash(newPassword, 12);
+  user.sessionVersion = (user.sessionVersion || 0) + 1;
+  await user.save();
+
+  const { token, expiresInMs } = signToken(user);
+  return { token, expiresInMs, user: toUserDto(user) };
+}
+
+// Permanently removes the account and the practice data tied to it.
+export async function deleteAccount(userId, { password, confirmation } = {}) {
+  const user = await User.findById(userId);
+  if (!user) throw httpError(404, "User not found.");
+  if (user.role === "admin") {
+    throw httpError(403, "Admin accounts can't be deleted from settings.", "ADMIN_DELETE_BLOCKED");
+  }
+  if (confirmation !== "DELETE") throw httpError(400, "Type DELETE to confirm.");
+  await verifyPassword(user, password);
+
+  await OsceAttempt.deleteMany({ userId: user._id.toString() });
+  await CreditTransaction.deleteMany({ userId: user._id });
+  await User.deleteOne({ _id: user._id });
 }

@@ -17,12 +17,12 @@ const userSchema = new mongoose.Schema(
     },
     role: { type: String, enum: ["student", "contributor", "admin"], default: "student" },
     roleLabel: { type: String, default: "" },
+    // Id of one of the bundled avatars (see config/avatars.js), never image data.
+    avatar: { type: String, default: "" },
     profile: {
       institution: { type: String, default: "" },
       programme: { type: String, default: "" },
       yearLevel: { type: String, default: "" },
-      targetExam: { type: String, default: "" },
-      expectedExamDate: { type: String, default: "" },
     },
   },
   { timestamps: true },

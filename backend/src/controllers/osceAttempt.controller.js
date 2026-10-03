@@ -82,6 +82,11 @@ export async function createAttempt(req, res) {
     error.status = 404;
     throw error;
   }
+  if (module.practiceModes?.length && !module.practiceModes.includes(mode)) {
+    const error = new Error("This practice mode is not available for this station.");
+    error.status = 409;
+    throw error;
+  }
 
   const fields = {
     userId: req.user.id,
@@ -127,7 +132,7 @@ export async function getAttempt(req, res) {
     success: true,
     data: {
       attempt: attemptDto(attempt),
-      module: { ...studentStationDetailDto(module), openingStatement: patientScript.openingStatement },
+      module: { ...studentStationDetailDto(module, { includeReview: ["self-assessed", "ai-assessed"].includes(attempt.status) }), openingStatement: patientScript.openingStatement },
       checklist: attempt.mode === "single-player" || attempt.status !== "active" ? checklistDto(checklist) : undefined,
     },
   });
@@ -235,15 +240,22 @@ export async function selfAssessAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
   if (attempt.status !== "ended") throw invalidAttemptState();
   const { checklist } = await getStationClinicalBundle(attempt.stationId);
-  const result = selfAssessChecklist(checklist, req.body.checkedItemIds || []);
+  const checklistItems = checklist.sections.flatMap((section) => section.items);
+  const validItems = new Map(checklistItems.map((item) => [item.itemId, item]));
+  if (req.body.itemScores?.some(({ itemId, rawScore }) => !validItems.has(itemId) || rawScore > validItems.get(itemId).maxRawScore)) {
+    const error = new Error("itemScores contains an unknown item or a score outside the item's range.");
+    error.status = 400;
+    throw error;
+  }
+  const result = selfAssessChecklist(checklist, req.body.checkedItemIds || [], req.body.itemScores || []);
   const feedback = {
     summary: "Self assessment complete.",
-    missedItems: checklist.sections.flatMap((section) => section.items.filter((item) => !req.body.checkedItemIds?.includes(item.itemId)).map((item) => item.label)),
+    missedItems: checklistItems.filter((item) => !result.itemScores.find((score) => score.itemId === item.itemId)?.rawScore).map((item) => item.label),
   };
   const updated = await OsceAttempt.findOneAndUpdate(
     { _id: attempt._id, userId: req.user.id, status: "ended" },
     { $set: {
-      selfAssessment: { checkedItemIds: req.body.checkedItemIds || [], itemScores: result.itemScores },
+      selfAssessment: { checkedItemIds: result.itemScores.filter((score) => score.rawScore > 0).map((score) => score.itemId), itemScores: result.itemScores },
       finalScore: result.finalScore,
       feedback,
       status: "self-assessed",

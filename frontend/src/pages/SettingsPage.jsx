@@ -1,170 +1,473 @@
-import { useEffect, useState } from "react";
-import { BookOpen, Building2, CalendarClock, Camera, Check, GraduationCap, Mail, Sparkles, Target, User } from "lucide-react";
-import { fetchCurrentUser, getCurrentUser, updateProfileRequest } from "../lib/api";
-import { PageHeader, PageMain, PrimaryButton, RequireUser } from "../components/AppPage";
+import { useEffect, useRef, useState } from "react";
+import { Check, Eye, EyeOff, ImagePlus, X } from "lucide-react";
+import {
+  changePasswordRequest,
+  deleteAccountRequest,
+  fetchCurrentUser,
+  getCurrentUser,
+  ROLE_OPTIONS,
+  updateProfileRequest,
+  YEAR_LEVEL_OPTIONS,
+} from "../lib/api";
+import { PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
 import { FormError, inputClass } from "../components/AuthShell";
-import { HealthIcon } from "../site/Illustrations";
+import { AVATAR_IDS, UserAvatar } from "../site/Illustrations";
+
+const SECTIONS = [
+  { id: "profile", label: "Profile" },
+  { id: "security", label: "Security" },
+  { id: "danger", label: "Delete account" },
+];
+
+function formFromUser(user) {
+  return {
+    fullName: user.fullName || "",
+    roleLabel: user.roleLabel || "",
+    institution: user.institution || user.profile?.institution || "",
+    programme: user.programme || user.profile?.programme || "",
+    yearLevel: user.yearLevel || user.profile?.yearLevel || "",
+  };
+}
 
 export default function SettingsPage() {
-  const [user, setUser] = useState(null);
-  const [form, setForm] = useState(null);
-  const [saved, setSaved] = useState(false);
+  const [user, setUser] = useState(getCurrentUser);
+
+  useEffect(() => {
+    fetchCurrentUser().then((data) => data?.user && setUser(data.user)).catch(() => {});
+  }, []);
+
+  return (
+    <RequireUser active="settings">
+      <PageMain width="split">
+        <PageHeader title="Settings" description="Your profile, password and account." />
+        {user && (
+          <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+            <ProfileSummary user={user} onSaved={setUser} />
+            <div className="grid min-w-0 gap-6">
+              <ProfileSection key={user.id} user={user} onSaved={setUser} />
+              <SecuritySection email={user.email} />
+              <DangerSection isAdmin={user.role === "admin"} />
+            </div>
+          </div>
+        )}
+      </PageMain>
+    </RequireUser>
+  );
+}
+
+function ProfileSummary({ user, onSaved }) {
+  const [picking, setPicking] = useState(false);
+  const subtitle = [user.yearLevel || user.profile?.yearLevel, user.institution || user.profile?.institution].filter(Boolean).join(", ");
+  return (
+    <aside className="site-rise lg:sticky lg:top-8 lg:self-start">
+      <Panel className="flex items-center gap-4 lg:flex-col lg:text-center">
+        <div className="relative shrink-0">
+          <UserAvatar id={user.avatar} size={72} className="ring-4 ring-s-card" />
+          <button
+            type="button"
+            onClick={() => setPicking(true)}
+            aria-label="Change profile picture"
+            title="Change profile picture"
+            className="site-press absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full border-2 border-s-card bg-s-ink text-s-on-accent hover:bg-s-accent"
+          >
+            <ImagePlus size={14} strokeWidth={2} aria-hidden="true" />
+          </button>
+        </div>
+        <div className="min-w-0">
+          <p className="truncate text-lg font-semibold tracking-tight text-s-ink">{user.fullName}</p>
+          <p className="truncate text-sm text-s-mute">{subtitle || user.email}</p>
+        </div>
+      </Panel>
+      <nav aria-label="Settings sections" className="mt-4 hidden lg:block">
+        <ul className="space-y-1">
+          {SECTIONS.map((s) => (
+            <li key={s.id}>
+              <a href={`#${s.id}`} className="flex min-h-11 items-center rounded-xl px-3 text-sm font-medium text-s-mute hover:bg-s-tint/70 hover:text-s-ink">
+                {s.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      {picking && <AvatarDialog current={user.avatar} onClose={() => setPicking(false)} onSaved={onSaved} />}
+    </aside>
+  );
+}
+
+// Native modal dialog: focus is trapped inside, Escape closes it, and the
+// page behind is inert. Clicking the backdrop also closes it.
+function AvatarDialog({ current, onClose, onSaved }) {
+  const ref = useRef(null);
+  const [selected, setSelected] = useState(current || AVATAR_IDS[0]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const u = getCurrentUser();
-    if (!u) {
-      window.location.href = "/signin";
-      return;
-    }
-    applyUser(u);
-    fetchCurrentUser().then((data) => {
-      if (data?.user) applyUser(data.user);
-    }).catch(() => {});
+    const dialog = ref.current;
+    dialog.showModal();
+    return () => dialog.close();
   }, []);
-
-  if (!user || !form) return null;
-
-  function handleChange(e) {
-    setSaved(false);
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
-  }
 
   async function handleSave(e) {
     e.preventDefault();
-    setStatus("loading");
+    if (selected === current) return onClose();
+    setStatus("saving");
     setError("");
     try {
-      const data = await updateProfileRequest({
-        fullName: form.fullName,
-        roleLabel: form.role,
-        profile: {
-          institution: form.institution,
-          programme: form.programme,
-          yearLevel: form.yearLevel,
-          targetExam: form.targetExam,
-          expectedExamDate: form.expectedExamDate,
-        },
-      });
-      if (data?.user) applyUser(data.user);
-      setSaved(true);
-      setStatus("idle");
+      const data = await updateProfileRequest({ avatar: selected });
+      if (data?.user) onSaved(data.user);
+      onClose();
     } catch (err) {
       setError(err.message);
       setStatus("error");
     }
   }
 
-  function applyUser(nextUser) {
-    setUser(nextUser);
-    setForm({
-      fullName: nextUser.fullName || "",
-      email: nextUser.email || "",
-      role: nextUser.roleLabel || (nextUser.role === "admin" ? "Admin" : "MBBS Student"),
-      institution: nextUser.institution || nextUser.profile?.institution || "",
-      programme: nextUser.programme || nextUser.profile?.programme || "",
-      yearLevel: nextUser.yearLevel || nextUser.profile?.yearLevel || "",
-      targetExam: nextUser.targetExam || nextUser.profile?.targetExam || "",
-      expectedExamDate: nextUser.expectedExamDate || nextUser.profile?.expectedExamDate || "",
-    });
-  }
-
-  const initials = form.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
-  const subtitle = [form.yearLevel, form.institution].filter(Boolean).join(", ");
-
   return (
-    <RequireUser active="settings">
-      <PageMain width="split">
-        <PageHeader title="Profile and settings" description="Manage your account and practice details." />
-
-        <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
-          <div className="site-rise site-grid h-fit overflow-hidden rounded-3xl border border-s-line">
-            <div className="relative h-20 bg-linear-to-r from-s-accent-soft via-sky-soft to-mint-soft">
-              <span className="pointer-events-none absolute -right-4 -top-4 text-s-accent opacity-[0.12]" aria-hidden="true">
-                <HealthIcon name="stethoscope" size={96} />
-              </span>
-            </div>
-            <div className="px-6 pb-6 text-center">
-              <div className="relative -mt-10 inline-block">
-                <span className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-s-card bg-s-accent text-2xl font-semibold text-s-on-accent site-shadow">
-                  {initials}
-                </span>
-                <button
-                  type="button"
-                  disabled
-                  title="Photo upload isn't available yet"
-                  aria-label="Change photo (not available yet)"
-                  className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full border-2 border-s-card bg-s-ink text-s-on-accent opacity-60"
-                >
-                  <Camera size={14} strokeWidth={2} />
-                </button>
-              </div>
-
-              <p className="mt-3 text-lg font-semibold tracking-tight text-s-ink">{form.fullName}</p>
-              {subtitle && <p className="text-sm text-s-mute">{subtitle}</p>}
-
-              <div className="mt-4 flex justify-center">
-                <span className="rounded-full bg-s-accent-soft px-3 py-1 font-chart text-xs text-s-accent-strong">{form.role}</span>
-              </div>
-            </div>
-          </div>
-
-          <form onSubmit={handleSave} className="site-rise site-grid rounded-3xl border border-s-line p-6 sm:p-7" style={{ "--rise-delay": "80ms" }}>
-            <h2 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-s-ink">
-              <GraduationCap size={18} strokeWidth={2} className="text-s-accent" aria-hidden="true" /> Academic profile
-            </h2>
-            <p className="mt-1 text-sm text-s-mute">This helps us suggest the right stations and timelines for you.</p>
-
-            <div className="mt-6 grid gap-5 sm:grid-cols-2">
-              <Field icon={User} label="Full name" name="fullName" value={form.fullName} onChange={handleChange} />
-              <Field icon={Mail} label="Email" name="email" type="email" value={form.email} onChange={handleChange} disabled />
-              <Field icon={GraduationCap} label="Role" name="role" value={form.role} onChange={handleChange} disabled />
-              <Field icon={Building2} label="Institution" name="institution" value={form.institution} onChange={handleChange} />
-              <Field icon={BookOpen} label="Programme" name="programme" value={form.programme} onChange={handleChange} />
-              <Field icon={GraduationCap} label="Year / Level" name="yearLevel" value={form.yearLevel} onChange={handleChange} />
-              <Field icon={Target} label="Target examination" name="targetExam" value={form.targetExam} onChange={handleChange} />
-              <Field icon={CalendarClock} label="Expected exam date" name="expectedExamDate" placeholder="e.g. March 2027" value={form.expectedExamDate} onChange={handleChange} />
-            </div>
-
-            {status === "error" && <div className="mt-6"><FormError>{error}</FormError></div>}
-
-            <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-s-line pt-6">
-              <PrimaryButton type="submit" disabled={status === "loading"}>
-                {status === "loading" ? "Saving..." : "Save changes"}
-              </PrimaryButton>
-              {saved && (
-                <span role="status" className="flex items-center gap-1.5 rounded-full bg-mint-soft px-3 py-1.5 text-sm font-medium text-s-good">
-                  <Check size={15} strokeWidth={2.5} aria-hidden="true" /> Saved
-                </span>
-              )}
-              <span className="flex items-center gap-1.5 text-xs text-s-mute sm:ml-auto">
-                <Sparkles size={13} strokeWidth={2} aria-hidden="true" /> Used to personalise your dashboard
-              </span>
-            </div>
-          </form>
+    <dialog
+      ref={ref}
+      aria-labelledby="avatar-dialog-title"
+      onCancel={(e) => { e.preventDefault(); onClose(); }}
+      onClick={(e) => e.target === ref.current && onClose()}
+      className="m-auto w-[calc(100%-2rem)] max-w-xl rounded-3xl border border-s-line bg-s-card p-0 text-s-ink shadow-2xl backdrop:bg-s-ink/40 backdrop:backdrop-blur-sm"
+    >
+      <form onSubmit={handleSave} className="p-5 sm:p-6">
+        <div className="mb-5 flex items-start justify-between gap-4">
+          <h2 id="avatar-dialog-title" className="text-lg font-semibold tracking-tight text-s-ink">Choose a profile picture</h2>
+          <button type="button" onClick={onClose} aria-label="Close" className="site-press -m-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-mute hover:bg-s-tint hover:text-s-ink">
+            <X size={18} strokeWidth={2} aria-hidden="true" />
+          </button>
         </div>
-      </PageMain>
-    </RequireUser>
+
+        <fieldset>
+          <legend className="sr-only">Avatars</legend>
+          <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
+            {AVATAR_IDS.map((id, i) => {
+              const isSelected = selected === id;
+              return (
+                <label
+                  key={id}
+                  className={`site-press relative flex aspect-square cursor-pointer items-center justify-center rounded-2xl border-2 transition-colors has-focus-visible:ring-2 has-focus-visible:ring-s-accent/40 ${
+                    isSelected ? "border-s-accent bg-s-accent-soft" : "border-transparent bg-s-tint/60 hover:border-s-line"
+                  }`}
+                >
+                  <input type="radio" name="avatar" value={id} checked={isSelected} onChange={() => setSelected(id)} className="sr-only" aria-label={`Avatar ${i + 1}`} />
+                  <UserAvatar id={id} size={56} className="bg-transparent" />
+                  {isSelected && (
+                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-s-accent text-s-on-accent" aria-hidden="true">
+                      <Check size={12} strokeWidth={3} />
+                    </span>
+                  )}
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
+
+        {status === "error" && <div className="mt-5"><FormError>{error}</FormError></div>}
+
+        <div className="mt-6 flex flex-wrap justify-end gap-3 border-t border-s-line pt-5">
+          <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+          <PrimaryButton type="submit" disabled={status === "saving"}>
+            {status === "saving" ? "Saving..." : "Save"}
+          </PrimaryButton>
+        </div>
+      </form>
+    </dialog>
   );
 }
 
-function Field({ icon: Icon, label, name, value, onChange, type = "text", placeholder, disabled = false }) {
+function SectionTitle({ id, title, description, danger = false }) {
   return (
-    <label className="block">
-      <span className="mb-2 block text-sm font-medium text-s-ink">{label}</span>
-      <div className="relative">
-        <Icon size={16} strokeWidth={2} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-s-mute" aria-hidden="true" />
-        <input
-          name={name}
-          type={type}
-          value={value}
-          placeholder={placeholder}
-          onChange={onChange}
-          disabled={disabled}
-          className={`${inputClass} pl-10 disabled:cursor-not-allowed disabled:bg-s-tint/60 disabled:text-s-mute`}
-        />
-      </div>
-    </label>
+    <div className="mb-6">
+      <h2 id={id} className={`scroll-mt-24 text-lg font-semibold tracking-tight ${danger ? "text-s-miss" : "text-s-ink"}`}>{title}</h2>
+      {description && <p className="mt-1 text-sm leading-relaxed text-s-mute">{description}</p>}
+    </div>
+  );
+}
+
+function Saved({ children = "Saved" }) {
+  return (
+    <span role="status" className="flex items-center gap-1.5 rounded-full bg-mint-soft px-3 py-1.5 text-sm font-medium text-s-good">
+      <Check size={15} strokeWidth={2.5} aria-hidden="true" /> {children}
+    </span>
+  );
+}
+
+// ---- Profile: name, role and studies ----
+function ProfileSection({ user, onSaved }) {
+  const [form, setForm] = useState(() => formFromUser(user));
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
+
+  function set(field, value) {
+    setStatus("idle");
+    setForm((f) => ({ ...f, [field]: value }));
+  }
+
+  async function handleSave(e) {
+    e.preventDefault();
+    setStatus("saving");
+    setError("");
+    try {
+      const data = await updateProfileRequest({
+        fullName: form.fullName,
+        roleLabel: form.roleLabel,
+        profile: { institution: form.institution, programme: form.programme, yearLevel: form.yearLevel },
+      });
+      if (data?.user) onSaved(data.user);
+      setStatus("saved");
+    } catch (err) {
+      setError(err.message);
+      setStatus("error");
+    }
+  }
+
+  // Keep a saved value that isn't in the list (typed in before the list existed).
+  const roleOptions = form.roleLabel && !ROLE_OPTIONS.includes(form.roleLabel) ? [form.roleLabel, ...ROLE_OPTIONS] : ROLE_OPTIONS;
+  const yearOptions = form.yearLevel && !YEAR_LEVEL_OPTIONS.includes(form.yearLevel) ? [form.yearLevel, ...YEAR_LEVEL_OPTIONS] : YEAR_LEVEL_OPTIONS;
+
+  return (
+    <Panel className="site-rise" style={{ "--rise-delay": "60ms" }}>
+      <form onSubmit={handleSave}>
+        <SectionTitle id="profile" title="Profile" />
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField label="Full name" name="fullName" autoComplete="name" required value={form.fullName} onChange={(v) => set("fullName", v)} />
+          <TextField label="Email" name="email" type="email" value={user.email} disabled hint="Your email can't be changed." />
+          <SelectField label="Role" name="roleLabel" value={form.roleLabel} options={roleOptions} onChange={(v) => set("roleLabel", v)} />
+          <SelectField label="Year or level" name="yearLevel" value={form.yearLevel} options={yearOptions} onChange={(v) => set("yearLevel", v)} />
+          <TextField label="Institution" name="institution" autoComplete="organization" value={form.institution} onChange={(v) => set("institution", v)} />
+          <TextField label="Programme" name="programme" placeholder="MBBS" value={form.programme} onChange={(v) => set("programme", v)} />
+        </div>
+
+        {status === "error" && <div className="mt-6"><FormError>{error}</FormError></div>}
+
+        <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-s-line pt-6">
+          <PrimaryButton type="submit" disabled={status === "saving"}>
+            {status === "saving" ? "Saving..." : "Save changes"}
+          </PrimaryButton>
+          {status === "saved" && <Saved />}
+        </div>
+      </form>
+    </Panel>
+  );
+}
+
+// ---- Security: password change ----
+const PASSWORD_CHECKS = [
+  { label: "At least 8 characters", test: (p) => p.length >= 8 },
+  { label: "A letter", test: (p) => /[A-Za-z]/.test(p) },
+  { label: "A number", test: (p) => /\d/.test(p) },
+];
+
+function SecuritySection({ email }) {
+  const empty = { currentPassword: "", newPassword: "", confirmPassword: "" };
+  const [form, setForm] = useState(empty);
+  const [show, setShow] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
+
+  const rulesMet = PASSWORD_CHECKS.every((c) => c.test(form.newPassword));
+  const matches = form.newPassword && form.newPassword === form.confirmPassword;
+  const canSubmit = form.currentPassword && rulesMet && matches && status !== "saving";
+
+  function set(field, value) {
+    setStatus("idle");
+    setForm((f) => ({ ...f, [field]: value }));
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!canSubmit) return;
+    setStatus("saving");
+    setError("");
+    try {
+      await changePasswordRequest({ currentPassword: form.currentPassword, newPassword: form.newPassword });
+      setForm(empty);
+      setStatus("saved");
+    } catch (err) {
+      setError(err.message);
+      setStatus("error");
+    }
+  }
+
+  const type = show ? "text" : "password";
+
+  return (
+    <Panel className="site-rise" style={{ "--rise-delay": "120ms" }}>
+      <form onSubmit={handleSubmit}>
+        <SectionTitle id="security" title="Security" description="Changing your password signs you out on every other device." />
+
+        {/* Lets password managers attach the new password to the right account. */}
+        <input type="text" name="username" autoComplete="username" value={email} readOnly hidden />
+
+        <div className="grid gap-5 sm:max-w-md">
+          <TextField label="Current password" name="currentPassword" type={type} autoComplete="current-password" required value={form.currentPassword} onChange={(v) => set("currentPassword", v)} />
+          <TextField label="New password" name="newPassword" type={type} autoComplete="new-password" required value={form.newPassword} onChange={(v) => set("newPassword", v)} />
+          <TextField
+            label="Confirm new password"
+            name="confirmPassword"
+            type={type}
+            autoComplete="new-password"
+            required
+            value={form.confirmPassword}
+            onChange={(v) => set("confirmPassword", v)}
+            error={form.confirmPassword && !matches ? "Passwords don't match." : ""}
+          />
+        </div>
+
+        <ul className="mt-4 flex flex-wrap gap-2" aria-label="Password requirements">
+          {PASSWORD_CHECKS.map((c) => {
+            const ok = c.test(form.newPassword);
+            return (
+              <li key={c.label} className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${ok ? "bg-mint-soft text-s-good" : "bg-s-tint text-s-mute"}`}>
+                {ok ? <Check size={13} strokeWidth={2.5} aria-hidden="true" /> : <X size={13} strokeWidth={2.5} aria-hidden="true" />}
+                {c.label}
+                <span className="sr-only">{ok ? "(met)" : "(not met)"}</span>
+              </li>
+            );
+          })}
+        </ul>
+
+        <button type="button" onClick={() => setShow((s) => !s)} className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full text-sm font-medium text-s-mute hover:text-s-ink">
+          {show ? <EyeOff size={16} strokeWidth={2} aria-hidden="true" /> : <Eye size={16} strokeWidth={2} aria-hidden="true" />}
+          {show ? "Hide passwords" : "Show passwords"}
+        </button>
+
+        {status === "error" && <div className="mt-5"><FormError>{error}</FormError></div>}
+
+        <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-s-line pt-6">
+          <PrimaryButton type="submit" disabled={!canSubmit}>
+            {status === "saving" ? "Updating..." : "Update password"}
+          </PrimaryButton>
+          {status === "saved" && <Saved>Password updated</Saved>}
+        </div>
+      </form>
+    </Panel>
+  );
+}
+
+// ---- Danger zone: account deletion ----
+function DangerSection({ isAdmin }) {
+  const [open, setOpen] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmText, setConfirmText] = useState("");
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
+
+  const canDelete = password && confirmText === "DELETE" && status !== "deleting";
+
+  function cancel() {
+    setOpen(false);
+    setPassword("");
+    setConfirmText("");
+    setError("");
+    setStatus("idle");
+  }
+
+  async function handleDelete(e) {
+    e.preventDefault();
+    if (!canDelete) return;
+    setStatus("deleting");
+    setError("");
+    try {
+      await deleteAccountRequest({ password });
+      window.location.replace("/");
+    } catch (err) {
+      setError(err.message);
+      setStatus("error");
+    }
+  }
+
+  return (
+    <section aria-labelledby="danger" className="site-rise rounded-3xl border border-coral/35 bg-s-card p-5 sm:p-6" style={{ "--rise-delay": "180ms" }}>
+      <SectionTitle
+        id="danger"
+        danger
+        title="Delete account"
+        description="Permanently deletes your account, practice history and AI credits. This can't be undone."
+      />
+
+      {isAdmin ? (
+        <p className="rounded-2xl bg-s-tint/60 p-4 text-sm text-s-mute">Admin accounts can't be deleted from here.</p>
+      ) : !open ? (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="site-press inline-flex min-h-11 items-center justify-center rounded-full border border-coral/40 bg-s-card px-5 py-2.5 text-sm font-semibold text-s-miss hover:bg-coral-soft"
+        >
+          Delete my account
+        </button>
+      ) : (
+        <form onSubmit={handleDelete} className="rounded-2xl bg-coral-soft/50 p-4 sm:p-5">
+          <div className="grid gap-5 sm:max-w-md">
+            <TextField label="Your password" name="deletePassword" type="password" autoComplete="current-password" required value={password} onChange={setPassword} />
+            <TextField
+              label="Type DELETE to confirm"
+              name="deleteConfirm"
+              autoComplete="off"
+              required
+              value={confirmText}
+              onChange={setConfirmText}
+            />
+          </div>
+
+          {status === "error" && <div className="mt-5"><FormError>{error}</FormError></div>}
+
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <button
+              type="submit"
+              disabled={!canDelete}
+              className="site-press inline-flex min-h-11 items-center justify-center rounded-full bg-s-miss px-5 py-2.5 text-sm font-semibold text-s-on-accent hover:opacity-90 disabled:pointer-events-none disabled:opacity-50"
+            >
+              {status === "deleting" ? "Deleting..." : "Delete permanently"}
+            </button>
+            <SecondaryButton onClick={cancel}>Cancel</SecondaryButton>
+          </div>
+        </form>
+      )}
+    </section>
+  );
+}
+
+// ---- Fields ----
+function TextField({ label, name, value, onChange, type = "text", placeholder, autoComplete, required = false, disabled = false, hint, error }) {
+  const describedBy = error ? `${name}-error` : hint ? `${name}-hint` : undefined;
+  return (
+    <div>
+      <label htmlFor={name} className="mb-2 block text-sm font-medium text-s-ink">{label}</label>
+      <input
+        id={name}
+        name={name}
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        required={required}
+        disabled={disabled}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={describedBy}
+        onChange={onChange ? (e) => onChange(e.target.value) : undefined}
+        className={`${inputClass} disabled:cursor-not-allowed disabled:bg-s-tint/60 disabled:text-s-mute`}
+      />
+      {error ? (
+        <p id={`${name}-error`} className="mt-1.5 text-xs text-s-miss">{error}</p>
+      ) : hint ? (
+        <p id={`${name}-hint`} className="mt-1.5 text-xs text-s-mute">{hint}</p>
+      ) : null}
+    </div>
+  );
+}
+
+function SelectField({ label, name, value, options, onChange }) {
+  return (
+    <div>
+      <label htmlFor={name} className="mb-2 block text-sm font-medium text-s-ink">{label}</label>
+      <select id={name} name={name} value={value} onChange={(e) => onChange(e.target.value)} className={inputClass}>
+        <option value="">Select</option>
+        {options.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+      </select>
+    </div>
   );
 }

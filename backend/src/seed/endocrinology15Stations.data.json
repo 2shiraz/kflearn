@@ -1,0 +1,1788 @@
+{
+  "metadata": {
+    "title": "ENDOCRINOLOGY OSCE",
+    "subtitle": "15 Evidence-Corrected Stations",
+    "audienceAndScoring": "Final-Year MBBS • 10 minutes per station • 20-point analytic checklist",
+    "facultyNote": "This manual contains exactly 15 standalone final-year MBBS endocrinology OSCE stations. Stations 1–6 are clinically revised versions of the supplied topics; stations 7–15 broaden coverage across adrenal, pituitary, calcium, and endocrine emergencies. Local protocols supersede imported guidance. NICE, JBDS, Society for Endocrinology, Endocrine Society, and ADA recommendations are used as identified evidence standards. They do not create Pakistani legal, licensing, prescribing, referral, or service obligations. Faculty must replace imported operational details with the current approved institutional, provincial, and national protocols before summative use. Resource constraints may shape implementation but must not reduce emergency safety.",
+    "assessmentDesign": [
+      "Each station is designed for 10 minutes and uses a 20-point analytic checklist (10 observable items scored 0, 1, or 2).",
+      "Score 2 = clearly and independently achieved; 1 = partially achieved or achieved only after a standard prompt; 0 = omitted, incorrect, or unsafe.",
+      "The analytic score and global rating must be recorded independently. No numerical pass mark is prescribed; use an approved standard-setting process.",
+      "Critical safety errors require examiner review and may justify failure when they create material danger. A minor omission alone should not automatically fail a candidate.",
+      "Candidate learning notes are intended for release after the station unless faculty deliberately uses the page for formative open-book teaching.",
+      "Standardised prompts restore progress without revealing the answer. Record every prompt and apply the same scoring rule to every candidate."
+    ],
+    "printingAndAssembly": [
+      "Each station begins on a new page. Candidate-facing material precedes a marked “Examiner confidential” break.",
+      "Remove or cover the Learning Note paragraph if the handout is used during a summative station.",
+      "Verify medicines, emergency charts, laboratory reference ranges, referral contacts, and equipment against the local site before use."
+    ],
+    "contents": [
+      "All stations: 10 minutes • 20 analytic marks",
+      "1. Hypothyroidism Integrated consultation",
+      "2. Hyperthyroidism History and counselling",
+      "3. Type 2 Diabetes Mellitus Management review",
+      "4. Hypoglycaemia Emergency demonstration and counselling",
+      "5. Diabetic Foot Examination and management planning",
+      "6. Gestational Diabetes Results explanation and counselling",
+      "7. Primary Adrenal Insufficiency History and counselling",
+      "8. Adrenal Crisis Acute-management simulation",
+      "9. Cushing Syndrome Examination and investigation interpretation",
+      "10. Acromegaly Examination and referral planning",
+      "11. Hyperprolactinaemia / Prolactinoma History, differential diagnosis, and counselling",
+      "12. Cranial Diabetes Insipidus Data interpretation and management planning",
+      "13. Hypercalcaemia due to Primary Hyperparathyroidism Data interpretation and referral planning",
+      "14. Acute Symptomatic Hypocalcaemia Acute-management simulation",
+      "15. Diabetic Ketoacidosis Acute-management simulation"
+    ]
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Hypothyroidism",
+      "primaryCompetency": "Focused history, thyroid-test interpretation, and safe treatment explanation",
+      "format": "Integrated consultation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are a final-year MBBS student in a general medical clinic. Mr Hamid Saeed, aged 74 years, has ischaemic heart disease and reports lethargy and muscle weakness.",
+        "In 10 minutes: take a focused history, review the thyroid-profile handout, explain the likely diagnosis, and outline safe initial management and follow-up.",
+        "You do not need to perform a physical examination. Tell the examiner which focused findings you would seek. Do not prescribe a patient-specific levothyroxine dose."
+      ],
+      "candidateHandout": [
+        "Presenting problem: progressive lethargy and generalized muscle weakness.",
+        "Thyroid profile: TSH is above the laboratory reference range; free T4 is below the laboratory reference range. The pattern has been confirmed on a repeat sample.",
+        "Known comorbidity: ischaemic heart disease. The patient is haemodynamically stable and has no acute chest pain, heart failure symptoms, hypothermia, or altered consciousness."
+      ],
+      "learningNotes": [
+        "Learning note (release after the station): TSH is the first-line test. Measure FT4 when TSH is abnormal. T3 is not required to diagnose or monitor hypothyroidism. Levothyroxine is standard replacement; older age and ischaemic heart disease require a cautious lower starting strategy with gradual titration. Once stable, NICE recommends annual TSH monitoring."
+      ],
+      "simulationScript": [
+        "Opening: “Doctor, I have become very tired and my muscles feel weak.” Speak slowly but remain alert and cooperative.",
+        "If allowed to talk: symptoms developed gradually over several months and are affecting usual household and social activities.",
+        "If asked: weight has increased; prefers warm weather and feels unusually cold; constipation; dry skin; thinning dry hair; mild hoarseness; sleeps more; mood is low at times but there is no self-harm idea.",
+        "Red flags/differentials: no morning shoulder or hip-girdle stiffness lasting over 45 minutes; no melaena; no orthopnoea; no seizure; no confusion.",
+        "Past thyroid history: no thyroid surgery, radioiodine, or known thyroid medicine. No recent neck swelling.",
+        "Medicines: takes regular prescribed cardiac medicines; no lithium or amiodarone. No herbal thyroid preparation. No known drug allergy.",
+        "ICE: thinks ageing may be responsible; worries about worsening heart disease; hopes for an explanation and a safe treatment."
+      ],
+      "examinerInstructions": [
+        "Remain silent unless a standard prompt is required. Give the candidate handout at the start.",
+        "If the candidate asks for examination findings, state: dry coarse skin, cool peripheries, slow pulse, and delayed ankle-jerk relaxation; no goitre and no decompensated heart failure.",
+        "Accept any safe local prescribing plan that explicitly starts cautiously because of age and ischaemic heart disease, uses TSH-guided titration, and avoids an unsupported fixed dose.",
+        "Do not award a separate mark for ordering T3. Record prompts. A prompted action may receive a maximum of 1/2 for its checklist item."
+      ],
+      "keyAnswerGuide": [
+        "Recognise primary hypothyroidism from high TSH with low FT4, while checking symptoms, functional effect, cardiac status, medicines, prior thyroid treatment, and red flags for severe disease.",
+        "Explain that the thyroid gland is underactive and replacement with levothyroxine is usually long term.",
+        "Because the patient is older and has ischaemic heart disease, recommend a cautious low-start, slow-titration approach under the treating clinician/local formulary; monitor for angina, palpitations, or heart-failure symptoms.",
+        "Recheck TSH after dose changes at the guideline/local-protocol interval until stable; once stable, monitor annually under NICE NG145. Avoid routine T3 monitoring."
+      ],
+      "suggestedApproach": [
+        "Open and listen without interruption.",
+        "Clarify the hypothyroid symptom cluster and functional impact.",
+        "Screen cardiac and neurological red flags, alternative explanations, past thyroid treatment, and medicines.",
+        "Interpret TSH/FT4 in plain language.",
+        "Explain cautious replacement, monitoring, adherence, administration, and safety-netting.",
+        "Check understanding and invite questions."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms patient identity, and uses an open invitation."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises onset, progression, lethargy, and muscle weakness."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks about weight, cold intolerance, bowel habit, skin/hair, voice, sleep, and mood."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses functional impact and screens severe neurological/systemic deterioration."
+        },
+        {
+          "order": 5,
+          "criterion": "Checks ischaemic symptoms, heart failure symptoms, and relevant cardiovascular history."
+        },
+        {
+          "order": 6,
+          "criterion": "Asks about thyroid surgery/radioiodine and medicines including lithium or amiodarone."
+        },
+        {
+          "order": 7,
+          "criterion": "Correctly interprets high TSH with low FT4 as primary hypothyroidism."
+        },
+        {
+          "order": 8,
+          "criterion": "Selects TSH with FT4 and explicitly avoids T3 as a routine hypothyroidism test."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains cautious levothyroxine initiation/titration because of age and IHD, without inventing a dose."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides monitoring, cardiac safety-netting, adherence advice, and checks understanding."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“What features would support or oppose an underactive thyroid?”",
+        "“How do the TSH and FT4 results fit together?”",
+        "“What changes because this patient is older and has ischaemic heart disease?”"
+      ],
+      "expectedCompetencies": [
+        "Communication",
+        "Focused assessment",
+        "Interpretation",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Counselling",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Recommends a full or unsupported fixed levothyroxine dose without accounting for age and ischaemic heart disease.",
+        "Uses T3 as the primary diagnostic or monitoring test for hypothyroidism.",
+        "Ignores acute cardiac symptoms or altered consciousness."
+      ],
+      "sourceNote": [
+        "NICE NG145 — Thyroid disease: assessment and management. https://www.nice.org.uk/guidance/ng145 Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Hyperthyroidism",
+      "primaryCompetency": "Focused history and antithyroid-drug safety counselling",
+      "format": "History and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are in an outpatient medical clinic. Mrs Abdullah, an adult with asthma, has six months of palpitations, sweating, and hand tremor. A thyroid profile supports hyperthyroidism.",
+        "In 10 minutes: take a focused history and counsel her about initial treatment, antithyroid-drug safety, symptom control, and follow-up.",
+        "No physical examination is required. Pregnancy status and intentions must be addressed."
+      ],
+      "candidateHandout": [
+        "Thyroid profile: TSH below the reference range and FT4 above the reference range.",
+        "Past history: asthma requiring inhaled treatment. Current rhythm is regular tachycardia; she is haemodynamically stable."
+      ],
+      "learningNotes": [
+        "Learning note: When TSH is low, interpret FT4; measure T3 if TSH is low and FT4 is normal. Carbimazole is commonly used outside the first trimester. PTU is preferred in the first trimester. Fever, sore throat, or mouth ulcers require stopping the antithyroid drug and urgent FBC. Hepatotoxicity symptoms require prompt review. A non-selective beta-blocker such as propranolol should be avoided in asthma."
+      ],
+      "simulationScript": [
+        "Opening: “My heart races, I sweat a lot, and my hands shake.” Appear worried but not breathless.",
+        "If asked: heat intolerance, weight loss despite good appetite, frequent stools, poor sleep, and difficulty writing because hands are moist and tremulous.",
+        "Cardiorespiratory: no chest pain, fainting, orthopnoea, or ankle swelling. Asthma wheezes episodically; propranolol has not been prescribed.",
+        "Eye/neck: gritty eyes but no double vision or visual loss; has noticed mild neck fullness without pain.",
+        "Pregnancy: not currently pregnant; would like pregnancy in the future and is willing to discuss timing and contraception with the specialist team.",
+        "Medicines: inhalers only; no amiodarone, lithium, thyroid hormone, or iodine-containing supplement. No known drug allergy.",
+        "ICE: fears a heart problem; wants rapid symptom relief without worsening asthma."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. If asked for examination findings: warm moist hands, fine tremor, regular tachycardia, diffuse non-tender goitre, no heart failure, and no visual-field deficit.",
+        "Accept locally available rate-control alternatives only if the candidate acknowledges asthma, avoids non-selective beta-blockade, and seeks senior/local-guideline advice.",
+        "The candidate need not quote a carbimazole dose. Full marks require agranulocytosis advice. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Confirm the thyrotoxic symptom cluster; assess arrhythmia/heart failure, eye disease, neck symptoms, medicines, pregnancy, and impact.",
+        "Explain antithyroid therapy and specialist/endocrine follow-up. Carbimazole is a common first-line option outside first-trimester pregnancy; first-trimester treatment requires review and PTU is preferred.",
+        "Give explicit written/verbal safety advice: stop the antithyroid drug and obtain urgent assessment/FBC for fever, sore throat, or mouth ulcers; seek prompt review for jaundice, dark urine, pale stools, marked pruritus, or upper abdominal pain.",
+        "Do not prescribe propranolol in this asthma case. Select symptom control according to asthma severity, cardiac status, local protocol, and senior review.",
+        "Monitor TFTs during treatment; the NICE evidence summary uses 4–8-week review until stable, then 3–6-month intervals."
+      ],
+      "suggestedApproach": [
+        "Elicit symptoms and functional effect.",
+        "Screen cardiovascular, eye, neurological, and pregnancy red flags.",
+        "Review asthma and medicines.",
+        "Explain diagnosis and options.",
+        "Prioritise antithyroid-drug safety and asthma-safe symptom control.",
+        "Agree monitoring and specialist follow-up."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Uses an open start and clarifies duration, severity, and functional impact."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks about heat intolerance, weight loss, appetite, bowel habit, sleep, and tremor."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses palpitations, chest pain, syncope, breathlessness, and heart-failure symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Asks about eye symptoms, neck swelling/pain, and compressive symptoms."
+        },
+        {
+          "order": 5,
+          "criterion": "Checks asthma severity, medicines/supplements, smoking, and allergies."
+        },
+        {
+          "order": 6,
+          "criterion": "Checks pregnancy status and future pregnancy intentions."
+        },
+        {
+          "order": 7,
+          "criterion": "Correctly interprets suppressed TSH with raised FT4."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains antithyroid therapy and first-trimester PTU preference."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives stop-drug/urgent-FBC agranulocytosis advice and hepatotoxicity safety-netting."
+        },
+        {
+          "order": 10,
+          "criterion": "Avoids propranolol in asthma and arranges TFT monitoring/specialist follow-up."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“What complications of thyrotoxicosis would you screen for?”",
+        "“What safety advice is essential before an antithyroid drug?”",
+        "“How does asthma affect symptomatic treatment?”"
+      ],
+      "expectedCompetencies": [
+        "Communication",
+        "Focused assessment",
+        "Interpretation",
+        "Prescribing safety",
+        "Counselling",
+        "Shared decision-making"
+      ],
+      "criticalSafetyErrors": [
+        "Misses stop-drug and urgent-FBC advice for fever, sore throat, or mouth ulcers.",
+        "Recommends propranolol despite asthma.",
+        "Continues carbimazole during a first-trimester pregnancy without urgent review."
+      ],
+      "sourceNote": [
+        "NICE NG145 — Thyroid disease: assessment and management. https://www.nice.org.uk/guidance/ng145",
+        "Pakistan-adapted hyperthyroidism guideline article. https://pmc.ncbi.nlm.nih.gov/articles/PMC10956339/ Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Type 2 Diabetes Mellitus",
+      "primaryCompetency": "Individualised treatment planning and shared decision-making",
+      "format": "Management review",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are reviewing Mrs Anam Awais, aged 47 years, who has had type 2 diabetes for two years. Her current random glucose is 300 mg/dL and glycaemic control is above her agreed target.",
+        "In 10 minutes: identify contributors and complications, interpret the summary handout, and agree a safe initial management plan.",
+        "Do not make unsupported driving-law statements. Use local prescribing policy where it differs from imported guidance."
+      ],
+      "candidateHandout": [
+        "Symptoms: thirst, polyuria, nocturia, tiredness, and recurrent skin boils. No vomiting, abdominal pain, or altered consciousness.",
+        "Current treatment: metformin; adherence has been inconsistent because of abdominal bloating. Renal function is adequate for the options under discussion. No known heart failure, established cardiovascular disease, or chronic kidney disease is documented.",
+        "Monitoring: HbA1c is above the individualised target. Eye screening is overdue. Blood pressure and lipid review are due."
+      ],
+      "learningNotes": [
+        "Learning note: Current NICE NG28 treatment is individualised by cardiovascular disease/risk, heart failure, CKD, contraindications, tolerability, access, and preferences. The current pathway supports metformin plus an SGLT2 inhibitor for many adults when appropriate. During significant vomiting, diarrhoea, fever, or dehydration, withhold metformin and SGLT2 inhibitors and seek advice. SGLT2 inhibitors can cause euglycaemic DKA."
+      ],
+      "simulationScript": [
+        "Opening: “I am thirsty, pass urine often, and feel less energetic.”",
+        "If asked: increased appetite but some weight loss; recurrent boils; genital itching; blurred vision intermittently; tingling in toes; no foot wound.",
+        "Adherence: often misses metformin because of bloating and work; does not use herbal remedies. No drug allergy.",
+        "Lifestyle: irregular meals, sugary drinks, little exercise. Does not smoke; no harmful alcohol use.",
+        "Complications/comorbidity: no chest pain, stroke symptoms, orthopnoea, known kidney disease, or pregnancy. Blood pressure has been high previously.",
+        "Psychosocial/ICE: work and family stress interfere with self-care; worries about complications; wants a practical affordable plan."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. The candidate should not be required to quote an HbA1c threshold or a drug dose.",
+        "Accept a safe locally available alternative if it is individualised and justified. To receive full safety marks, the candidate must address acute-illness sick-day rules and SGLT2-related DKA warnings if recommending that class.",
+        "If rapid improvement is proposed, expect eye/retinopathy review. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Clarify osmotic symptoms, adherence, adverse effects, diet/activity, infection, medicines, psychosocial barriers, hypoglycaemia history, and micro/macrovascular complications.",
+        "Exclude acute metabolic decompensation clinically. Review HbA1c, renal function, urine albumin, BP, lipids, eye status, and feet.",
+        "Optimise metformin tolerability/adherence, including consideration of modified-release formulation where locally available. Consider adding an SGLT2 inhibitor under the current NICE pathway when appropriate, after discussing benefits, genital infection, volume depletion, sick-day rules, and euglycaemic DKA.",
+        "Agree realistic nutrition/activity goals, cardiovascular-risk management, vaccinations according to local policy, and structured follow-up. Individualise glycaemic target and account for affordability."
+      ],
+      "suggestedApproach": [
+        "Explore symptoms and barriers.",
+        "Screen acute illness and complications.",
+        "Review cardiovascular, renal, and eye/foot status.",
+        "Agree lifestyle priorities.",
+        "Individualise medication using comorbidity, tolerability, access, and preference.",
+        "Give sick-day and DKA safety-netting; arrange review."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Builds rapport and clarifies symptoms, duration, and effect on daily life."
+        },
+        {
+          "order": 2,
+          "criterion": "Assesses medication adherence, adverse effects, supplements, and affordability."
+        },
+        {
+          "order": 3,
+          "criterion": "Reviews diet, physical activity, weight, smoking, alcohol, and psychosocial barriers."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens acute decompensation, infection, and hypoglycaemia."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens eye, renal, neurological, foot, cardiovascular, and sexual complications appropriately."
+        },
+        {
+          "order": 6,
+          "criterion": "Reviews BP, lipids, renal function/albuminuria, HbA1c, eyes, and feet."
+        },
+        {
+          "order": 7,
+          "criterion": "Proposes realistic lifestyle change through shared decision-making."
+        },
+        {
+          "order": 8,
+          "criterion": "Individualises glucose-lowering therapy by CVD/HF/CKD, contraindications, tolerability, and access."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives metformin/SGLT2 sick-day advice and euglycaemic-DKA warning if relevant."
+        },
+        {
+          "order": 10,
+          "criterion": "Plans cardiovascular-risk reduction, complication surveillance, and timely follow-up."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“What factors should determine the first medication plan?”",
+        "“What safety advice is needed during an acute illness?”",
+        "“Which complication checks are due?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Management",
+        "Prescribing safety",
+        "Counselling",
+        "Shared decision-making"
+      ],
+      "criticalSafetyErrors": [
+        "Treats one drug pathway as universal despite contraindications or comorbidity.",
+        "Omits sick-day advice when continuing/recommending metformin or an SGLT2 inhibitor.",
+        "Misses symptoms requiring urgent assessment for metabolic decompensation."
+      ],
+      "sourceNote": [
+        "NICE NG28 — Type 2 diabetes in adults: management. https://www.nice.org.uk/guidance/ng28",
+        "ADA — Standards of Care in Diabetes. https://professional.diabetes.org/standards-of-care Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Hypoglycaemia",
+      "primaryCompetency": "Emergency recognition, immediate treatment, and prevention counselling",
+      "format": "Emergency demonstration and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are seeing Mr Zeeshan, aged 45 years, with type 2 diabetes. Since glimepiride was started, he has had sweating, tremor, dizziness, unsteady gait, and confusion at 3 a.m. and after exercise. Home glucose was below 70 mg/dL during both episodes.",
+        "In 10 minutes: demonstrate immediate management for the conscious patient presented, explain what changes if swallowing or consciousness is impaired, and counsel on prevention.",
+        "No examination is required."
+      ],
+      "candidateHandout": [
+        "Current state: conscious, cooperative, able to swallow; capillary glucose below 70 mg/dL.",
+        "Medicines: glimepiride and atenolol. Episodes improve after food. No known drug allergy."
+      ],
+      "learningNotes": [
+        "Learning note: For a conscious patient able to swallow, give 15 g fast-acting carbohydrate, recheck after 15 minutes, repeat if still below 70 mg/dL, then give longer-acting carbohydrate after recovery. Chocolate and fatty foods are not first-line. Do not give oral treatment if consciousness or swallowing is impaired. Severe hypoglycaemia is defined by need for assistance, not only a glucose value."
+      ],
+      "simulationScript": [
+        "Opening: “I am sweating and shaking again. I think the new tablet is causing it.”",
+        "Act anxious and mildly tremulous but answer appropriately and swallow safely.",
+        "If asked: episodes followed a missed/late meal and vigorous exercise; no insulin use; no vomiting or renal diagnosis known.",
+        "Hypertension: takes atenolol. Explain that palpitations are not always prominent during episodes.",
+        "Lifestyle: smokes; drinks alcohol regularly; wants help to reduce both.",
+        "ICE: fears permanent brain damage and expects a safer medication plan."
+      ],
+      "examinerInstructions": [
+        "Provide a simulated glucose meter result below 70 mg/dL. The candidate should verbalise 15 g fast-acting carbohydrate and a 15-minute recheck.",
+        "When asked what happens after treatment, state that symptoms improve and repeat glucose is above 70 mg/dL.",
+        "Do not require a specific replacement diabetes medicine. Expect urgent medication review, assessment of renal/liver function and meal/activity pattern, and caution that beta-blockers can mask warning symptoms.",
+        "Oral carbohydrate in an unconscious patient is a material safety failure."
+      ],
+      "keyAnswerGuide": [
+        "Recognise symptomatic level-1 hypoglycaemia and treat before prolonged history-taking.",
+        "Give 15 g rapid carbohydrate, recheck at 15 minutes, repeat if still low, then longer-acting carbohydrate once recovered. Observe longer and seek medical review because sulfonylurea-related hypoglycaemia can recur.",
+        "If unable to swallow or unconscious: protect airway, call for help, place safely, use local emergency glucagon/IV glucose pathway, monitor glucose and recovery, and do not give anything orally.",
+        "Review glimepiride urgently; assess meals, exercise, alcohol, kidney/liver function, and medicines. Provide glucose-monitoring, rapid-carbohydrate, identification, family education, and locally applicable driving advice."
+      ],
+      "suggestedApproach": [
+        "Treat immediately.",
+        "Recheck at 15 minutes and complete recovery treatment.",
+        "Assess cause and recurrence risk.",
+        "Explain the impaired-consciousness pathway.",
+        "Arrange medication review and prevention plan.",
+        "Address the patient’s fear and check understanding."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises hypoglycaemia and prioritises immediate treatment."
+        },
+        {
+          "order": 2,
+          "criterion": "Confirms consciousness and ability to swallow before oral treatment."
+        },
+        {
+          "order": 3,
+          "criterion": "Gives 15 g fast-acting carbohydrate rather than chocolate/milk as first treatment."
+        },
+        {
+          "order": 4,
+          "criterion": "Rechecks capillary glucose after 15 minutes."
+        },
+        {
+          "order": 5,
+          "criterion": "Repeats rapid carbohydrate if still low and gives longer-acting carbohydrate after recovery."
+        },
+        {
+          "order": 6,
+          "criterion": "Explains no oral intake if consciousness/swallowing is impaired and calls for emergency help."
+        },
+        {
+          "order": 7,
+          "criterion": "Uses an appropriate glucagon/IV glucose pathway and monitors recovery for severe episodes."
+        },
+        {
+          "order": 8,
+          "criterion": "Identifies glimepiride, missed meals, exercise, alcohol, renal/liver function, and beta-blocker masking as relevant."
+        },
+        {
+          "order": 9,
+          "criterion": "Arranges urgent medication review and explains recurrence risk."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides prevention, carrying rapid carbohydrate, glucose checks, identification, family advice, and safe-driving principles."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“What must you establish before giving anything by mouth?”",
+        "“When will you recheck the glucose?”",
+        "“What makes another episode more likely?”"
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Clinical reasoning",
+        "Management",
+        "Prescribing safety",
+        "Counselling"
+      ],
+      "criticalSafetyErrors": [
+        "Gives oral carbohydrate to a patient with impaired consciousness or unsafe swallowing.",
+        "Fails to recheck glucose after treatment.",
+        "Discharges/reassures without considering recurrent sulfonylurea hypoglycaemia or medication review."
+      ],
+      "sourceNote": [
+        "ADA — Standards of Care in Diabetes. https://professional.diabetes.org/standards-of-care Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Diabetic Foot",
+      "primaryCompetency": "Focused foot assessment, risk recognition, and urgent referral planning",
+      "format": "Examination and management planning",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are assessing Mr Ramazan Ahmad, aged 55 years, with type 2 diabetes and a plantar foot ulcer present for three weeks.",
+        "In 10 minutes: describe a focused diabetic foot examination using the supplied findings, identify the active problems and urgency, and explain immediate management and prevention.",
+        "A manikin is available. Verbalise painful or invasive steps and obtain consent."
+      ],
+      "candidateHandout": [
+        "Diabetes control is above target. The patient is a heavy smoker.",
+        "Right foot: plantar ulcer over a pressure point; loss of protective sensation on 10 g monofilament; dorsalis pedis and posterior tibial pulses are not palpable; foot is cooler than the other side. No pus, spreading erythema, systemic illness, or fever is present. Ulcer depth is not yet fully defined."
+      ],
+      "learningNotes": [
+        "Learning note: Assess perfusion, neuropathy, infection, site, area, and depth. Limb- or life-threatening disease needs immediate escalation. Under NICE NG19, other active diabetic foot problems require specialist foot-service referral within one working day. Antibiotics are for clinical infection, not for every ulcer. Consider acute Charcot neuroarthropathy when there is redness, warmth, swelling, or deformity."
+      ],
+      "simulationScript": [
+        "Opening: “This wound under my foot has not healed, and walking is difficult.”",
+        "Ulcer: noticed three weeks ago; little pain; no discharge, smell, fever, or rapidly spreading redness; no previous ulcer or amputation.",
+        "Neuropathy/ischaemia: numb toes, sometimes night discomfort; no rest pain reported. Feet often feel cold.",
+        "Foot care: sometimes walks barefoot; checks feet irregularly; shoes are tight at the forefoot.",
+        "Medicines: metformin and an antihypertensive; no ulcer antibiotic; no allergy.",
+        "ICE: worries about job loss and amputation; wants to know whether dressing alone is enough."
+      ],
+      "examinerInstructions": [
+        "Give the findings card at the start. Do not require a numeric SINBAD score because ulcer area and depth are incompletely supplied.",
+        "Expect the candidate to call this an active neuro-ischaemic diabetic foot ulcer requiring prompt multidisciplinary foot-service and vascular assessment. Immediate hospital escalation is required if deterioration suggests limb- or life-threatening infection/ischaemia.",
+        "Do not reward empirical antibiotics in the absence of clinical infection. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Inspect both feet, footwear, skin, nails, deformity, pressure points, ulcer site/area/depth, discharge, erythema, warmth, swelling, and possible Charcot change.",
+        "Palpate temperature and pulses; assess capillary refill as appropriate; use monofilament plus another sensory modality; consider ankle reflexes. Do not probe an ulcer casually; a trained probe-to-bone assessment and imaging are considered if osteomyelitis is suspected.",
+        "Identify neuropathy plus impaired perfusion. Arrange prompt multidisciplinary diabetic-foot referral (NICE: within one working day) and vascular assessment; offload pressure and provide appropriate wound care. Escalate immediately for sepsis, gangrene, critical ischaemia, deep infection, or rapid progression.",
+        "Optimise glycaemia and cardiovascular risk; support smoking cessation; give practical daily foot-care and footwear advice."
+      ],
+      "suggestedApproach": [
+        "Consent, expose, and compare both feet.",
+        "Look: footwear, deformity, skin, ulcer, infection, Charcot features.",
+        "Feel: temperature and perfusion.",
+        "Test protective sensation safely.",
+        "Classify the active problem and urgency.",
+        "Offload, refer, optimise risk, educate, and safety-net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Obtains consent, checks pain, exposes appropriately, and compares both feet."
+        },
+        {
+          "order": 2,
+          "criterion": "Inspects footwear, skin, nails, interdigital spaces, deformity, pressure points, and ulcer characteristics."
+        },
+        {
+          "order": 3,
+          "criterion": "Looks specifically for infection, gangrene, ischaemia, and acute Charcot features."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses temperature, dorsalis pedis/posterior tibial pulses, and perfusion."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses protective sensation with 10 g monofilament and an additional appropriate modality."
+        },
+        {
+          "order": 6,
+          "criterion": "Identifies an active neuro-ischaemic plantar ulcer and does not force an unsupported score."
+        },
+        {
+          "order": 7,
+          "criterion": "Recognises immediate limb/life-threatening escalation criteria."
+        },
+        {
+          "order": 8,
+          "criterion": "Arranges prompt multidisciplinary foot-team and vascular assessment; NICE standard is within one working day for other active problems."
+        },
+        {
+          "order": 9,
+          "criterion": "Provides offloading/wound-care plan and avoids antibiotics without clinical infection."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses glucose/risk-factor control, smoking, daily inspection, washing/drying, footwear, and danger signs."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“Which findings determine urgency?”",
+        "“What would make you suspect acute Charcot neuroarthropathy?”",
+        "“Does every ulcer require an antibiotic?”"
+      ],
+      "expectedCompetencies": [
+        "Focused examination",
+        "Interpretation",
+        "Clinical reasoning",
+        "Management",
+        "Safety-netting",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Delays specialist referral for an active ulcer.",
+        "Misses impaired perfusion, spreading infection, gangrene, or suspected Charcot foot.",
+        "Prescribes antibiotics solely because an ulcer exists, without clinical infection."
+      ],
+      "sourceNote": [
+        "NICE NG19 — Diabetic foot problems: prevention and management. https://www.nice.org.uk/guidance/ng19 Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Gestational Diabetes",
+      "primaryCompetency": "OGTT interpretation and antenatal/postnatal counselling",
+      "format": "Results explanation and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are in an antenatal medical clinic. Mrs Abdullah is 24 weeks pregnant and has come to discuss a 75 g oral glucose tolerance test (OGTT).",
+        "In 10 minutes: interpret the result, explain the immediate plan and pregnancy treatment principles, address her recent ACE-inhibitor exposure, and arrange postpartum follow-up.",
+        "Use the candidate handout. Do not imply that one medication pathway applies to every woman."
+      ],
+      "candidateHandout": [
+        "Current 75 g OGTT at 24 weeks: 2-hour plasma glucose 250 mg/dL (13.9 mmol/L). Earlier OGTT at 16 weeks was normal.",
+        "Risk factors: previous gestational diabetes; previous baby weighed more than 4.5 kg; BMI above 30 kg/m²; mother had gestational diabetes.",
+        "A few days ago, another clinician started lisinopril for raised blood pressure before learning of the pregnancy."
+      ],
+      "learningNotes": [
+        "Learning note: NICE NG3 diagnoses gestational diabetes at fasting glucose ≥5.6 mmol/L or 2-hour glucose ≥7.8 mmol/L. Management includes diet, activity, glucose monitoring, and prompt joint obstetric-diabetes review. Medication follows the NG3 pathway and individual findings; metformin and insulin are options. Arrange fasting plasma glucose 6–13 weeks after birth, not a routine postpartum OGTT under NICE."
+      ],
+      "simulationScript": [
+        "Opening: “I was told my sugar test is high. Will it harm my baby?”",
+        "Current symptoms: feels well; no vomiting, abdominal pain, reduced fetal movement, headache, visual symptoms, or acute illness.",
+        "Obstetric history: confirms previous gestational diabetes and a baby over 4.5 kg. No known diabetes outside pregnancy.",
+        "Medicine: started lisinopril a few days ago and has taken it as prescribed; no allergy.",
+        "Lifestyle: willing to meet a dietitian and monitor glucose. Has family support.",
+        "ICE: worries about congenital harm, a very large baby, injections, and future diabetes."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Expect diagnosis using the explicitly supplied NICE thresholds, while noting these are UK evidence standards and local obstetric protocols govern care in Pakistan.",
+        "The candidate should advise stopping the ACE inhibitor and arranging prompt obstetric/medical review for a pregnancy-safe blood-pressure plan; do not require a replacement drug or dose.",
+        "Accept metformin and/or insulin discussion only as an individualised specialist plan. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Explain that the 2-hour glucose exceeds the cited NICE diagnostic threshold for gestational diabetes.",
+        "Arrange prompt review by the joint obstetric-diabetes team because the value is markedly abnormal and risk factors are present. Begin diet/activity support and home glucose monitoring; assess maternal BP and fetal growth/wellbeing according to local protocol.",
+        "Stop lisinopril and obtain prompt obstetric/medical review. Reassure without claiming zero risk; document timing and exposure.",
+        "Medication must follow the individualised NG3/local pathway, considering glucose profile, contraindications, pregnancy features, preferences, and access. After birth, stop pregnancy-specific therapy as clinically appropriate and arrange fasting plasma glucose at 6–13 weeks plus ongoing diabetes-risk surveillance."
+      ],
+      "suggestedApproach": [
+        "Acknowledge concern and confirm pregnancy context.",
+        "Interpret OGTT with the supplied threshold.",
+        "Assess immediate maternal/fetal concerns and refer promptly.",
+        "Explain lifestyle, monitoring, and individualised medication options.",
+        "Address ACE-inhibitor exposure safely.",
+        "Plan delivery/postpartum transition and long-term surveillance."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Explains the OGTT result clearly and checks understanding."
+        },
+        {
+          "order": 2,
+          "criterion": "Correctly applies the supplied NICE 2-hour threshold and diagnoses gestational diabetes."
+        },
+        {
+          "order": 3,
+          "criterion": "Reviews previous GDM, macrosomia, BMI, family history, and current symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Arranges prompt joint obstetric-diabetes team assessment."
+        },
+        {
+          "order": 5,
+          "criterion": "Explains diet, appropriate activity, glucose monitoring, and follow-up."
+        },
+        {
+          "order": 6,
+          "criterion": "Discusses medication as an individualised metformin/insulin pathway rather than a universal rule."
+        },
+        {
+          "order": 7,
+          "criterion": "Recognises lisinopril is unsuitable in pregnancy and advises prompt cessation/review without inventing a substitute dose."
+        },
+        {
+          "order": 8,
+          "criterion": "Addresses maternal and fetal monitoring and provides urgent obstetric safety-netting."
+        },
+        {
+          "order": 9,
+          "criterion": "Plans clinically appropriate stopping/review of pregnancy-specific treatment after birth."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges fasting plasma glucose at 6–13 weeks and explains continuing type 2 diabetes risk."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“How does the 2-hour result compare with the supplied threshold?”",
+        "“Which current medicine needs urgent review?”",
+        "“What test is planned after delivery under NICE?”"
+      ],
+      "expectedCompetencies": [
+        "Interpretation",
+        "Communication",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Counselling",
+        "Shared decision-making"
+      ],
+      "criticalSafetyErrors": [
+        "Misses postpartum diabetes testing.",
+        "Recommends routine postpartum OGTT as the NICE pathway.",
+        "Continues lisinopril without urgent pregnancy review or presents one medication pathway as mandatory for all women."
+      ],
+      "sourceNote": [
+        "NICE NG3 — Diabetes in pregnancy. https://www.nice.org.uk/guidance/ng3 Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Primary Adrenal Insufficiency",
+      "primaryCompetency": "Focused history and steroid-replacement safety counselling",
+      "format": "History and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are counselling an adult recently confirmed to have primary adrenal insufficiency.",
+        "In 10 minutes: take a focused history for symptoms and complications, then explain replacement treatment, sick-day measures, emergency precautions, and follow-up.",
+        "Do not quote a patient-specific maintenance dose; use the handout."
+      ],
+      "candidateHandout": [
+        "Specialist conclusion: biochemical testing is consistent with primary adrenal insufficiency. The patient is currently stable and able to take oral medication.",
+        "Current symptoms: fatigue, weight loss, postural light-headedness, salt craving, and increased skin pigmentation."
+      ],
+      "learningNotes": [
+        "Learning note: Primary adrenal insufficiency requires glucocorticoid replacement and, where indicated, mineralocorticoid replacement. Hydrocortisone and fludrocortisone are cited medicines. Never stop steroids abruptly. Illness/stress dosing, emergency identification, an injection kit where available, and urgent action for vomiting or collapse are essential."
+      ],
+      "simulationScript": [
+        "Opening: “The specialist said my adrenal glands are not working. I am frightened by lifelong steroids.”",
+        "If asked: months of fatigue, weight loss, dizziness on standing, salt craving, and darker skin; no current vomiting, fever, abdominal pain, fainting, or confusion.",
+        "Adherence concern: worries steroids will cause dependence and asks whether tablets can be stopped when feeling well.",
+        "Context: lives with family who can learn emergency measures; sometimes travels to areas far from a hospital.",
+        "ICE: thinks the medicine may be more dangerous than the disease; wants a simple emergency plan."
+      ],
+      "examinerInstructions": [
+        "The patient is stable; this is not an adrenal-crisis station. Give the handout at the start.",
+        "Expect plain-language explanation of glucocorticoid replacement and possible mineralocorticoid replacement, but no fixed maintenance dose.",
+        "Full marks require no abrupt cessation, illness/stress-dose plan, emergency identification, and urgent action when oral absorption is unreliable."
+      ],
+      "keyAnswerGuide": [
+        "Link symptoms to inadequate cortisol and aldosterone production. Check postural symptoms, weight change, pigmentation, salt craving, GI symptoms, adherence barriers, and crisis features.",
+        "Explain regular glucocorticoid replacement and specialist-guided mineralocorticoid treatment where indicated. Discuss adherence and monitoring of symptoms, BP, electrolytes, and replacement adequacy.",
+        "Provide the written local sick-day plan: increase glucocorticoid during significant intercurrent illness/stress as instructed; never stop abruptly; if vomiting prevents oral treatment or severe illness/collapse occurs, use emergency steroid measures and seek emergency care.",
+        "Recommend steroid emergency identification/card, medical-alert identification, spare supplies, travel planning, and family training in emergency injection where locally available."
+      ],
+      "suggestedApproach": [
+        "Explore symptoms and current stability.",
+        "Explain the diagnosis simply.",
+        "Describe replacement roles without inventing a dose.",
+        "Teach sick-day and vomiting rules.",
+        "Arrange identification, supplies, family training, and follow-up.",
+        "Use teach-back."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Builds rapport and explores fatigue, weight loss, postural symptoms, salt craving, and pigmentation."
+        },
+        {
+          "order": 2,
+          "criterion": "Screens vomiting, abdominal pain, fever, collapse, hypotension symptoms, and altered consciousness."
+        },
+        {
+          "order": 3,
+          "criterion": "Explains primary adrenal hormone deficiency in plain language."
+        },
+        {
+          "order": 4,
+          "criterion": "Explains glucocorticoid replacement and possible mineralocorticoid replacement."
+        },
+        {
+          "order": 5,
+          "criterion": "States steroids must not be stopped abruptly."
+        },
+        {
+          "order": 6,
+          "criterion": "Provides a clear written illness/stress-dose plan according to local protocol."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains vomiting/poor absorption as an emergency requiring parenteral steroid and urgent care."
+        },
+        {
+          "order": 8,
+          "criterion": "Recommends steroid emergency identification and accessible spare medication."
+        },
+        {
+          "order": 9,
+          "criterion": "Discusses emergency injection kit/family training where available and travel planning."
+        },
+        {
+          "order": 10,
+          "criterion": "Plans specialist monitoring and uses teach-back to confirm understanding."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“What advice prevents adrenal crisis during an illness?”",
+        "“What if the patient vomits every oral dose?”",
+        "“How can another clinician recognise the condition in an emergency?”"
+      ],
+      "expectedCompetencies": [
+        "Communication",
+        "Focused assessment",
+        "Prescribing safety",
+        "Counselling",
+        "Safety-netting",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Advises abrupt steroid cessation.",
+        "Omits sick-day/emergency advice.",
+        "Treats repeated vomiting, severe illness, or collapse as routine outpatient deterioration."
+      ],
+      "sourceNote": [
+        "Endocrine Society — Primary adrenal insufficiency. https://www.endocrine.org/clinical-practice-guidelines/primary-adrenal-insufficiency Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Adrenal Crisis",
+      "primaryCompetency": "Immediate recognition, resuscitation, and steroid treatment",
+      "format": "Acute-management simulation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are the first doctor called to an adult with known primary adrenal insufficiency who has vomiting, abdominal pain, fever, hypotension, and increasing confusion after being unable to retain steroid tablets.",
+        "In 10 minutes: lead immediate assessment and management. Verbalise actions to the nurse/examiner.",
+        "Do not wait for confirmatory tests before treating suspected adrenal crisis."
+      ],
+      "candidateHandout": [
+        "A–E: airway patent; breathing spontaneous; circulation shows hypotension and clinical dehydration; disability shows increasing confusion; fever is present."
+      ],
+      "learningNotes": [
+        "Learning note: Treat suspected adrenal crisis immediately with hydrocortisone 100 mg IV or IM and rapid 0.9% sodium chloride resuscitation. Investigations must not delay treatment. Monitor glucose, electrolytes, fluid status, and response; identify and treat the precipitant."
+      ],
+      "simulationScript": [
+        "Nurse opening: “This patient with Addison’s disease has been vomiting all day and is becoming confused. Blood pressure is very low.”",
+        "If asked: oral steroid doses were missed because of vomiting; fever and abdominal pain began today; no known trauma.",
+        "After hydrocortisone and fluids are ordered: state that IV access is secured and treatment starts. The patient requires repeated reassessment and senior/endocrine input.",
+        "If the candidate waits for cortisol: patient remains hypotensive and confused; provide the emergency prompt."
+      ],
+      "examinerInstructions": [
+        "Act as the nurse. The candidate should use an A–E approach, call for senior help, give hydrocortisone 100 mg IV/IM immediately, and start rapid 0.9% sodium chloride.",
+        "Provide requested tests after treatment is initiated: glucose, U&E/creatinine, FBC, cultures if infection suspected, and paired cortisol/ACTH if feasible before steroid—but never at the cost of delay.",
+        "If no steroid is ordered within the early phase, use one stall-prevention prompt; record it and cap the relevant item at 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Recognise adrenal crisis and begin A–E resuscitation, monitoring, IV access, and senior/emergency support.",
+        "Give hydrocortisone 100 mg IV or IM immediately. Start rapid 0.9% sodium chloride and reassess haemodynamics; tailor further fluid to comorbidity and response.",
+        "Check and treat hypoglycaemia; monitor electrolytes, renal function, glucose, urine output, consciousness, and response. Take diagnostic samples if feasible without delaying steroids.",
+        "Search for and treat a precipitant such as infection. Continue protocol-based glucocorticoid/fluids and transition only under specialist guidance."
+      ],
+      "suggestedApproach": [
+        "Recognise crisis and call for help.",
+        "A–E, monitoring, oxygen if indicated, IV access.",
+        "Immediate hydrocortisone.",
+        "Rapid isotonic saline with reassessment.",
+        "Investigate without delaying treatment.",
+        "Treat precipitant and continue close monitoring."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises adrenal crisis from shock, vomiting, fever, abdominal pain, and confusion."
+        },
+        {
+          "order": 2,
+          "criterion": "Calls for senior/resuscitation help and starts A–E assessment."
+        },
+        {
+          "order": 3,
+          "criterion": "Applies continuous observations/monitoring and obtains IV access."
+        },
+        {
+          "order": 4,
+          "criterion": "Gives hydrocortisone 100 mg IV or IM immediately."
+        },
+        {
+          "order": 5,
+          "criterion": "Starts rapid 0.9% sodium chloride resuscitation and reassesses response."
+        },
+        {
+          "order": 6,
+          "criterion": "Checks glucose promptly and treats hypoglycaemia if present."
+        },
+        {
+          "order": 7,
+          "criterion": "Requests electrolytes/renal function and appropriate diagnostic samples without delaying treatment."
+        },
+        {
+          "order": 8,
+          "criterion": "Monitors fluid balance, urine output, electrolytes, glucose, consciousness, and haemodynamics."
+        },
+        {
+          "order": 9,
+          "criterion": "Identifies and treats the likely precipitating cause."
+        },
+        {
+          "order": 10,
+          "criterion": "Seeks endocrine/critical-care support and plans ongoing protocol-based steroid/fluid care."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: “The patient remains hypotensive and more confused. What treatment will you give now?”",
+        "“What will you monitor during resuscitation?”"
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Clinical reasoning",
+        "Management",
+        "Team communication",
+        "Prescribing safety"
+      ],
+      "criticalSafetyErrors": [
+        "Delays hydrocortisone while awaiting cortisol or other tests.",
+        "Fails to begin isotonic-fluid resuscitation or reassess haemodynamics.",
+        "Omits glucose/electrolyte monitoring or escalation despite shock."
+      ],
+      "sourceNote": [
+        "Society for Endocrinology — Adrenal crisis guidance. https://www.endocrinology.org/clinical-practice/clinical-guidance/adrenal-crisis/ Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Cushing Syndrome",
+      "primaryCompetency": "Focused examination and safe diagnostic sequencing",
+      "format": "Examination and investigation interpretation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are assessing an adult referred with possible Cushing syndrome.",
+        "In 10 minutes: describe a focused examination, interpret the supplied findings, and outline the safe diagnostic and referral pathway.",
+        "You are not expected to recall cortisol cut-offs. Do not order lesion-directed surgery before biochemical confirmation and localisation."
+      ],
+      "candidateHandout": [
+        "Observed features: wide purple abdominal striae, easy bruising, proximal muscle weakness, and severe hypertension. Generalised obesity is also present.",
+        "Medication review supplied after you ask: no oral, injected, inhaled, topical, or traditional preparation containing a known glucocorticoid has been identified.",
+        "Specialist screening summary: two recommended first-line cortisol screening tests are reported by the laboratory as abnormal. ACTH and cause-localising investigations have not yet been completed. No adrenal or pituitary imaging has been performed."
+      ],
+      "learningNotes": [
+        "Learning note: Discriminating features include proximal myopathy, wide purple striae, easy bruising, and severe hypertension. Exclude exogenous glucocorticoids first. Confirm hypercortisolism biochemically before cause-directed testing/imaging. Definitive treatment targets the causal lesion under specialist care."
+      ],
+      "simulationScript": [
+        "Opening: “My muscles are weak, I bruise easily, and my blood pressure has become difficult to control.”",
+        "If asked: difficulty rising from a chair; skin bruises with minor knocks; mood and sleep have worsened; no acute psychosis or infection symptoms.",
+        "Steroid exposure: denies prescribed tablets/injections/inhalers/creams and has brought all medicines for review; no known steroid-containing product identified.",
+        "Complications: hypertension; increased glucose on recent testing; no known fracture or renal stone.",
+        "ICE: worries about cancer; wants a scan immediately."
+      ],
+      "examinerInstructions": [
+        "Candidate should verbalise a focused general, skin, musculoskeletal, cardiovascular, endocrine, and neurological examination with dignity.",
+        "The handout deliberately gives interpreted abnormal screening results without thresholds. Expect ACTH-guided specialist localisation and assessment of complications before definitive treatment.",
+        "Accept a safe alternative biochemical sequence consistent with specialist/local protocol."
+      ],
+      "keyAnswerGuide": [
+        "Look for discriminatory features rather than diagnosing from obesity alone. Examine BP, skin/striae/bruising, proximal power, fat distribution, infection, virilisation where relevant, spine/fracture clues, mood/cognition, and visual fields if pituitary disease is suspected.",
+        "Review all routes of exogenous glucocorticoid exposure before labelling endogenous disease.",
+        "Interpret the two abnormal screens as requiring endocrine confirmation and cause evaluation. Measure ACTH and use specialist dynamic testing/localisation; image only after biochemical direction.",
+        "Assess and manage complications such as hypertension, diabetes, infection risk, osteoporosis, thrombotic risk, and psychiatric effects. Refer to an endocrine multidisciplinary team; surgery is principal definitive treatment when an operable causal lesion is confirmed."
+      ],
+      "suggestedApproach": [
+        "Confirm discriminating features and steroid exposure.",
+        "Perform a respectful focused examination.",
+        "Interpret abnormal screening without inventing thresholds.",
+        "Sequence confirmation, ACTH, and directed imaging.",
+        "Assess complications.",
+        "Refer for definitive multidisciplinary care."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Assesses general appearance and recognises discriminatory rather than nonspecific features."
+        },
+        {
+          "order": 2,
+          "criterion": "Examines/requests BP and cardiovascular assessment."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses striae, bruising, skin changes, and infection signs."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses proximal muscle power functionally and safely."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens mood/cognition, glucose symptoms, fracture/osteoporosis, and other supported complications."
+        },
+        {
+          "order": 6,
+          "criterion": "Reviews exogenous glucocorticoids by all routes before diagnosing endogenous disease."
+        },
+        {
+          "order": 7,
+          "criterion": "Interprets abnormal screening as biochemical evidence requiring endocrine confirmation."
+        },
+        {
+          "order": 8,
+          "criterion": "Requests ACTH/cause-directed specialist evaluation before imaging."
+        },
+        {
+          "order": 9,
+          "criterion": "Avoids unsupported thresholds and lesion-directed treatment before localisation."
+        },
+        {
+          "order": 10,
+          "criterion": "Explains endocrine MDT referral and complication management in patient-centred language."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“What common cause must be excluded before endogenous testing?”",
+        "“What should guide the choice of imaging?”",
+        "“Which complications require active assessment?”"
+      ],
+      "expectedCompetencies": [
+        "Focused examination",
+        "Interpretation",
+        "Clinical reasoning",
+        "Management planning",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Diagnoses Cushing syndrome from obesity alone.",
+        "Fails to consider exogenous glucocorticoids.",
+        "Orders lesion-directed surgery or indiscriminate imaging before biochemical confirmation/localisation."
+      ],
+      "sourceNote": [
+        "Endocrine Society — Treatment of Cushing syndrome. https://www.endocrine.org/clinical-practice-guidelines/treatment-of-cushing-syndrome Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Acromegaly",
+      "primaryCompetency": "Focused examination and complication assessment",
+      "format": "Examination and referral planning",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are examining an adult with progressive enlargement of hands and feet and change in facial appearance.",
+        "In 10 minutes: conduct or verbalise a focused examination, identify complications, interpret the supplied specialist results, and outline management.",
+        "Do not invent GH or IGF-1 thresholds."
+      ],
+      "candidateHandout": [
+        "Specialist results: IGF-1 is reported above the age- and sex-adjusted reference range. During an oral glucose suppression test, GH fails to suppress; the specialist laboratory interprets the result as diagnostic. Pituitary MRI shows an operable pituitary lesion close to the optic chiasm.",
+        "Symptoms: increasing shoe/ring size, headaches, snoring, daytime sleepiness, and reduced peripheral vision."
+      ],
+      "learningNotes": [
+        "Learning note: Assess acral/facial changes and important complications including visual-field impairment, sleep apnoea, cardiomyopathy, hypertension, and diabetes. Transsphenoidal surgery is cited first-line definitive treatment for an operable pituitary source; persistent disease or unsuitable surgery may require specialist medical therapy such as a somatostatin analogue."
+      ],
+      "simulationScript": [
+        "Opening: “My rings no longer fit, my shoes are larger, and I keep bumping into things at the side.”",
+        "If asked: gradual progression over years; headaches but no sudden worst-ever headache, vomiting, collapse, or diplopia.",
+        "Sleep/cardiorespiratory: loud snoring and daytime sleepiness; exertional breathlessness but no acute chest pain.",
+        "Metabolic: previously high blood pressure and glucose readings.",
+        "ICE: fears a brain tumour and loss of sight; wants to know whether surgery is necessary."
+      ],
+      "examinerInstructions": [
+        "Provide the handout at the start. If the candidate examines visual fields appropriately, state there is a bitemporal field defect.",
+        "Expected examination areas: hands, face, oral cavity/tongue, skin, BP/pulse, visual fields/cranial nerves, thyroid, cardiovascular system, and signs of glucose intolerance/sleep apnoea where appropriate.",
+        "Sudden severe headache or acute visual decline should trigger urgent pituitary-apoplexy assessment."
+      ],
+      "keyAnswerGuide": [
+        "Confirm progressive acral/facial change and examine for visual compromise, cranial-nerve signs, macroglossia, skin changes, BP, cardiomyopathy/heart failure, sleep apnoea, and diabetes.",
+        "Interpret the supplied IGF-1, suppression test, and MRI as specialist-confirmed acromegaly from an operable pituitary lesion with chiasmal risk.",
+        "Arrange formal visual-field assessment and endocrine/neurosurgical multidisciplinary review. Transsphenoidal surgery is the cited first-line definitive option for an operable source.",
+        "Explain that persistent disease or unsuitable surgery may require specialist medical therapy and long-term biochemical, pituitary-function, visual, and complication follow-up."
+      ],
+      "suggestedApproach": [
+        "Characterise progression and red flags.",
+        "Inspect hands, face, oral cavity, and skin.",
+        "Assess visual fields/cranial nerves and cardiovascular status.",
+        "Screen sleep, metabolic, and musculoskeletal complications.",
+        "Interpret supplied specialist data.",
+        "Refer urgently according to visual risk and explain definitive/long-term care."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies progression of acral/facial changes and functional impact."
+        },
+        {
+          "order": 2,
+          "criterion": "Screens headache, acute visual change, diplopia, vomiting, and collapse."
+        },
+        {
+          "order": 3,
+          "criterion": "Examines hands, facial features, oral cavity/tongue, and skin changes respectfully."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses visual fields and relevant cranial nerves."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses BP, pulse, and cardiovascular complications."
+        },
+        {
+          "order": 6,
+          "criterion": "Screens sleep apnoea, diabetes, musculoskeletal, and other supported complications."
+        },
+        {
+          "order": 7,
+          "criterion": "Correctly interprets the supplied IGF-1, suppression test, and MRI without inventing cut-offs."
+        },
+        {
+          "order": 8,
+          "criterion": "Recognises bitemporal field loss/chiasmal proximity as requiring prompt specialist action."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains transsphenoidal surgery as cited first-line definitive treatment for an operable source."
+        },
+        {
+          "order": 10,
+          "criterion": "Plans specialist medical options if needed and long-term pituitary/complication follow-up."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“Which bedside examination addresses the patient’s visual complaint?”",
+        "“What complications commonly affect management?”",
+        "“How do the supplied results support the diagnosis?”"
+      ],
+      "expectedCompetencies": [
+        "Focused examination",
+        "Interpretation",
+        "Clinical reasoning",
+        "Referral planning",
+        "Communication"
+      ],
+      "criticalSafetyErrors": [
+        "Misses visual symptoms or sudden severe headache.",
+        "Invents biochemical cut-offs and contradicts the supplied specialist interpretation.",
+        "Offers surgery or medical therapy without specialist assessment."
+      ],
+      "sourceNote": [
+        "Endocrine Society — Acromegaly. https://www.endocrine.org/clinical-practice-guidelines/acromegaly Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Hyperprolactinaemia / Prolactinoma",
+      "primaryCompetency": "Focused reproductive, medication, and neurological assessment",
+      "format": "History, differential diagnosis, and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are assessing an adult woman with amenorrhoea, galactorrhoea, and an elevated prolactin result.",
+        "In 10 minutes: take a focused history, interpret the handout, discuss differential diagnosis and next steps, and provide safety-netting.",
+        "Do not stop psychiatric medicine abruptly or diagnose prolactinoma before secondary causes are assessed."
+      ],
+      "candidateHandout": [
+        "Results: prolactin above the laboratory reference range; pregnancy test negative; TSH and renal function within reference ranges. No pituitary imaging has been performed.",
+        "Medicines: risperidone prescribed by psychiatry; no other relevant medicine is listed."
+      ],
+      "learningNotes": [
+        "Learning note: Ask about reproductive/sexual symptoms, infertility, galactorrhoea, headache, and visual symptoms. Review medicines and secondary causes before diagnosing prolactinoma. Dopamine agonists such as cabergoline or bromocriptine are first-line for most confirmed prolactinomas under specialist care. Pregnancy intentions affect planning."
+      ],
+      "simulationScript": [
+        "Opening: “My periods have stopped and there is milk from my breasts, but I am not pregnant.”",
+        "If asked: symptoms developed gradually; reduced libido; wants future fertility. No breast blood, lump, or fever.",
+        "Neurological: mild intermittent headache; no sudden severe headache, vomiting, diplopia, or loss of peripheral vision.",
+        "Medicine: risperidone has helped mental health; is worried about relapse and will not stop it without psychiatry advice.",
+        "ICE: fears a pituitary tumour and infertility; wants a scan and treatment."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. The most likely current explanation is medicine-associated hyperprolactinaemia, but the candidate must keep an open differential and coordinate with psychiatry/endocrinology.",
+        "Accept repeat prolactin under appropriate conditions, macroprolactin assessment where locally available, and specialist-directed imaging based on persistence, degree, symptoms, and clinical context; no numeric threshold is required.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Assess menstrual, fertility, galactorrhoea, sexual, pregnancy, thyroid, renal, medication, headache, and visual symptoms. Examine visual fields and breasts only with consent/chaperone and when indicated.",
+        "Interpret elevated prolactin with negative pregnancy test and normal TSH/renal function in the context of risperidone; do not label prolactinoma yet.",
+        "Repeat/confirm and investigate secondary causes according to local protocol. Liaise with psychiatry before any antipsychotic change; balance relapse risk. Refer to endocrinology if persistent, symptomatic, markedly elevated, or neurological features occur.",
+        "If a prolactinoma is confirmed, specialist dopamine-agonist therapy is usually first line; discuss pregnancy intentions and monitoring. Sudden severe headache or visual loss requires urgent assessment for mass effect/apoplexy."
+      ],
+      "suggestedApproach": [
+        "Clarify reproductive and breast symptoms.",
+        "Screen headache/visual red flags.",
+        "Review pregnancy, thyroid, renal, and medicine causes.",
+        "Interpret results in context.",
+        "Coordinate safe confirmatory work-up and specialty care.",
+        "Counsel about fertility, treatment principles, and urgent symptoms."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Explores amenorrhoea, cycle history, galactorrhoea, libido, sexual function, and fertility intentions."
+        },
+        {
+          "order": 2,
+          "criterion": "Checks pregnancy and relevant obstetric history."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens headache, visual-field change, diplopia, vomiting, and sudden deterioration."
+        },
+        {
+          "order": 4,
+          "criterion": "Reviews medicines thoroughly, especially risperidone, and does not stop it abruptly."
+        },
+        {
+          "order": 5,
+          "criterion": "Considers thyroid, renal, physiological, and other secondary causes."
+        },
+        {
+          "order": 6,
+          "criterion": "Correctly interprets the supplied results without prematurely diagnosing prolactinoma."
+        },
+        {
+          "order": 7,
+          "criterion": "Plans confirmation/repeat testing and appropriate secondary-cause assessment."
+        },
+        {
+          "order": 8,
+          "criterion": "Coordinates psychiatry and endocrinology input before medicine changes or imaging decisions."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains dopamine agonists as specialist first-line treatment for most confirmed prolactinomas."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses pregnancy intentions and provides urgent apoplexy/mass-effect safety-netting."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“Which medicine in the handout may explain the result?”",
+        "“What symptoms suggest urgent pituitary mass effect?”",
+        "“What must happen before changing the psychiatric medicine?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Interpretation",
+        "Differential diagnosis",
+        "Counselling",
+        "Prescribing safety",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Diagnoses prolactinoma without assessing medicines and secondary causes.",
+        "Stops risperidone abruptly without psychiatric coordination.",
+        "Misses sudden severe headache or visual-field loss requiring urgent assessment."
+      ],
+      "sourceNote": [
+        "Endocrine Society — Diagnosis and treatment of hyperprolactinaemia. https://academic.oup.com/jcem/article/96/2/273/2709487 Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Cranial Diabetes Insipidus",
+      "primaryCompetency": "Fluid-balance interpretation and safe initial management",
+      "format": "Data interpretation and management planning",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are reviewing an adult on a neurosurgical ward after pituitary surgery. The patient has intense thirst and high urine output.",
+        "In 10 minutes: interpret the fluid-balance and laboratory summary, identify immediate risks, and propose safe initial management.",
+        "Do not perform an unsupervised water-deprivation test."
+      ],
+      "candidateHandout": [
+        "Fluid balance: persistent high-volume dilute urine with increasing thirst. Serum sodium is above the reference range; serum osmolality is high; urine osmolality is inappropriately low.",
+        "Current state: alert, able to drink, clinically dehydrated. No desmopressin has yet been given."
+      ],
+      "learningNotes": [
+        "Learning note: Ensure access to water when safe, monitor intake/output, volume status, and serum sodium. Desmopressin treats cranial DI, but repeated/excess dosing without reassessment can cause hyponatraemia. Water-deprivation testing is specialist-supervised and inappropriate in an unstable, dehydrated, or hypernatraemic patient."
+      ],
+      "simulationScript": [
+        "Nurse opening: “Since pituitary surgery, the patient is passing very large volumes of pale urine and cannot stop drinking.”",
+        "If asked: patient is alert and can drink; no vomiting; urine output has remained high despite oral intake.",
+        "If candidate restricts water: state thirst worsens and sodium risk increases.",
+        "If appropriate monitoring and specialist review are ordered: state fluid chart and repeat sodium are arranged."
+      ],
+      "examinerInstructions": [
+        "Act as the ward nurse. Expect recognition of postoperative cranial DI with hypernatraemic dehydration.",
+        "Accept cautious oral or IV free-water replacement according to clinical state and local protocol; the exact rate is not assessed.",
+        "Desmopressin should be specialist-directed and followed by close urine-output and sodium monitoring. A water-deprivation test is unsafe here."
+      ],
+      "keyAnswerGuide": [
+        "Recognise hypotonic polyuria with high serum sodium/osmolality and low urine osmolality after pituitary surgery as cranial DI until assessed.",
+        "Assess A–E and volume status. Ensure free access to water while alert and safe; replace fluid deficit carefully according to local hypernatraemia protocol. Monitor input, urine output, weight, observations, and frequent sodium.",
+        "Discuss desmopressin with endocrine/neurosurgical teams, using response and biochemical/fluid data to guide repeat dosing. Avoid excessive dosing and hyponatraemia.",
+        "If unable to drink, altered, or severely hypernatraemic, escalate urgently for monitored fluid management. Do not use bedside water deprivation."
+      ],
+      "suggestedApproach": [
+        "Recognise the data pattern.",
+        "Assess airway, consciousness, volume, and access to water.",
+        "Restore safe hydration.",
+        "Start strict monitoring and repeat biochemistry.",
+        "Use specialist-guided desmopressin.",
+        "Escalate if unable to drink or neurologically unwell."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises high-volume dilute polyuria, high serum osmolality/sodium, and low urine osmolality."
+        },
+        {
+          "order": 2,
+          "criterion": "Links the presentation to postoperative cranial DI."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses A–E, consciousness, hydration, and ability to drink."
+        },
+        {
+          "order": 4,
+          "criterion": "Ensures safe free access to water and does not restrict fluids."
+        },
+        {
+          "order": 5,
+          "criterion": "Plans appropriate deficit replacement under a hypernatraemia/local fluid protocol."
+        },
+        {
+          "order": 6,
+          "criterion": "Starts strict intake/output, urine volume, weight, observations, and fluid-balance monitoring."
+        },
+        {
+          "order": 7,
+          "criterion": "Repeats serum sodium/osmolality and monitors the rate/clinical response."
+        },
+        {
+          "order": 8,
+          "criterion": "Uses desmopressin with endocrine/neurosurgical guidance and reassessment."
+        },
+        {
+          "order": 9,
+          "criterion": "Recognises hyponatraemia/water intoxication risk from excess desmopressin."
+        },
+        {
+          "order": 10,
+          "criterion": "Avoids water deprivation and escalates if unable to drink, altered, or significantly unstable."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“What does the serum–urine osmolality pattern suggest?”",
+        "“Is water deprivation safe in this patient?”",
+        "“What must be monitored after desmopressin?”"
+      ],
+      "expectedCompetencies": [
+        "Interpretation",
+        "Clinical reasoning",
+        "Management",
+        "Prescribing safety",
+        "Emergency escalation",
+        "Team communication"
+      ],
+      "criticalSafetyErrors": [
+        "Restricts water in a dehydrated hypernatraemic patient.",
+        "Performs or recommends unsupervised water deprivation.",
+        "Gives repeated desmopressin without sodium and fluid-balance monitoring."
+      ],
+      "sourceNote": [
+        "Society for Endocrinology — Inpatient management of cranial diabetes insipidus. https://www.endocrinology.org/media/scplexuf/guidelines-for-the-inpatient-management-of-cranial-diabetes-insipidus.pdf Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Hypercalcaemia due to Primary Hyperparathyroidism",
+      "primaryCompetency": "Clinical and biochemical interpretation with complication assessment",
+      "format": "Data interpretation and referral planning",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are reviewing an adult with recurrent renal stones and persistently raised calcium.",
+        "In 10 minutes: take a focused complication history, interpret the supplied biochemical pattern, identify urgency, and outline further assessment and referral.",
+        "Do not invent calcium-correction formulae or surgical thresholds."
+      ],
+      "candidateHandout": [
+        "Repeat laboratory reports: albumin-adjusted calcium is above the laboratory upper reference limit on more than one sample. Parathyroid hormone is inappropriately high for the raised calcium. Renal ultrasound confirms a stone. The patient is alert and haemodynamically stable.",
+        "No neck imaging has been performed. No surgical-threshold values are supplied."
+      ],
+      "learningNotes": [
+        "Learning note: Interpret PTH in relation to calcium. Assess renal stones, fragility fractures, neurocognitive symptoms, and other supported complications. Parathyroidectomy is indicated for symptomatic disease and for patients meeting NICE criteria. Severe symptomatic hypercalcaemia needs urgent assessment. Localisation imaging is for operative planning, not biochemical diagnosis."
+      ],
+      "simulationScript": [
+        "Opening: “I have another kidney stone and was told my calcium is high.”",
+        "If asked: intermittent renal colic; constipation and fatigue; no current vomiting, severe dehydration, confusion, coma, or cardiac symptoms.",
+        "Skeletal: no known fragility fracture; occasional bone ache.",
+        "Medicines/family: no calcium supplement or thiazide reported; no known family endocrine syndrome.",
+        "ICE: thinks a neck scan will confirm the diagnosis; worries about kidney damage."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. The pattern is compatible with primary hyperparathyroidism and symptomatic renal involvement.",
+        "Do not expect numeric surgical criteria. Full marks require appropriate renal/skeletal assessment, endocrine/surgical referral, and urgent escalation if severe symptoms develop.",
+        "Accept local laboratory conventions for calcium confirmation."
+      ],
+      "keyAnswerGuide": [
+        "Assess renal, skeletal, GI, neurocognitive, hydration, medication, malignancy, and family-history features. Screen for severe symptoms such as confusion, marked dehydration, arrhythmia, or rapidly worsening illness.",
+        "Interpret repeatedly high adjusted calcium with an inappropriately high PTH as a PTH-dependent pattern compatible with primary hyperparathyroidism.",
+        "Assess renal function/stone burden and skeletal complications; review vitamin D and other tests according to specialist/local protocol. Do not use neck imaging to establish the biochemical diagnosis.",
+        "Refer to endocrinology and an experienced parathyroid surgeon because the patient is symptomatic. Severe symptomatic hypercalcaemia requires urgent hospital management."
+      ],
+      "suggestedApproach": [
+        "Clarify symptoms and urgency.",
+        "Review medicines and alternative causes.",
+        "Interpret calcium and PTH together.",
+        "Assess renal and skeletal complications.",
+        "Explain why imaging follows biochemical diagnosis.",
+        "Refer appropriately and safety-net severe symptoms."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Explores renal stones, urinary symptoms, hydration, and renal history."
+        },
+        {
+          "order": 2,
+          "criterion": "Explores constipation, nausea, fatigue, mood/cognition, and severe neurological symptoms."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses bone pain, height loss, and fragility-fracture history."
+        },
+        {
+          "order": 4,
+          "criterion": "Reviews medicines/supplements, malignancy clues, and family endocrine history."
+        },
+        {
+          "order": 5,
+          "criterion": "Interprets repeated raised adjusted calcium correctly."
+        },
+        {
+          "order": 6,
+          "criterion": "Recognises PTH is inappropriately high for hypercalcaemia and identifies a PTH-dependent pattern."
+        },
+        {
+          "order": 7,
+          "criterion": "Identifies renal stone disease as symptomatic target-organ involvement."
+        },
+        {
+          "order": 8,
+          "criterion": "Plans renal and skeletal complication assessment using local/specialist protocol."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains localisation imaging is not the biochemical diagnostic test and avoids invented thresholds."
+        },
+        {
+          "order": 10,
+          "criterion": "Refers for endocrine/parathyroid-surgical assessment and escalates severe symptomatic disease urgently."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "“How should PTH be interpreted when calcium is high?”",
+        "“Which complications influence referral?”",
+        "“What is the role of neck imaging?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Interpretation",
+        "Clinical reasoning",
+        "Referral planning",
+        "Communication"
+      ],
+      "criticalSafetyErrors": [
+        "Diagnoses primary hyperparathyroidism without a coherent calcium–PTH relationship.",
+        "Misses confusion or other severe hypercalcaemia features requiring urgent care.",
+        "Invents surgical thresholds or treats neck imaging as the diagnostic test."
+      ],
+      "sourceNote": [
+        "NICE NG132 — Primary hyperparathyroidism. https://www.nice.org.uk/guidance/ng132 Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Acute Symptomatic Hypocalcaemia",
+      "primaryCompetency": "Emergency recognition and monitored IV calcium treatment",
+      "format": "Acute-management simulation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are called to an adult who developed perioral tingling, carpopedal spasm, and stridor after neck surgery.",
+        "In 10 minutes: lead immediate assessment and management, including treatment and monitoring.",
+        "Verbalise medication orders to the nurse/examiner."
+      ],
+      "candidateHandout": [
+        "A–E: airway threatened by stridor; breathing spontaneous; circulation currently maintained; patient has painful carpopedal spasm. ECG shows prolonged QT. Serum calcium is below the laboratory reference range."
+      ],
+      "learningNotes": [
+        "Learning note: Severe symptomatic hypocalcaemia requires airway/senior support and 10 mL of 10% calcium gluconate IV over 10–20 minutes with ECG monitoring. Reassess symptoms and calcium; investigate/correct the cause and associated electrolyte abnormalities according to local protocol."
+      ],
+      "simulationScript": [
+        "Nurse opening: “This patient has tingling, hand spasm, and noisy breathing after neck surgery.”",
+        "If asked: symptoms developed rapidly; no prior seizure. The patient is frightened and struggles to speak because of stridor.",
+        "After airway help and monitored calcium are ordered: state that anaesthesia/senior help arrives, ECG monitoring is attached, and calcium treatment starts.",
+        "If the candidate delays: stridor worsens; provide the emergency stall prompt."
+      ],
+      "examinerInstructions": [
+        "Act as the nurse. Expect immediate A–E, airway/anaesthetic support, ECG monitoring, and IV calcium gluconate.",
+        "Award the treatment item only if the candidate specifies 10 mL of 10% calcium gluconate over 10–20 minutes and monitoring.",
+        "Accept further infusion/replacement only according to local protocol with repeat calcium and cause correction. Prompted actions score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Recognise severe symptomatic postoperative hypocalcaemia with laryngospasm/stridor, tetany, and prolonged QT.",
+        "Call for senior/anaesthetic help, assess A–E, support airway and oxygenation as indicated, obtain IV access, and attach ECG monitoring.",
+        "Give 10 mL of 10% calcium gluconate IV over 10–20 minutes with continuous ECG monitoring; reassess symptoms, ECG, and calcium. Repeat/infuse only under the emergency/local protocol.",
+        "Investigate cause and associated abnormalities, including magnesium as locally indicated, and coordinate surgical/endocrine management."
+      ],
+      "suggestedApproach": [
+        "Recognise airway-threatening hypocalcaemia.",
+        "Call for anaesthetic/senior help and perform A–E.",
+        "Attach ECG and secure IV access.",
+        "Give monitored IV calcium gluconate.",
+        "Reassess and continue protocol-based correction.",
+        "Investigate postoperative cause and associated electrolytes."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises severe symptomatic hypocalcaemia from tetany/stridor and prolonged QT."
+        },
+        {
+          "order": 2,
+          "criterion": "Calls for senior/anaesthetic/resuscitation help immediately."
+        },
+        {
+          "order": 3,
+          "criterion": "Uses an A–E approach and prioritises airway support."
+        },
+        {
+          "order": 4,
+          "criterion": "Applies ECG monitoring and obtains IV access."
+        },
+        {
+          "order": 5,
+          "criterion": "Orders 10 mL of 10% calcium gluconate IV."
+        },
+        {
+          "order": 6,
+          "criterion": "Specifies administration over 10–20 minutes with continuous ECG monitoring."
+        },
+        {
+          "order": 7,
+          "criterion": "Reassesses airway, symptoms, ECG, and calcium after treatment."
+        },
+        {
+          "order": 8,
+          "criterion": "Uses local protocol for repeat dosing/infusion rather than unmonitored empiricism."
+        },
+        {
+          "order": 9,
+          "criterion": "Investigates the postoperative cause and relevant associated electrolytes, including magnesium where indicated."
+        },
+        {
+          "order": 10,
+          "criterion": "Coordinates ongoing surgical/endocrine care and documents the emergency response."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: “The stridor is worsening. What are your immediate orders?”",
+        "“How must IV calcium be monitored?”"
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Management",
+        "Prescribing safety",
+        "Team communication",
+        "Reassessment"
+      ],
+      "criticalSafetyErrors": [
+        "Delays IV calcium in severe symptomatic disease.",
+        "Administers IV calcium without ECG monitoring.",
+        "Fails to address airway compromise or seizure risk."
+      ],
+      "sourceNote": [
+        "Society for Endocrinology — Emergency management of acute hypocalcaemia in adults. https://pmc.ncbi.nlm.nih.gov/articles/PMC5314808/ Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Diabetic Ketoacidosis",
+      "primaryCompetency": "Protocol-based resuscitation, insulin, potassium, and monitoring",
+      "format": "Acute-management simulation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are the first doctor assessing an adult with diabetes who has vomiting, abdominal pain, dehydration, and deep rapid breathing.",
+        "In 10 minutes: interpret the DKA criteria card and lead initial management and monitoring using the supplied protocol summary.",
+        "Verbalise orders to the nurse/examiner. Do not stop insulin solely because glucose falls while ketoacidosis persists."
+      ],
+      "candidateHandout": [
+        "Diagnostic card (JBDS adult standard): glucose >11 mmol/L or known diabetes; blood ketones >3 mmol/L or urine ketones >2+; venous pH <7.3 and/or bicarbonate <15 mmol/L. This patient meets all three components.",
+        "Initial state: clinically dehydrated with Kussmaul respiration; potassium has been measured before insulin and is within the laboratory reference range. No shock or focal neurological deficit is present.",
+        "Protocol summary: begin protocol-based IV 0.9% sodium chloride; fixed-rate IV insulin 0.1 units/kg/hour; monitor and replace potassium according to the approved chart; monitor glucose, ketones, venous acid–base status, electrolytes, fluid balance, and clinical response; add glucose-containing fluid when the protocol indicates while continuing insulin for ketone clearance; identify and treat the precipitant."
+      ],
+      "learningNotes": [
+        "Learning note: DKA care is fluids plus fixed-rate insulin plus potassium management, monitoring, and precipitant treatment. Neurological deterioration is uncommon but serious and requires urgent escalation."
+      ],
+      "simulationScript": [
+        "Nurse opening: “The patient with diabetes has been vomiting and is breathing deeply. The DKA criteria card is positive.”",
+        "If asked: insulin was missed during a febrile illness; no chest pain or pregnancy information is supplied.",
+        "After initial orders: IV access and monitoring are established. Repeat results are available only when the candidate requests them.",
+        "If the candidate stops insulin when glucose falls: ketones and acidosis remain abnormal."
+      ],
+      "examinerInstructions": [
+        "Act as the nurse. The candidate may use the supplied JBDS criteria and protocol summary; threshold recall beyond the card is not assessed.",
+        "Expect A–E, senior support, fluids, fixed-rate insulin 0.1 units/kg/hour after potassium assessment, potassium replacement by chart, and frequent reassessment.",
+        "Accept concurrent continuation of appropriate long-acting basal insulin if stated as local/JBDS protocol, but do not require it for a checklist mark.",
+        "Escalate the simulation for shock, altered consciousness, failure to improve, or other severe features if the candidate asks."
+      ],
+      "keyAnswerGuide": [
+        "Recognise DKA using the supplied triad and assess severity with A–E, observations, mental state, hydration, and comorbidity.",
+        "Call for senior help, establish monitoring/IV access, and begin protocol-based 0.9% sodium chloride. Start fixed-rate IV insulin at 0.1 units/kg/hour after potassium assessment.",
+        "Monitor potassium closely and replace according to the approved chart. Check glucose, ketones, venous pH/bicarbonate, electrolytes, renal function, fluid input/output, and clinical response at protocol intervals.",
+        "When glucose reaches the protocol trigger, add glucose-containing fluid but continue insulin until ketone/acidosis resolution criteria are met. Identify and treat infection, missed insulin, myocardial ischaemia, drugs, or other precipitants as applicable.",
+        "Escalate haemodynamic instability, neurological deterioration, severe electrolyte disturbance, or failure to improve."
+      ],
+      "suggestedApproach": [
+        "Recognise DKA and assess severity.",
+        "Call for help; monitoring and IV access.",
+        "Start isotonic fluid protocol.",
+        "Check potassium, then fixed-rate insulin.",
+        "Monitor ketones, acid–base status, glucose, potassium, and fluid balance.",
+        "Treat precipitant and escalate non-response/instability."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises DKA using the supplied glucose/diabetes, ketone, and acidosis criteria."
+        },
+        {
+          "order": 2,
+          "criterion": "Uses A–E, assesses hydration/mental state, and calls for senior help."
+        },
+        {
+          "order": 3,
+          "criterion": "Establishes IV access, cardiac/physiological monitoring, and baseline investigations."
+        },
+        {
+          "order": 4,
+          "criterion": "Starts protocol-based IV 0.9% sodium chloride resuscitation."
+        },
+        {
+          "order": 5,
+          "criterion": "Confirms potassium has been assessed before insulin."
+        },
+        {
+          "order": 6,
+          "criterion": "Starts fixed-rate IV insulin at 0.1 units/kg/hour."
+        },
+        {
+          "order": 7,
+          "criterion": "Monitors/replaces potassium according to the approved protocol chart."
+        },
+        {
+          "order": 8,
+          "criterion": "Monitors glucose, ketones, venous pH/bicarbonate, electrolytes, renal function, and fluid balance."
+        },
+        {
+          "order": 9,
+          "criterion": "Adds glucose-containing fluid when indicated while continuing insulin until ketoacidosis resolves."
+        },
+        {
+          "order": 10,
+          "criterion": "Identifies/treats the precipitant and escalates instability, neurological decline, or failure to improve."
+        }
+      ],
+      "globalRating": [
+        "Clear fail Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: “The DKA criteria are met. What are your first treatment orders?”",
+        "“Glucose has fallen but ketones remain high. What do you do?”",
+        "“Which variable must be checked and managed closely with insulin?”"
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Interpretation",
+        "Management",
+        "Prescribing safety",
+        "Monitoring",
+        "Team communication"
+      ],
+      "criticalSafetyErrors": [
+        "Starts insulin without potassium assessment.",
+        "Stops insulin solely because glucose falls while ketoacidosis persists.",
+        "Omits fluids, monitoring, or precipitant management."
+      ],
+      "sourceNote": [
+        "JBDS — The management of diabetic ketoacidosis in adults (March 2023 PDF). https://abcd.care/sites/default/files/site_uploads/JBDS_Guidelines_Current/JBDS_02_DKA_Guideline_with_QR_code_March_2023.pdf Accessed 25 July 2026. Recommendations from UK bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    }
+  ]
+}

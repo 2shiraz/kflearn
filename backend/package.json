@@ -7,6 +7,8 @@
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
     "seed": "node src/seed/seed.js",
+    "seed:cvs": "node src/seed/seedCvs.js",
+    "seed:endocrinology": "node src/seed/seedEndocrinology.js",
     "make-admin": "node src/scripts/makeAdmin.js",
     "grant-credits": "node src/scripts/grantCredits.js",
     "test": "NODE_ENV=test node --test --test-concurrency=1 tests/*.test.js",

@@ -9,8 +9,8 @@ import { refreshCredits, useCredits } from "../lib/credits";
 const REASON_LABELS = {
   "virtual-patient": "AI Virtual Patient session",
   "ai-assessment": "AI Assessment",
-  "admin-grant": "Credits added",
-  purchase: "Credit package purchase",
+  "admin-grant": "AI credits added",
+  purchase: "AI credit package purchase",
 };
 
 function describe(row) {
@@ -54,10 +54,10 @@ export default function CreditsPage() {
   return (
     <RequireUser active="credits">
       <PageMain width="split">
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Credits" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "AI Credits" }]} />
         <PageHeader
-          title="Credits"
-          description="Credits are for the AI patient and AI marking. Guides, handouts, MCQs, OSPE and self-practice are always free."
+          title="AI Credits"
+          description="AI credits are for the AI patient and AI marking. Guides, handouts, MCQs, OSPE and self-practice are always free."
         />
 
         <div className="grid gap-6">
@@ -72,7 +72,7 @@ export default function CreditsPage() {
                   <Skeleton className="h-14 w-36 bg-s-on-accent/20" />
                 ) : (
                   <p className="text-5xl font-semibold tracking-tight">
-                    {balance.toLocaleString()} <span className="text-lg font-medium text-s-on-accent/80">credits</span>
+                    {balance.toLocaleString()} <span className="text-lg font-medium text-s-on-accent/80">AI credits</span>
                   </p>
                 )}
               </div>
@@ -87,7 +87,7 @@ export default function CreditsPage() {
             </div>
 
             <Panel className="site-rise" style={{ "--rise-delay": "80ms" }}>
-              <h2 className="text-lg font-semibold tracking-tight text-s-ink">What uses credits</h2>
+              <h2 className="text-lg font-semibold tracking-tight text-s-ink">What uses AI credits</h2>
               <ul className="mt-4 space-y-2.5">
                 {USES.map((use) => (
                   <li key={use.label} className="flex items-start gap-3 rounded-2xl border border-s-line bg-s-card p-3.5">
@@ -129,7 +129,7 @@ export default function CreditsPage() {
                         <span className="mr-1 text-base font-medium text-s-mute">PKR</span>
                         {formatPkr(pkg.pricePkr)}
                       </p>
-                      <p className="mt-1 font-chart text-sm text-s-mute">{pkg.credits.toLocaleString()} credits</p>
+                      <p className="mt-1 font-chart text-sm text-s-mute">{pkg.credits.toLocaleString()} AI credits</p>
                       <p className="mt-4 flex items-center gap-2 text-sm text-s-ink">
                         <Check size={16} strokeWidth={2.25} className="shrink-0 text-s-good" aria-hidden="true" />
                         {pkg.fullStations} full AI stations
@@ -142,14 +142,14 @@ export default function CreditsPage() {
           )}
 
           <Panel>
-            <h2 className="text-lg font-semibold tracking-tight text-s-ink">Credit history</h2>
+            <h2 className="text-lg font-semibold tracking-tight text-s-ink">AI credit history</h2>
             <div className="mt-4">
               {history.error && <ErrorMessage message={history.error} onRetry={loadHistory} />}
-              {history.loading && <ListSkeleton rows={3} label="Loading credit history" />}
+              {history.loading && <ListSkeleton rows={3} label="Loading AI credit history" />}
               {!history.loading && !history.error && history.rows.length === 0 && (
                 <div className="flex items-center gap-4 rounded-2xl bg-s-tint/60 p-4">
                   <Character name="student-usman" size={48} tone="mint" />
-                  <p className="text-sm text-s-mute">No credit activity yet. Sessions and top-ups will show here.</p>
+                  <p className="text-sm text-s-mute">No AI credit activity yet. Sessions and top-ups will show here.</p>
                 </div>
               )}
               {history.rows.length > 0 && (

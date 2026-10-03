@@ -1,4 +1,4 @@
-import { currentUser, loginUser, registerUser, revokeUserSessions, updateCurrentUser } from "../services/auth.service.js";
+import { changePassword, currentUser, deleteAccount, loginUser, registerUser, revokeUserSessions, updateCurrentUser } from "../services/auth.service.js";
 import { clearAuthCookies, CSRF_COOKIE, setAuthCookies } from "../utils/authCookies.js";
 
 function respondWithSession(req, res, status, { token, expiresInMs, user }) {
@@ -57,6 +57,25 @@ export async function updateMe(req, res, next) {
   try {
     const data = await updateCurrentUser(req.user.id, req.body || {});
     res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updatePassword(req, res, next) {
+  try {
+    const data = await changePassword(req.user.id, req.body || {});
+    respondWithSession(req, res, 200, data);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteMe(req, res, next) {
+  try {
+    await deleteAccount(req.user.id, req.body || {});
+    clearAuthCookies(res);
+    res.set("Cache-Control", "no-store").json({ success: true });
   } catch (error) {
     next(error);
   }

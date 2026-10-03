@@ -10,7 +10,7 @@ function assertValidAmount(amount) {
 }
 
 function insufficientCredits(required, balance) {
-  const error = new Error(`You need ${required} credits for this. Your balance is ${balance}.`);
+  const error = new Error(`You need ${required} AI credits for this. Your balance is ${balance}.`);
   error.status = 402;
   error.code = "INSUFFICIENT_CREDITS";
   return error;

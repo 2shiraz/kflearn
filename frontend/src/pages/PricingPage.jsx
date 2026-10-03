@@ -161,7 +161,7 @@ function Packs({ state }) {
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-lg font-semibold">{active.name}</p>
-                  <p className="mt-1 font-chart text-sm text-s-mute">{formatCount(active.credits)} credits</p>
+                  <p className="mt-1 font-chart text-sm text-s-mute">{formatCount(active.credits)} AI credits</p>
                 </div>
                 {active.id === bestValueId && (
                   <span className="rounded-full bg-mint-soft px-3 py-1 text-xs font-medium text-mint">Best value</span>

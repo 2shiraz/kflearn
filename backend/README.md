@@ -47,9 +47,25 @@ station content.
 
 ```bash
 npm run seed
+npm run seed:cvs
+npm run seed:endocrinology
 npm run dev
 npm test
 ```
+
+`seed:cvs` imports the 15 cardiovascular stations. `seed:endocrinology`
+imports the 15 endocrinology stations and corrects the older DKA history
+station's specialty without replacing its content or identifiers. The full
+`seed` command includes both collections plus the existing station bank.
+The station data is checked into `src/seed`; the uploaded documents are not
+needed to seed another database. Set `MONGODB_URI` for the target database,
+then run the relevant command from `backend`.
+
+These seeds upsert by stable slug, so repeated runs preserve station, script,
+and checklist IDs without adding duplicates. They update authored content
+for those slugs. The new stations use ten-minute sessions and 20-point
+checklists with 0/1/2 self-marking. AI patient mode is enabled only where a
+patient conversation can cover the task; other stations offer guided practice.
 
 ## Real-AI OSCE tests
 

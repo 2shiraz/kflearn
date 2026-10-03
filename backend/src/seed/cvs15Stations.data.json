@@ -1,0 +1,1795 @@
+{
+  "metadata": {
+    "title": "CARDIOVASCULAR SYSTEM (CVS) OSCE",
+    "subtitle": "15 Evidence-Corrected Stations",
+    "audienceAndScoring": "Final-Year MBBS • 10 minutes per station • 20-point analytic checklist",
+    "facultyNote": "This manual contains exactly 15 standalone final-year MBBS cardiovascular OSCE stations, written for KMU-pattern final-year MBBS and postgraduate (CPSP) examinations. Stations 1–5 are clinically revised versions of the candidate's own supplied CVS teaching material (chest pain/MI, angina, post-MI counselling and medication advice, hypertension, atrial fibrillation); stations 6–15 broaden coverage across heart failure, conduction/rhythm emergencies, endocarditis, thromboembolic disease, valvular/rheumatic heart disease, lipid management, and cardiac arrest. Local protocols supersede imported guidance. NICE, ESC/EACTS, and Resuscitation Council UK recommendations are used as identified evidence standards. They do not create Pakistani legal, licensing, prescribing, referral, or service obligations. Faculty must replace imported operational details with the current approved institutional, provincial, and national protocols before summative use. Resource constraints may shape implementation but must not reduce emergency safety.",
+    "assessmentDesign": [
+      "Each station is designed for 10 minutes and uses a 20-point analytic checklist (10 observable items scored 0, 1, or 2).",
+      "Score 2 = clearly and independently achieved; 1 = partially achieved or achieved only after a standard prompt; 0 = omitted, incorrect, or unsafe.",
+      "The analytic score and global rating must be recorded independently. No numerical pass mark is prescribed; use an approved standard-setting process.",
+      "Critical safety errors require examiner review and may justify failure when they create material danger. A minor omission alone should not automatically fail a candidate.",
+      "Candidate learning notes are intended for release after the station unless faculty deliberately uses the page for formative open-book teaching.",
+      "Standardised prompts restore progress without revealing the answer. Record every prompt and apply the same scoring rule to every candidate."
+    ],
+    "printingAndAssembly": [
+      "Each station begins on a new page. Candidate-facing material precedes a marked \"Examiner confidential\" break.",
+      "Remove or cover the Learning Note paragraph if the handout is used during a summative station.",
+      "Verify medicines, emergency charts, laboratory reference ranges, referral contacts, and equipment against the local site before use."
+    ],
+    "contents": [
+      "All stations: 10 minutes • 20 analytic marks",
+      "1. Acute Coronary Syndrome / Acute MI — History, ECG interpretation, and emergency GP-level management",
+      "2. Stable Angina — History, differential diagnosis, and secondary-prevention counselling",
+      "3. Post-MI Secondary Prevention — Lifestyle, medication counselling, and return-to-activity planning",
+      "4. Hypertension — Counselling on lifestyle and stepped drug therapy",
+      "5. Atrial Fibrillation — History, stroke-risk assessment, and management planning",
+      "6. Chronic Heart Failure — Management review and guideline-directed drug therapy",
+      "7. Acute Pulmonary Oedema — Acute-management simulation",
+      "8. Bradyarrhythmia / Complete Heart Block — Acute-management simulation",
+      "9. Supraventricular Tachycardia — Acute-management simulation",
+      "10. Infective Endocarditis — History, examination, and referral planning",
+      "11. Deep Vein Thrombosis — Data interpretation and counselling",
+      "12. Acute Pulmonary Embolism — Acute-management simulation",
+      "13. Rheumatic / Valvular Heart Disease (Mitral Stenosis) — Examination and counselling",
+      "14. Dyslipidaemia — Results interpretation and counselling",
+      "15. Cardiac Arrest — Acute-management simulation (BLS/ALS)"
+    ]
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Acute Coronary Syndrome / Acute MI",
+      "primaryCompetency": "Focused chest-pain history, ECG interpretation, and emergency GP-level management",
+      "format": "History and emergency-management simulation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are a GP. Mr Allah Rakha, aged 51 years, presents with severe central chest pain for the last 10 minutes.",
+        "In 10 minutes: take a focused pain history (onset, site, character, radiation, associated features, relieving/aggravating factors, medicines, prior investigation), interpret the supplied ECG finding, and manage him as an emergency.",
+        "You do not need to draw the ECG yourself — interpret the handout description. Do not delay emergency transfer to complete a full social history."
+      ],
+      "candidateHandout": [
+        "Pain: constant, severe (7–8/10), central chest and left arm to the little finger, started while walking uphill carrying groceries; associated nausea and profuse sweating; not relieved by rest or over-the-counter paracetamol.",
+        "ECG (already performed): changes consistent with anterior myocardial infarction.",
+        "Risk factors on request: heavy smoker (2 packs/day), regular alcohol use, father died of a heart attack, no known diabetes; significant psychosocial stress (job insecurity, recent marital separation)."
+      ],
+      "learningNotes": [
+        "Learning note (release after the station): Suspected ACS with ischaemic ECG changes needs immediate emergency-department transfer for reperfusion assessment — time to thrombolysis/PCI is the single biggest determinant of myocardial salvage. Pre-transfer GP-level measures under NICE NG185 are aspirin 300 mg chewed/dispersed immediately (unless a genuine contraindication or already taken), analgesia (IV opiate such as morphine, with an antiemetic such as metoclopramide), oxygen only if SpO2 is low, IV access, and arranging the fastest safe transfer with a written medicines record for the receiving team. GTN does not replace opioid analgesia in an evolving MI and does not by itself confirm or exclude a cardiac cause."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I have severe chest pain, like a heavy weight on my chest, and I'm short of breath.\" Appear distressed and diaphoretic but able to answer questions.",
+        "If asked about the pain (OD-PARA-MI/SOD-PARRA-MI style): as in the handout — constant, severe, central with left-arm radiation, worse with exertion, relieved somewhat by rest, associated nausea and sweating, no relief with paracetamol.",
+        "Differential screening answers: no pleuritic component, no recent long-haul travel or immobilisation, no leg swelling, no chest trauma, no unilateral vesicular rash, pain is not reproducible with one-finger palpation or movement, not relieved by antacid, no difficulty swallowing.",
+        "Red flags: no weight loss, no fever, no night sweats, no haemoptysis.",
+        "If asked for the ECG: state \"changes consistent with anterior myocardial infarction\" — do not require the candidate to read raw ECG paper.",
+        "ICE: frightened of dying; has a flight booked in a few hours to see a new grandchild and initially resists admission; accepts admission once the candidate explains the risk in plain, honest language."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. If the candidate offers analgesia before completing the full history, that is good practice, not a deduction.",
+        "Full marks for management require, at minimum: aspirin 300 mg immediately, adequate analgesia (opioid ± antiemetic), oxygen only if hypoxic (do not reward routine high-flow oxygen in a non-hypoxic patient — this is an outdated and now discouraged practice), IV access, and an explicit statement of urgent ambulance transfer to a facility capable of reperfusion.",
+        "If the candidate proposes discharge, delay, or letting the patient fly, this is a critical safety error regardless of other performance.",
+        "Prompted items score at most 1/2. Record every prompt."
+      ],
+      "keyAnswerGuide": [
+        "Take a focused, open pain history using a structured mnemonic (onset, site, character, radiation, associated features, relieving/aggravating factors, medicines, investigations) while continuously observing for haemodynamic compromise.",
+        "Screen and verbalise the chest-pain differential (musculoskeletal, pericarditis, dissection, PE, pneumothorax, oesophagitis, shingles) and explain why each is against the presentation.",
+        "Interpret the ECG description as anterior MI and recognise this as a time-critical emergency.",
+        "Give aspirin 300 mg, opioid analgesia with antiemetic, oxygen only if indicated, IV access, and arrange immediate emergency transfer; provide a written summary of medicines given to avoid duplication in the receiving unit.",
+        "Address the patient's understandable reluctance (the flight) with honest, values-based communication rather than coercion, and gain informed agreement to transfer."
+      ],
+      "suggestedApproach": [
+        "Open, listen, and assess severity/haemodynamic status early.",
+        "Take a structured pain history and screen red flags/differentials.",
+        "Interpret the ECG finding and recognise the emergency.",
+        "Give immediate evidence-based pre-transfer treatment.",
+        "Explain the diagnosis honestly and negotiate urgent transfer.",
+        "Document and hand over safely."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity, and opens with an invitation to describe the pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Takes a structured pain history: onset, site, character, radiation, severity, timing."
+        },
+        {
+          "order": 3,
+          "criterion": "Elicits associated features (nausea, sweating, breathlessness) and relieving/aggravating factors."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens the chest-pain differential (PE, pneumothorax, pericarditis, dissection, shingles, musculoskeletal, oesophageal) with targeted questions."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens red flags (weight loss, fever, night sweats, haemoptysis) and cardiac risk factors (smoking, alcohol, family history, diabetes)."
+        },
+        {
+          "order": 6,
+          "criterion": "Correctly interprets the supplied ECG description as anterior MI and recognises the emergency."
+        },
+        {
+          "order": 7,
+          "criterion": "Gives aspirin 300 mg immediately (unless a genuine contraindication)."
+        },
+        {
+          "order": 8,
+          "criterion": "Gives adequate analgesia (opioid) with an antiemetic, and oxygen only if hypoxic."
+        },
+        {
+          "order": 9,
+          "criterion": "Secures IV access and arranges immediate emergency transfer without delay."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates honestly and sensitively, addresses the patient's own priority (the flight), and documents/hands over safely."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What immediate treatment would you give before the ambulance arrives?\"",
+        "\"How would you explain the urgency to a patient who wants to leave for a flight?\"",
+        "\"What would change your management if the patient became hypotensive?\""
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Focused history",
+        "Interpretation",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Communication/negotiation"
+      ],
+      "criticalSafetyErrors": [
+        "Delays or omits aspirin without a genuine contraindication.",
+        "Gives routine high-flow oxygen to a non-hypoxic patient, or omits oxygen when hypoxia is present.",
+        "Allows discharge, delay, or unsupervised travel in suspected acute MI."
+      ],
+      "sourceNote": [
+        "NICE NG185 — Acute coronary syndromes. https://www.nice.org.uk/guidance/ng185",
+        "NICE QS68 — Acute coronary syndromes in adults (quality standard). https://www.nice.org.uk/guidance/qs68 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Stable Angina",
+      "primaryCompetency": "Structured pain history, differential diagnosis, and stepwise secondary-prevention counselling",
+      "format": "History and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Ashraf Butt, known to have had an MI last year, presents with chest pain that is now more frequent, more severe, and longer-lasting despite his GTN spray.",
+        "In 10 minutes: take a structured pain history, screen for unstable features, examine as directed by the handout, and counsel on lifestyle and drug secondary prevention.",
+        "Do not quote a fixed dose escalation beyond what the handout/answer guide supports; individualise to heart rate/BP response."
+      ],
+      "candidateHandout": [
+        "Pain: central, crushing, radiates to neck and left arm, brought on by cold, emotion, heavy meals, and exertion; relieved by rest and GTN spray within 10–15 minutes; frequency and severity have increased over recent weeks; no episode has yet lasted more than 15 minutes.",
+        "Examination on request: heart sounds normal in all four areas, chest clear, BP and pulse within acceptable range, no signs of heart failure.",
+        "Past history: previous MI; heavy smoker (wants to quit); occasional alcohol; strong family history of ischaemic heart disease and hypertension; no known diabetes; is a cashier (a sedentary, stressful job)."
+      ],
+      "learningNotes": [
+        "Learning note: This is stable angina until proven otherwise, but any pain lasting over 15 minutes despite rest and GTN, pain at rest, or rapidly crescendo pain is unstable angina and needs urgent cardiology referral/admission. NICE CG126 (Stable angina: management) supports GTN spray for acute attacks, a first-line anti-anginal (commonly a beta-blocker or calcium-channel blocker), and secondary-prevention aspirin, a statin, and an ACE inhibitor where indicated. Beta-blockers are avoided or used cautiously in reactive airway disease."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, since my heart attack I've had chest pain on exertion which used to settle with my spray, but now it's more frequent and lasts longer.\"",
+        "If asked (SOD-PARRA-MI): as per handout; confirms no episode has exceeded 15 minutes; no pain at rest so far.",
+        "Differential screening: pain is not reproducible by palpation, not worse on movement or breathing, no antacid relief, no chest trauma, not worse lying flat, not relieved by sitting forward.",
+        "Personal/social: heavy smoker, intends to stop; drinks occasionally, intends to cut down; significant work and home stress; not known to be asthmatic (confirm on request).",
+        "ICE: fears another heart attack; hopes for medicine beyond the spray; worried about being told he needs surgery."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Provide examination findings only on request, as listed in the handout.",
+        "Full marks require the candidate to explicitly screen for \"unstable\" features (rest pain, crescendo pattern, pain >15 minutes) and state that any of these requires urgent same-day cardiology assessment rather than routine anti-anginal titration.",
+        "Accept any safe drug sequence consistent with local formulary; beta-blocker first-line is standard but calcium-channel blocker is an acceptable alternative, particularly if reactive airway disease is present."
+      ],
+      "keyAnswerGuide": [
+        "Take a structured pain history, confirm the pattern remains \"stable\" (exertional, relieved by rest/GTN, no episode >15 minutes), and screen the chest-pain differential.",
+        "Examine heart sounds, lungs, BP, and pulse; order ECG, FBC, fasting lipid profile, cardiac enzymes only if an acute event is suspected, fasting glucose, ESR, and TFTs as first-line work-up.",
+        "Explain the pathophysiology in plain language and counsel on smoking cessation, alcohol moderation, diet, weight, structured exercise within symptom limits, and driving/occupational restrictions relevant to his job.",
+        "Offer GTN spray technique review (repeat after 5 minutes, call an ambulance after a second repeat dose or if pain persists), a first-line anti-anginal (beta-blocker, e.g. atenolol, titrated to resting heart rate around 60 beats/min, avoided/cautious in asthma; calcium-channel blocker such as amlodipine as an alternative or add-on; long-acting nitrate as a further step), and secondary prevention with aspirin (or clopidogrel if aspirin-intolerant), a statin, and an ACE inhibitor.",
+        "Safety-net: any pain lasting over 15 minutes despite rest and GTN, or pain at rest, is a medical emergency requiring an ambulance, not a routine follow-up appointment."
+      ],
+      "suggestedApproach": [
+        "Elicit the pain pattern and confirm it remains exertional/stable.",
+        "Screen differentials and red flags for instability.",
+        "Examine and investigate as indicated.",
+        "Explain the diagnosis and negotiate a stepped management plan.",
+        "Cover lifestyle, driving, and psychosocial factors.",
+        "Safety-net for unstable angina and check understanding."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Opens with rapport and elicits a structured, chronological pain history."
+        },
+        {
+          "order": 2,
+          "criterion": "Confirms exertional pattern, relief with rest/GTN, and screens explicitly for rest pain/crescendo pattern/duration >15 minutes."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens the chest-pain differential (musculoskeletal, pericarditis, oesophageal, pneumothorax) with targeted questions."
+        },
+        {
+          "order": 4,
+          "criterion": "Reviews cardiac risk factors: smoking, alcohol, family history, diabetes, and occupational/psychosocial stress."
+        },
+        {
+          "order": 5,
+          "criterion": "Requests/interprets a focused examination (heart sounds, chest, BP, pulse) appropriately."
+        },
+        {
+          "order": 6,
+          "criterion": "Orders appropriate first-line investigations (ECG, lipids, glucose, FBC ± TFT/ESR) without over-investigating."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains angina pathophysiology in plain, patient-centred language."
+        },
+        {
+          "order": 8,
+          "criterion": "Reviews GTN spray technique and gives the correct emergency escalation rule (repeat dose, call ambulance after second repeat/persistent pain)."
+        },
+        {
+          "order": 9,
+          "criterion": "Proposes an individualised first-line anti-anginal plus secondary-prevention aspirin/statin/ACE inhibitor, checking for asthma before beta-blockade."
+        },
+        {
+          "order": 10,
+          "criterion": "Explicitly safety-nets for unstable angina and addresses driving/occupational and psychosocial concerns."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What features would make you treat this as unstable angina instead?\"",
+        "\"What would you check before starting a beta-blocker?\"",
+        "\"What should the patient do if the spray doesn't work?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Differential diagnosis",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Counselling",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to screen for or recognise unstable-angina features.",
+        "Prescribes a beta-blocker without checking for asthma/reactive airway disease.",
+        "Gives no clear emergency-escalation instruction for the GTN spray."
+      ],
+      "sourceNote": [
+        "NICE CG126 — Stable angina: management. https://www.nice.org.uk/guidance/cg126 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Post-MI Secondary Prevention",
+      "primaryCompetency": "Lifestyle counselling, medication explanation, and return-to-activity planning after myocardial infarction",
+      "format": "Counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Muhammad Mahmood was discharged 7 days ago after an MI. He has come for his post-discharge counselling visit.",
+        "In 10 minutes: explain the diagnosis in plain language, counsel on lifestyle (diet, exercise, weight, smoking, alcohol, driving, flying, sexual activity, psychological effects), and explain his secondary-prevention medicines and their safety-netting.",
+        "Do not promise he will never have another heart attack; be honest while reassuring."
+      ],
+      "candidateHandout": [
+        "Current medicines: aspirin, a beta-blocker (atenolol), an ACE inhibitor (ramipril), a statin (simvastatin), and a GTN spray for emergency use.",
+        "No current chest pain, breathlessness, fever, or pleuritic pain (screen for Dressler syndrome).",
+        "Occupation: a desk-based (sedentary) job; enjoys swimming; is a smoker; drinks socially."
+      ],
+      "learningNotes": [
+        "Learning note: NICE CG172 (MI: cardiac rehabilitation and secondary prevention) supports a graded return to activity (rest briefly, then gradually increasing walking distance over 4–6 weeks), cardiac rehabilitation referral, smoking cessation support, dietary advice (Mediterranean-pattern diet, oily fish, reduced salt/saturated fat), and driving/flying guidance following local and licensing-authority rules. Fever, pleuritic chest pain, or a pericardial rub 2–10 weeks after MI suggests Dressler syndrome and needs cardiology referral. Depression is common (roughly half of patients in the first week, around a quarter at one year) and should be actively screened for."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I'm glad to be home, but I have a lot of questions about what I can and can't do now.\"",
+        "Questions the patient may ask if given the opportunity: \"What exactly is a heart attack?\" \"Can I have another one?\" \"What is an angiogram / treadmill test?\" \"When can I go back to work?\" \"When can I fly?\" \"When can I have sex again?\"",
+        "If asked about mood: admits feeling low and anxious since discharge, worried about dying suddenly; no suicidal ideation.",
+        "If asked about the medicines: willing to take them but worried about side effects, especially impotence, and asks whether he really needs all four."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Expect the candidate to structure counselling rather than deliver an unstructured monologue.",
+        "Full marks require an explicit, graded return-to-activity plan (not just \"take it easy\"), explicit driving/flying guidance, a depression screen, and safety-netting for Dressler syndrome and medicine-specific danger symptoms (aspirin bleeding, statin muscle pain, ACE-inhibitor cough/angioedema, beta-blocker bradycardia/hypotension).",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Explain MI in plain language (blocked heart-vessel blood supply causing muscle death, replaced by scar over 4–6 weeks) and answer the patient's specific questions (angiography, exercise tolerance test) honestly.",
+        "Give a graded activity plan: brief rest, short walks, gradually increasing distance/pace over 4–6 weeks; occupation-dependent return to work (sooner for sedentary work, later for heavy manual labour); swimming after 4–6 weeks; driving restriction for about a week with a formal fitness assessment; flying restriction for about 2 weeks and only once able to climb stairs without symptoms; sexual activity generally after some weeks once exercise tolerance allows, avoiding heavy meals/hot baths beforehand, and never combining a GTN spray with a PDE5-inhibitor such as sildenafil because of dangerous hypotension.",
+        "Address diet (reduce salt/saturated fat, increase fruit/vegetables/oily fish), weight, smoking cessation (offer support/referral), and safe alcohol limits.",
+        "Explain each secondary-prevention medicine (beta-blocker, ACE inhibitor, aspirin, statin, GTN) with its purpose, common side effects, and a clear safety-netting instruction for each; never suggest stopping any of them abruptly on the patient's own initiative.",
+        "Screen for depression and for Dressler syndrome; arrange follow-up and cardiac rehabilitation referral."
+      ],
+      "suggestedApproach": [
+        "Open, acknowledge the recent event, and invite questions.",
+        "Explain the diagnosis and answer specific questions.",
+        "Cover a graded activity/return-to-work/driving/flying/sex plan.",
+        "Cover diet, weight, smoking, and alcohol.",
+        "Explain each medicine with safety-netting.",
+        "Screen mood, safety-net for Dressler syndrome, and arrange follow-up."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Opens supportively and structures the consultation around the patient's own questions and concerns."
+        },
+        {
+          "order": 2,
+          "criterion": "Explains MI and its natural history in clear, non-technical language."
+        },
+        {
+          "order": 3,
+          "criterion": "Gives a graded, staged return-to-activity plan (rest, walking distance, timeframe)."
+        },
+        {
+          "order": 4,
+          "criterion": "Gives occupation-appropriate return-to-work guidance and correct driving and flying restrictions."
+        },
+        {
+          "order": 5,
+          "criterion": "Addresses sexual activity, including the GTN/PDE5-inhibitor interaction warning."
+        },
+        {
+          "order": 6,
+          "criterion": "Covers diet, weight, smoking cessation support, and alcohol moderation."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains each secondary-prevention medicine's purpose and does not suggest self-directed stopping."
+        },
+        {
+          "order": 8,
+          "criterion": "Gives medicine-specific safety-netting (bleeding, muscle pain, cough/angioedema, bradycardia/hypotension)."
+        },
+        {
+          "order": 9,
+          "criterion": "Actively screens for depression/psychological effects."
+        },
+        {
+          "order": 10,
+          "criterion": "Safety-nets for Dressler syndrome and arranges cardiac rehabilitation/follow-up."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"When can he safely return to work and to driving?\"",
+        "\"What would make you suspect Dressler syndrome?\"",
+        "\"What must never be combined with a GTN spray, and why?\""
+      ],
+      "expectedCompetencies": [
+        "Communication",
+        "Counselling",
+        "Prescribing safety",
+        "Health promotion",
+        "Psychological assessment",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to warn against combining GTN spray with a PDE5-inhibitor.",
+        "Gives no graded activity plan, or clears the patient for unrestricted activity/driving/flying immediately.",
+        "Misses or dismisses a depression screen or Dressler-syndrome safety-netting."
+      ],
+      "sourceNote": [
+        "NICE CG172 — Myocardial infarction: cardiac rehabilitation and prevention of further cardiovascular disease. https://www.nice.org.uk/guidance/cg172 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Hypertension",
+      "primaryCompetency": "Diagnosis explanation, lifestyle counselling, and stepped antihypertensive therapy",
+      "format": "Counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr Fazal Ahmad, aged 57 years, has had repeatedly high blood pressure readings on separate occasions. He feels well but is low in mood and reports erectile difficulty.",
+        "In 10 minutes: confirm the diagnosis in plain language, screen for end-organ damage and secondary causes, counsel on lifestyle change, and offer stepped drug therapy with side-effect counselling.",
+        "Do not invent a numeric age-based rule beyond the supplied NICE-style step algorithm."
+      ],
+      "candidateHandout": [
+        "Readings: persistently elevated on multiple occasions over the past year; secondary-cause screening tests already performed are negative.",
+        "No known heart, cerebrovascular, renal, or visual end-organ damage on direct questioning; occasional headache and blurred vision were the only symptoms, found incidentally.",
+        "Personal: smoker; drinks beyond recommended limits; sedentary desk job; overweight; not known diabetic."
+      ],
+      "learningNotes": [
+        "Learning note: NICE NG136 defines a stepped approach — under 55 years (and not of Black African/African-Caribbean family origin) start with an ACE inhibitor or ARB (A); 55 and over, or of Black African/African-Caribbean family origin at any age, start with a calcium-channel blocker (C); step 2 combines A+C or A+D; step 3 combines A+C+D, where D is a thiazide-like diuretic; a beta-blocker or alpha-blocker is considered as a further add-on step, particularly in younger patients or those with specific indications. Target is generally below 140/90 mmHg (below 130/80 if diabetic), individualised by age and frailty. Beta-blockers and diuretics can cause or worsen erectile dysfunction and low mood — this is directly relevant to this patient's presenting concerns."
+      ],
+      "simulationScript": [
+        "Opening: \"But doctor, I feel fine — do I really need medicine?\"",
+        "If asked: diagnosed incidentally about a year ago; occasional headache/blurred vision only; no chest pain, breathlessness, leg swelling, or prior stroke; no known kidney or urinary problem.",
+        "Personal/social: smoker, heavy drinker, sedentary job, overweight, minimal exercise; family history of hypertension and heart disease.",
+        "Mood/sexual: admits low mood and erectile difficulty; asks whether the tablets themselves might make this worse.",
+        "ICE: fears this is untreatable and lifelong; worried about a friend who died of high blood pressure; wants to know how to live normally and avoid complications."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. If the candidate performs examination, state BP confirmed elevated on repeat, fundoscopy normal, heart and lungs unremarkable.",
+        "Full marks require the candidate to name the correct first step by the supplied age rule, and to explicitly connect the mood/erectile-dysfunction concern to a rational drug choice (e.g., avoiding or later reviewing a beta-blocker/diuretic, offering an ACE inhibitor/ARB or calcium-channel blocker as more mood/sexual-function-neutral options).",
+        "Accept any safe, locally available option within the correct drug class. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Confirm the diagnosis of essential hypertension after excluding secondary causes and screen for end-organ damage (cardiac, cerebrovascular, renal, visual) and diabetes.",
+        "Explain the condition and that it is controllable, not curable, requiring ongoing treatment even when asymptomatic.",
+        "Counsel on salt/fat reduction, increased fruit/vegetable intake, reduced alcohol, smoking cessation, regular exercise, and weight reduction; discourage unsupervised calcium/magnesium/potassium supplements as a substitute for treatment.",
+        "Select the first-line drug by the supplied age/ethnicity rule (ACE inhibitor/ARB under 55; calcium-channel blocker at 55+ or Black African/Caribbean family origin), and explain stepped add-on therapy if control is not achieved.",
+        "Explicitly discuss side effects relevant to this patient — beta-blockers and thiazide diuretics can cause or worsen depression and erectile dysfunction, so an ACE inhibitor/ARB or calcium-channel blocker is a more suitable choice here; note ACE-inhibitor contraindications (pregnancy, cough) and calcium-channel blocker side effects (ankle oedema, flushing).",
+        "Arrange baseline investigations (renal function/electrolytes, lipid profile, glucose, urine protein, ECG), follow-up, and safety-netting for new symptoms."
+      ],
+      "suggestedApproach": [
+        "Confirm diagnosis and screen for secondary causes/end-organ damage.",
+        "Explore lifestyle, mood, and sexual-function concerns.",
+        "Explain the condition honestly.",
+        "Counsel on lifestyle modification.",
+        "Choose and explain a first-line drug appropriate to age and to the mood/sexual-function concern.",
+        "Arrange investigations, follow-up, and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Builds rapport and explores the patient's own understanding and concerns first."
+        },
+        {
+          "order": 2,
+          "criterion": "Confirms the diagnosis was made on repeated readings and screens for secondary causes."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens for cardiac, cerebrovascular, renal, and visual end-organ damage."
+        },
+        {
+          "order": 4,
+          "criterion": "Reviews smoking, alcohol, diet, weight, exercise, and occupational/psychosocial stress."
+        },
+        {
+          "order": 5,
+          "criterion": "Explicitly explores mood and erectile function and connects this to drug choice."
+        },
+        {
+          "order": 6,
+          "criterion": "Explains hypertension is controllable but generally lifelong, without inventing false certainty."
+        },
+        {
+          "order": 7,
+          "criterion": "Selects the correct first-line drug class by the supplied age/ethnicity rule."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains stepped add-on therapy (A+C, then +D) if control is not achieved."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives class-specific side-effect counselling, avoiding or flagging beta-blocker/diuretic effects on mood and sexual function."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges baseline investigations, follow-up interval, and safety-netting for new symptoms."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"Which drug class would you avoid given his mood and erectile-function concerns, and why?\"",
+        "\"What determines the first-line drug choice in this patient?\"",
+        "\"What baseline tests would you arrange before and during treatment?\""
+      ],
+      "expectedCompetencies": [
+        "Communication",
+        "Counselling",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Health promotion",
+        "Shared decision-making"
+      ],
+      "criticalSafetyErrors": [
+        "Chooses a first-line drug that contradicts the supplied age/ethnicity rule without justification.",
+        "Ignores the mood/erectile-dysfunction history when selecting therapy.",
+        "Fails to screen for secondary causes or end-organ damage before starting treatment."
+      ],
+      "sourceNote": [
+        "NICE NG136 — Hypertension in adults: diagnosis and management. https://www.nice.org.uk/guidance/ng136 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Atrial Fibrillation",
+      "primaryCompetency": "Focused history, stroke-risk assessment, and rate/rhythm/anticoagulation decision-making",
+      "format": "History and management planning",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "An adult presents with palpitations and an irregularly irregular pulse, newly confirmed as atrial fibrillation on ECG.",
+        "In 10 minutes: take a focused history, interpret the supplied risk-factor summary, explain the CHA2DS2-VASc-style stroke-risk approach, and outline the anticoagulation, rate-control, and (where relevant) rhythm-control plan.",
+        "Do not quote a specific anticoagulant dose; discuss the decision at the class/strategy level."
+      ],
+      "candidateHandout": [
+        "History: palpitations for several weeks, intermittent, with mild breathlessness on exertion; no syncope, no chest pain at rest.",
+        "Risk factors present: hypertension (treated), age over 65, no diabetes, no prior stroke/TIA, no vascular disease, sex as supplied by faculty for local scoring convention.",
+        "Examination: irregularly irregular pulse around 100–110/min; no signs of heart failure; BP controlled."
+      ],
+      "learningNotes": [
+        "Learning note: NICE NG196 supports a structured stroke-risk assessment (CHA2DS2-VASc-based) before starting anticoagulation, weighed against bleeding risk factors; most patients with a meaningful stroke-risk score benefit from anticoagulation regardless of whether rate or rhythm control is chosen for symptom control. Rate control (commonly a beta-blocker) is first-line for most patients; rhythm control (cardioversion, antiarrhythmics, or ablation) is considered for symptomatic patients, new-onset AF, or where rate control fails. Anticoagulation decisions are not deferred just because rhythm control is planned."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, my heart has been racing on and off for a few weeks, and I get a bit breathless.\"",
+        "If asked: no fainting, no chest pain at rest, no leg swelling; hypertension is treated and usually well-controlled; no known diabetes, stroke, or vascular disease; drinks alcohol occasionally; no excess caffeine.",
+        "If asked about bleeding risk: no history of bleeding, no liver or kidney disease, not on other blood-thinning or anti-inflammatory medicine, alcohol intake is modest.",
+        "ICE: worried this means a stroke is inevitable; wants to know if the heart can be \"fixed\" back to normal rhythm; anxious about being on blood thinners long term."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Do not require a specific numeric CHA2DS2-VASc score to be calculated aloud if the candidate correctly identifies and weighs the relevant risk factors (age, hypertension, sex, absence of diabetes/stroke/vascular disease).",
+        "Full marks require the candidate to state that anticoagulation is generally indicated given the risk-factor burden, independent of the rate-vs-rhythm decision, and to weigh bleeding risk factors before committing.",
+        "Accept any safe locally available anticoagulant class discussion (a DOAC or a vitamin-K antagonist with monitoring) without requiring a specific drug name or dose. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a focused history covering onset, triggers, associated syncope/chest pain, breathlessness, and known risk factors for stroke and bleeding.",
+        "Confirm AF from the irregularly irregular pulse and ECG, and structure a CHA2DS2-VASc-style risk assessment (age, hypertension, diabetes, prior stroke/TIA, vascular disease, sex) against a bleeding-risk assessment.",
+        "Explain that most patients with a meaningful stroke-risk burden should be anticoagulated regardless of the rate/rhythm strategy chosen, and discuss anticoagulant options at a class level with monitoring/bleeding safety-netting.",
+        "Discuss rate control (typically a beta-blocker, or a rate-limiting calcium-channel blocker if beta-blockade is unsuitable — never combine the two) as first-line symptom control, and rhythm-control options (cardioversion, antiarrhythmics, referral for ablation) for persistent symptoms or younger/first-detected AF, coordinating with cardiology.",
+        "Address the patient's fears honestly: rhythm restoration is not guaranteed, anticoagulation reduces but does not eliminate stroke risk, and ongoing follow-up/monitoring is required."
+      ],
+      "suggestedApproach": [
+        "Elicit a focused palpitations/AF history.",
+        "Confirm the diagnosis and assess stroke and bleeding risk.",
+        "Explain why anticoagulation is usually needed regardless of rhythm strategy.",
+        "Discuss rate-control options and when rhythm control is considered.",
+        "Address fears and expectations honestly.",
+        "Arrange follow-up and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a structured history of palpitations, triggers, syncope, chest pain, and breathlessness."
+        },
+        {
+          "order": 2,
+          "criterion": "Confirms AF from pulse/ECG findings and explains this to the patient in plain language."
+        },
+        {
+          "order": 3,
+          "criterion": "Systematically assesses stroke-risk factors (age, hypertension, diabetes, prior stroke/TIA, vascular disease, sex)."
+        },
+        {
+          "order": 4,
+          "criterion": "Systematically assesses bleeding-risk factors before recommending anticoagulation."
+        },
+        {
+          "order": 5,
+          "criterion": "Correctly states that anticoagulation is generally indicated here, independent of the rate/rhythm decision."
+        },
+        {
+          "order": 6,
+          "criterion": "Discusses anticoagulant options at a class level with appropriate safety-netting, without inventing a dose."
+        },
+        {
+          "order": 7,
+          "criterion": "Proposes rate control (beta-blocker first-line; avoids combining beta-blocker with rate-limiting CCB) as initial strategy."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains when rhythm control (cardioversion/antiarrhythmics/ablation) would be considered and involves cardiology."
+        },
+        {
+          "order": 9,
+          "criterion": "Addresses the patient's fears about stroke and \"being fixed\" honestly and empathetically."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges appropriate follow-up, monitoring, and safety-netting for bleeding or recurrent symptoms."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"Does the rhythm-control decision change whether he needs anticoagulation?\"",
+        "\"What would you weigh before starting an anticoagulant?\"",
+        "\"What combination of rate-control drugs would you avoid, and why?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Risk assessment",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Counselling",
+        "Shared decision-making"
+      ],
+      "criticalSafetyErrors": [
+        "States anticoagulation is unnecessary because rhythm control is planned.",
+        "Combines a beta-blocker with a rate-limiting calcium-channel blocker.",
+        "Fails to assess bleeding risk before recommending anticoagulation."
+      ],
+      "sourceNote": [
+        "NICE NG196 — Atrial fibrillation: diagnosis and management. https://www.nice.org.uk/guidance/ng196 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Chronic Heart Failure",
+      "primaryCompetency": "Management review and guideline-directed medical therapy",
+      "format": "Management review",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Saira Iqbal, aged 63 years, has known heart failure with reduced ejection fraction and is reviewed in clinic with worsening breathlessness on exertion and ankle swelling.",
+        "In 10 minutes: assess severity, identify possible triggers/non-adherence, interpret the handout, and optimise guideline-directed therapy.",
+        "Do not invent a specific ejection-fraction percentage; use the handout's classification."
+      ],
+      "candidateHandout": [
+        "Known heart failure with reduced ejection fraction (confirmed by echocardiogram at diagnosis). Currently breathless walking one flight of stairs (previously two); bilateral ankle swelling; weight increased by 2 kg in a week; sleeps on two pillows.",
+        "Current medicines: an ACE inhibitor and a beta-blocker at moderate doses; not currently on a mineralocorticoid-receptor antagonist or SGLT2 inhibitor.",
+        "Adherence: sometimes skips the diuretic because it makes her need the toilet during the day; salt intake has increased since a family wedding season."
+      ],
+      "learningNotes": [
+        "Learning note: NICE NG106 supports four-pillar guideline-directed therapy for heart failure with reduced ejection fraction — an ACE inhibitor/ARB (or ARNI where available), a beta-blocker, a mineralocorticoid-receptor antagonist, and an SGLT2 inhibitor — titrated as tolerated, alongside a loop diuretic for congestive symptoms. Worsening symptoms should prompt review of adherence, salt/fluid intake, renal function/electrolytes, and precipitants (arrhythmia, ischaemia, infection, anaemia, thyroid disease, NSAID use) before escalating diuretic dose."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, my ankles are more swollen and I get out of breath much quicker than before.\"",
+        "If asked: no chest pain, no fever, no palpitations noticed; weight gain over the past week; occasionally skips the water tablet; increased salty food recently; no NSAID or new over-the-counter medicine use.",
+        "If asked about examination findings: state bilateral pitting ankle oedema, mild bibasal crackles, raised JVP, no murmur change from baseline.",
+        "ICE: worried this means her heart is \"failing completely\"; wants to know if more medicine will help or if this is now untreatable."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Provide examination findings only on request.",
+        "Full marks require the candidate to explicitly screen for reversible precipitants (adherence, diet, arrhythmia, ischaemia, infection, anaemia, thyroid, NSAIDs) before simply increasing diuretic dose, and to identify at least the mineralocorticoid-receptor antagonist and SGLT2 inhibitor as missing pillars of therapy.",
+        "Accept any safe, locally available drug within the correct class. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Assess severity (functional class, weight change, orthopnoea, oedema) and screen for precipitants: diuretic/salt non-adherence, arrhythmia, ischaemia, infection, anaemia, thyroid dysfunction, and NSAID/other nephrotoxic or fluid-retaining drug use.",
+        "Examine (or interpret supplied findings for) volume status, request renal function/electrolytes, and consider a natriuretic peptide and ECG if not recently done.",
+        "Reinforce adherence and salt/fluid-restriction counselling in plain language, addressing the specific reason for diuretic under-use (urinary frequency) with practical advice (e.g. timing of dose).",
+        "Explain the four pillars of guideline-directed therapy and identify which are missing here (MRA and SGLT2 inhibitor); discuss cautious introduction with monitoring of renal function and potassium.",
+        "Reassure honestly: heart failure is a manageable long-term condition with good evidence that fuller guideline-directed therapy improves symptoms and survival; arrange follow-up and safety-netting for red-flag deterioration (severe breathlessness at rest, chest pain, marked weight gain, confusion)."
+      ],
+      "suggestedApproach": [
+        "Assess current severity and functional impact.",
+        "Screen systematically for precipitants and adherence barriers.",
+        "Examine/interpret volume status and order relevant tests.",
+        "Address adherence practically.",
+        "Optimise guideline-directed therapy, explaining the missing pillars.",
+        "Reassure, follow up, and safety-net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Assesses functional severity: breathlessness, orthopnoea, weight change, oedema."
+        },
+        {
+          "order": 2,
+          "criterion": "Screens for diuretic/dietary non-adherence and the specific barrier (urinary frequency)."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens for other precipitants: arrhythmia, ischaemia, infection, anaemia, thyroid disease, NSAID use."
+        },
+        {
+          "order": 4,
+          "criterion": "Requests/interprets relevant examination and investigations (renal function/electrolytes, ECG, natriuretic peptide)."
+        },
+        {
+          "order": 5,
+          "criterion": "Gives practical, individualised adherence advice (e.g. diuretic timing) rather than generic instruction alone."
+        },
+        {
+          "order": 6,
+          "criterion": "Identifies the current four-pillar therapy status and names the missing components (MRA, SGLT2 inhibitor)."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains cautious introduction of new therapy with renal/potassium monitoring."
+        },
+        {
+          "order": 8,
+          "criterion": "Avoids reflexive diuretic dose escalation without first addressing reversible precipitants."
+        },
+        {
+          "order": 9,
+          "criterion": "Reassures honestly about prognosis while conveying the benefit of optimised therapy."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges follow-up and gives clear red-flag safety-netting for deterioration."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What would you check before simply raising the diuretic dose?\"",
+        "\"Which guideline-directed drug classes are still missing here?\"",
+        "\"What symptoms should make her seek help urgently?\""
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Management",
+        "Prescribing safety",
+        "Counselling",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Escalates diuretic dose without screening for reversible precipitants.",
+        "Fails to recognise missing guideline-directed therapy components.",
+        "Introduces new therapy without a plan to monitor renal function/potassium."
+      ],
+      "sourceNote": [
+        "NICE NG106 — Chronic heart failure in adults: diagnosis and management. https://www.nice.org.uk/guidance/ng106 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Acute Pulmonary Oedema",
+      "primaryCompetency": "Emergency recognition and protocol-based treatment of acute decompensated heart failure",
+      "format": "Acute-management simulation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are called to an adult with known heart disease who has sudden severe breathlessness, cannot lie flat, and is coughing pink frothy sputum.",
+        "In 10 minutes: lead immediate assessment and management. Verbalise all orders to the nurse/examiner.",
+        "Do not delay treatment to complete a full history."
+      ],
+      "candidateHandout": [
+        "A–E: airway patent; breathing rapid and laboured with bilateral crackles to the mid-zones and audible wheeze; oxygen saturation low on air; circulation shows tachycardia and elevated blood pressure; alert but anxious and unable to speak in full sentences."
+      ],
+      "learningNotes": [
+        "Learning note: Acute pulmonary oedema needs the patient sat upright, high-flow oxygen to correct hypoxia, IV loop diuretic (e.g. furosemide), and, if BP allows, a nitrate infusion/spray to reduce preload. Non-invasive ventilation (CPAP) is used for persistent hypoxia/respiratory distress despite initial treatment under local protocol. Identify and treat the precipitant (ischaemia, arrhythmia, uncontrolled hypertension, valve failure, non-adherence). Caution is needed if the patient is hypotensive — nitrates and excessive diuresis can worsen a low-output state, which needs a different approach (inotropic support) under specialist guidance."
+      ],
+      "simulationScript": [
+        "Nurse opening: \"This patient became suddenly breathless, can't lie flat, and is coughing pink frothy sputum. Sats are low.\"",
+        "If asked: no reported chest pain, but patient is too breathless to give a full history; family reports known heart failure and possible missed medicine over recent days.",
+        "After sitting upright, oxygen, and IV furosemide are ordered: state saturation begins to improve, breathing remains laboured.",
+        "If BP remains high and no improvement: state nitrate infusion is available and blood pressure supports its use.",
+        "If candidate delays treatment for full history: breathing worsens; provide the emergency stall prompt."
+      ],
+      "examinerInstructions": [
+        "Act as the nurse. Expect immediate A–E assessment, sitting the patient upright, high-flow oxygen, continuous monitoring, IV access, and an IV loop diuretic as first-line treatment.",
+        "Award the nitrate item only if the candidate checks blood pressure is adequate before offering it.",
+        "Escalate to a CPAP/non-invasive ventilation discussion and senior/ICU involvement if the candidate asks about ongoing hypoxia despite initial treatment.",
+        "Do not require exact diuretic dosing; a stated IV loop diuretic with reassessment is sufficient. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Recognise acute pulmonary oedema from breathlessness, orthopnoea, crackles, hypoxia, and pink frothy sputum; call for senior/emergency help.",
+        "Sit the patient upright, give high-flow oxygen targeted to correct hypoxia, attach continuous monitoring, and secure IV access.",
+        "Give an IV loop diuretic and reassess; give a nitrate infusion/spray if blood pressure is adequate, avoiding it (and cautious with diuresis) if the patient is hypotensive.",
+        "Consider CPAP/non-invasive ventilation for persistent hypoxia or distress under local protocol, and escalate for possible inotropic support if a low-output/hypotensive picture emerges.",
+        "Investigate and treat the precipitant (ECG for ischaemia/arrhythmia, troponin, chest X-ray, review of medicine adherence and BP control) once the emergency is stabilised."
+      ],
+      "suggestedApproach": [
+        "Recognise the emergency and call for help.",
+        "A–E, sit upright, oxygen, monitoring, IV access.",
+        "Give IV loop diuretic; reassess.",
+        "Give nitrate only if BP allows.",
+        "Escalate to CPAP/ICU if not improving.",
+        "Investigate and treat the precipitant."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises acute pulmonary oedema from the presenting features."
+        },
+        {
+          "order": 2,
+          "criterion": "Calls for senior/emergency help and applies an A–E approach."
+        },
+        {
+          "order": 3,
+          "criterion": "Sits the patient upright and gives high-flow oxygen targeted to hypoxia."
+        },
+        {
+          "order": 4,
+          "criterion": "Attaches continuous monitoring and secures IV access."
+        },
+        {
+          "order": 5,
+          "criterion": "Gives an IV loop diuretic promptly."
+        },
+        {
+          "order": 6,
+          "criterion": "Checks blood pressure before considering a nitrate infusion/spray."
+        },
+        {
+          "order": 7,
+          "criterion": "Reassesses response to treatment and escalates appropriately."
+        },
+        {
+          "order": 8,
+          "criterion": "Considers CPAP/non-invasive ventilation for persistent hypoxia under local protocol."
+        },
+        {
+          "order": 9,
+          "criterion": "Recognises hypotension as a reason to avoid/limit nitrates and diuresis and to seek specialist/inotropic input."
+        },
+        {
+          "order": 10,
+          "criterion": "Investigates and addresses the likely precipitant once stabilised."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: \"Breathing is worsening and sats are falling. What are your immediate orders?\"",
+        "\"What would change if the blood pressure were low instead of high?\""
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Management",
+        "Prescribing safety",
+        "Team communication",
+        "Reassessment"
+      ],
+      "criticalSafetyErrors": [
+        "Delays initial treatment (oxygen, position, diuretic) to complete a full history.",
+        "Gives a nitrate to a hypotensive patient.",
+        "Fails to escalate for non-invasive ventilation/ICU input when hypoxia persists."
+      ],
+      "sourceNote": [
+        "NICE CG187 — Acute heart failure: diagnosis and management. https://www.nice.org.uk/guidance/cg187 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Bradyarrhythmia / Complete Heart Block",
+      "primaryCompetency": "Emergency recognition and protocol-based treatment of symptomatic bradycardia",
+      "format": "Acute-management simulation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are called to see an adult who has become dizzy and pre-syncopal on the ward. The monitor shows a slow, regular heart rate with no relationship between P waves and QRS complexes.",
+        "In 10 minutes: lead immediate assessment and management, and verbalise all orders to the nurse/examiner.",
+        "Do not wait for a cardiology review before giving first-line emergency treatment if the patient is unstable."
+      ],
+      "candidateHandout": [
+        "A–E: airway patent; breathing normal rate; heart rate slow (well below normal range); blood pressure low-normal; patient dizzy, pale, and clammy but conscious; ECG monitor pattern is consistent with complete (third-degree) heart block.",
+        "Adverse features present: hypotension and pre-syncope."
+      ],
+      "learningNotes": [
+        "Learning note: Symptomatic bradycardia with adverse features (shock, syncope, myocardial ischaemia, or heart failure) is treated per the Resuscitation Council UK bradycardia algorithm with IV atropine 500 micrograms, repeated up to a defined maximum if inadequate response, while preparing for transcutaneous pacing and involving cardiology urgently. Complete heart block with a wide-QRS escape rhythm may respond poorly to atropine, so early escalation to pacing (transcutaneous, then transvenous) must not be delayed. Reversible causes (drugs such as beta-blockers/calcium-channel blockers/digoxin, electrolyte disturbance, ischaemia) should be sought and corrected in parallel."
+      ],
+      "simulationScript": [
+        "Nurse opening: \"This patient suddenly feels dizzy and looks pale. The monitor shows a very slow heart rate.\"",
+        "If asked: no chest pain; recently started a new medicine (details available if requested — a beta-blocker was added two days ago); no known electrolyte disturbance reported yet.",
+        "After atropine is given: state modest or minimal improvement in rate, patient remains symptomatic.",
+        "If candidate escalates to pacing preparation and senior/cardiology call: state transcutaneous pacing pads are being applied and cardiology is on the way.",
+        "If the candidate delays escalation: state symptoms worsen; provide the emergency stall prompt."
+      ],
+      "examinerInstructions": [
+        "Act as the nurse. Expect A–E assessment, identification of adverse features, and IV atropine as first-line treatment.",
+        "Full marks require the candidate to recognise that complete heart block may respond poorly to atropine and to move promptly to preparing for transcutaneous pacing and urgent cardiology involvement rather than repeating atropine indefinitely.",
+        "Expect the candidate to ask about and identify the recently started beta-blocker as a reversible contributing factor and to review/withhold it.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Recognise symptomatic bradycardia with adverse features (hypotension, pre-syncope) as an emergency requiring immediate treatment, and call for senior/cardiology help.",
+        "Apply A–E, continuous ECG/BP monitoring, oxygen if hypoxic, and IV access.",
+        "Give IV atropine as first-line treatment; recognise that complete heart block, especially with a wide-QRS escape rhythm, may not respond well and that pacing should not be delayed while repeating atropine.",
+        "Prepare for transcutaneous pacing and urgent cardiology review for consideration of transvenous pacing.",
+        "Identify and correct reversible contributors (review recently started beta-blocker/calcium-channel blocker/digoxin, check electrolytes, assess for ischaemia)."
+      ],
+      "suggestedApproach": [
+        "Recognise the emergency and call for help.",
+        "A–E, monitoring, oxygen if needed, IV access.",
+        "Give IV atropine.",
+        "Prepare for pacing if response is inadequate.",
+        "Identify and correct reversible causes.",
+        "Continue close monitoring and escalate to cardiology."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises symptomatic bradycardia with adverse features as an emergency."
+        },
+        {
+          "order": 2,
+          "criterion": "Calls for senior/cardiology help and applies an A–E approach."
+        },
+        {
+          "order": 3,
+          "criterion": "Applies continuous ECG/BP monitoring, oxygen if indicated, and IV access."
+        },
+        {
+          "order": 4,
+          "criterion": "Gives IV atropine promptly as first-line treatment."
+        },
+        {
+          "order": 5,
+          "criterion": "Recognises complete heart block may respond poorly to atropine."
+        },
+        {
+          "order": 6,
+          "criterion": "Prepares for transcutaneous pacing without excessive delay."
+        },
+        {
+          "order": 7,
+          "criterion": "Escalates urgently to cardiology for definitive/transvenous pacing."
+        },
+        {
+          "order": 8,
+          "criterion": "Identifies the recently started beta-blocker as a reversible contributor and reviews/withholds it."
+        },
+        {
+          "order": 9,
+          "criterion": "Checks for other reversible causes (electrolytes, ischaemia, other bradycardic drugs)."
+        },
+        {
+          "order": 10,
+          "criterion": "Continues close monitoring and documents the emergency response."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: \"Atropine has been given but the patient remains symptomatic. What now?\"",
+        "\"What recently started medicine might be contributing, and what would you do about it?\""
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Interpretation",
+        "Management",
+        "Prescribing safety",
+        "Team communication"
+      ],
+      "criticalSafetyErrors": [
+        "Repeats atropine indefinitely instead of escalating to pacing in an unresponsive complete heart block.",
+        "Fails to recognise or act on adverse features (hypotension, pre-syncope).",
+        "Misses a reversible drug cause that could be stopped immediately."
+      ],
+      "sourceNote": [
+        "Resuscitation Council UK — Adult bradycardia algorithm, 2021 guidelines. https://www.resus.org.uk/library/2021-resuscitation-guidelines",
+        "ESC 2021 Guidelines on cardiac pacing and cardiac resynchronization therapy. https://academic.oup.com/eurheartj/article/42/35/3427/6358547 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Supraventricular Tachycardia",
+      "primaryCompetency": "Emergency recognition and stepwise treatment of narrow-complex tachycardia",
+      "format": "Acute-management simulation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "An adult presents with sudden-onset palpitations and a regular, fast, narrow-complex rhythm on the monitor. The patient is talking normally and alert.",
+        "In 10 minutes: lead assessment and stepwise management, verbalising all actions and orders to the nurse/examiner.",
+        "Escalate immediately if adverse features develop."
+      ],
+      "candidateHandout": [
+        "A–E: airway patent; breathing normal; heart rate very fast and regular, narrow QRS on monitor; blood pressure currently adequate; patient alert, mildly anxious, able to converse in full sentences.",
+        "No chest pain, no reduced consciousness, no signs of heart failure at present (stable, no adverse features)."
+      ],
+      "learningNotes": [
+        "Learning note: Stable narrow-complex SVT is managed per the Resuscitation Council UK/ESC tachycardia approach: vagal manoeuvres first (e.g. modified Valsalva, carotid sinus massage only if no bruit and locally appropriate), then IV adenosine as a rapid bolus with a flush, escalating the dose if the first is ineffective, with continuous ECG recording during administration. If adverse features (shock, syncope, myocardial ischaemia, heart failure) are present or the rhythm fails to respond and the patient deteriorates, synchronised DC cardioversion under sedation/anaesthesia is required without delay. Adenosine is avoided or used with extreme caution in patients with asthma/reactive airway disease and pre-excitation with atrial fibrillation."
+      ],
+      "simulationScript": [
+        "Nurse opening: \"This patient suddenly developed a very fast, regular heartbeat. They're talking to us and blood pressure is currently fine.\"",
+        "If asked: no chest pain, no fainting, no known heart disease; no asthma; first episode like this.",
+        "After vagal manoeuvres attempted: state no sustained response.",
+        "After adenosine ordered: ask the candidate to specify continuous ECG recording during administration; state the rhythm terminates (or, if the candidate is being tested on escalation, state it recurs/fails to terminate after the correct stepwise doses — follow local station-specific branch as instructed by faculty).",
+        "If adverse features are introduced (chest pain, falling BP, reduced consciousness) and the candidate does not move to synchronised cardioversion: provide the emergency stall prompt."
+      ],
+      "examinerInstructions": [
+        "Act as the nurse. Expect an A–E approach, recognition that the patient is currently stable (no adverse features), vagal manoeuvres first, then IV adenosine with continuous ECG recording.",
+        "Full marks require the candidate to explicitly ask about asthma/reactive airway disease before adenosine and to state that synchronised DC cardioversion under sedation is required immediately if adverse features develop or the rhythm does not respond and the patient deteriorates.",
+        "Do not require an exact adenosine dose in milligrams for full marks if the candidate correctly describes a rapid IV bolus with flush, escalating if ineffective, under continuous ECG monitoring. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Recognise regular narrow-complex tachycardia, assess for adverse features (shock, syncope, ischaemia, heart failure), and call for senior help if any are present.",
+        "In the stable patient: attempt vagal manoeuvres first, then give IV adenosine as a rapid bolus with a flush under continuous ECG monitoring, escalating the dose if the first attempt fails, having first excluded asthma/reactive airway disease as a caution.",
+        "If adverse features are present, or the arrhythmia persists with deterioration, proceed immediately to synchronised DC cardioversion under sedation/anaesthesia without delay.",
+        "Investigate for a precipitant/underlying pathway (12-lead ECG once terminated, looking for pre-excitation) and arrange cardiology follow-up, including discussion of ablation for recurrent episodes."
+      ],
+      "suggestedApproach": [
+        "Recognise the rhythm and assess for adverse features.",
+        "Attempt vagal manoeuvres.",
+        "Give IV adenosine with monitoring, checking for asthma first.",
+        "Escalate to synchronised cardioversion if unstable or unresponsive.",
+        "Investigate the underlying cause once stable.",
+        "Arrange cardiology follow-up."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises regular narrow-complex tachycardia and assesses for adverse features."
+        },
+        {
+          "order": 2,
+          "criterion": "Calls for senior help and applies an A–E approach."
+        },
+        {
+          "order": 3,
+          "criterion": "Attempts vagal manoeuvres first in the stable patient."
+        },
+        {
+          "order": 4,
+          "criterion": "Checks for asthma/reactive airway disease before considering adenosine."
+        },
+        {
+          "order": 5,
+          "criterion": "Gives IV adenosine as a rapid bolus with flush under continuous ECG monitoring."
+        },
+        {
+          "order": 6,
+          "criterion": "Escalates the adenosine dose appropriately if the first attempt is ineffective."
+        },
+        {
+          "order": 7,
+          "criterion": "Recognises adverse features (shock, syncope, ischaemia, heart failure) as an indication for immediate synchronised cardioversion."
+        },
+        {
+          "order": 8,
+          "criterion": "Moves promptly to synchronised DC cardioversion under sedation if unstable or unresponsive with deterioration."
+        },
+        {
+          "order": 9,
+          "criterion": "Obtains a post-termination 12-lead ECG to look for an underlying pathway (e.g. pre-excitation)."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges cardiology follow-up and discusses recurrence-prevention options (including ablation)."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: \"The patient is now clammy and blood pressure is falling. What do you do now?\"",
+        "\"What would make you avoid or be cautious with adenosine?\""
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Interpretation",
+        "Management",
+        "Prescribing safety",
+        "Team communication"
+      ],
+      "criticalSafetyErrors": [
+        "Gives adenosine without checking for asthma/reactive airway disease.",
+        "Delays synchronised cardioversion in an unstable patient with adverse features.",
+        "Fails to use continuous ECG monitoring during adenosine administration."
+      ],
+      "sourceNote": [
+        "2019 ESC Guidelines for the management of patients with supraventricular tachycardia. https://academic.oup.com/eurheartj/article/41/5/655/5556821",
+        "Resuscitation Council UK — Adult tachycardia algorithm, 2021 guidelines. https://www.resus.org.uk/library/2021-resuscitation-guidelines Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Infective Endocarditis",
+      "primaryCompetency": "Focused history, examination, and referral planning for suspected endocarditis",
+      "format": "History and examination",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "An adult with a known heart-valve abnormality presents with several weeks of low-grade fever and general malaise.",
+        "In 10 minutes: take a focused history, describe a focused examination for the peripheral stigmata of endocarditis, interpret the supplied findings, and outline the investigation and referral pathway.",
+        "Do not start empirical antibiotics yourself in this station; describe the correct referral pathway."
+      ],
+      "candidateHandout": [
+        "History: fatigue, low-grade intermittent fever, night sweats, and unintentional weight loss over several weeks; known rheumatic mitral valve disease from childhood; no recent dental or skin procedure reported yet (ask directly).",
+        "Examination findings on request: a new or changed heart murmur, low-grade fever, splinter haemorrhages, and tender nodules on the finger pulps (Osler's nodes); no obvious skin abscess or IV drug use track marks."
+      ],
+      "learningNotes": [
+        "Learning note: Suspected infective endocarditis needs blood cultures (at least three sets from different sites before any antibiotic) and echocardiography (transthoracic first-line, transoesophageal if non-diagnostic or high clinical suspicion), interpreted alongside the modified Duke criteria (major criteria include positive blood cultures typical for endocarditis and evidence of endocardial involvement on imaging; minor criteria include predisposing heart condition, fever, vascular/immunological phenomena). Empirical antibiotics should not be started before cultures are taken unless the patient is septic/haemodynamically unstable, and antibiotic choice is a specialist/microbiology-guided decision. NICE CG64 addresses antibiotic prophylaxis before interventional procedures in at-risk patients as a separate, distinct topic from treatment of established disease."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I've been feeling tired and feverish for weeks and I don't know why.\"",
+        "If asked: known childhood rheumatic heart disease affecting a valve; had a dental extraction about a month before symptoms began; no IV drug use; no recent skin infection or piercing.",
+        "If asked about symptoms: night sweats, unintentional weight loss, joint aches, no cough, no urinary symptoms, no rash other than what is found on examination.",
+        "If asked for examination: as per handout — new/changed murmur, low-grade fever, splinter haemorrhages, tender finger-pulp nodules; no signs of embolic stroke or acute limb ischaemia currently.",
+        "ICE: worried this is \"just a virus\" and reluctant to be admitted; concerned about missing work."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Provide examination findings only on request.",
+        "Full marks require the candidate to explicitly link the dental procedure and known valve disease to endocarditis risk, order blood cultures before any antibiotic, and request echocardiography while using the modified Duke criteria framework (named or described) to structure the diagnostic reasoning.",
+        "Do not require an antibiotic regimen to be named — expect referral to hospital/cardiology-microbiology for culture-guided treatment. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history covering constitutional symptoms (fever, night sweats, weight loss), known valve disease, and a recent dental/skin/vascular-access procedure or IV drug use as predisposing events.",
+        "Examine (or interpret supplied findings) for a new/changing murmur and peripheral stigmata: splinter haemorrhages, Osler's nodes, Janeway lesions, Roth spots, clubbing, and embolic phenomena (stroke, limb ischaemia, renal infarction).",
+        "Structure the diagnosis using the modified Duke criteria (major: positive blood cultures typical of endocarditis, echocardiographic/imaging evidence of endocardial involvement; minor: predisposing condition, fever, vascular and immunological phenomena, microbiological evidence not meeting major criteria).",
+        "Take at least three sets of blood cultures from different sites before starting any antibiotic (unless the patient is septic/unstable), and arrange echocardiography (transthoracic first, transoesophageal if needed).",
+        "Refer urgently for specialist (cardiology/microbiology, often via hospital admission) culture-guided antibiotic therapy rather than starting empirical treatment in this setting; discuss the separate, distinct role of antibiotic prophylaxis before future at-risk procedures."
+      ],
+      "suggestedApproach": [
+        "Take a focused constitutional/cardiac history.",
+        "Actively seek a predisposing event (dental/skin/vascular procedure, IV drug use).",
+        "Examine for murmur and peripheral stigmata.",
+        "Apply the modified Duke framework to structure reasoning.",
+        "Arrange blood cultures and echocardiography before any antibiotic.",
+        "Refer urgently for specialist treatment and discuss future prophylaxis."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a focused history of constitutional symptoms (fever, night sweats, weight loss, fatigue)."
+        },
+        {
+          "order": 2,
+          "criterion": "Actively asks about known valve disease and a recent dental/skin/vascular-access procedure or IV drug use."
+        },
+        {
+          "order": 3,
+          "criterion": "Examines for or correctly interprets a new/changing heart murmur."
+        },
+        {
+          "order": 4,
+          "criterion": "Examines for or correctly interprets peripheral stigmata (splinters, Osler's nodes, Janeway lesions, embolic phenomena)."
+        },
+        {
+          "order": 5,
+          "criterion": "Structures the diagnostic reasoning using the modified Duke criteria framework."
+        },
+        {
+          "order": 6,
+          "criterion": "Orders at least three sets of blood cultures from different sites before any antibiotic."
+        },
+        {
+          "order": 7,
+          "criterion": "Arranges echocardiography (transthoracic first-line) as part of the diagnostic work-up."
+        },
+        {
+          "order": 8,
+          "criterion": "Does not start empirical antibiotics before cultures in the stable patient."
+        },
+        {
+          "order": 9,
+          "criterion": "Refers urgently for specialist/hospital culture-guided treatment rather than managing this alone."
+        },
+        {
+          "order": 10,
+          "criterion": "Discusses the distinct, separate role of antibiotic prophylaxis before future at-risk procedures."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What predisposing event would you specifically ask about?\"",
+        "\"What must happen before any antibiotic is given?\"",
+        "\"How would you structure your diagnostic reasoning here?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Focused examination",
+        "Interpretation",
+        "Clinical reasoning",
+        "Referral planning",
+        "Professionalism"
+      ],
+      "criticalSafetyErrors": [
+        "Starts empirical antibiotics before blood cultures in a stable patient.",
+        "Fails to ask about a predisposing procedure or IV drug use.",
+        "Manages suspected endocarditis in primary care without urgent specialist referral."
+      ],
+      "sourceNote": [
+        "2023 ESC Guidelines for the management of endocarditis. https://academic.oup.com/eurheartj/article/44/39/3948/7243107",
+        "NICE CG64 — Prophylaxis against infective endocarditis. https://www.nice.org.uk/guidance/cg64 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Deep Vein Thrombosis",
+      "primaryCompetency": "Wells-score interpretation and safe initial management planning",
+      "format": "Data interpretation and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "An adult presents with a swollen, painful calf that developed over two days after a long-haul flight.",
+        "In 10 minutes: take a focused history, interpret the supplied Wells-score data, explain the diagnostic pathway, and counsel on initial management.",
+        "Do not invent a specific anticoagulant dose; discuss the decision at the class/pathway level."
+      ],
+      "candidateHandout": [
+        "History: unilateral calf swelling and pain for two days, worse on walking, following a 10-hour flight a few days ago; no chest pain or breathlessness currently; no recent surgery, cancer, or immobilisation otherwise; no personal or family history of clotting disorder.",
+        "Examination on request: unilateral calf swelling >3 cm compared with the other leg, pitting oedema, tenderness along the deep venous system, prominent superficial veins; no alternative diagnosis (e.g. cellulitis) evident."
+      ],
+      "learningNotes": [
+        "Learning note: NICE NG158 supports a two-level Wells score to stratify DVT probability. \"DVT likely\" (score 2 or more) should prompt a proximal leg ultrasound within 4 hours if available, or interim parenteral anticoagulation with ultrasound within 24 hours if not; \"DVT unlikely\" (score 1 or less) should prompt a D-dimer test, with ultrasound only if positive. If DVT is confirmed, anticoagulation (typically a DOAC first-line where suitable) is continued for at least 3 months, with the decision on extended treatment based on whether the event was provoked or unprovoked and on bleeding risk."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, my calf has been swollen and painful since I got back from a long flight.\"",
+        "If asked: no breathlessness, chest pain, or haemoptysis currently; no recent surgery, cancer diagnosis, or long-term immobility other than the flight; no personal/family clotting history; not on hormonal contraception (confirm on request; if asked, faculty may specify she is not, to keep the station focused on the VTE-risk-factor reasoning rather than a second diagnosis).",
+        "If asked for examination: as per handout.",
+        "ICE: worried about \"a clot travelling to the lungs\"; wants to know if she needs to be admitted and for how long she will need treatment."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. The candidate should calculate/state a two-level Wells score classification (\"likely\" vs \"unlikely\") using the supplied clinical features, without needing to recite every point value.",
+        "Full marks require the candidate to correctly route a \"DVT likely\" classification to urgent proximal ultrasound (or interim anticoagulation if ultrasound cannot be done within 4 hours) rather than starting with a D-dimer.",
+        "Accept any safe locally available anticoagulant discussed at a class level. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a focused history of the swelling's onset, risk factors (recent travel/immobility, surgery, malignancy, hormonal therapy, personal/family clotting history), and screen for symptoms suggesting pulmonary embolism.",
+        "Examine for or interpret unilateral swelling, tenderness, and pitting oedema, and exclude an obvious alternative cause.",
+        "Apply the two-level Wells score: with a \"likely\" classification here, arrange urgent proximal leg ultrasound (within 4 hours if available) or interim parenteral anticoagulation with ultrasound to follow within 24 hours if not.",
+        "Explain that a D-dimer is used mainly to help exclude DVT when the Wells score is \"unlikely,\" not as the first test in a \"likely\" presentation.",
+        "If DVT is confirmed, explain that anticoagulation (commonly a DOAC where suitable) is usually continued for at least 3 months, with the decision on extending treatment individualised to whether the clot was provoked (e.g. by the flight) and to bleeding risk; counsel on bleeding safety-netting and compression stocking use as per local protocol."
+      ],
+      "suggestedApproach": [
+        "Take a focused history including VTE risk factors and PE symptoms.",
+        "Examine/interpret leg findings and exclude alternative diagnoses.",
+        "Apply the two-level Wells score correctly.",
+        "Route to ultrasound (± interim anticoagulation) appropriately.",
+        "Explain confirmed-DVT treatment duration and individualisation.",
+        "Counsel and safety-net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a focused history of onset, risk factors, and PE-suggestive symptoms."
+        },
+        {
+          "order": 2,
+          "criterion": "Examines for or correctly interprets unilateral swelling, tenderness, and pitting oedema."
+        },
+        {
+          "order": 3,
+          "criterion": "Excludes an obvious alternative diagnosis (e.g. cellulitis, ruptured Baker's cyst)."
+        },
+        {
+          "order": 4,
+          "criterion": "Correctly applies the two-level Wells score to classify the presentation as \"likely.\""
+        },
+        {
+          "order": 5,
+          "criterion": "Routes a \"likely\" classification to urgent ultrasound (or interim anticoagulation if delayed) rather than starting with D-dimer."
+        },
+        {
+          "order": 6,
+          "criterion": "Explains the correct role of D-dimer in the \"unlikely\" pathway."
+        },
+        {
+          "order": 7,
+          "criterion": "Discusses anticoagulation choice at a class level appropriate to this patient."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains a sensible minimum treatment duration and the provoked/unprovoked distinction."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives bleeding-risk safety-netting and practical advice (e.g. compression, mobilisation) per local protocol."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses the patient's fear of pulmonary embolism honestly and checks understanding."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"How does the Wells score change your first investigation?\"",
+        "\"When is D-dimer the right first test, and when is it not?\"",
+        "\"How long is treatment likely to last, and what decides that?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Interpretation",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Counselling",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Orders D-dimer as the first test in a Wells \"likely\" presentation instead of urgent ultrasound.",
+        "Fails to screen for pulmonary embolism symptoms.",
+        "Gives no plan for interim anticoagulation when same-day ultrasound is not available."
+      ],
+      "sourceNote": [
+        "NICE NG158 — Venous thromboembolic diseases: diagnosis, management and thrombophilia testing. https://www.nice.org.uk/guidance/ng158 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Acute Pulmonary Embolism",
+      "primaryCompetency": "Emergency recognition, risk stratification, and protocol-based treatment",
+      "format": "Acute-management simulation",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "An adult develops sudden breathlessness and pleuritic chest pain three days after major surgery.",
+        "In 10 minutes: lead assessment, recognise the emergency, risk-stratify for haemodynamic instability, and lead initial management. Verbalise orders to the nurse/examiner.",
+        "Do not delay treatment in an unstable patient to await imaging confirmation."
+      ],
+      "candidateHandout": [
+        "A–E: airway patent; breathing rapid with pleuritic chest pain, oxygen saturation low on air; circulation shows tachycardia; blood pressure currently borderline-low; patient anxious, mild lightheadedness.",
+        "Post-operative day 3 after major abdominal surgery; limited mobility since surgery; no bleeding or anticoagulant contraindication reported."
+      ],
+      "learningNotes": [
+        "Learning note: High clinical suspicion of PE with haemodynamic compromise (hypotension or shock) is treated as high-risk and needs immediate resuscitation, oxygen, and urgent senior/critical-care involvement, with consideration of thrombolysis if confirmed or strongly suspected and imaging is not immediately possible in a deteriorating patient — do not wait for a formal Wells/PESI calculation to give oxygen and call for help. In a haemodynamically stable patient, risk-stratify with the Wells score / clinical probability, obtain CT pulmonary angiography (or V/Q scan if contraindicated), and start anticoagulation without delay while awaiting confirmation if clinical suspicion is high. Postoperative VTE prophylaxis omission and immobility are the relevant precipitants here and should prompt review of the thromboprophylaxis plan going forward."
+      ],
+      "simulationScript": [
+        "Nurse opening: \"This patient, three days after surgery, has suddenly become breathless with chest pain. Blood pressure is borderline and sats are low.\"",
+        "If asked: no haemoptysis; mild pleuritic pain; anxious; no known bleeding risk beyond recent surgery (faculty note: this creates a deliberate tension between anticoagulation benefit and postoperative bleeding risk to test judgement).",
+        "If oxygen, monitoring, and IV access are ordered promptly: state saturation improves slightly, BP remains borderline.",
+        "If the candidate proposes waiting for CT before any treatment while the patient is unstable: symptoms and BP worsen; provide the emergency stall prompt.",
+        "If the candidate asks for a senior/critical-care/interventional radiology opinion on the bleeding-risk-versus-anticoagulation tension: state this has been requested and is pending."
+      ],
+      "examinerInstructions": [
+        "Act as the nurse. Expect immediate A–E, oxygen, monitoring, IV access, and recognition that this is high clinical probability PE with early haemodynamic compromise.",
+        "Full marks require the candidate to explicitly weigh postoperative bleeding risk against the need for anticoagulation/thrombolysis and to involve a senior/surgical/critical-care opinion rather than making the decision alone, while not simply omitting treatment because of the surgery.",
+        "Do not require a specific PESI score number if the candidate correctly identifies high risk from hypotension/hypoxia. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Recognise sudden breathlessness, pleuritic pain, tachycardia, hypoxia, and borderline hypotension after major surgery/immobility as high clinical probability of PE with early haemodynamic compromise; call for senior/critical-care help.",
+        "Give immediate oxygen, continuous monitoring, and IV access; do not delay these for imaging.",
+        "Recognise the postoperative bleeding-risk tension: involve the surgical/senior team promptly rather than either withholding anticoagulation reflexively or giving it without discussion, given recent major surgery.",
+        "If the patient deteriorates into shock, treat as high-risk PE requiring urgent senior/critical-care management and consideration of thrombolysis with surgical input on bleeding risk; if stable, arrange urgent CT pulmonary angiography and start anticoagulation without delay if clinical suspicion is high, per a multidisciplinary decision given the recent surgery.",
+        "Review and reinforce postoperative VTE prophylaxis for future prevention once the acute event is managed."
+      ],
+      "suggestedApproach": [
+        "Recognise the emergency and call for help.",
+        "A–E, oxygen, monitoring, IV access.",
+        "Weigh anticoagulation benefit against postoperative bleeding risk with senior/surgical input.",
+        "Arrange urgent imaging if stable; treat as high-risk if unstable.",
+        "Escalate for thrombolysis discussion if deteriorating.",
+        "Review VTE prophylaxis going forward."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises sudden breathlessness/pleuritic pain postoperatively as high probability of PE."
+        },
+        {
+          "order": 2,
+          "criterion": "Calls for senior/critical-care help and applies an A–E approach."
+        },
+        {
+          "order": 3,
+          "criterion": "Gives immediate oxygen, monitoring, and IV access without delay."
+        },
+        {
+          "order": 4,
+          "criterion": "Identifies hypotension/hypoxia as features of a potentially high-risk (haemodynamically significant) PE."
+        },
+        {
+          "order": 5,
+          "criterion": "Explicitly recognises the postoperative bleeding-risk tension around anticoagulation/thrombolysis."
+        },
+        {
+          "order": 6,
+          "criterion": "Involves a senior/surgical/critical-care opinion rather than deciding alone."
+        },
+        {
+          "order": 7,
+          "criterion": "Arranges urgent CT pulmonary angiography (or equivalent) if the patient is stable enough."
+        },
+        {
+          "order": 8,
+          "criterion": "Does not delay essential emergency treatment/escalation while awaiting imaging in an unstable patient."
+        },
+        {
+          "order": 9,
+          "criterion": "Describes escalation to high-risk PE management (including thrombolysis discussion) if shock develops."
+        },
+        {
+          "order": 10,
+          "criterion": "Plans review of postoperative VTE prophylaxis for the future."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: \"Blood pressure is now falling further. What do you do?\"",
+        "\"How does recent major surgery change your anticoagulation decision, and who else should be involved?\""
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Interpretation",
+        "Clinical reasoning",
+        "Prescribing safety",
+        "Team communication"
+      ],
+      "criticalSafetyErrors": [
+        "Delays oxygen/monitoring/IV access while waiting for imaging in an unstable patient.",
+        "Makes the anticoagulation/thrombolysis decision alone without involving surgical/senior input given recent major surgery.",
+        "Fails to recognise haemodynamic compromise as a marker of high-risk PE."
+      ],
+      "sourceNote": [
+        "NICE NG158 — Venous thromboembolic diseases: diagnosis, management and thrombophilia testing. https://www.nice.org.uk/guidance/ng158 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Rheumatic / Valvular Heart Disease (Mitral Stenosis)",
+      "primaryCompetency": "Focused cardiovascular examination and counselling",
+      "format": "Examination and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "An adult with a childhood history of rheumatic fever presents with progressive breathlessness and occasional palpitations.",
+        "In 10 minutes: describe or perform a focused cardiovascular examination, interpret the supplied findings, and counsel on diagnosis, complications, and management principles.",
+        "Do not invent specific valve-area cut-offs; use the handout's descriptive severity."
+      ],
+      "candidateHandout": [
+        "History: childhood history of rheumatic fever with recurrent sore throats; progressive breathlessness on exertion over recent months; occasional palpitations; no chest pain; no haemoptysis currently.",
+        "Examination on request: a malar flush, irregularly irregular pulse (in keeping with atrial fibrillation), a loud first heart sound with an opening snap, and a low-pitched rumbling mid-diastolic murmur best heard at the apex in the left lateral position; no signs of pulmonary oedema at present."
+      ],
+      "learningNotes": [
+        "Learning note: Rheumatic mitral stenosis commonly presents with exertional breathlessness, and atrial fibrillation is a common and important complication because of left atrial enlargement, itself increasing thromboembolic stroke risk substantially. Management under the ESC/EACTS 2021 valvular heart disease guideline includes rate control and anticoagulation for associated AF, monitoring for pulmonary hypertension/right heart failure, and referral for consideration of balloon valvuloplasty or surgical valve intervention once symptoms or valve severity warrant it. Secondary antibiotic prophylaxis against recurrent rheumatic fever, and endocarditis-prophylaxis counselling for future at-risk procedures, remain relevant in patients with a rheumatic history."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I get breathless much more easily now, and sometimes my heart feels like it's racing or fluttering.\"",
+        "If asked: childhood history of repeated severe sore throats and joint pains, told at the time it was \"rheumatic fever\"; no formal follow-up since; no chest pain; no coughing blood; no leg swelling yet.",
+        "If asked for examination: as per handout.",
+        "ICE: worried about needing \"open heart surgery\"; unaware that the childhood illness is connected to her current symptoms."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. If the candidate examines physically, confirm the findings as listed when the relevant area is assessed correctly (pulse, praecordium, auscultation in the left lateral position).",
+        "Full marks require the candidate to connect the childhood rheumatic fever history to the current valve lesion, correctly recognise the examination findings as mitral stenosis, and identify the AF/thromboembolic-risk complication explicitly.",
+        "Accept a general description of balloon valvuloplasty/surgical options without requiring detailed technical criteria. Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Take a history explicitly linking the childhood illness (rheumatic fever) to current valve disease, and assess functional impact, palpitations, and complications (breathlessness, haemoptysis, oedema, embolic events).",
+        "Examine (or interpret supplied findings) for the malar flush, irregular pulse, loud S1 with opening snap, and mid-diastolic murmur at the apex in the left lateral position — correctly naming this pattern as mitral stenosis.",
+        "Explain the diagnosis in plain language, connecting it to the childhood illness, and explain that the irregular pulse represents atrial fibrillation, a recognised complication that raises stroke risk and needs its own assessment for anticoagulation.",
+        "Outline the management approach: rate control and anticoagulation for AF, monitoring for pulmonary hypertension/right heart failure, and specialist referral for consideration of balloon valvuloplasty or surgical valve repair/replacement depending on severity and symptoms.",
+        "Discuss secondary antibiotic prophylaxis against recurrent rheumatic fever where still indicated, and endocarditis-prophylaxis counselling for future at-risk dental/surgical procedures."
+      ],
+      "suggestedApproach": [
+        "Link the childhood history to the current presentation.",
+        "Assess functional impact and complications.",
+        "Examine and correctly interpret the cardiac findings.",
+        "Explain the diagnosis and the AF/stroke-risk complication.",
+        "Outline referral and treatment options.",
+        "Discuss secondary prophylaxis and endocarditis-prophylaxis counselling."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes a history connecting childhood rheumatic fever to the current presentation."
+        },
+        {
+          "order": 2,
+          "criterion": "Assesses functional impact, palpitations, and complications (breathlessness, haemoptysis, oedema, embolic events)."
+        },
+        {
+          "order": 3,
+          "criterion": "Examines (or interprets) the pulse, correctly identifying the irregularly irregular rhythm."
+        },
+        {
+          "order": 4,
+          "criterion": "Correctly identifies the loud S1, opening snap, and mid-diastolic murmur pattern of mitral stenosis."
+        },
+        {
+          "order": 5,
+          "criterion": "Positions/describes auscultation technique correctly (left lateral position, apex, bell)."
+        },
+        {
+          "order": 6,
+          "criterion": "Explains the diagnosis in plain, patient-centred language, linking it to the childhood illness."
+        },
+        {
+          "order": 7,
+          "criterion": "Explicitly identifies the AF complication and its associated thromboembolic/stroke risk."
+        },
+        {
+          "order": 8,
+          "criterion": "Outlines rate control and anticoagulation for the AF component."
+        },
+        {
+          "order": 9,
+          "criterion": "Describes specialist referral for balloon valvuloplasty/surgical options appropriate to severity."
+        },
+        {
+          "order": 10,
+          "criterion": "Discusses secondary rheumatic-fever and endocarditis-prophylaxis counselling."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What is the connection between her childhood illness and her symptoms now?\"",
+        "\"What does the irregular pulse tell you, and why does it matter?\"",
+        "\"What long-term options exist for the valve itself?\""
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Focused examination",
+        "Interpretation",
+        "Clinical reasoning",
+        "Counselling",
+        "Referral planning"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to recognise the AF complication or its stroke-risk implication.",
+        "Misses the connection between childhood rheumatic fever and the current valve lesion.",
+        "Gives no referral pathway for definitive valve assessment/treatment."
+      ],
+      "sourceNote": [
+        "2021 ESC/EACTS Guidelines for the management of valvular heart disease. https://academic.oup.com/eurheartj/article/43/7/561/6358470 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Dyslipidaemia",
+      "primaryCompetency": "Lipid-result interpretation and cardiovascular-risk-based statin counselling",
+      "format": "Results interpretation and counselling",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "An adult attends for routine results review. A fasting lipid profile shows an elevated total and LDL cholesterol.",
+        "In 10 minutes: interpret the results in the context of overall cardiovascular risk, explain the finding, and counsel on lifestyle and statin therapy.",
+        "Do not invent a specific numeric risk-score percentage; reason from the supplied risk-factor summary."
+      ],
+      "candidateHandout": [
+        "Results: total cholesterol and LDL cholesterol above the laboratory reference range; HDL cholesterol low-normal; triglycerides mildly raised.",
+        "Risk factors present: overweight, sedentary job, smoker, family history of early heart disease in a first-degree relative, no known diabetes, blood pressure previously borderline.",
+        "No known cardiovascular disease, stroke, or peripheral arterial disease (this is primary prevention)."
+      ],
+      "learningNotes": [
+        "Learning note: NICE NG238 (cardiovascular disease: risk assessment and reduction, including lipid modification) supports a formal cardiovascular-risk assessment (a validated risk tool) to guide the primary-prevention statin decision, generally offering a statin (commonly atorvastatin) when 10-year risk crosses an agreed threshold or in patients with specific higher-risk conditions, alongside lifestyle measures (diet, exercise, weight, smoking cessation, alcohol moderation). Baseline liver function should be checked before starting and monitored after initiation; muscle aches/weakness should prompt review for statin-associated muscle symptoms. Secondary prevention (a patient with known cardiovascular disease) uses a higher-intensity statin regardless of a formal risk score."
+      ],
+      "simulationScript": [
+        "Opening: \"Doctor, I heard my cholesterol came back high. Does that mean I need medicine for the rest of my life?\"",
+        "If asked: no chest pain, no known heart or vascular disease; smoker, sedentary job, overweight; father had a heart attack in his 50s; occasional alcohol.",
+        "ICE: worried statins have serious side effects (has heard stories about muscle problems); wants to try \"just diet\" first and asks if that would be enough."
+      ],
+      "examinerInstructions": [
+        "Give the handout at the start. Do not require a specific numeric risk-score result to be quoted; accept correct reasoning that this patient has multiple risk factors and a significant family history, supporting a discussion about statin therapy in a shared-decision framework.",
+        "Full marks require the candidate to check for secondary causes (thyroid, renal, liver, diabetes, alcohol) before attributing this solely to primary dyslipidaemia, and to explain both lifestyle and drug options rather than one alone.",
+        "Prompted items score at most 1/2."
+      ],
+      "keyAnswerGuide": [
+        "Interpret the lipid profile in the context of overall cardiovascular risk rather than treating the LDL number in isolation; use a formal risk-assessment tool where locally available.",
+        "Screen for secondary causes of dyslipidaemia (hypothyroidism, diabetes, renal or liver disease, alcohol excess, certain medicines) before attributing the picture purely to primary/lifestyle-related dyslipidaemia.",
+        "Explain lifestyle measures (diet — reduced saturated fat, increased fibre/fruit/vegetables, weight reduction, regular exercise, smoking cessation, alcohol moderation) as foundational, alongside — not instead of — statin therapy when risk is significant.",
+        "Offer a statin (commonly atorvastatin) with an honest discussion of benefits (reduced cardiovascular event risk) and the real but generally modest risk of muscle symptoms/hepatic effects, checking baseline liver function first and giving clear safety-netting for muscle pain/weakness or jaundice.",
+        "Arrange follow-up lipid and liver-function testing after initiation, and reinforce shared decision-making rather than a directive \"take it or don't\" approach."
+      ],
+      "suggestedApproach": [
+        "Explore the patient's understanding and specific concern.",
+        "Interpret the lipid result in the context of overall risk, screening for secondary causes.",
+        "Explain lifestyle measures as foundational.",
+        "Offer statin therapy with honest risk/benefit discussion.",
+        "Arrange baseline/follow-up monitoring.",
+        "Check understanding and agree a plan together."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Explores the patient's existing understanding and specific concern about statins."
+        },
+        {
+          "order": 2,
+          "criterion": "Interprets the lipid result in the context of overall cardiovascular risk, not in isolation."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens for secondary causes of dyslipidaemia before attributing it purely to lifestyle."
+        },
+        {
+          "order": 4,
+          "criterion": "Reviews all relevant risk factors (smoking, weight, activity, family history, blood pressure)."
+        },
+        {
+          "order": 5,
+          "criterion": "Explains diet, weight, exercise, smoking cessation, and alcohol moderation clearly."
+        },
+        {
+          "order": 6,
+          "criterion": "Offers statin therapy in a balanced way, not \"diet alone\" and not \"medicine alone.\""
+        },
+        {
+          "order": 7,
+          "criterion": "Gives an honest, non-alarmist explanation of statin side effects, particularly muscle symptoms."
+        },
+        {
+          "order": 8,
+          "criterion": "Arranges baseline liver function before starting and explains follow-up monitoring."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives clear safety-netting for muscle pain/weakness or jaundice."
+        },
+        {
+          "order": 10,
+          "criterion": "Uses shared decision-making and checks the patient's understanding and agreement."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "\"What would you check before assuming this is purely lifestyle-related?\"",
+        "\"Is diet alone ever enough, and how would you decide?\"",
+        "\"What would make you stop or review the statin?\""
+      ],
+      "expectedCompetencies": [
+        "Interpretation",
+        "Clinical reasoning",
+        "Counselling",
+        "Prescribing safety",
+        "Shared decision-making",
+        "Health promotion"
+      ],
+      "criticalSafetyErrors": [
+        "Starts a statin without any secondary-cause screening or baseline liver function check.",
+        "Presents lifestyle change and statin therapy as mutually exclusive rather than complementary.",
+        "Gives no safety-netting for statin-associated muscle symptoms."
+      ],
+      "sourceNote": [
+        "NICE NG238 — Cardiovascular disease: risk assessment and reduction, including lipid modification. https://www.nice.org.uk/guidance/ng238 Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Cardiac Arrest",
+      "primaryCompetency": "Basic and advanced life support: recognition, CPR quality, and rhythm-directed treatment",
+      "format": "Acute-management simulation (BLS/ALS)",
+      "time": "10 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You find an adult collapsed and unresponsive on the ward corridor.",
+        "In 10 minutes: lead recognition and resuscitation using a basic-life-support-into-advanced-life-support sequence, verbalising every action and order to the team/examiner.",
+        "Manikin and simulated monitor/defibrillator are available; verbalise all interventions clearly."
+      ],
+      "candidateHandout": [
+        "Initial state: unresponsive, not breathing normally, no signs of life on brief check.",
+        "Once CPR/monitor are attached: first rhythm shown is shockable (ventricular fibrillation)."
+      ],
+      "learningNotes": [
+        "Learning note: The Resuscitation Council UK 2021 adult ALS algorithm begins with confirming unresponsiveness and absent normal breathing, shouting for help, and starting high-quality chest compressions (rate 100–120/min, depth 5–6 cm, full recoil, minimal interruption) with asynchronous ventilations once an airway adjunct is placed. Attach a monitor/defibrillator as soon as available. For a shockable rhythm (VF/pulseless VT): give one shock immediately, resume CPR immediately for 2 minutes without a rhythm/pulse check, then reassess; give adrenaline 1 mg IV/IO after the third shock and every 3–5 minutes thereafter, and amiodarone 300 mg IV/IO after the third shock (further dose after the fifth if still in a shockable rhythm). For a non-shockable rhythm (asystole/PEA): give adrenaline 1 mg IV/IO as soon as access is obtained and every 3–5 minutes, continuing CPR with rhythm checks every 2 minutes. Identify and treat reversible causes (the 4 Hs and 4 Ts: hypoxia, hypovolaemia, hypo/hyperkalaemia and other metabolic abnormalities, hypothermia; tension pneumothorax, tamponade, toxins, thromboembolism) throughout."
+      ],
+      "simulationScript": [
+        "Examiner/nurse cues: on approach, state \"the patient is unresponsive and not breathing normally\" once the candidate checks.",
+        "When the candidate calls for help and starts compressions: confirm a crash call/team is on the way and compressions are being counted/timed by the examiner for rate and depth.",
+        "When a monitor/defibrillator is attached: state the rhythm is shockable (VF).",
+        "After the shock and 2 minutes of CPR: state the rhythm remains shockable on the second check unless the candidate has otherwise correctly requested a reassessment cadence, in which case follow the standard 2-minute-cycle branching per local mock-code convention.",
+        "If compressions are interrupted for longer than necessary (e.g. prolonged pauses to \"feel for a pulse\" during a cycle) or a shock is delayed: provide the emergency stall prompt and note this for scoring.",
+        "If asked about reversible causes: provide simulated findings as directed by faculty (e.g. no obvious external bleeding, normal-looking chest wall) to allow the candidate to verbalise the 4H/4T screen."
+      ],
+      "examinerInstructions": [
+        "Run this as a structured mock code. Expect an immediate, confident BLS opening (unresponsive/breathing check, shout for help/activate emergency response, start compressions) before any equipment is available.",
+        "Full marks require correct compression rate/depth as verbalised or demonstrated, minimal hands-off time, correct shock-then-immediate-CPR sequence, correctly timed adrenaline (after the third shock in a shockable rhythm; immediately in a non-shockable rhythm) and amiodarone (after the third shock), and an explicit 4H/4T reversible-cause screen.",
+        "Prompted items score at most 1/2. A dangerous pause in compressions or a missed/delayed shock is a critical safety error regardless of other performance."
+      ],
+      "keyAnswerGuide": [
+        "Confirm unresponsiveness and absent normal breathing quickly; shout for help/activate the emergency response; start high-quality chest compressions immediately (rate 100–120/min, depth 5–6 cm, full recoil, minimal interruption), with ventilations once airway support is available.",
+        "Attach the monitor/defibrillator as soon as possible and recognise the shockable rhythm; deliver one shock, then resume CPR immediately for a full 2-minute cycle without checking rhythm or pulse in between.",
+        "Give adrenaline 1 mg IV/IO after the third shock and repeat every 3–5 minutes; give amiodarone 300 mg IV/IO after the third shock (a further 150 mg dose may be given after the fifth shock if still shockable).",
+        "If the rhythm becomes non-shockable (asystole/PEA), continue CPR with adrenaline 1 mg IV/IO as soon as access is obtained and every 3–5 minutes, without shocks.",
+        "Throughout, systematically consider and address the 4 Hs (hypoxia, hypovolaemia, hypo/hyperkalaemia/metabolic, hypothermia) and 4 Ts (tension pneumothorax, tamponade, toxins, thromboembolism); minimise hands-off time at every rhythm check and maintain clear team communication and role allocation."
+      ],
+      "suggestedApproach": [
+        "Confirm cardiac arrest and call for help immediately.",
+        "Start high-quality CPR without delay.",
+        "Attach the monitor/defibrillator and follow the shockable/non-shockable branch correctly.",
+        "Give adrenaline and amiodarone at the correct timing.",
+        "Minimise hands-off time throughout.",
+        "Systematically screen for and treat reversible causes."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms unresponsiveness and absent normal breathing rapidly and safely."
+        },
+        {
+          "order": 2,
+          "criterion": "Shouts for help/activates the emergency response before starting other tasks."
+        },
+        {
+          "order": 3,
+          "criterion": "Starts high-quality chest compressions immediately at the correct rate and depth."
+        },
+        {
+          "order": 4,
+          "criterion": "Attaches the monitor/defibrillator as soon as available and correctly identifies the shockable rhythm."
+        },
+        {
+          "order": 5,
+          "criterion": "Delivers the shock promptly and resumes CPR immediately afterward without a pulse/rhythm check."
+        },
+        {
+          "order": 6,
+          "criterion": "Minimises hands-off (no-compression) time throughout the resuscitation."
+        },
+        {
+          "order": 7,
+          "criterion": "Gives adrenaline 1 mg IV/IO at the correct timing for a shockable rhythm (after the third shock, then every 3–5 minutes)."
+        },
+        {
+          "order": 8,
+          "criterion": "Gives amiodarone 300 mg IV/IO at the correct timing (after the third shock)."
+        },
+        {
+          "order": 9,
+          "criterion": "Systematically screens for and addresses the 4 Hs and 4 Ts."
+        },
+        {
+          "order": 10,
+          "criterion": "Maintains clear team communication, role allocation, and documentation throughout."
+        }
+      ],
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context without irrelevant overreach."
+      ],
+      "promptQuestions": [
+        "Emergency stall prompt: \"Compressions have stopped for too long — what should be happening right now?\"",
+        "\"When exactly do you give adrenaline and amiodarone in a shockable rhythm?\"",
+        "\"What reversible causes would you specifically look for here?\""
+      ],
+      "expectedCompetencies": [
+        "Emergency prioritisation",
+        "Psychomotor/procedural skill",
+        "Team communication",
+        "Prescribing safety",
+        "Structured algorithm use"
+      ],
+      "criticalSafetyErrors": [
+        "Delays starting chest compressions or calling for help.",
+        "Interrupts compressions for a prolonged pause, or delays/omits the shock in a shockable rhythm.",
+        "Gives adrenaline or amiodarone at the wrong timing, or fails to screen for reversible causes."
+      ],
+      "sourceNote": [
+        "Resuscitation Council UK — Adult advanced life support guidelines, 2021. https://www.resus.org.uk/library/2021-resuscitation-guidelines/adult-advanced-life-support-guidelines Accessed September 2026. Recommendations from UK/European bodies are labelled as evidence standards; approved Pakistani institutional/provincial protocols, formularies, referral pathways, and emergency charts supersede imported operational details."
+      ]
+    }
+  ]
+}

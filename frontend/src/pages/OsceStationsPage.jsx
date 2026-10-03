@@ -58,7 +58,7 @@ function SpendError({ error }) {
     <div role="alert" className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl border border-sun/25 bg-sun-soft p-4 text-sm text-s-ink">
       <Coins size={18} strokeWidth={2} className="shrink-0 text-sun" aria-hidden="true" />
       <span className="min-w-0 flex-1">{error.message}</span>
-      <Link to="/credits" className="site-press inline-flex min-h-11 items-center rounded-full bg-s-card px-4 font-semibold text-s-ink ring-1 ring-sun/30 hover:bg-sun-soft">Get credits</Link>
+      <Link to="/credits" className="site-press inline-flex min-h-11 items-center rounded-full bg-s-card px-4 font-semibold text-s-ink ring-1 ring-sun/30 hover:bg-sun-soft">Get AI credits</Link>
     </div>
   );
 }
@@ -386,12 +386,12 @@ export function OsceStationDetail() {
               <CandidateInstructions module={module} />
             </Panel>
             <div className="space-y-4">
-              <VirtualPatientCard
+              {module.practiceOptions?.includes("virtual-patient") && <VirtualPatientCard
                 module={module}
                 onClick={() => start("virtual-patient")}
                 loading={state.starting === "virtual-patient"}
-                shortfall={shortfall ? `You have ${balance} credit${balance === 1 ? "" : "s"}.` : ""}
-              />
+                shortfall={shortfall ? `You have ${balance} AI credit${balance === 1 ? "" : "s"}.` : ""}
+              />}
               <SelfPracticeCard onClick={() => start("single-player")} loading={state.starting === "single-player"} />
               <SpendError error={state.startError} />
             </div>
@@ -421,6 +421,14 @@ function CandidateInstructions({ module, bare = false }) {
           ))}
         </ol>
       )}
+      {!!module.candidateHandout?.length && (
+        <div className="mt-5 rounded-2xl border border-s-line bg-s-card p-4">
+          <h3 className="text-sm font-semibold text-s-ink">Station handout</h3>
+          <ul className="mt-2 space-y-2 text-sm leading-relaxed text-s-mute">
+            {module.candidateHandout.map((line, index) => <li key={`${index}-${line.slice(0, 24)}`}>{line}</li>)}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -447,7 +455,7 @@ function VirtualPatientCard({ module, onClick, loading, shortfall }) {
       {shortfall ? (
         <p className="relative mt-5 text-sm text-s-on-accent/90">
           {shortfall}{" "}
-          <Link to="/credits" className="font-semibold underline underline-offset-2">Get credits</Link> to start.
+          <Link to="/credits" className="font-semibold underline underline-offset-2">Get AI credits</Link> to start.
         </p>
       ) : (
         <button
@@ -473,7 +481,7 @@ function SelfPracticeCard({ onClick, loading }) {
         <span className="rounded-full bg-mint-soft px-2.5 py-1 font-chart text-xs text-s-good">Free</span>
       </div>
       <h3 className="mt-4 text-lg font-semibold tracking-tight text-s-ink">Guided self-practice</h3>
-      <p className="mt-1.5 text-sm leading-relaxed text-s-mute">Read the patient script, then reveal the checklist and mark yourself.</p>
+      <p className="mt-1.5 text-sm leading-relaxed text-s-mute">Work through the station script, then reveal the checklist and mark yourself.</p>
       <SecondaryButton onClick={onClick} disabled={loading} className="mt-5 w-full">
         {loading ? "Starting..." : "Start self-practice"}
       </SecondaryButton>
@@ -486,7 +494,7 @@ export function SinglePlayerOsce() {
   const navigate = useNavigate();
   const params = new URLSearchParams(window.location.search);
   const attemptId = params.get("attemptId");
-  const [state, setState] = useState({ loading: true, content: null, checked: [], notes: "", error: "" });
+  const [state, setState] = useState({ loading: true, content: null, checked: [], scores: {}, notes: "", error: "" });
   const [checklistRevealed, setChecklistRevealed] = useState(false);
   const finishRef = useRef(false);
   const timer = useCountdown({ limitSeconds: state.content?.timeLimitSeconds || 360, enabled: Boolean(state.content) });
@@ -502,7 +510,7 @@ export function SinglePlayerOsce() {
     finishRef.current = true;
     if (attemptId) {
       await endOsceAttempt(attemptId, { notes: state.notes, elapsedSeconds: timer.elapsedSeconds });
-      await selfAssessOsceAttempt(attemptId, state.checked);
+      await selfAssessOsceAttempt(attemptId, state.checked, toItemScores(state.scores));
       navigate(`/stations/attempts/${attemptId}/results`);
     }
   }
@@ -531,10 +539,12 @@ export function SinglePlayerOsce() {
               <div className="mt-6 border-t border-s-line pt-5">
                 <div className="flex items-center gap-3">
                   <Character name={patientFor(state.content.title)} size={40} tone="indigo" />
-                  <h2 className="text-lg font-semibold tracking-tight text-s-ink">Patient script</h2>
+                  <h2 className="text-lg font-semibold tracking-tight text-s-ink">{state.content.simulationScript?.length ? "Simulation script" : "Patient script"}</h2>
                 </div>
                 <div className="mt-4 grid gap-2.5">
-                  {state.content.patientScript.facts.map((fact) => (
+                  {state.content.simulationScript?.length ? state.content.simulationScript.map((line, index) => (
+                    <div key={`${index}-${line.slice(0, 24)}`} className="rounded-2xl border border-s-line bg-s-card p-4 text-sm leading-relaxed text-s-mute">{line}</div>
+                  )) : state.content.patientScript.facts.map((fact) => (
                     <div key={fact.factId} className="rounded-2xl border border-s-line bg-s-card p-4 text-sm">
                       <div className="flex flex-wrap items-center gap-2">
                         <Chip>{fact.section}</Chip>
@@ -549,15 +559,18 @@ export function SinglePlayerOsce() {
             <Panel className="site-rise self-start xl:sticky xl:top-6" style={{ "--rise-delay": "80ms" }}>
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold tracking-tight text-s-ink">Marking checklist</h2>
-                {checklistRevealed && <Chip>{state.checked.length} ticked</Chip>}
+                {checklistRevealed && <Chip>{state.checked.length} marked</Chip>}
               </div>
               {checklistRevealed ? (
-                <Checklist checklist={state.content.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
+                <>
+                  <Checklist checklist={state.content.checklist} checked={state.checked} scores={state.scores} onChange={(checked) => setState((s) => ({ ...s, checked }))} onScoreChange={(itemId, rawScore) => setState((s) => withScoredItem(s, itemId, rawScore))} />
+                  <StationReview module={state.content} />
+                </>
               ) : (
                 <div className="mt-4 flex flex-col items-center rounded-2xl border border-dashed border-s-line bg-s-card px-5 py-6 text-center">
                   <Character name="examiner" size={64} tone="mint" />
                   <p className="mt-3 text-sm leading-relaxed text-s-mute">
-                    Hidden for now so you test yourself properly. Work through the patient script first, then reveal the checklist to mark yourself.
+                    Hidden for now so you test yourself properly. Work through the station script first, then reveal the checklist to mark yourself.
                   </p>
                   <SecondaryButton onClick={() => setChecklistRevealed(true)} className="mt-4">
                     <Eye size={16} strokeWidth={2} aria-hidden="true" /> Reveal checklist
@@ -862,7 +875,7 @@ export function VirtualPatientSession() {
 export function SelfAssessmentPage() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
-  const [state, setState] = useState({ loading: true, attempt: null, checklist: null, checked: [], aiLoading: false, error: "", spendError: null });
+  const [state, setState] = useState({ loading: true, attempt: null, checklist: null, checked: [], scores: {}, aiLoading: false, error: "", spendError: null });
 
   const load = useCallback(() => {
     setState((s) => ({ ...s, loading: true, error: "" }));
@@ -877,7 +890,7 @@ export function SelfAssessmentPage() {
 
   async function selfAssess() {
     try {
-      await selfAssessOsceAttempt(attemptId, state.checked);
+      await selfAssessOsceAttempt(attemptId, state.checked, toItemScores(state.scores));
       navigate(`/stations/attempts/${attemptId}/results`);
     } catch (err) {
       setState((s) => ({ ...s, spendError: err }));
@@ -896,8 +909,10 @@ export function SelfAssessmentPage() {
     }
   }
 
-  const totalItems = state.checklist ? state.checklist.sections.reduce((sum, section) => sum + section.items.length, 0) : 0;
-  const tickedPct = totalItems ? Math.round((state.checked.length / totalItems) * 100) : 0;
+  const allItems = state.checklist?.sections.flatMap((section) => section.items) || [];
+  const totalPoints = allItems.reduce((sum, item) => sum + item.maxRawScore, 0);
+  const markedPoints = allItems.reduce((sum, item) => sum + (state.scores[item.itemId] ?? (state.checked.includes(item.itemId) ? item.maxRawScore : 0)), 0);
+  const tickedPct = totalPoints ? Math.round((markedPoints / totalPoints) * 100) : 0;
 
   return (
     <RequireUser>
@@ -910,13 +925,13 @@ export function SelfAssessmentPage() {
             <Panel className="site-rise">
               <h1 className="text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">Mark your station</h1>
               <p className="mt-2 leading-relaxed text-s-mute">Tick what you covered, or let the AI examiner read your transcript and mark it for you.</p>
-              <Checklist checklist={state.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
+              <Checklist checklist={state.checklist} checked={state.checked} scores={state.scores} onChange={(checked) => setState((s) => ({ ...s, checked }))} onScoreChange={(itemId, rawScore) => setState((s) => withScoredItem(s, itemId, rawScore))} />
             </Panel>
             <Panel className="site-rise flex flex-col items-center text-center md:sticky md:top-6 md:self-start" style={{ "--rise-delay": "80ms" }}>
               <Character name="examiner" size={64} tone="mint" />
               <ScoreRing pct={tickedPct} tone="text-mint" className="mt-4 h-32 w-32">
-                <span className="text-3xl font-semibold tracking-tight text-s-ink">{state.checked.length}</span>
-                <span className="font-chart text-xs text-s-mute">of {totalItems} ticked</span>
+                <span className="text-3xl font-semibold tracking-tight text-s-ink">{markedPoints}</span>
+                <span className="font-chart text-xs text-s-mute">of {totalPoints} points</span>
               </ScoreRing>
               <PrimaryButton onClick={aiAssess} disabled={state.aiLoading} className="mt-6 w-full">
                 <Sparkles size={16} strokeWidth={2} aria-hidden="true" /> {state.aiLoading ? "Assessing..." : "AI assessment"}
@@ -993,6 +1008,12 @@ export function OsceResultPage() {
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-mint text-s-card" aria-hidden="true"><Check size={13} strokeWidth={3} /></span>
                   Nothing missed on the checklist.
                 </p>
+              )}
+              {!!state.data.module?.learningNotes && (
+                <div className="mt-6 border-t border-s-line pt-5">
+                  <h2 className="font-semibold text-s-ink">Station review</h2>
+                  <StationReview module={state.data.module} />
+                </div>
               )}
             </Panel>
           </div>
@@ -1260,7 +1281,7 @@ export function AdminOscePage() {
                 <h2 className="text-lg font-semibold tracking-tight text-s-ink">Configuration</h2>
                 <p className="mt-1 text-sm text-s-mute">Virtual patient, assessment, and speech-to-text models are configured under AI &amp; models.</p>
                 {!defaultProvider?.configured && <p className="mt-4 flex items-start gap-2 rounded-2xl bg-sun-soft p-3.5 text-sm text-s-ink"><AlertTriangle size={17} strokeWidth={2} className="shrink-0 text-sun" aria-hidden="true" /> The default provider has no configured key. AI sessions may be unavailable.</p>}
-                <p className="mt-4 text-sm text-s-mute">Credit prices and usage caps are server configuration. Grants remain CLI-only and are recorded in the credit ledger.</p>
+                <p className="mt-4 text-sm text-s-mute">AI credit prices and usage caps are server configuration. Grants remain CLI-only and are recorded in the AI credit ledger.</p>
                 <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "ai" }))} className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Review AI settings <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
               </Panel>
             </div>
@@ -1385,7 +1406,7 @@ export function AdminOscePage() {
         {!state.loading && state.activeTab === "users" && (
           <Panel>
             <h2 className="text-2xl font-semibold tracking-tight text-s-ink">Accounts</h2>
-            <p className="mt-1 text-sm text-s-mute">{state.users.length} registered accounts. Account roles and credit balances are read-only here; grants use the audited CLI.</p>
+            <p className="mt-1 text-sm text-s-mute">{state.users.length} registered accounts. Account roles and AI credit balances are read-only here; grants use the audited CLI.</p>
             <label className="relative mt-5 block max-w-md"><span className="sr-only">Search accounts</span><Search size={17} strokeWidth={2} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-s-mute" aria-hidden="true" /><input value={userSearch} onChange={(e) => setUserSearch(e.target.value)} placeholder="Search name, email, or role" className="w-full min-h-11 rounded-xl border border-s-line bg-s-card py-2.5 pl-10 pr-3 text-sm text-s-ink outline-none placeholder:text-s-mute focus:border-s-accent" /></label>
             {/* Phones: one card per user — a 5-column table has no room to breathe below sm. */}
             <div className="mt-5 space-y-2 sm:hidden">
@@ -1396,7 +1417,7 @@ export function AdminOscePage() {
                     <span className="shrink-0 rounded-full bg-s-accent-soft px-2.5 py-1 font-chart text-xs text-s-accent-strong">{user.role}</span>
                   </div>
                   <p className="mt-1 break-all text-s-mute">{user.email}</p>
-                  <p className="mt-1 text-s-mute">{user.roleLabel || user.profile?.programme || "-"} / {user.creditBalance} credits / Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</p>
+                  <p className="mt-1 text-s-mute">{user.roleLabel || user.profile?.programme || "-"} / {user.creditBalance} AI credits / Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</p>
                 </div>
               ))}
             </div>
@@ -1408,7 +1429,7 @@ export function AdminOscePage() {
                     <th className="border-b border-s-line py-3 pr-3">Email</th>
                     <th className="border-b border-s-line py-3 pr-3">Role</th>
                     <th className="border-b border-s-line py-3 pr-3">Profile</th>
-                    <th className="border-b border-s-line py-3 pr-3">Credits</th>
+                    <th className="border-b border-s-line py-3 pr-3">AI Credits</th>
                     <th className="border-b border-s-line py-3 pr-3">Joined</th>
                   </tr>
                 </thead>
@@ -1447,7 +1468,38 @@ function WeightTag({ weight, className = "" }) {
 }
 
 // Checklist rows styled like the landing "Mark yourself like the examiner".
-function Checklist({ checklist, checked, onChange }) {
+function withScoredItem(state, itemId, rawScore) {
+  return {
+    ...state,
+    scores: { ...state.scores, [itemId]: rawScore },
+    checked: rawScore > 0 ? [...new Set([...state.checked, itemId])] : state.checked.filter((id) => id !== itemId),
+  };
+}
+
+function toItemScores(scores) {
+  return Object.entries(scores).map(([itemId, rawScore]) => ({ itemId, rawScore }));
+}
+
+function StationReview({ module }) {
+  const guidanceStart = module.facultyNote?.indexOf("Local protocols supersede imported guidance.") ?? -1;
+  const practiceGuidance = guidanceStart >= 0 ? module.facultyNote.slice(guidanceStart) : module.facultyNote;
+  return (
+    <div className="mt-5 space-y-4 text-sm leading-relaxed text-s-mute">
+      {!!module.learningNotes && <p className="whitespace-pre-line rounded-2xl border border-s-line bg-s-card p-4"><strong>Review notes:</strong> {module.learningNotes}</p>}
+      {!!module.keyAnswerGuide && <p className="whitespace-pre-line"><strong>Answer guide:</strong> {module.keyAnswerGuide}</p>}
+      {!!module.examinerInstructions && <p className="whitespace-pre-line"><strong>Examiner guidance:</strong> {module.examinerInstructions}</p>}
+      {!!module.suggestedCandidateApproach?.length && <p><strong>Suggested approach:</strong> {module.suggestedCandidateApproach.join(" → ")}</p>}
+      {!!module.vivaQuestions?.length && <div><strong>Prompt questions:</strong><ul className="mt-2 list-disc pl-5">{module.vivaQuestions.map(prompt => <li key={prompt.question}>{prompt.question}</li>)}</ul></div>}
+      {!!module.expectedCompetencies?.length && <p><strong>Expected competencies:</strong> {module.expectedCompetencies.join(", ")}</p>}
+      {!!module.criticalSafetyErrors?.length && <div className="text-coral"><strong>Critical safety errors:</strong><ul className="mt-2 list-disc pl-5">{module.criticalSafetyErrors.map(error => <li key={error}>{error}</li>)}</ul></div>}
+      {!!module.assessmentDesign?.length && <p><strong>Assessment rules:</strong> {module.assessmentDesign.join(" ")}</p>}
+      {!!practiceGuidance && <p><strong>Practice guidance:</strong> {practiceGuidance}</p>}
+      {!!module.globalRatingOptions?.length && <p><strong>Global ratings:</strong> {module.globalRatingOptions.join(" · ")}</p>}
+    </div>
+  );
+}
+
+function Checklist({ checklist, checked, scores = {}, onChange, onScoreChange }) {
   const selected = new Set(checked);
   function toggle(itemId) {
     const next = new Set(selected);
@@ -1463,7 +1515,23 @@ function Checklist({ checklist, checked, onChange }) {
           <ul className="mt-2.5 divide-y divide-s-line overflow-hidden rounded-2xl border border-s-line bg-s-card">
             {section.items.map((item) => {
               const on = selected.has(item.itemId);
-              return (
+              return item.maxRawScore > 1 ? (
+                <li key={item.itemId} className="flex items-start gap-3.5 px-4 py-3.5">
+                  <select
+                    aria-label={`Score: ${item.label}`}
+                    className="shrink-0 rounded-lg border border-s-line bg-s-card p-2 text-sm text-s-ink"
+                    value={scores[item.itemId] ?? 0}
+                    onChange={(event) => onScoreChange(item.itemId, Number(event.target.value))}
+                  >
+                    {Array.from({ length: item.maxRawScore + 1 }, (_, score) => (
+                      <option key={score} value={score}>
+                        {score}/{item.maxRawScore} · {score === 0 ? "Omitted" : score === item.maxRawScore ? "Complete" : "Partial"}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="min-w-0 flex-1 text-sm leading-relaxed text-s-ink">{item.label}</span>
+                </li>
+              ) : (
                 <li key={item.itemId}>
                   <label className="flex cursor-pointer items-start gap-3.5 px-4 py-3.5 transition-colors hover:bg-s-page">
                     <input type="checkbox" checked={on} onChange={() => toggle(item.itemId)} className="peer sr-only" />
@@ -1480,7 +1548,7 @@ function Checklist({ checklist, checked, onChange }) {
                         <span className="font-medium text-s-ink">{item.label}</span>
                         <WeightTag weight={item.weightCategory} />
                       </span>
-                      {item.remediationText && <span className="mt-0.5 block leading-relaxed text-s-mute">{item.remediationText}</span>}
+                      {item.remediationText && item.remediationText !== item.label && <span className="mt-0.5 block leading-relaxed text-s-mute">{item.remediationText}</span>}
                     </span>
                   </label>
                 </li>

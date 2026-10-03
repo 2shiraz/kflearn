@@ -15,24 +15,39 @@ export function stationListDto(module) {
     timeLimitSeconds: module.timeLimitSeconds,
     shortDescription: module.shortDescription,
     taskTags: module.taskTags,
+    stationType: module.stationType,
+    stationFormat: module.stationFormat,
   };
 }
 
-export function studentStationDetailDto(module) {
+export function studentStationDetailDto(module, { includeReview = false } = {}) {
+  const hasPostStationReview = Boolean(module.assessmentDesign?.length);
   return {
     ...stationListDto(module),
     candidateInstructions: module.candidateInstructions,
-    practiceOptions: ["single-player", "virtual-patient"],
-    learningNotes: module.learningNotes,
+    candidateHandout: module.candidateHandout || [],
+    practiceOptions: module.practiceModes?.length ? module.practiceModes : ["single-player", "virtual-patient"],
+    learningNotes: !hasPostStationReview || includeReview ? module.learningNotes : undefined,
     commonMistakes: module.commonMistakes,
     keyDifferentials: module.keyDifferentials,
-    vivaQuestions: module.vivaQuestions,
+    vivaQuestions: !hasPostStationReview || includeReview ? module.vivaQuestions : undefined,
+    ...(includeReview ? {
+      examinerInstructions: module.examinerInstructions,
+      keyAnswerGuide: module.keyAnswerGuide,
+      suggestedCandidateApproach: module.suggestedCandidateApproach,
+      expectedCompetencies: module.expectedCompetencies,
+      criticalSafetyErrors: module.criticalSafetyErrors,
+      globalRatingOptions: module.globalRatingOptions,
+      assessmentDesign: module.assessmentDesign,
+      facultyNote: module.facultyNote,
+    } : {}),
   };
 }
 
 export function singlePlayerDto({ module, patientScript, checklist }) {
   return {
-    ...studentStationDetailDto(module),
+    ...studentStationDetailDto(module, { includeReview: true }),
+    simulationScript: module.simulationScript || [],
     patientScript: {
       patientIdentity: patientScript.patientIdentity,
       openingStatement: patientScript.openingStatement,
@@ -45,9 +60,6 @@ export function singlePlayerDto({ module, patientScript, checklist }) {
       })),
     },
     checklist: checklistDto(checklist),
-    examinerInstructions: module.examinerInstructions,
-    keyAnswerGuide: module.keyAnswerGuide,
-    suggestedCandidateApproach: module.suggestedCandidateApproach,
   };
 }
 

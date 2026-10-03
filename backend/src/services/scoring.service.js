@@ -64,14 +64,20 @@ export function assessChecklistFromTranscript(checklist, attempt) {
   };
 }
 
-export function selfAssessChecklist(checklist, checkedItemIds = []) {
+export function selfAssessChecklist(checklist, checkedItemIds = [], scoredItems = []) {
   const checked = new Set(checkedItemIds);
+  const explicitScores = new Map(scoredItems.map(({ itemId, rawScore }) => [itemId, rawScore]));
   const itemScores = checklist.sections.flatMap((section) =>
-    section.items.map((item) => ({
-      itemId: item.itemId,
-      rawScore: checked.has(item.itemId) ? item.maxRawScore || 1 : 0,
-      evidence: checked.has(item.itemId) ? "Marked by student during self assessment." : "",
-    })),
+    section.items.map((item) => {
+      const rawScore = explicitScores.has(item.itemId)
+        ? explicitScores.get(item.itemId)
+        : checked.has(item.itemId) ? item.maxRawScore || 1 : 0;
+      return {
+        itemId: item.itemId,
+        rawScore,
+        evidence: rawScore > 0 ? "Marked by student during self assessment." : "",
+      };
+    }),
   );
   return {
     itemScores,

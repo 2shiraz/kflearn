@@ -77,6 +77,23 @@ export function Character({ name, alt = "", size = 56, tone = "indigo", classNam
   );
 }
 
+// Profile pictures: 20 bundled pixel-art avatars. The account stores only the
+// id ("a01" to "a20"); the image never goes to the server.
+export const AVATAR_IDS = Array.from({ length: 20 }, (_, i) => `a${String(i + 1).padStart(2, "0")}`);
+
+export function UserAvatar({ id, size = 40, className = "" }) {
+  const safeId = AVATAR_IDS.includes(id) ? id : AVATAR_IDS[0];
+  return (
+    <span
+      className={`inline-flex shrink-0 items-end justify-center overflow-hidden rounded-full bg-s-accent-soft ${className}`}
+      style={{ width: size, height: size }}
+      aria-hidden="true"
+    >
+      <img src={`/illustrations/avatars/${safeId}.svg`} alt="" width={size} height={size} className="pixel h-full w-full" />
+    </span>
+  );
+}
+
 // Animated voice bars, shown while the virtual patient is "speaking".
 export function VoiceBars({ className = "" }) {
   return (

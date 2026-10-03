@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
-import { registerRequest, ROLE_OPTIONS } from "../lib/api";
+import { registerRequest, ROLE_OPTIONS, YEAR_LEVEL_OPTIONS } from "../lib/api";
 import AuthShell, { FormError, inputClass, primaryButtonClass, secondaryButtonClass } from "../components/AuthShell";
 
 const STEP_LABELS = ["Account", "Role", "Profile"];
@@ -15,7 +15,7 @@ export default function SignupPage() {
   const [account, setAccount] = useState({ fullName: "", email: "", password: "" });
   const [role, setRole] = useState("");
   const [profile, setProfile] = useState({
-    institution: "", programme: "MBBS", yearLevel: "", targetExam: "", expectedExamDate: "",
+    institution: "", programme: "MBBS", yearLevel: "",
   });
 
   function handleAccountSubmit(e) {
@@ -172,10 +172,14 @@ export default function SignupPage() {
             <Field id="institution" label="Institution" placeholder="Allama Iqbal Medical College" autoComplete="organization" value={profile.institution} onChange={(v) => setProfile((p) => ({ ...p, institution: v }))} />
             <div className="grid gap-5 sm:grid-cols-2">
               <Field id="programme" label="Programme" placeholder="MBBS" value={profile.programme} onChange={(v) => setProfile((p) => ({ ...p, programme: v }))} />
-              <Field id="yearLevel" label="Year or level" placeholder="Year 4" value={profile.yearLevel} onChange={(v) => setProfile((p) => ({ ...p, yearLevel: v }))} />
+              <div>
+                <label htmlFor="yearLevel" className="mb-2 block text-sm font-medium text-s-ink">Year or level</label>
+                <select id="yearLevel" value={profile.yearLevel} onChange={(e) => setProfile((p) => ({ ...p, yearLevel: e.target.value }))} className={inputClass}>
+                  <option value="">Select</option>
+                  {YEAR_LEVEL_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
+              </div>
             </div>
-            <Field id="targetExam" label="Target examination" placeholder="FCPS Part 1" value={profile.targetExam} onChange={(v) => setProfile((p) => ({ ...p, targetExam: v }))} />
-            <Field id="expectedExamDate" label="Expected exam date" placeholder="March 2027" value={profile.expectedExamDate} onChange={(v) => setProfile((p) => ({ ...p, expectedExamDate: v }))} />
           </div>
 
           {status === "error" && <div className="mt-5"><FormError>{error}</FormError></div>}

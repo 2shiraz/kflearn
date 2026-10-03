@@ -22,6 +22,26 @@ export const ROLE_OPTIONS = [
   "Other Medical Learner",
 ];
 
+export const YEAR_LEVEL_OPTIONS = [
+  "1st Year",
+  "2nd Year",
+  "3rd Year",
+  "4th Year",
+  "Final Year",
+  "House Job",
+  "Graduate",
+  "Postgraduate Trainee",
+];
+
+// Tells mounted UI (sidebar, top bar) that the cached user changed, e.g. a new
+// avatar or name saved from Settings.
+export const USER_EVENT = "kf:user";
+
+function storeUser(user) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+  window.dispatchEvent(new window.Event(USER_EVENT));
+}
+
 function clearLegacySessionStorage() {
   sessionStorage.removeItem(SESSION_KEY);
   sessionStorage.removeItem(LEGACY_SESSION_KEY);
@@ -30,7 +50,7 @@ function clearLegacySessionStorage() {
 
 export function saveAuthSession(data) {
   clearLegacySessionStorage();
-  if (data?.user) localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  if (data?.user) storeUser(data.user);
   if (data?.csrfToken) localStorage.setItem(CSRF_KEY, data.csrfToken);
   return data;
 }
@@ -88,7 +108,7 @@ export async function loginRequest({ email, password }) {
 
 export async function fetchCurrentUser() {
   const data = await apiFetch("/auth/me");
-  if (data?.user) localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  if (data?.user) storeUser(data.user);
   if (data?.csrfToken) localStorage.setItem(CSRF_KEY, data.csrfToken);
   return data;
 }
@@ -98,8 +118,27 @@ export async function updateProfileRequest(payload) {
     method: "PATCH",
     body: JSON.stringify(payload),
   });
-  if (data?.user) localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+  if (data?.user) storeUser(data.user);
   return data;
+}
+
+// Signs out every other session; the server returns a fresh session for this one.
+export async function changePasswordRequest({ currentPassword, newPassword }) {
+  const data = await apiFetch("/auth/password", {
+    method: "POST",
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  return saveAuthSession(data);
+}
+
+export async function deleteAccountRequest({ password }) {
+  await apiFetch("/auth/me/delete", {
+    method: "POST",
+    body: JSON.stringify({ password, confirmation: "DELETE" }),
+  });
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(CSRF_KEY);
+  clearLegacySessionStorage();
 }
 
 export function saveProfileDetails(user, profile) {
@@ -220,10 +259,10 @@ export function endOsceAttempt(attemptId, payload = {}) {
   });
 }
 
-export function selfAssessOsceAttempt(attemptId, checkedItemIds) {
+export function selfAssessOsceAttempt(attemptId, checkedItemIds, itemScores = []) {
   return apiFetch(`/osce/attempts/${attemptId}/self-assessment`, {
     method: "POST",
-    body: JSON.stringify({ checkedItemIds }),
+    body: JSON.stringify({ checkedItemIds, itemScores }),
   });
 }
 

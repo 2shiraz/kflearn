@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { LogOut, Menu, ChevronLeft, ChevronRight, X } from "lucide-react";
+import {
+  ChevronLeft, ChevronRight, ClipboardList, HeartPulse, LayoutGrid, ListChecks, LogOut, Menu,
+  Microscope, NotebookText, Settings, ShieldCheck, Stethoscope, TrendingUp, X, Zap,
+} from "lucide-react";
 import BrandMark from "./BrandMark";
-import { MedIcon } from "../site/Illustrations";
-import { SECTION_LOOK } from "../site/tones";
-import { getCurrentUser } from "../lib/api";
+import { UserAvatar } from "../site/Illustrations";
+import { getCurrentUser, USER_EVENT } from "../lib/api";
 import { useCredits } from "../lib/credits";
 
 function formatBalance(balance) {
@@ -22,21 +24,35 @@ export const SECTIONS = [
   { key: "progress", label: "Progress", href: "/progress" },
 ];
 
-// Colourful Fluent Emoji icon, the same set the pages use: the section's
-// own icon, or a fixed one for the account items. Log out keeps a plain
-// line glyph since it is an action, not a place.
-const ACCOUNT_ICONS = { dashboard: "hospital", credits: "coin", settings: "health-worker", admin: "memo" };
+// Plain line icons for navigation, one per item. AI credits get a gold bolt
+// with no circle behind it.
+const NAV_ICONS = {
+  dashboard: LayoutGrid,
+  stations: Stethoscope,
+  mcqs: ListChecks,
+  ospe: Microscope,
+  history: ClipboardList,
+  "clinical-exam": HeartPulse,
+  handouts: NotebookText,
+  progress: TrendingUp,
+  admin: ShieldCheck,
+  credits: Zap,
+  settings: Settings,
+  logout: LogOut,
+};
 
 function NavIcon({ item, active }) {
-  const name = SECTION_LOOK[item.key]?.icon || ACCOUNT_ICONS[item.key];
+  const Icon = NAV_ICONS[item.key];
   return (
     <span
       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors ${
-        active ? "bg-s-card ring-1 ring-s-line" : "bg-s-tint text-s-mute group-hover:text-s-ink"
+        item.key === "credits"
+          ? "text-sun"
+          : active ? "bg-s-card text-s-ink ring-1 ring-s-line" : "bg-s-tint text-s-mute group-hover:text-s-ink"
       }`}
       aria-hidden="true"
     >
-      {name ? <MedIcon name={name} size={20} /> : <item.icon size={16} strokeWidth={2} />}
+      {item.key === "credits" ? <Icon size={18} strokeWidth={1.75} fill="currentColor" /> : <Icon size={16} strokeWidth={2} />}
     </span>
   );
 }
@@ -77,9 +93,9 @@ function AccountLinks({ active, balance, mode, onNavigate, onLogout }) {
   const compact = mode !== "drawer";
   return (
     <div className="flex flex-col gap-1 border-t border-s-line pt-3">
-      <Link to="/credits" title={compact ? `Credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, mode)}>
+      <Link to="/credits" title={compact ? `AI credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, mode)}>
         <NavIcon item={{ key: "credits" }} active={creditsActive} />
-        <span className={hide}>Credits</span>
+        <span className={hide}>AI Credits</span>
         <span className={`${hide} ml-auto font-chart text-xs text-s-mute`}>{formatBalance(balance)}</span>
       </Link>
       <Link to="/settings" title={compact ? "Settings" : undefined} aria-current={settingsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(settingsActive, mode)}>
@@ -87,19 +103,32 @@ function AccountLinks({ active, balance, mode, onNavigate, onLogout }) {
         <span className={hide}>Settings</span>
       </Link>
       <button type="button" title={compact ? "Sign out" : undefined} onClick={onLogout} className={`${itemClass(false, mode)} w-full hover:text-s-miss`}>
-        <NavIcon item={{ key: "logout", icon: LogOut }} active={false} />
+        <NavIcon item={{ key: "logout" }} active={false} />
         <span className={hide}>Sign out</span>
       </button>
     </div>
   );
 }
 
-function Initials({ initials, className = "" }) {
+// The chosen avatar, or initials for a cached user saved before avatars existed.
+function ProfilePic({ user, initials }) {
+  if (user?.avatar) return <UserAvatar id={user.avatar} size={36} />;
   return (
-    <span className={`flex shrink-0 items-center justify-center rounded-full bg-s-accent text-xs font-semibold text-s-on-accent ${className}`}>
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-s-accent text-xs font-semibold text-s-on-accent">
       {initials}
     </span>
   );
+}
+
+// Re-read the cached user when Settings saves a new name or avatar.
+function useCachedUser() {
+  const [user, setUser] = useState(getCurrentUser);
+  useEffect(() => {
+    const onChange = () => setUser(getCurrentUser());
+    window.addEventListener(USER_EVENT, onChange);
+    return () => window.removeEventListener(USER_EVENT, onChange);
+  }, []);
+  return user;
 }
 
 // Desktop collapse preference, kept per browser. Read once on mount so the
@@ -114,7 +143,7 @@ function readCollapsed() {
 }
 
 export default function Sidebar({ active = "dashboard", onLogout }) {
-  const user = getCurrentUser();
+  const user = useCachedUser();
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(readCollapsed);
   const { balance } = useCredits();
@@ -158,12 +187,12 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
             <BrandMark size={30} />
             <span className="truncate text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
           </Link>
-          <Link to="/credits" aria-label={`Credits: ${formatBalance(balance)}`} className="site-press flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-2.5 font-chart text-xs text-s-ink hover:bg-s-tint/70">
-            <MedIcon name="coin" size={18} /> {formatBalance(balance)}
+          <Link to="/credits" aria-label={`AI credits: ${formatBalance(balance)}`} className="site-press flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-2.5 font-chart text-xs text-s-ink hover:bg-s-tint/70">
+            <Zap size={16} strokeWidth={1.75} fill="currentColor" className="text-sun" aria-hidden="true" /> {formatBalance(balance)}
           </Link>
           {initials && (
             <Link to="/settings" aria-label="Settings" className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
-              <Initials initials={initials} className="h-9 w-9" />
+              <ProfilePic user={user} initials={initials} />
             </Link>
           )}
         </div>
@@ -200,7 +229,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
 
           {user && !collapsed && (
             <div className="mb-2 hidden items-center gap-3 rounded-2xl bg-s-tint/60 p-2.5 lg:flex">
-              <Initials initials={initials} className="h-9 w-9" />
+              <ProfilePic user={user} initials={initials} />
               <span className="min-w-0">
                 <span className="block truncate text-sm font-medium text-s-ink">{user.fullName}</span>
                 <span className="block truncate text-xs text-s-mute">{user.email}</span>
