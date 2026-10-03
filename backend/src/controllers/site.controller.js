@@ -1,5 +1,5 @@
 import { Announcement } from "../models/Announcement.js";
-import { getBranding, getLogo, getPricing, getSiteSettings, updateBranding, updatePricing, updateSiteSettings } from "../services/siteSettings.service.js";
+import { getBranding, getFavicon, getLogo, getPricing, getSiteSettings, updateBranding, updatePricing, updateSiteSettings } from "../services/siteSettings.service.js";
 
 function notFound(message) {
   const error = new Error(message);
@@ -30,8 +30,11 @@ export async function getPublicSite(req, res) {
   res.json({ success: true, data: { signupsOpen, branding } });
 }
 
-export async function getPublicLogo(req, res) {
-  const logo = await getLogo();
+export const getPublicLogo = (req, res) => sendImage(res, getLogo);
+export const getPublicFavicon = (req, res) => sendImage(res, getFavicon);
+
+async function sendImage(res, load) {
+  const logo = await load();
   if (!logo) {
     res.status(404).end();
     return;

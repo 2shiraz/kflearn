@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, ImageUp, Trash2 } from "lucide-react";
 import { getAdminSettings, updateAdminBranding } from "../../lib/api";
-import { ACCENTS, logoUrl, refreshPublicSite } from "../../lib/branding";
+import { ACCENTS, faviconUrl, logoUrl, refreshPublicSite } from "../../lib/branding";
 import { Panel, PrimaryButton, SecondaryButton } from "../AppPage";
 import { Area, Field, InlineError, SavedNote, SectionHeading } from "./AdminKit";
 
 const LOGO_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_LOGO = 200 * 1024;
+const FAVICON_TYPES = [...LOGO_TYPES, "image/x-icon", "image/vnd.microsoft.icon"];
+const MAX_FAVICON = 100 * 1024;
 
 // Name, logo, theme colour and the text shown in browser tabs and search
 // results.
@@ -14,6 +16,7 @@ export default function AdminBranding() {
   const [form, setForm] = useState(null);
   const [saved, setSaved] = useState("");
   const [logo, setLogo] = useState(undefined); // undefined: unchanged, null: remove, string: new data URL
+  const [favicon, setFavicon] = useState(undefined); // same as logo
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState("");
   const fileRef = useRef(null);
@@ -22,13 +25,14 @@ export default function AdminBranding() {
     setForm(branding);
     setSaved(JSON.stringify(branding));
     setLogo(undefined);
+    setFavicon(undefined);
   }
 
   useEffect(() => {
     getAdminSettings().then((d) => { load(d.branding); setStatus("idle"); }).catch((err) => { setError(err.message); setStatus("error"); });
   }, []);
 
-  const dirty = form && (JSON.stringify(form) !== saved || logo !== undefined);
+  const dirty = form && (JSON.stringify(form) !== saved || logo !== undefined || favicon !== undefined);
   const set = (key, value) => { setForm((f) => ({ ...f, [key]: value })); setStatus("idle"); };
 
   function pickLogo(file) {
@@ -41,6 +45,21 @@ export default function AdminBranding() {
     reader.readAsDataURL(file);
   }
 
+  function pickFavicon(file) {
+    setError("");
+    if (!file) return;
+    if (!FAVICON_TYPES.includes(file.type) && !file.name.toLowerCase().endsWith(".ico")) return setError("Use a PNG, ICO, JPEG or WebP image for the favicon. SVG isn't allowed.");
+    if (file.size > MAX_FAVICON) return setError("The favicon must be under 100 KB. A square image of 64 by 64 pixels is plenty.");
+    const reader = new window.FileReader();
+    reader.onload = () => {
+      // Some systems give .ico files no type; label them so the server can check them.
+      const url = String(reader.result).replace(/^data:(application\/octet-stream)?;/, "data:image/x-icon;");
+      setFavicon(url);
+      setStatus("idle");
+    };
+    reader.readAsDataURL(file);
+  }
+
   async function save(e) {
     e.preventDefault();
     setStatus("saving");
@@ -48,6 +67,7 @@ export default function AdminBranding() {
     try {
       const payload = { siteName: form.siteName, metaTitle: form.metaTitle, metaDescription: form.metaDescription, accent: form.accent };
       if (logo !== undefined) payload.logo = logo;
+      if (favicon !== undefined) payload.favicon = favicon;
       const data = await updateAdminBranding(payload);
       load(data.branding);
       setStatus("saved");
@@ -59,10 +79,12 @@ export default function AdminBranding() {
   }
 
   const previewLogo = logo === null ? "/logo.svg" : logo || (form && logoUrl(form));
+  const previewFavicon = favicon === null ? "/favicon.svg" : favicon || (form && faviconUrl(form));
+  const customFavicon = favicon || (favicon === undefined && form?.faviconVersion > 0);
 
   return (
     <div className="space-y-5">
-      <SectionHeading title="Branding" description="Your name, logo and colour across the site, and how it appears in browser tabs and search results." />
+      <SectionHeading title="Branding" description="Your name, logo, favicon and colour across the site, and how it appears in browser tabs and search results." />
       <InlineError>{error}</InlineError>
       {form && (
         <form onSubmit={save} className="space-y-5">
@@ -108,7 +130,19 @@ export default function AdminBranding() {
 
           <Panel>
             <h3 className="font-semibold text-s-ink">Browser tab and search results</h3>
-            <div className="mt-4 grid gap-5 lg:grid-cols-2">
+            <div className="mt-4 flex flex-wrap items-center gap-4 rounded-2xl bg-s-tint/50 p-4">
+              <div className="flex min-w-0 max-w-xs flex-1 items-center gap-2 rounded-t-xl border border-b-0 border-s-line bg-s-card px-3 py-2.5" aria-label="Browser tab preview">
+                <img src={previewFavicon} alt="" className="h-4 w-4 shrink-0 object-contain" />
+                <span className="truncate text-xs text-s-ink">{form.metaTitle || "Page title"}</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <input id="favicon-file" type="file" accept={[...FAVICON_TYPES, ".ico"].join(",")} className="sr-only" onChange={(e) => { pickFavicon(e.target.files?.[0]); e.target.value = ""; }} />
+                <SecondaryButton onClick={() => document.getElementById("favicon-file")?.click()}><ImageUp size={16} strokeWidth={2} aria-hidden="true" /> Upload favicon</SecondaryButton>
+                {customFavicon && <SecondaryButton onClick={() => { setFavicon(null); setStatus("idle"); }}><Trash2 size={16} strokeWidth={2} aria-hidden="true" /> Use default</SecondaryButton>}
+              </div>
+              <p className="w-full text-xs text-s-mute">The small icon in the browser tab and bookmarks. PNG or ICO, square, under 100 KB. 64 by 64 pixels is plenty.</p>
+            </div>
+            <div className="mt-5 grid gap-5 lg:grid-cols-2">
               <div className="space-y-4">
                 <Field label="Page title" helper={`${form.metaTitle.length} / 70. Shown in the browser tab and as the search result heading.`} required maxLength={70} value={form.metaTitle} onChange={(v) => set("metaTitle", v)} />
                 <Area label="Description" helper={`${form.metaDescription.length} / 160. The short summary under the title in search results.`} maxLength={160} rows={3} value={form.metaDescription} onChange={(v) => set("metaDescription", v)} />
@@ -123,7 +157,7 @@ export default function AdminBranding() {
 
           <div className="flex flex-wrap items-center gap-3">
             <PrimaryButton type="submit" disabled={!dirty || status === "saving"}>{status === "saving" ? "Saving..." : "Save branding"}</PrimaryButton>
-            {dirty && <SecondaryButton onClick={() => { setForm(JSON.parse(saved)); setLogo(undefined); setError(""); }}>Discard changes</SecondaryButton>}
+            {dirty && <SecondaryButton onClick={() => { setForm(JSON.parse(saved)); setLogo(undefined); setFavicon(undefined); setError(""); }}>Discard changes</SecondaryButton>}
             {status === "saved" && !dirty && <SavedNote />}
           </div>
         </form>

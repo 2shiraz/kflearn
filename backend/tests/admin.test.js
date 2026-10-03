@@ -299,6 +299,21 @@ test("branding: text, theme colour and a safely checked logo", async () => {
 
   await request(app).patch("/api/admin/settings/branding").set("Authorization", admin.auth).send({ logo: null });
   assert.equal((await request(app).get("/api/public/logo")).status, 404);
+
+  // Favicon: PNG or ICO, checked by bytes, served separately from the logo.
+  const ico = Buffer.from([0, 0, 1, 0, 1, 0, 16, 16, 0, 0, 1, 0, 32, 0]);
+  assert.equal((await request(app).patch("/api/admin/settings/branding").set("Authorization", admin.auth).send({ favicon: svg })).status, 400);
+  assert.equal((await request(app).patch("/api/admin/settings/branding").set("Authorization", admin.auth).send({ favicon: `data:image/x-icon;base64,${png.toString("base64")}` })).status, 400);
+  const fav = await request(app).patch("/api/admin/settings/branding").set("Authorization", admin.auth).send({ favicon: `data:image/vnd.microsoft.icon;base64,${ico.toString("base64")}` });
+  assert.equal(fav.status, 200, fav.body.message);
+  assert.equal(fav.body.data.branding.faviconVersion > 0, true);
+  const served = await request(app).get("/api/public/favicon");
+  assert.equal(served.status, 200);
+  assert.equal(served.headers["content-type"], "image/x-icon");
+  assert.equal((await request(app).get("/api/public/logo")).status, 404);
+  assert.equal((await request(app).get("/api/public/site")).body.data.branding.faviconVersion > 0, true);
+  await request(app).patch("/api/admin/settings/branding").set("Authorization", admin.auth).send({ favicon: null });
+  assert.equal((await request(app).get("/api/public/favicon")).status, 404);
 });
 
 test("sign-in responses carry the site switches", async () => {

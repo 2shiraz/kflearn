@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-// Site name, browser title, search description, theme colour and logo, set
+// Site name, browser title, search description, theme colour, logo and
+// favicon, set
 // by the admin. The last known branding is cached so it is applied before
 // the first paint (no flash of the default look), then refreshed.
 const CACHE_KEY = "kf_public_site";
@@ -22,6 +23,7 @@ export const DEFAULT_BRANDING = {
   metaDescription: "",
   accent: "indigo",
   logoVersion: 0,
+  faviconVersion: 0,
 };
 
 function readCache() {
@@ -37,6 +39,27 @@ const listeners = new Set();
 
 export function logoUrl(branding) {
   return branding?.logoVersion ? `${API_BASE}/public/logo?v=${branding.logoVersion}` : "/logo.svg";
+}
+
+export function faviconUrl(branding) {
+  return branding?.faviconVersion ? `${API_BASE}/public/favicon?v=${branding.faviconVersion}` : "/favicon.svg";
+}
+
+// Points the tab icons at the admin's favicon, or back at the built-in ones.
+function setFavicon(branding) {
+  for (const link of document.querySelectorAll('link[rel="icon"], link[rel="apple-touch-icon"]')) {
+    if (!link.dataset.defaultHref) {
+      link.dataset.defaultHref = link.getAttribute("href");
+      link.dataset.defaultType = link.getAttribute("type") || "";
+    }
+    if (branding.faviconVersion) {
+      link.setAttribute("href", faviconUrl(branding));
+      link.removeAttribute("type");
+    } else {
+      link.setAttribute("href", link.dataset.defaultHref);
+      if (link.dataset.defaultType) link.setAttribute("type", link.dataset.defaultType);
+    }
+  }
 }
 
 function setMeta(name, content) {
@@ -64,6 +87,7 @@ export function applyBranding(branding = DEFAULT_BRANDING) {
   if (branding.metaTitle) document.title = branding.metaTitle;
   setMeta("description", branding.metaDescription);
   setMeta("theme-color", accent.accent);
+  setFavicon(branding);
 }
 
 function publish(next) {

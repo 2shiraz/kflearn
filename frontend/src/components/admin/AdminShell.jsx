@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { ArrowLeft, LogOut, Menu, X } from "lucide-react";
+import { ArrowLeft, LogOut, Menu, ShieldCheck, X } from "lucide-react";
 import BrandMark from "../BrandMark";
 import { ProfilePic, useCachedUser } from "../Sidebar";
 import { logout } from "../../lib/api";
@@ -13,6 +13,8 @@ function signOut() {
 
 // The admin console's own frame: a separate full page with its own menu,
 // away from the student sidebar. "Back to site" returns to the dashboard.
+// A dark bar along the top and the "Admin" badge make it obvious at a glance
+// that this isn't the student site.
 // tabs: [{ id, label, icon, group }], linked as /admin/<id>.
 export default function AdminShell({ tabs, active, title, description, actions, children }) {
   const user = useCachedUser();
@@ -33,7 +35,9 @@ export default function AdminShell({ tabs, active, title, description, actions, 
       <BrandMark size={32} />
       <div className="min-w-0 leading-tight">
         <p className="truncate text-[15px] font-semibold tracking-tight text-s-ink"><SiteName /></p>
-        <p className="text-xs font-medium text-s-accent">Admin console</p>
+        <p className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-s-ink px-2 py-0.5 text-[11px] font-semibold text-s-page">
+          <ShieldCheck size={12} strokeWidth={2.25} aria-hidden="true" /> Admin
+        </p>
       </div>
     </div>
   );
@@ -75,15 +79,26 @@ export default function AdminShell({ tabs, active, title, description, actions, 
   );
 
   return (
-    <div className="site site-app min-h-dvh lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
-      <aside className="sticky top-0 hidden h-dvh flex-col border-r border-s-line bg-s-card px-3 py-4 lg:flex">
+    <div className="site site-app min-h-dvh">
+      <div className="sticky top-0 z-40 flex h-10 items-center gap-3 bg-s-ink px-4 text-xs text-s-page sm:px-6">
+        <ShieldCheck size={15} strokeWidth={2} className="shrink-0" aria-hidden="true" />
+        <p className="min-w-0 flex-1 truncate">
+          <span className="font-semibold">Admin console</span>
+          <span className="hidden opacity-70 sm:inline"> / changes here apply to every student</span>
+        </p>
+        <Link to="/dashboard" className="hidden min-h-8 shrink-0 items-center gap-1.5 rounded-full px-3 font-semibold hover:bg-s-page/15 lg:inline-flex">
+          <ArrowLeft size={14} strokeWidth={2.25} aria-hidden="true" /> Back to site
+        </Link>
+      </div>
+      <div className="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
+      <aside className="sticky top-10 hidden h-[calc(100dvh-2.5rem)] flex-col border-r border-s-line bg-s-card px-3 py-4 shadow-[inset_3px_0_0_var(--s-accent)] lg:flex">
         {brand}
         <div className="mt-2 flex min-h-0 flex-1 flex-col">{nav}</div>
         {footer}
       </aside>
 
       {/* Phones and tablets: a top bar with the menu in a drawer. */}
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-s-line bg-s-page/90 px-2 backdrop-blur-lg lg:hidden">
+      <header className="sticky top-10 z-30 flex h-16 items-center gap-2 border-b border-s-line bg-s-page/90 px-2 backdrop-blur-lg lg:hidden">
         <button type="button" aria-label="Open admin menu" aria-expanded={open} aria-controls="admin-drawer" onClick={() => setOpen(true)} className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-ink hover:bg-s-tint/70">
           <Menu size={20} strokeWidth={1.75} />
         </button>
@@ -118,6 +133,7 @@ export default function AdminShell({ tabs, active, title, description, actions, 
         )}
         {children}
       </main>
+      </div>
     </div>
   );
 }

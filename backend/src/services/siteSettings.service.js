@@ -107,11 +107,14 @@ export async function updatePricing(payload = {}) {
 }
 
 // ---- Branding ----
-// The app name, browser title, search description, theme colour and logo.
-// The logo is kept as image bytes in its own setting and served from
-// /api/public/logo, so the branding object stays small.
+// The app name, browser title, search description, theme colour, logo and
+// favicon. The images are kept as bytes in their own settings and served
+// from /api/public/logo and /api/public/favicon, so the branding object
+// stays small.
 const BRANDING_KEY = "branding";
 const LOGO_KEY = "branding-logo";
+const FAVICON_KEY = "branding-favicon";
+const MAX_FAVICON_BYTES = 100 * 1024;
 export const ACCENTS = ["indigo", "blue", "teal", "emerald", "rose", "violet", "slate"];
 const MAX_LOGO_BYTES = 200 * 1024;
 
@@ -121,6 +124,7 @@ const DEFAULT_BRANDING = {
   metaDescription: "OSCE practice with an AI patient, past paper MCQs and OSPE stations, history taking and clinical exam guides.",
   accent: "indigo",
   logoVersion: 0,
+  faviconVersion: 0,
 };
 
 export async function getBranding() {
@@ -137,16 +141,33 @@ const LOGO_TYPES = {
   "image/jpeg": (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff,
   "image/webp": (b) => b.subarray(0, 4).toString("ascii") === "RIFF" && b.subarray(8, 12).toString("ascii") === "WEBP",
 };
+const FAVICON_TYPES = {
+  ...LOGO_TYPES,
+  "image/x-icon": (b) => b[0] === 0 && b[1] === 0 && b[2] === 1 && b[3] === 0,
+};
 
 // Only PNG, JPEG or WebP, checked by their actual bytes. SVG is refused
 // because it can carry scripts.
-function parseLogo(dataUrl) {
-  const match = /^data:(image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl || "");
-  if (!match) throw badRequest("The logo must be a PNG, JPEG or WebP image.");
+// The favicon may also be an .ico file.
+function parseImage(dataUrl, { name, types, max }) {
+  const match = /^data:(image\/[a-z.+-]+);base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl || "");
+  // Browsers label .ico files with either type.
+  const type = match?.[1] === "image/vnd.microsoft.icon" ? "image/x-icon" : match?.[1];
+  if (!match || !types[type]) throw badRequest(`The ${name} must be a ${types["image/x-icon"] ? "PNG, JPEG, WebP or ICO" : "PNG, JPEG or WebP"} image.`);
   const bytes = Buffer.from(match[2], "base64");
-  if (bytes.length > MAX_LOGO_BYTES) throw badRequest("The logo must be under 200 KB.");
-  if (!LOGO_TYPES[match[1]](bytes)) throw badRequest("That file isn't a valid image.");
-  return { type: match[1], data: bytes.toString("base64") };
+  if (bytes.length > max) throw badRequest(`The ${name} must be under ${max / 1024} KB.`);
+  if (!types[type](bytes)) throw badRequest("That file isn't a valid image.");
+  return { type, data: bytes.toString("base64") };
+}
+
+async function storeImage(value, key, options) {
+  if (value === null) {
+    await AppSetting.deleteOne({ key });
+    return 0;
+  }
+  const image = parseImage(value, options);
+  await AppSetting.findOneAndUpdate({ key }, { $set: { value: image } }, { upsert: true });
+  return Date.now();
 }
 
 export async function updateBranding(payload = {}) {
@@ -165,22 +186,21 @@ export async function updateBranding(payload = {}) {
     if (!ACCENTS.includes(payload.accent)) throw badRequest("Pick one of the theme colours.");
     next.accent = payload.accent;
   }
-  if (payload.logo !== undefined) {
-    if (payload.logo === null) {
-      await AppSetting.deleteOne({ key: LOGO_KEY });
-      next.logoVersion = 0;
-    } else {
-      const logo = parseLogo(payload.logo);
-      await AppSetting.findOneAndUpdate({ key: LOGO_KEY }, { $set: { value: logo } }, { upsert: true });
-      next.logoVersion = Date.now();
-    }
-  }
+  // Check both images before storing either, so a bad favicon doesn't leave
+  // a half-saved logo.
+  if (payload.logo) parseImage(payload.logo, { name: "logo", types: LOGO_TYPES, max: MAX_LOGO_BYTES });
+  if (payload.favicon) parseImage(payload.favicon, { name: "favicon", types: FAVICON_TYPES, max: MAX_FAVICON_BYTES });
+  if (payload.logo !== undefined) next.logoVersion = await storeImage(payload.logo, LOGO_KEY, { name: "logo", types: LOGO_TYPES, max: MAX_LOGO_BYTES });
+  if (payload.favicon !== undefined) next.faviconVersion = await storeImage(payload.favicon, FAVICON_KEY, { name: "favicon", types: FAVICON_TYPES, max: MAX_FAVICON_BYTES });
   await AppSetting.findOneAndUpdate({ key: BRANDING_KEY }, { $set: { value: next } }, { upsert: true });
   return next;
 }
 
-export async function getLogo() {
-  const stored = (await AppSetting.findOne({ key: LOGO_KEY }).lean())?.value;
-  if (!stored?.data || !LOGO_TYPES[stored.type]) return null;
+async function getImage(key, types) {
+  const stored = (await AppSetting.findOne({ key }).lean())?.value;
+  if (!stored?.data || !types[stored.type]) return null;
   return { type: stored.type, bytes: Buffer.from(stored.data, "base64") };
 }
+
+export const getLogo = () => getImage(LOGO_KEY, LOGO_TYPES);
+export const getFavicon = () => getImage(FAVICON_KEY, FAVICON_TYPES);
