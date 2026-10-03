@@ -104,7 +104,7 @@ export default function App() {
           <Route path="/stations/attempts/:attemptId/self-assessment" element={<SelfAssessmentPage />} />
           <Route path="/stations/attempts/:attemptId/ai-assessment" element={<SelfAssessmentPage />} />
           <Route path="/stations/attempts/:attemptId/results" element={<OsceResultPage />} />
-          <Route path="/admin/stations" element={<AdminOscePage />} />
+          <Route path="/admin/:tab?" element={<AdminOscePage />} />
           <Route path="/history-taking" element={<HistoryGuideHome />} />
           <Route path="/history-taking/:topicSlug" element={<HistoryGuideTopic />} />
           <Route path="/clinical-examination" element={<ClinicalExamGuideHome />} />

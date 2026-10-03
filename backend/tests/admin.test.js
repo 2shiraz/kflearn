@@ -9,6 +9,7 @@ import { seedOsceContent } from "../src/seed/osce.seed.js";
 import { ContentAuditLog } from "../src/models/ContentAuditLog.js";
 import { CreditTransaction } from "../src/models/CreditTransaction.js";
 import { OsceStation } from "../src/models/OsceStation.js";
+import { PatientScript } from "../src/models/PatientScript.js";
 import { SmartChecklist } from "../src/models/SmartChecklist.js";
 import { User } from "../src/models/User.js";
 
@@ -379,6 +380,30 @@ test("a half-written draft saves with only a title, but can't be published until
   assert.equal(publish.status, 400);
   assert.match(publish.body.message, /presenting complaint.*short description.*at least one task.*checklist items.*3 patient facts/);
   assert.equal((await OsceStation.findById(id).lean()).status, "draft");
+});
+
+test("an admin can delete a station for good after typing its title", async () => {
+  const admin = await account("admin@example.com", "admin");
+  const saved = await request(app).post("/api/admin/osce/import").set("Authorization", admin.auth).send({ stations: [sampleStation()] });
+  const id = saved.body.data.created[0].id;
+  const created = await OsceStation.findById(id).lean();
+
+  const wrong = await request(app).delete(`/api/admin/osce/${id}`).set("Authorization", admin.auth).send({ confirmTitle: "Headache" });
+  assert.equal(wrong.status, 400);
+  assert.ok(await OsceStation.exists({ _id: id }));
+
+  const student = await account("s10@example.com");
+  assert.equal((await request(app).delete(`/api/admin/osce/${id}`).set("Authorization", student.auth).send({ confirmTitle: created.title })).status, 403);
+
+  const listed = await request(app).get("/api/admin/osce").set("Authorization", admin.auth);
+  assert.equal(listed.body.data.find((s) => s.id === id)?.attempts, 0);
+
+  const done = await request(app).delete(`/api/admin/osce/${id}`).set("Authorization", admin.auth).send({ confirmTitle: created.title });
+  assert.equal(done.status, 200, done.body.message);
+  assert.equal(await OsceStation.exists({ _id: id }), null);
+  assert.equal(await PatientScript.exists({ _id: created.patientScriptId }), null);
+  assert.equal(await SmartChecklist.exists({ _id: created.smartChecklistId }), null);
+  assert.equal((await request(app).delete(`/api/admin/osce/${id}`).set("Authorization", admin.auth).send({ confirmTitle: created.title })).status, 404);
 });
 
 test("the station editor edits the checklist (tick and graded items) and review visibility", async () => {

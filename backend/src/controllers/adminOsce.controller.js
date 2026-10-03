@@ -6,13 +6,20 @@ import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 import { Specialty } from "../models/Specialty.js";
 import { OsceFramework } from "../models/OsceFramework.js";
+import { OsceAttempt } from "../models/OsceAttempt.js";
+import { UnansweredQuestion } from "../models/UnansweredQuestion.js";
 import { REVIEW_PARTS, stationListDto } from "../services/osce.service.js";
 import { importStations, parseImport } from "../services/osceImport.service.js";
 
 export async function listAdminStations(req, res) {
-  const modules = await OsceStation.find().populate("specialtyId").sort({ createdAt: -1 });
-  // Dates let the admin list sort by newest or recently edited.
-  res.json({ success: true, data: modules.map((m) => ({ ...stationListDto(m), createdAt: m.createdAt, updatedAt: m.updatedAt })) });
+  const [modules, attemptCounts] = await Promise.all([
+    OsceStation.find().populate("specialtyId").sort({ createdAt: -1 }),
+    OsceAttempt.aggregate([{ $group: { _id: "$stationId", count: { $sum: 1 } } }]),
+  ]);
+  const attempts = new Map(attemptCounts.map((row) => [String(row._id), row.count]));
+  // Dates let the admin list sort by newest or recently edited. The attempt
+  // count is shown before a station is deleted.
+  res.json({ success: true, data: modules.map((m) => ({ ...stationListDto(m), createdAt: m.createdAt, updatedAt: m.updatedAt, attempts: attempts.get(String(m._id)) || 0 })) });
 }
 
 export async function createOsceContent(req, res) {
@@ -332,6 +339,34 @@ export async function updateAdminStation(req, res) {
     summary: "Edited station content from the admin area.",
   });
   res.json({ success: true, data: editableDto(await station.populate("specialtyId"), checklist) });
+}
+
+// ---- Deleting a station for good ----
+// Removes the station, its AI patient script and checklist (unless another
+// station shares them), every student attempt at it, and its unanswered
+// questions. The admin types the title to confirm. Can't be undone.
+export async function deleteAdminStation(req, res) {
+  const station = await findStation(req.params.id);
+  const typed = typeof req.body?.confirmTitle === "string" ? req.body.confirmTitle.trim() : "";
+  if (typed !== station.title.trim()) throw badRequest("Type the station's title exactly to delete it.");
+
+  const shared = async (field, id) => id && (await OsceStation.exists({ _id: { $ne: station._id }, [field]: id }));
+  const [attempts] = await Promise.all([
+    OsceAttempt.deleteMany({ stationId: station._id }),
+    UnansweredQuestion.deleteMany({ stationId: station._id }),
+  ]);
+  if (station.patientScriptId && !(await shared("patientScriptId", station.patientScriptId))) await PatientScript.deleteOne({ _id: station.patientScriptId });
+  if (station.smartChecklistId && !(await shared("smartChecklistId", station.smartChecklistId))) await SmartChecklist.deleteOne({ _id: station.smartChecklistId });
+  await OsceStation.deleteOne({ _id: station._id });
+  await ContentAuditLog.create({
+    contentType: "OsceStation",
+    contentId: station._id,
+    version: station.version,
+    action: "deleted",
+    changedBy: req.user.id,
+    summary: `Deleted "${station.title}" with ${attempts.deletedCount} attempts.`,
+  });
+  res.json({ success: true, data: { deleted: station._id, attempts: attempts.deletedCount } });
 }
 
 // ---- Import from JSON ----

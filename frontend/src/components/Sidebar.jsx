@@ -179,7 +179,7 @@ function AccountLinks({ active, balance, mode, user, initials, onNavigate, onLog
 }
 
 // The chosen avatar, or initials for a cached user saved before avatars existed.
-function ProfilePic({ user, initials }) {
+export function ProfilePic({ user, initials }) {
   if (user?.avatar) return <UserAvatar id={user.avatar} size={36} />;
   return (
     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-s-accent text-xs font-semibold text-s-on-accent">
@@ -189,7 +189,7 @@ function ProfilePic({ user, initials }) {
 }
 
 // Re-read the cached user when Settings saves a new name or avatar.
-function useCachedUser() {
+export function useCachedUser() {
   const [user, setUser] = useState(getCurrentUser);
   useEffect(() => {
     const onChange = () => setUser(getCurrentUser());
@@ -217,7 +217,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
   const { balance } = useCredits();
   const site = useSite();
   const openSections = SECTIONS.filter((s) => sectionOpen(site, s.key, user));
-  const navSections = user?.role === "admin" ? [...openSections, { key: "admin", label: "Admin", href: "/admin/stations", group: "admin" }] : openSections;
+  const navSections = user?.role === "admin" ? [...openSections, { key: "admin", label: "Admin", href: "/admin", group: "admin" }] : openSections;
 
   const initials = user?.fullName ? user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "";
 

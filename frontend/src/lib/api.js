@@ -366,6 +366,11 @@ export function getAdminActivity() {
   return apiFetch("/admin/activity");
 }
 
+// Deletes a station for good; confirmTitle must match its title.
+export function deleteAdminStation(id, confirmTitle) {
+  return apiFetch(`/admin/osce/${id}`, { method: "DELETE", body: JSON.stringify({ confirmTitle }) });
+}
+
 // draft: a half-written station from the editor; only the title is checked.
 export function importAdminStations(stations, dryRun = false, draft = false) {
   return apiFetch("/admin/osce/import", { method: "POST", body: JSON.stringify({ stations, dryRun, draft }) });

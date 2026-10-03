@@ -11,12 +11,15 @@ import AdminOverview from "../components/admin/AdminOverview";
 import AdminBranding from "../components/admin/AdminBranding";
 import AdminActivity from "../components/admin/AdminActivity";
 import ImportStationsDialog from "../components/admin/ImportStationsDialog";
+import AdminShell from "../components/admin/AdminShell";
+import DeleteStationDialog from "../components/admin/DeleteStationDialog";
 import { useLeaveStationGuard } from "../hooks/useLeaveStationGuard";
 import { OSCE_CATEGORIES, displayTitle } from "../lib/osceFilters.js";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { TONES, specialtyLook } from "../site/tones";
 import {
   ArrowRight,
+  Trash2,
   Check,
   Clock3,
   Coins,
@@ -63,6 +66,7 @@ import {
   sendPatientMessage,
   transcribeOsceAudio,
   updateAiStatus,
+  getCurrentUser,
 } from "../lib/api";
 import { isCreditError, refreshCredits, setCreditBalance, useCredits } from "../lib/credits";
 
@@ -1007,11 +1011,20 @@ const STATION_SORTS = {
 };
 
 export function AdminOscePage() {
+  const user = getCurrentUser();
+  if (user?.role !== "admin") return <RequireUser active="admin" adminOnly />;
+  return <AdminConsole />;
+}
+
+function AdminConsole() {
+  const { tab: tabParam } = useParams();
+  const navigate = useNavigate();
   const [stationSearch, setStationSearch] = useState("");
   const [stationFilter, setStationFilter] = useState("all");
   const [stationCategoryFilter, setStationCategoryFilter] = useState("");
   const [stationModeFilter, setStationModeFilter] = useState("");
   const [editStationId, setEditStationId] = useState(null);
+  const [deleteStation, setDeleteStation] = useState(null);
   const [importOpen, setImportOpen] = useState(false);
   const [stationSort, setStationSort] = useState("newest");
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -1020,7 +1033,6 @@ export function AdminOscePage() {
     loading: true,
     saving: false,
     savingAi: false,
-    activeTab: "overview",
     modules: [],
     users: [],
     aiStatus: null,
@@ -1055,8 +1067,8 @@ export function AdminOscePage() {
     setState((s) => ({ ...s, aiForm: { ...s.aiForm, [field]: value } }));
   }
 
-  async function changeStatus(id, status) {
-    if (status === "archived" && !window.confirm("Archive this station? It will no longer appear to students.")) return;
+  async function changeStatus(id, status, confirmed = false) {
+    if (status === "archived" && !confirmed && !window.confirm("Archive this station? It will no longer appear to students.")) return;
     setStatusBusyId(id);
     setState((s) => ({ ...s, error: "", message: "" }));
     try {
@@ -1101,11 +1113,17 @@ export function AdminOscePage() {
     { id: "branding", label: "Branding", icon: Palette, group: "Settings" },
     { id: "ai", label: "AI & models", icon: Settings2, group: "Settings" },
   ];
+  const activeTab = tabs.some((t) => t.id === tabParam) ? tabParam : "overview";
+  // Each section has its own address (/admin/stations, /admin/pricing, ...),
+  // so the browser's back button and shared links work.
   const goTo = (tab, filter) => {
     if (filter) setStationFilter(filter);
-    setState((s) => ({ ...s, activeTab: tab, error: "", message: "" }));
-    window.scrollTo({ top: 0 });
+    navigate(tab === "overview" ? "/admin" : `/admin/${tab}`);
   };
+  useEffect(() => {
+    setState((s) => (s.error || s.message ? { ...s, error: "", message: "" } : s));
+    window.scrollTo({ top: 0 });
+  }, [activeTab]);
   const counts = Object.fromEntries(["draft", "approved", "published", "archived"].map((status) => [status, state.modules.filter((station) => station.status === status).length]));
   const visibleStations = state.modules.filter((station) =>
     (!stationCategoryFilter || station.category === stationCategoryFilter) &&
@@ -1116,30 +1134,12 @@ export function AdminOscePage() {
   const defaultProvider = state.aiStatus?.providers?.find((provider) => provider.id === state.aiStatus.defaultProvider);
 
   return (
-    <RequireUser active="admin" adminOnly>
-      <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin console" }]} />
-        <PageHeader
-          title="Admin console"
-          description="Content, accounts and site settings in one place."
-        />
-        <div className="grid gap-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-8">
-        <nav aria-label="Admin sections" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:sticky lg:top-6 lg:mx-0 lg:flex-col lg:gap-0.5 lg:self-start lg:overflow-visible lg:px-0 lg:pb-0">
-          {tabs.map((tab, i) => (
-            <div key={tab.id} className="contents">
-              {tab.group && tab.group !== tabs[i - 1]?.group && <p className="hidden px-3 pb-1 pt-4 text-xs font-medium text-s-mute/80 lg:block">{tab.group}</p>}
-              <button type="button" aria-current={state.activeTab === tab.id ? "page" : undefined} onClick={() => goTo(tab.id)} className={`site-press inline-flex min-h-11 shrink-0 items-center gap-2.5 rounded-full px-4 text-sm font-medium lg:w-full lg:px-3 ${state.activeTab === tab.id ? "bg-s-accent-soft text-s-ink" : "border border-s-line bg-s-card text-s-mute hover:text-s-ink lg:border-transparent lg:bg-transparent lg:hover:bg-s-tint/70"}`}>
-                <tab.icon size={17} strokeWidth={1.9} className={state.activeTab === tab.id ? "text-s-accent" : ""} aria-hidden="true" /> {tab.label}
-              </button>
-            </div>
-          ))}
-        </nav>
-        <div className="min-w-0">
+    <AdminShell tabs={tabs} active={activeTab}>
         {state.loading && <Loading variant="admin" />}
         {state.error && <div className="mb-4"><ErrorMessage message={state.error} /></div>}
         {state.message && <p role="status" className="mb-4 flex items-center gap-2 rounded-2xl bg-mint-soft p-3.5 text-sm text-s-good"><Check size={16} strokeWidth={2.5} aria-hidden="true" />{state.message}</p>}
-        {!state.loading && state.activeTab === "overview" && <AdminOverview counts={counts} defaultProvider={defaultProvider} onNavigate={goTo} />}
-        {!state.loading && state.activeTab === "stations" && <div className="space-y-5">
+        {!state.loading && activeTab === "overview" && <AdminOverview counts={counts} defaultProvider={defaultProvider} onNavigate={goTo} />}
+        {!state.loading && activeTab === "stations" && <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div><h2 className="text-2xl font-semibold tracking-tight text-s-ink">OSCE stations</h2><p className="text-sm text-s-mute">Search, edit, review, publish or archive stations.</p></div>
             <div className="flex flex-wrap gap-2">
@@ -1167,6 +1167,9 @@ export function AdminOscePage() {
                   <select id={`station-status-${station.id}`} aria-label={`Change status for ${station.title}`} value={station.status} disabled={statusBusyId === station.id} onChange={(e) => changeStatus(station.id, e.target.value)} className="min-h-11 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent disabled:opacity-50">
                     {Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}
                   </select>
+                  <button type="button" onClick={() => setDeleteStation(station)} aria-label={`Delete ${station.title}`} title="Delete station" className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-mute hover:bg-coral-soft/60 hover:text-s-miss">
+                    <Trash2 size={17} strokeWidth={2} aria-hidden="true" />
+                  </button>
                 </div>
               ))}
               {visibleStations.length === 0 && <p className="py-5 text-center text-sm text-s-mute">No stations match this search.</p>}
@@ -1183,7 +1186,7 @@ export function AdminOscePage() {
             }}
           />
         </div>}
-        {!state.loading && state.activeTab === "ai" && (
+        {!state.loading && activeTab === "ai" && (
           <Panel>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -1235,14 +1238,12 @@ export function AdminOscePage() {
             </form>
           </Panel>
         )}
-        {!state.loading && state.activeTab === "users" && <AdminAccounts />}
-        {!state.loading && state.activeTab === "announcements" && <AdminAnnouncements />}
-        {!state.loading && state.activeTab === "pricing" && <AdminPricing />}
-        {!state.loading && state.activeTab === "access" && <AdminAccess />}
-        {!state.loading && state.activeTab === "branding" && <AdminBranding />}
-        {!state.loading && state.activeTab === "activity" && <AdminActivity />}
-        </div>
-        </div>
+        {!state.loading && activeTab === "users" && <AdminAccounts />}
+        {!state.loading && activeTab === "announcements" && <AdminAnnouncements />}
+        {!state.loading && activeTab === "pricing" && <AdminPricing />}
+        {!state.loading && activeTab === "access" && <AdminAccess />}
+        {!state.loading && activeTab === "branding" && <AdminBranding />}
+        {!state.loading && activeTab === "activity" && <AdminActivity />}
         <ImportStationsDialog
           open={importOpen}
           onClose={() => setImportOpen(false)}
@@ -1253,6 +1254,15 @@ export function AdminOscePage() {
             setState((s) => ({ ...s, modules, message: `Imported ${created.length} ${created.length === 1 ? "station" : "stations"} as drafts. Review, then publish.` }));
           }}
         />
+        <DeleteStationDialog
+          station={deleteStation}
+          onClose={() => setDeleteStation(null)}
+          onArchive={(station) => changeStatus(station.id, "archived", true)}
+          onDeleted={async (station) => {
+            const modules = await listAdminOsceStations();
+            setState((s) => ({ ...s, modules, message: `"${station.title}" deleted.` }));
+          }}
+        />
         <StationEditDialog
           stationId={editStationId}
           onClose={() => setEditStationId(null)}
@@ -1261,8 +1271,7 @@ export function AdminOscePage() {
             setState((s) => ({ ...s, modules, message: "Station saved." }));
           }}
         />
-      </PageMain>
-    </RequireUser>
+    </AdminShell>
   );
 }
 
