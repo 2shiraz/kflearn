@@ -366,8 +366,9 @@ export function getAdminActivity() {
   return apiFetch("/admin/activity");
 }
 
-export function importAdminStations(stations, dryRun = false) {
-  return apiFetch("/admin/osce/import", { method: "POST", body: JSON.stringify({ stations, dryRun }) });
+// draft: a half-written station from the editor; only the title is checked.
+export function importAdminStations(stations, dryRun = false, draft = false) {
+  return apiFetch("/admin/osce/import", { method: "POST", body: JSON.stringify({ stations, dryRun, draft }) });
 }
 
 // ---- Admin: accounts ----

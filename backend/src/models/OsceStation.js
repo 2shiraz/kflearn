@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 import { OSCE_CATEGORIES } from "../utils/osceCategories.js";
 
+function isFinished() {
+  return this.status !== "draft";
+}
+
 const osceStationSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true, lowercase: true },
     specialtyId: { type: mongoose.Schema.Types.ObjectId, ref: "Specialty", required: true },
-    presentingComplaint: { type: String, required: true },
+    // Drafts can be saved half-written; these are checked before publishing.
+    presentingComplaint: { type: String, required: isFinished },
     systemOrTopic: { type: String, default: "" },
     stationType: { type: String, enum: ["history", "counselling", "examination", "interpretation", "emergency"], default: "history" },
     stationFormat: { type: String, default: "" },
@@ -16,7 +21,7 @@ const osceStationSchema = new mongoose.Schema(
     difficulty: { type: String, enum: ["beginner", "intermediate", "advanced"], default: "beginner" },
     timeLimitSeconds: { type: Number, default: 360 },
     thumbnail: { type: String, default: "" },
-    shortDescription: { type: String, required: true },
+    shortDescription: { type: String, required: isFinished },
     candidateInstructions: {
       context: String,
       patientSummary: String,

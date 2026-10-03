@@ -54,13 +54,15 @@ function reader(path) {
 }
 
 // Turns one JSON station into validated documents (not yet saved).
-export function parseStation(raw, index = 0) {
+// draft: a half-written station from the editor. Only the title is needed;
+// the rest is checked when the station is published.
+export function parseStation(raw, index = 0, { draft = false } = {}) {
   const at = `Station ${index + 1}`;
   const r = reader(at);
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) r.fail("must be an object.");
 
   const title = r.text(raw, "title", { required: true, max: 160 });
-  const specialty = r.text(raw, "specialty", { required: true, max: 80 });
+  const specialty = r.text(raw, "specialty", { required: !draft, max: 80, fallback: "General" });
   const category = r.text(raw, "category", { fallback: "history" }).toLowerCase();
   if (!OSCE_CATEGORIES.some(({ value }) => value === category)) r.fail(`"category" must be one of: ${OSCE_CATEGORIES.map((c) => c.value).join(", ")}.`);
   const difficulty = r.text(raw, "difficulty", { fallback: "intermediate" }).toLowerCase();
@@ -73,24 +75,24 @@ export function parseStation(raw, index = 0) {
 
   const candidate = raw.candidate || {};
   const cr = reader(`${at} > candidate`);
-  const tasks = cr.list(candidate, "tasks", { required: true, max: 20 });
-  if (!tasks.length) cr.fail(`"tasks" needs at least one task.`);
+  const tasks = cr.list(candidate, "tasks", { required: !draft, max: 20 });
+  if (!tasks.length && !draft) cr.fail(`"tasks" needs at least one task.`);
 
   const patient = raw.patient || {};
   const pr = reader(`${at} > patient`);
-  const openingStatement = pr.text(patient, "openingStatement", { required: aiPatient, max: 600, fallback: "Hello doctor." });
+  const openingStatement = pr.text(patient, "openingStatement", { required: aiPatient && !draft, max: 600, fallback: "Hello doctor." });
   const age = patient.age;
   if (age !== undefined && (!Number.isInteger(age) || age < 0 || age > 120)) pr.fail(`"age" must be a whole number of years.`);
   const factsRaw = patient.facts ?? [];
   if (!Array.isArray(factsRaw) || factsRaw.length > 80) pr.fail(`"facts" must be a list of up to 80 facts.`);
-  if (aiPatient && factsRaw.length < 3) pr.fail(`an AI patient needs at least 3 facts so it can answer questions.`);
+  if (aiPatient && !draft && factsRaw.length < 3) pr.fail(`an AI patient needs at least 3 facts so it can answer questions.`);
 
   // The checklist is either a flat list of items, or a list of sections
   // ({ title, items }) when the station groups its marking points.
-  const checklistRaw = raw.checklist;
-  if (!Array.isArray(checklistRaw) || !checklistRaw.length) r.fail(`"checklist" must be a list of items.`);
+  const checklistRaw = draft ? raw.checklist ?? [] : raw.checklist;
+  if (!Array.isArray(checklistRaw) || (!checklistRaw.length && !draft)) r.fail(`"checklist" must be a list of items.`);
   const sectioned = checklistRaw.every((entry) => Array.isArray(entry?.items));
-  const sectionsRaw = sectioned ? checklistRaw : [{ title: "Station checklist", items: checklistRaw }];
+  const sectionsRaw = (sectioned ? checklistRaw : [{ title: "Station checklist", items: checklistRaw }]).filter((sec) => !draft || sec.items.length);
   if (sectionsRaw.length > 12) r.fail(`"checklist" can have at most 12 sections.`);
   if (sectionsRaw.reduce((n, sec) => n + sec.items.length, 0) > 60) r.fail(`"checklist" can have at most 60 items.`);
 
@@ -155,7 +157,7 @@ export function parseStation(raw, index = 0) {
     module: {
       title,
       slug: base,
-      presentingComplaint: r.text(raw, "presentingComplaint", { required: true, max: 200 }),
+      presentingComplaint: r.text(raw, "presentingComplaint", { required: !draft, max: 200 }),
       systemOrTopic: specialty,
       category,
       stationType: category === "procedure" ? "examination" : category,
@@ -163,7 +165,7 @@ export function parseStation(raw, index = 0) {
       taskTags: [category, slugify(specialty)],
       difficulty,
       timeLimitSeconds: Math.round(minutes * 60),
-      shortDescription: r.text(raw, "shortDescription", { required: true, max: 600 }),
+      shortDescription: r.text(raw, "shortDescription", { required: !draft, max: 600 }),
       candidateInstructions: {
         context: cr.text(candidate, "context", { max: 2000 }),
         patientSummary: cr.text(candidate, "patientSummary", { max: 2000 }),
@@ -232,11 +234,11 @@ function parseVisibility(show, rr) {
   return out;
 }
 
-export function parseImport(payload) {
+export function parseImport(payload, { draft = false } = {}) {
   const list = Array.isArray(payload) ? payload : Array.isArray(payload?.stations) ? payload.stations : [payload];
   if (!list.length) throw new ImportError("The JSON has no stations in it.");
   if (list.length > MAX_IMPORT_STATIONS) throw new ImportError(`Import up to ${MAX_IMPORT_STATIONS} stations at a time.`);
-  return list.map(parseStation);
+  return list.map((raw, i) => parseStation(raw, i, { draft }));
 }
 
 async function freeSlug(base) {

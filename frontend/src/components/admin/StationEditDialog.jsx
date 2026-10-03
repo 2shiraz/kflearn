@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { getAdminStation, listAdminSpecialties, updateAdminStation } from "../../lib/api";
 import { OSCE_CATEGORIES } from "../../lib/osceFilters";
-import { PrimaryButton, SecondaryButton } from "../AppPage";
+import { PrimaryButton } from "../AppPage";
 import { AdminDialog, Area, Field, InlineError, Select, ShowAllToggle, Toggle } from "./AdminKit";
 
 const lines = (text) => text.split("\n").map((l) => l.trim()).filter(Boolean);
 
 function toForm(s) {
   return {
+    draft: s.status === "draft",
     title: s.title,
     shortDescription: s.shortDescription,
     presentingComplaint: s.presentingComplaint,
@@ -63,15 +64,16 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
   const dirty = form && JSON.stringify(form) !== initial;
-  const close = () => {
-    if (saving) return;
-    if (dirty && !window.confirm("Discard your unsaved changes?")) return;
-    onClose();
-  };
 
   async function save(e) {
     e.preventDefault();
     const modes = [form.checklistPractice && "single-player", form.aiPatient && "virtual-patient"].filter(Boolean);
+    // A draft can be saved half-written: blank checklist rows are left out.
+    const checklist = form.draft
+      ? form.checklist
+        .map((sec) => ({ ...sec, title: sec.title.trim() || "Station checklist", items: sec.items.filter((i) => i.label.trim()) }))
+        .filter((sec) => sec.items.length)
+      : form.checklist;
     if (!modes.length) {
       setError("Leave at least one way to practise this station.");
       return;
@@ -99,9 +101,9 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
           return { question: question.trim(), answer: rest.join("|").trim() };
         }),
         reviewVisibility: form.reviewVisibility,
-        ...(form.checklist.length ? {
+        ...(checklist.length ? {
           checklist: {
-            sections: form.checklist.map((sec) => ({
+            sections: checklist.map((sec) => ({
               sectionId: sec.sectionId,
               title: sec.title,
               items: sec.items.map(({ itemId, label, description, marks, weight, critical }) => ({ itemId, label, description, marks: Number(marks), weight, critical })),
@@ -119,17 +121,28 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
   }
 
   return (
-    <AdminDialog wide open={Boolean(stationId)} title="Edit station" description="Changes show to students straight away if the station is published." onClose={close}>
+    <AdminDialog fullscreen open={Boolean(stationId)} title={form?.title ? `Edit: ${form.title}` : "Edit station"} description="Changes show to students straight away if the station is published." onClose={onClose} dirty={Boolean(dirty)} busy={saving}
+      saveLabel="Save changes" onSave={() => document.getElementById("station-edit-form")?.requestSubmit()}
+      sections={form && [
+        { id: "st-basics", label: "Basics" },
+        { id: "st-candidate", label: "Candidate instructions" },
+        { id: "st-checklist", label: "Marking checklist" },
+        { id: "st-review", label: "Station review" },
+      ]}
+      footer={form && <PrimaryButton type="submit" form="station-edit-form" disabled={saving || !dirty}>{saving ? "Saving..." : "Save station"}</PrimaryButton>}
+    >
       {!form && !error && <p className="text-sm text-s-mute">Loading station...</p>}
       {!form && <InlineError>{error}</InlineError>}
       {form && (
-        <form onSubmit={save} className="space-y-6">
-          <section className="space-y-4">
+        <form id="station-edit-form" onSubmit={save} className="space-y-6">
+          <section id="st-basics" className="scroll-mt-8 space-y-4">
             <h3 className="font-semibold text-s-ink">Basics</h3>
-            <Field label="Title" required maxLength={160} value={form.title} onChange={(v) => set("title", v)} />
-            <Area label="Short description" helper="Shown on the station card." required maxLength={600} rows={2} value={form.shortDescription} onChange={(v) => set("shortDescription", v)} />
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Presenting complaint" required maxLength={200} value={form.presentingComplaint} onChange={(v) => set("presentingComplaint", v)} />
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Field label="Title" required maxLength={160} value={form.title} onChange={(v) => set("title", v)} />
+              <Field label="Presenting complaint" required={!form.draft} maxLength={200} value={form.presentingComplaint} onChange={(v) => set("presentingComplaint", v)} />
+            </div>
+            <Area label="Short description" helper="Shown on the station card." required={!form.draft} maxLength={600} rows={2} value={form.shortDescription} onChange={(v) => set("shortDescription", v)} />
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Select label="Specialty" value={form.specialtyId} onChange={(v) => set("specialtyId", v)}>
                 {specialties.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
               </Select>
@@ -144,22 +157,24 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
               </Select>
               <Field label="Time limit (minutes)" type="number" min="1" max="60" required value={form.minutes} onChange={(v) => set("minutes", v)} />
             </div>
-            <div className="divide-y divide-s-line rounded-2xl border border-s-line px-4">
+            <div className="grid divide-y divide-s-line rounded-2xl border border-s-line px-4 lg:grid-cols-2 lg:gap-8 lg:divide-y-0">
               <Toggle label="Checklist practice" description="Students work through the station and mark themselves. Free." checked={form.checklistPractice} onChange={(v) => set("checklistPractice", v)} />
               <Toggle label="AI patient" description="Students talk to the AI patient and can get AI marking. Uses AI credits." checked={form.aiPatient} onChange={(v) => set("aiPatient", v)} />
             </div>
           </section>
 
-          <section className="space-y-4 border-t border-s-line pt-5">
+          <section id="st-candidate" className="scroll-mt-8 space-y-4 border-t border-s-line pt-5">
             <h3 className="font-semibold text-s-ink">Candidate instructions</h3>
-            <Area label="Context" rows={3} maxLength={2000} value={form.context} onChange={(v) => set("context", v)} />
-            <Area label="Patient summary" rows={3} maxLength={2000} value={form.patientSummary} onChange={(v) => set("patientSummary", v)} />
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Area label="Context" rows={3} maxLength={2000} value={form.context} onChange={(v) => set("context", v)} />
+              <Area label="Patient summary" rows={3} maxLength={2000} value={form.patientSummary} onChange={(v) => set("patientSummary", v)} />
+            </div>
             <Area label="Tasks" helper="One task per line." rows={4} value={form.tasks} onChange={(v) => set("tasks", v)} />
           </section>
 
           <ChecklistEditor sections={form.checklist} onChange={(next) => set("checklist", next)} />
 
-          <section className="space-y-5 border-t border-s-line pt-5">
+          <section id="st-review" className="scroll-mt-8 space-y-5 border-t border-s-line pt-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div className="min-w-0">
                 <h3 className="font-semibold text-s-ink">Station review</h3>
@@ -174,7 +189,8 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
               ["vivaQuestions", "Questions an examiner may ask", { rows: 4, helper: "One per line. Add the answer after a | if you have one: Question | Answer" }],
               ["criticalSafetyErrors", "Critical safety errors", { rows: 3, helper: "One per line." }],
               ["learningNotes", "Review notes", { rows: 3, maxLength: 6000 }],
-            ].map(([key, label, props]) => {
+            ].reduce((rows, field, i) => (i % 2 ? rows[rows.length - 1].push(field) : rows.push([field]), rows), []).map((pair) => (
+              <div key={pair[0][0]} className="grid gap-5 lg:grid-cols-2">{pair.map(([key, label, props]) => {
               const shown = form.reviewVisibility[key] !== false;
               return (
                 <div key={key} className={shown ? "" : "opacity-60"}>
@@ -185,14 +201,11 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
                   </label>
                 </div>
               );
-            })}
+            })}</div>
+            ))}
           </section>
 
           <InlineError>{error}</InlineError>
-          <div className="sticky bottom-0 -mx-6 -mb-6 flex flex-col-reverse gap-2 border-t border-s-line bg-s-card px-6 py-4 sm:flex-row sm:justify-end">
-            <SecondaryButton onClick={close} disabled={saving}>Cancel</SecondaryButton>
-            <PrimaryButton type="submit" disabled={saving || !dirty}>{saving ? "Saving..." : "Save station"}</PrimaryButton>
-          </div>
         </form>
       )}
     </AdminDialog>
@@ -203,7 +216,6 @@ export default function StationEditDialog({ stationId, onClose, onSaved }) {
 // (1 mark, done or not) or graded (0 up to its marks, partial credit allowed).
 // Critical items weigh most in the final percentage.
 export function ChecklistEditor({ sections, onChange }) {
-  if (!sections.length) return null;
   const total = sections.reduce((sum, s) => sum + s.items.reduce((t, i) => t + (Number(i.marks) || 0), 0), 0);
   const count = sections.reduce((sum, s) => sum + s.items.length, 0);
   const updateSection = (si, patch) => onChange(sections.map((s, i) => (i === si ? { ...s, ...patch } : s)));
@@ -217,7 +229,7 @@ export function ChecklistEditor({ sections, onChange }) {
   };
 
   return (
-    <section className="space-y-4 border-t border-s-line pt-5">
+    <section id="st-checklist" className="scroll-mt-8 space-y-4 border-t border-s-line pt-5">
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <h3 className="font-semibold text-s-ink">Marking checklist</h3>

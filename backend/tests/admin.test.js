@@ -360,6 +360,27 @@ test("stations can be imported from JSON as drafts, with a dry run first", async
   assert.equal((await request(app).post("/api/admin/osce/import").set("Authorization", student.auth).send({ stations: sampleStation() })).status, 403);
 });
 
+test("a half-written draft saves with only a title, but can't be published until it's finished", async () => {
+  const admin = await account("admin@example.com", "admin");
+  const saved = await request(app).post("/api/admin/osce/import").set("Authorization", admin.auth)
+    .send({ stations: [{ title: "Unfinished station", aiPatient: true, checklist: [] }], draft: true });
+  assert.equal(saved.status, 201, saved.body.message);
+  const id = saved.body.data.created[0].id;
+  const draft = await OsceStation.findById(id).populate("specialtyId").lean();
+  assert.equal(draft.status, "draft");
+  assert.equal(draft.specialtyId.name, "General");
+
+  const noTitle = await request(app).post("/api/admin/osce/import").set("Authorization", admin.auth).send({ stations: [{ title: "" }], draft: true });
+  assert.equal(noTitle.status, 400);
+  const notDraft = await request(app).post("/api/admin/osce/import").set("Authorization", admin.auth).send({ stations: [{ title: "Unfinished station" }] });
+  assert.equal(notDraft.status, 400);
+
+  const publish = await request(app).patch(`/api/admin/osce/${id}/status`).set("Authorization", admin.auth).send({ status: "published" });
+  assert.equal(publish.status, 400);
+  assert.match(publish.body.message, /presenting complaint.*short description.*at least one task.*checklist items.*3 patient facts/);
+  assert.equal((await OsceStation.findById(id).lean()).status, "draft");
+});
+
 test("the station editor edits the checklist (tick and graded items) and review visibility", async () => {
   const admin = await account("admin@example.com", "admin");
   const id = station._id.toString();

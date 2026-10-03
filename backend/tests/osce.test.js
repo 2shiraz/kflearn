@@ -343,7 +343,7 @@ test("admin can move a station through all supported visibility statuses", async
 
   for (const status of ["draft", "approved", "published", "archived"]) {
     const changed = await request(app).patch(`/api/admin/osce/${id}/status`).set("Authorization", auth).send({ status });
-    assert.equal(changed.status, 200);
+    assert.equal(changed.status, 200, changed.body.message);
     assert.equal(changed.body.data.module.status, status);
     const listed = await request(app).get("/api/admin/osce").set("Authorization", auth);
     assert.equal(listed.body.data.find((station) => station.id === id)?.status, status);

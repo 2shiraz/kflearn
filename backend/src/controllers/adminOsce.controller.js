@@ -50,6 +50,21 @@ export async function createOsceContent(req, res) {
   res.status(201).json({ success: true, data: { module: createdModule } });
 }
 
+// What a half-written draft still needs before students can see it.
+async function missingForPublish(module) {
+  const missing = [];
+  if (!module.presentingComplaint?.trim()) missing.push("presenting complaint");
+  if (!module.shortDescription?.trim()) missing.push("short description");
+  if (!module.candidateInstructions?.tasks?.length) missing.push("at least one task");
+  const checklist = module.smartChecklistId ? await SmartChecklist.findById(module.smartChecklistId).lean() : null;
+  if (!checklist?.sections?.some((sec) => sec.items?.length)) missing.push("checklist items");
+  if (module.practiceModes?.includes("virtual-patient")) {
+    const script = module.patientScriptId ? await PatientScript.findById(module.patientScriptId).lean() : null;
+    if ((script?.facts?.length || 0) < 4) missing.push("3 patient facts for the AI patient");
+  }
+  return missing;
+}
+
 export async function updateStationStatus(req, res) {
   if (!mongoose.isObjectIdOrHexString(req.params.id)) {
     const error = new Error("Module not found.");
@@ -67,6 +82,14 @@ export async function updateStationStatus(req, res) {
     const error = new Error("Invalid status.");
     error.status = 400;
     throw error;
+  }
+  if (["approved", "published"].includes(status)) {
+    const missing = await missingForPublish(module);
+    if (missing.length) {
+      const error = new Error(`Finish this station first. Missing: ${missing.join(", ")}.`);
+      error.status = 400;
+      throw error;
+    }
   }
   module.status = status;
   if (status === "published") module.publishedAt = new Date();
@@ -234,8 +257,9 @@ export async function updateAdminStation(req, res) {
   };
 
   if (body.title !== undefined) station.title = text(body.title, "Title", 160, true);
-  if (body.shortDescription !== undefined) station.shortDescription = text(body.shortDescription, "Short description", 600, true);
-  if (body.presentingComplaint !== undefined) station.presentingComplaint = text(body.presentingComplaint, "Presenting complaint", 200, true);
+  const finished = station.status !== "draft";
+  if (body.shortDescription !== undefined) station.shortDescription = text(body.shortDescription, "Short description", 600, finished);
+  if (body.presentingComplaint !== undefined) station.presentingComplaint = text(body.presentingComplaint, "Presenting complaint", 200, finished);
   if (body.difficulty !== undefined) {
     if (!DIFFICULTIES.includes(body.difficulty)) throw badRequest("Invalid difficulty.");
     station.difficulty = body.difficulty;
@@ -313,13 +337,13 @@ export async function updateAdminStation(req, res) {
 // ---- Import from JSON ----
 // dryRun checks the JSON and returns a summary without saving anything.
 export async function importOsceStations(req, res) {
-  const { stations, dryRun } = req.body || {};
+  const { stations, dryRun, draft } = req.body || {};
   if (stations === undefined) {
     const error = new Error("Paste the station JSON first.");
     error.status = 400;
     throw error;
   }
-  const parsed = parseImport(stations);
+  const parsed = parseImport(stations, { draft: draft === true });
   if (dryRun === true) {
     res.json({
       success: true,

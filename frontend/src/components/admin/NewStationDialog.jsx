@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { importAdminStations, listAdminSpecialties } from "../../lib/api";
 import { OSCE_CATEGORIES } from "../../lib/osceFilters";
-import { PrimaryButton, SecondaryButton } from "../AppPage";
+import { PrimaryButton } from "../AppPage";
 import { AdminDialog, Area, Field, InlineError, Select, ShowAllToggle, Toggle } from "./AdminKit";
 import { ChecklistEditor, newItem } from "./StationEditDialog";
 
@@ -37,7 +37,8 @@ const blank = () => ({
 
 // Build a new station in one place: basics, what the candidate is told, the
 // AI patient, the marking checklist and the review. Saved as a draft through
-// the same checks as JSON import.
+// the same checks as JSON import. Only the title is needed to save; the rest
+// is checked when the station is published.
 export default function NewStationDialog({ open, onClose, onCreated }) {
   const [form, setForm] = useState(blank);
   const [specialties, setSpecialties] = useState([]);
@@ -59,18 +60,19 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
   const setFact = (i, patch) => setForm((f) => ({ ...f, facts: f.facts.map((fact, j) => (j === i ? { ...fact, ...patch } : fact)) }));
   const dirty = form.title || form.presentingComplaint || form.tasks || form.facts.some((f) => f.answer);
 
-  const close = () => {
-    if (saving) return;
-    if (dirty && !window.confirm("Discard this station?")) return;
-    onClose();
-  };
 
   async function save(e) {
     e.preventDefault();
+    if (!form.title.trim()) return setError("Give the station a title so you can find it later.");
     if (!form.checklistPractice && !form.aiPatient) return setError("Leave at least one way to practise this station.");
     const specialty = form.specialty === "__new" ? form.newSpecialty.trim() : form.specialty;
-    if (!specialty) return setError("Choose a specialty or type a new one.");
-    const facts = form.facts.filter((f) => f.label.trim() || f.answer.trim());
+    const topic = Object.fromEntries(FACT_SECTIONS);
+    const facts = form.facts
+      .filter((f) => f.answer.trim())
+      .map((f) => ({ ...f, label: f.label.trim() || topic[f.section] }));
+    const checklist = form.checklist
+      .map((sec) => ({ title: sec.title.trim() || "Station checklist", items: sec.items.filter((i) => i.label.trim()) }))
+      .filter((sec) => sec.items.length);
     setSaving(true);
     setError("");
     try {
@@ -90,7 +92,7 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
           age: form.patient.age === "" ? undefined : Number(form.patient.age),
           facts: facts.map((f) => ({ section: f.section, label: f.label, answer: f.answer })),
         },
-        checklist: form.checklist.map((sec) => ({
+        checklist: checklist.map((sec) => ({
           title: sec.title,
           items: sec.items.map((i) => ({ label: i.label, description: i.description, marks: Number(i.marks), critical: i.critical })),
         })),
@@ -107,7 +109,7 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
           show: form.show,
         },
       };
-      const data = await importAdminStations([station], false);
+      const data = await importAdminStations([station], false, true);
       onCreated(data.created);
       onClose();
     } catch (err) {
@@ -118,14 +120,26 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
   }
 
   return (
-    <AdminDialog wide open={open} title="Write a station" description="Saved as a draft, hidden from students until you publish it." onClose={close}>
-      <form onSubmit={save} className="space-y-6">
-        <section className="space-y-4">
+    <AdminDialog fullscreen open={open} title="Write a station" description="Saved as a draft, hidden from students until you publish it. Only the title is needed to save." onClose={onClose} dirty={Boolean(dirty)} busy={saving}
+      saveLabel="Save as draft" onSave={() => document.getElementById("station-new-form")?.requestSubmit()}
+      sections={[
+        { id: "st-basics", label: "Basics" },
+        { id: "st-candidate", label: "Candidate instructions" },
+        ...(form.aiPatient ? [{ id: "st-patient", label: "The patient" }] : []),
+        { id: "st-checklist", label: "Marking checklist" },
+        { id: "st-review", label: "Station review" },
+      ]}
+      footer={<PrimaryButton type="submit" form="station-new-form" disabled={saving}>{saving ? "Saving..." : "Save as draft"}</PrimaryButton>}
+    >
+      <form id="station-new-form" onSubmit={save} className="space-y-6">
+        <section id="st-basics" className="scroll-mt-8 space-y-4">
           <h3 className="font-semibold text-s-ink">Basics</h3>
-          <Field label="Title" required maxLength={160} value={form.title} onChange={(v) => set("title", v)} placeholder="Chest pain: focused history" />
-          <Area label="Short description" helper="Shown on the station card." required maxLength={600} rows={2} value={form.shortDescription} onChange={(v) => set("shortDescription", v)} />
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Presenting complaint" required maxLength={200} value={form.presentingComplaint} onChange={(v) => set("presentingComplaint", v)} />
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Field label="Title" required maxLength={160} value={form.title} onChange={(v) => set("title", v)} placeholder="Chest pain: focused history" />
+            <Field label="Presenting complaint" maxLength={200} value={form.presentingComplaint} onChange={(v) => set("presentingComplaint", v)} />
+          </div>
+          <Area label="Short description" helper="Shown on the station card." maxLength={600} rows={2} value={form.shortDescription} onChange={(v) => set("shortDescription", v)} />
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <div className="space-y-2">
               <Select label="Specialty" value={form.specialty} onChange={(v) => set("specialty", v)}>
                 {specialties.map((s) => <option key={s.id} value={s.name}>{s.name}</option>)}
@@ -143,26 +157,28 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
             </Select>
             <Field label="Time limit (minutes)" type="number" min="1" max="60" required value={form.minutes} onChange={(v) => set("minutes", v)} />
           </div>
-          <div className="divide-y divide-s-line rounded-2xl border border-s-line px-4">
+          <div className="grid divide-y divide-s-line rounded-2xl border border-s-line px-4 lg:grid-cols-2 lg:gap-8 lg:divide-y-0">
             <Toggle label="Checklist practice" description="Students work through the station and mark themselves. Free." checked={form.checklistPractice} onChange={(v) => set("checklistPractice", v)} />
             <Toggle label="AI patient" description="Students talk to the AI patient and can get AI marking. Needs the patient below." checked={form.aiPatient} onChange={(v) => set("aiPatient", v)} />
           </div>
         </section>
 
-        <section className="space-y-4 border-t border-s-line pt-5">
+        <section id="st-candidate" className="scroll-mt-8 space-y-4 border-t border-s-line pt-5">
           <h3 className="font-semibold text-s-ink">Candidate instructions</h3>
-          <Area label="Context" rows={2} maxLength={2000} value={form.context} onChange={(v) => set("context", v)} placeholder="You are an FY1 in the emergency department." />
-          <Area label="Patient summary" rows={2} maxLength={2000} value={form.patientSummary} onChange={(v) => set("patientSummary", v)} />
-          <Area label="Tasks" helper="One task per line." required rows={3} value={form.tasks} onChange={(v) => set("tasks", v)} />
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Area label="Context" rows={2} maxLength={2000} value={form.context} onChange={(v) => set("context", v)} placeholder="You are an FY1 in the emergency department." />
+            <Area label="Patient summary" rows={2} maxLength={2000} value={form.patientSummary} onChange={(v) => set("patientSummary", v)} />
+          </div>
+          <Area label="Tasks" helper="One task per line." rows={3} value={form.tasks} onChange={(v) => set("tasks", v)} />
         </section>
 
         {form.aiPatient && (
-          <section className="space-y-4 border-t border-s-line pt-5">
+          <section id="st-patient" className="scroll-mt-8 space-y-4 border-t border-s-line pt-5">
             <div>
               <h3 className="font-semibold text-s-ink">The patient</h3>
               <p className="mt-0.5 text-sm text-s-mute">The AI patient only says what's written here. Write facts in the patient's own words.</p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Field label="Name" maxLength={80} value={form.patient.name} onChange={(v) => setPatient("name", v)} />
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Age" type="number" min="0" max="120" value={form.patient.age} onChange={(v) => setPatient("age", v)} />
@@ -174,10 +190,10 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
               <Field label="Occupation" maxLength={80} value={form.patient.occupation} onChange={(v) => setPatient("occupation", v)} />
               <Field label="Manner" maxLength={200} value={form.patient.demeanor} onChange={(v) => setPatient("demeanor", v)} placeholder="Anxious but cooperative" />
             </div>
-            <Area label="Opening line" required rows={2} maxLength={600} value={form.patient.openingStatement} onChange={(v) => setPatient("openingStatement", v)} placeholder="Doctor, I've had a tight pain in my chest since this morning." />
+            <Area label="Opening line" rows={2} maxLength={600} value={form.patient.openingStatement} onChange={(v) => setPatient("openingStatement", v)} placeholder="Doctor, I've had a tight pain in my chest since this morning." />
             <div className="space-y-2">
               <p className="text-sm font-medium text-s-ink">Facts the patient can share <span className="font-normal text-s-mute">(at least 3)</span></p>
-              <ol className="space-y-2">
+              <ol className="grid gap-2 xl:grid-cols-2">
                 {form.facts.map((fact, i) => (
                   <li key={i} className="grid gap-2 rounded-xl bg-s-tint/50 p-3 sm:grid-cols-[11rem_minmax(0,1fr)_auto]">
                     <select aria-label="Fact topic" value={fact.section} onChange={(e) => setFact(i, { section: e.target.value })} className="min-h-10 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent">
@@ -202,7 +218,7 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
 
         <ChecklistEditor sections={form.checklist} onChange={(next) => set("checklist", next)} />
 
-        <section className="space-y-5 border-t border-s-line pt-5">
+        <section id="st-review" className="scroll-mt-8 space-y-5 border-t border-s-line pt-5">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
               <h3 className="font-semibold text-s-ink">Station review</h3>
@@ -210,6 +226,7 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
             </div>
             <ShowAllToggle visibility={form.show} onChange={(v) => set("show", v)} />
           </div>
+          <div className="grid gap-5 lg:grid-cols-2">
           {REVIEW_FIELDS.map(([key, label, props]) => (
             <div key={key} className={form.show[key] ? "" : "opacity-60"}>
               <Area label={label} {...props} value={form.review[key]} onChange={(v) => set("review", { ...form.review, [key]: v })} />
@@ -219,13 +236,10 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
               </label>
             </div>
           ))}
+          </div>
         </section>
 
         <InlineError>{error}</InlineError>
-        <div className="sticky bottom-0 -mx-6 -mb-6 flex flex-col-reverse gap-2 border-t border-s-line bg-s-card px-6 py-4 sm:flex-row sm:justify-end">
-          <SecondaryButton onClick={close} disabled={saving}>Cancel</SecondaryButton>
-          <PrimaryButton type="submit" disabled={saving}>{saving ? "Saving..." : "Save as draft"}</PrimaryButton>
-        </div>
       </form>
     </AdminDialog>
   );
