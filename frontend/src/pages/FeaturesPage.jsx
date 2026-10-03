@@ -87,7 +87,7 @@ const modules = [
 export default function FeaturesPage() {
   return (
     <PageShell>
-      <section className="mx-auto max-w-7xl px-4 pb-10 pt-14 sm:px-6 lg:px-8 lg:pt-20">
+      <section className="mx-auto max-w-7xl px-4 pb-10 pt-28 sm:px-6 lg:px-8 lg:pt-36">
         <h1 className="site-rise max-w-3xl text-4xl font-semibold leading-tight text-s-ink md:text-5xl">Everything inside KF LearnSmart</h1>
         <p className="site-rise mt-5 max-w-2xl text-lg leading-relaxed text-s-mute" style={{ "--rise-delay": "80ms" }}>
           OSCE stations with an AI patient, question banks, OSPE stations and revision guides. Here is what each part does.

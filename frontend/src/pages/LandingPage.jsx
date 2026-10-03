@@ -53,7 +53,7 @@ export default function LandingPage() {
 function Hero() {
   return (
     <section className="site-hero overflow-hidden border-b border-s-line">
-      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-14 px-4 pb-14 pt-8 sm:px-6 md:pb-20 md:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 lg:px-8 lg:pb-28">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-14 px-4 pb-14 pt-28 sm:px-6 md:pb-20 md:pt-36 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 lg:px-8 lg:pb-28">
         <div>
           <p className="site-rise inline-flex items-center gap-2 rounded-full bg-sky-soft px-3.5 py-1.5 text-sm font-medium text-s-ink">
             <HealthIcon name="stethoscope" size={18} className="text-sky" />
