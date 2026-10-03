@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { LayoutGrid, Coins, Settings, LogOut, Menu, ShieldCheck, X } from "lucide-react";
+import { LayoutGrid, Coins, Settings, LogOut, Menu, ChevronLeft, ChevronRight, ShieldCheck, X } from "lucide-react";
 import BrandMark from "./BrandMark";
 import { HealthIcon } from "../site/Illustrations";
-import { SECTION_LOOK, TONES } from "../site/tones";
+import { SECTION_LOOK } from "../site/tones";
 import { getCurrentUser } from "../lib/api";
 import { useCredits } from "../lib/credits";
 
@@ -22,15 +22,14 @@ export const SECTIONS = [
   { key: "progress", label: "Progress", href: "/progress" },
 ];
 
-// Icon in a small tinted circle: the section's Healthicon in its specialty
-// colour, or a lucide glyph for UI items (dashboard, credits, settings).
+// Icon in a small neutral circle, in black and white: the section's
+// Healthicon, or a lucide glyph for UI items (dashboard, credits, settings).
 function NavIcon({ item, active }) {
   const look = SECTION_LOOK[item.key];
-  const tone = TONES[look?.tone || "indigo"];
   return (
     <span
       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors ${
-        active ? "bg-s-card text-s-accent" : look ? `${tone.soft} ${tone.text}` : "bg-s-tint text-s-mute group-hover:text-s-ink"
+        active ? "bg-s-card text-s-ink" : "bg-s-tint text-s-mute group-hover:text-s-ink"
       }`}
       aria-hidden="true"
     >
@@ -39,23 +38,27 @@ function NavIcon({ item, active }) {
   );
 }
 
-function itemClass(active, compact) {
-  return `site-press group flex min-h-11 items-center gap-3 rounded-full p-1.5 pr-3 text-sm font-medium ${
-    compact ? "justify-center pr-1.5 lg:justify-start lg:pr-3" : ""
-  } ${active ? "bg-s-accent-soft text-s-ink" : "text-s-mute hover:bg-s-tint/70 hover:text-s-ink"}`;
+// Layout modes: "drawer" (mobile menu, labels always), "rail" (tablet icons,
+// labels from lg), "collapsed" (icons only at every size).
+const LABEL_CLASS = { drawer: "", rail: "sr-only lg:not-sr-only", collapsed: "sr-only" };
+const ALIGN_CLASS = { drawer: "", rail: "justify-center pr-1.5 lg:justify-start lg:pr-3", collapsed: "justify-center pr-1.5" };
+
+function itemClass(active, mode) {
+  return `site-press group flex min-h-11 items-center gap-3 rounded-full p-1.5 pr-3 text-sm font-medium ${ALIGN_CLASS[mode]} ${
+    active ? "bg-s-accent-soft text-s-ink" : "text-s-mute hover:bg-s-tint/70 hover:text-s-ink"
+  }`;
 }
 
-// `compact` = the sm..lg icon rail, where labels are hidden.
-function NavList({ sections, active, compact, onNavigate }) {
+function NavList({ sections, active, mode, onNavigate }) {
   return (
     <ul className="flex flex-col gap-1">
       {sections.map((s) => {
         const isActive = s.key === active;
         return (
           <li key={s.key}>
-            <Link to={s.href} title={compact ? s.label : undefined} aria-current={isActive ? "page" : undefined} onClick={onNavigate} className={itemClass(isActive, compact)}>
+            <Link to={s.href} title={mode !== "drawer" ? s.label : undefined} aria-current={isActive ? "page" : undefined} onClick={onNavigate} className={itemClass(isActive, mode)}>
               <NavIcon item={s} active={isActive} />
-              <span className={`${compact ? "sr-only lg:not-sr-only" : ""} truncate`}>{s.label}</span>
+              <span className={`${LABEL_CLASS[mode]} truncate`}>{s.label}</span>
             </Link>
           </li>
         );
@@ -64,22 +67,23 @@ function NavList({ sections, active, compact, onNavigate }) {
   );
 }
 
-function AccountLinks({ active, balance, compact, onNavigate, onLogout }) {
+function AccountLinks({ active, balance, mode, onNavigate, onLogout }) {
   const creditsActive = active === "credits";
   const settingsActive = active === "settings";
-  const hide = compact ? "sr-only lg:not-sr-only" : "";
+  const hide = LABEL_CLASS[mode];
+  const compact = mode !== "drawer";
   return (
     <div className="flex flex-col gap-1 border-t border-s-line pt-3">
-      <Link to="/credits" title={compact ? `Credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, compact)}>
+      <Link to="/credits" title={compact ? `Credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, mode)}>
         <NavIcon item={{ key: "credits", icon: Coins }} active={creditsActive} />
         <span className={hide}>Credits</span>
         <span className={`${hide} ml-auto font-chart text-xs text-s-mute`}>{formatBalance(balance)}</span>
       </Link>
-      <Link to="/settings" title={compact ? "Settings" : undefined} aria-current={settingsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(settingsActive, compact)}>
+      <Link to="/settings" title={compact ? "Settings" : undefined} aria-current={settingsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(settingsActive, mode)}>
         <NavIcon item={{ key: "settings", icon: Settings }} active={settingsActive} />
         <span className={hide}>Settings</span>
       </Link>
-      <button type="button" title={compact ? "Sign out" : undefined} onClick={onLogout} className={`${itemClass(false, compact)} w-full hover:text-s-miss`}>
+      <button type="button" title={compact ? "Sign out" : undefined} onClick={onLogout} className={`${itemClass(false, mode)} w-full hover:text-s-miss`}>
         <NavIcon item={{ key: "logout", icon: LogOut }} active={false} />
         <span className={hide}>Sign out</span>
       </button>
@@ -95,9 +99,21 @@ function Initials({ initials, className = "" }) {
   );
 }
 
+// Desktop collapse preference, kept per browser. Read once on mount so the
+// sidebar doesn't flash open on every page change.
+const COLLAPSE_KEY = "kf_sidebar_collapsed";
+function readCollapsed() {
+  try {
+    return localStorage.getItem(COLLAPSE_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
 export default function Sidebar({ active = "dashboard", onLogout }) {
   const user = getCurrentUser();
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(readCollapsed);
   const { balance } = useCredits();
   const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", icon: ShieldCheck, href: "/admin/stations" }] : SECTIONS;
 
@@ -112,9 +128,22 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
 
   const close = () => setOpen(false);
 
+  function toggleCollapsed() {
+    setCollapsed((c) => {
+      try {
+        localStorage.setItem(COLLAPSE_KEY, c ? "0" : "1");
+      } catch {
+        // Storage blocked: the toggle still works for this page.
+      }
+      return !c;
+    });
+  }
+
+  const railMode = collapsed ? "collapsed" : "rail";
+
   // Phones (< sm): a full-width top bar like the public navbar, with a menu
   // button that opens the full drawer. sm..lg: an icon rail. lg+: the same
-  // rail with labels.
+  // rail with labels, which can be collapsed back to icons.
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-30 border-b border-s-line bg-s-page/85 backdrop-blur-lg sm:hidden">
@@ -127,7 +156,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
             <span className="truncate text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
           </Link>
           <Link to="/credits" aria-label={`Credits: ${formatBalance(balance)}`} className="site-press flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-2.5 font-chart text-xs text-s-ink hover:bg-s-tint/70">
-            <Coins size={15} strokeWidth={2} className="text-sun" aria-hidden="true" /> {formatBalance(balance)}
+            <Coins size={15} strokeWidth={2} className="text-s-mute" aria-hidden="true" /> {formatBalance(balance)}
           </Link>
           {initials && (
             <Link to="/settings" aria-label="Settings" className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
@@ -137,21 +166,36 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
         </div>
       </header>
 
-      <aside className="sticky top-0 z-30 hidden h-dvh shrink-0 border-r border-s-line bg-s-card/80 backdrop-blur-lg sm:block sm:w-20 lg:w-64">
+      <aside className={`sticky top-0 z-30 hidden h-dvh shrink-0 border-r border-s-line bg-s-card/80 backdrop-blur-lg motion-safe:transition-[width] motion-safe:duration-300 sm:block sm:w-20 ${collapsed ? "lg:w-20" : "lg:w-64"}`}>
+        {/* Collapse handle: a small round button on the sidebar's right edge,
+            halfway down. The visible circle is 24px; the hit area is 44px. */}
+        <button
+          type="button"
+          onClick={toggleCollapsed}
+          aria-expanded={!collapsed}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="group absolute -right-5.5 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center lg:flex"
+        >
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-s-line bg-s-card text-s-mute shadow-sm transition-colors group-hover:border-s-accent/40 group-hover:text-s-ink" aria-hidden="true">
+            {collapsed ? <ChevronRight size={14} strokeWidth={2.25} /> : <ChevronLeft size={14} strokeWidth={2.25} />}
+          </span>
+        </button>
+
         <div className="flex h-full flex-col px-3 py-4">
           <button type="button" aria-label="Open menu" aria-expanded={open} aria-controls="app-drawer" onClick={() => setOpen(true)} className="site-press mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-full text-s-ink hover:bg-s-tint/70 lg:hidden">
             <Menu size={20} strokeWidth={1.75} />
           </button>
-          <Link to="/dashboard" aria-label="KF LearnSmart dashboard" className="mb-5 flex min-h-11 items-center justify-center gap-2.5 lg:justify-start lg:px-1.5">
+          <Link to="/dashboard" aria-label="KF LearnSmart dashboard" className={`mb-5 flex min-h-11 items-center justify-center gap-2.5 ${collapsed ? "" : "lg:justify-start lg:px-1.5"}`}>
             <BrandMark size={34} />
-            <span className="hidden text-[15px] font-semibold tracking-tight text-s-ink lg:block">KF LearnSmart</span>
+            <span className={`hidden whitespace-nowrap text-[15px] font-semibold tracking-tight text-s-ink ${collapsed ? "" : "lg:block"}`}>KF LearnSmart</span>
           </Link>
 
           <nav aria-label="App" className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
-            <NavList sections={navSections} active={active} compact />
+            <NavList sections={navSections} active={active} mode={railMode} />
           </nav>
 
-          {user && (
+          {user && !collapsed && (
             <div className="mb-2 hidden items-center gap-3 rounded-2xl bg-s-tint/60 p-2.5 lg:flex">
               <Initials initials={initials} className="h-9 w-9" />
               <span className="min-w-0">
@@ -160,7 +204,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
               </span>
             </div>
           )}
-          <AccountLinks active={active} balance={balance} compact onLogout={onLogout} />
+          <AccountLinks active={active} balance={balance} mode={railMode} onLogout={onLogout} />
         </div>
       </aside>
 
@@ -195,10 +239,10 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
           </div>
 
           <nav aria-label="App" className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
-            <NavList sections={navSections} active={active} onNavigate={close} />
+            <NavList sections={navSections} active={active} mode="drawer" onNavigate={close} />
           </nav>
 
-          <AccountLinks active={active} balance={balance} onNavigate={close} onLogout={() => { close(); onLogout(); }} />
+          <AccountLinks active={active} balance={balance} mode="drawer" onNavigate={close} onLogout={() => { close(); onLogout(); }} />
         </div>
       </div>
     </>
