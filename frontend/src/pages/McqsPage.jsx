@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { ArrowRight, BookOpen, Check, PlayCircle, Shuffle, X } from "lucide-react";
 import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser } from "../components/AppPage";
-import { QuestionSkeleton } from "../components/Skeleton";
+import { SetupSkeleton } from "../components/Skeleton";
 import { Chip, ChoicePills, PillLink, ProgressLine, ResultsSummary, SectionHeader, SetupCard, StepBar, Toggle, TopicCard, YEAR_TONES, YearCard } from "../components/StudyKit";
 import { plus } from "../site/siteContent";
 import { getBlock, getYear, loadQuestions, mcqTotalCount, mcqYears } from "../data/mcqs/catalog";
@@ -228,7 +228,7 @@ export function McqPractice() {
   let body;
   if (!year || (blockSlug && !block) || (topicSlug && !topic)) body = <NotFound backTo={year ? `/mcqs/${year.slug}` : "/mcqs"} backLabel="Back to sections" />;
   else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
-  else if (!pool) body = <QuestionSkeleton count={1} label="Loading questions" />;
+  else if (!pool) body = <SetupSkeleton label="Loading questions" />;
   else if (!session) body = <Setup pool={pool} config={config} setConfig={setConfig} onStart={start} />;
   else if (session.finished) body = <Results session={session} onRestart={() => setSession(null)} backTo={`/mcqs/${year.slug}`} />;
   else body = <Runner session={session} setSession={setSession} />;

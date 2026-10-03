@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { ArrowRight, BookOpen, Check, ClipboardCheck, Eye, EyeOff, PlayCircle, Shuffle, X } from "lucide-react";
 import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
-import { QuestionSkeleton } from "../components/Skeleton";
+import { QuestionSkeleton, SetupSkeleton } from "../components/Skeleton";
 import { CheckRow, Chip, ChoicePills, Pager, PillLink, ProgressLine, ResultsSummary, SectionHeader, SetupCard, StepBar, TimerPill, Toggle, TopicCard, YEAR_TONES, YearCard, rise, scoreTone } from "../components/StudyKit";
 import { MedIcon } from "../site/Illustrations";
 import { plus } from "../site/siteContent";
@@ -297,7 +297,7 @@ export function OspeRead() {
   let body;
   if (!valid) body = <NotFound backTo={year ? `/ospe/${year.slug}` : "/ospe"} backLabel="Back to sections" />;
   else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
-  else if (!stations) body = <QuestionSkeleton options={4} label="Loading stations" />;
+  else if (!stations) body = <QuestionSkeleton toolbar options={4} label="Loading stations" />;
   else {
     body = (
       <>
@@ -394,7 +394,7 @@ export function OspePractice() {
   let body;
   if (!valid) body = <NotFound backTo={year ? `/ospe/${year.slug}` : "/ospe"} backLabel="Back to sections" />;
   else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
-  else if (!pool) body = <QuestionSkeleton count={1} options={4} label="Loading stations" />;
+  else if (!pool) body = <SetupSkeleton label="Loading stations" />;
   else if (!session) body = <Setup pool={pool} config={config} setConfig={setConfig} onStart={start} />;
   else if (session.finished) body = <Results session={session} onRestart={() => setSession(null)} backTo={`/ospe/${year.slug}`} />;
   else body = <Runner key={session.index} session={session} setSession={setSession} />;

@@ -13,16 +13,20 @@ function formatBalance(balance) {
   return balance === null ? "..." : balance.toLocaleString();
 }
 
+// Grouped navigation. The first group has no heading; the rest are labelled
+// in the expanded sidebar and separated by a hairline when collapsed to icons.
 export const SECTIONS = [
-  { key: "dashboard", label: "Dashboard", href: "/dashboard" },
-  { key: "stations", label: "OSCE Stations", href: "/stations" },
-  { key: "mcqs", label: "MCQs", href: "/mcqs" },
-  { key: "ospe", label: "OSPE", href: "/ospe" },
-  { key: "history", label: "History Taking Guide", href: "/history-taking" },
-  { key: "clinical-exam", label: "Clinical Exam Guide", href: "/clinical-examination" },
-  { key: "handouts", label: "Handout Notes", href: "/handout-notes" },
-  { key: "progress", label: "Progress", href: "/progress" },
+  { key: "dashboard", label: "Dashboard", href: "/dashboard", group: "home" },
+  { key: "progress", label: "Progress", href: "/progress", group: "home" },
+  { key: "stations", label: "OSCE Stations", href: "/stations", group: "practice" },
+  { key: "mcqs", label: "MCQs", href: "/mcqs", group: "practice" },
+  { key: "ospe", label: "OSPE", href: "/ospe", group: "practice" },
+  { key: "history", label: "History Taking Guide", href: "/history-taking", group: "guides" },
+  { key: "clinical-exam", label: "Clinical Exam Guide", href: "/clinical-examination", group: "guides" },
+  { key: "handouts", label: "Handout Notes", href: "/handout-notes", group: "guides" },
 ];
+
+const GROUP_LABELS = { home: "", practice: "Practice", guides: "Guides and notes", admin: "Admin" };
 
 // Plain line icons for navigation, one per item. AI credits get a gold bolt
 // with no circle behind it.
@@ -68,21 +72,49 @@ function itemClass(active, mode) {
   }`;
 }
 
+// Group heading: text in the expanded sidebar, a short hairline in icon-only
+// layouts so the groups still read as separate.
+const GROUP_TEXT_CLASS = { drawer: "block", rail: "hidden lg:block", collapsed: "hidden" };
+const GROUP_RULE_CLASS = { drawer: "hidden", rail: "lg:hidden", collapsed: "" };
+
 function NavList({ sections, active, mode, onNavigate }) {
+  const groups = [];
+  for (const s of sections) {
+    const group = s.group || "home";
+    const last = groups[groups.length - 1];
+    if (last && last.key === group) last.items.push(s);
+    else groups.push({ key: group, items: [s] });
+  }
   return (
-    <ul className="flex flex-col gap-1">
-      {sections.map((s) => {
-        const isActive = s.key === active;
+    <div className="flex flex-col">
+      {groups.map((g, gi) => {
+        const label = GROUP_LABELS[g.key];
+        const headingId = `nav-group-${g.key}`;
         return (
-          <li key={s.key}>
-            <Link to={s.href} title={mode !== "drawer" ? s.label : undefined} aria-current={isActive ? "page" : undefined} onClick={onNavigate} className={itemClass(isActive, mode)}>
-              <NavIcon item={s} active={isActive} />
-              <span className={`${LABEL_CLASS[mode]} truncate`}>{s.label}</span>
-            </Link>
-          </li>
+          <div key={g.key} role="group" aria-labelledby={label ? headingId : undefined} className={gi > 0 ? "mt-2" : ""}>
+            {gi > 0 && (
+              <>
+                <p id={headingId} className={`${GROUP_TEXT_CLASS[mode]} px-3 pb-1.5 pt-3 text-xs font-medium text-s-mute/80`}>{label}</p>
+                <span className={`${GROUP_RULE_CLASS[mode]} mx-auto my-2 block h-px w-6 bg-s-line`} aria-hidden="true" />
+              </>
+            )}
+            <ul className="flex flex-col gap-1">
+              {g.items.map((s) => {
+                const isActive = s.key === active;
+                return (
+                  <li key={s.key}>
+                    <Link to={s.href} title={mode !== "drawer" ? s.label : undefined} aria-current={isActive ? "page" : undefined} onClick={onNavigate} className={itemClass(isActive, mode)}>
+                      <NavIcon item={s} active={isActive} />
+                      <span className={`${LABEL_CLASS[mode]} truncate`}>{s.label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         );
       })}
-    </ul>
+    </div>
   );
 }
 
@@ -147,7 +179,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(readCollapsed);
   const { balance } = useCredits();
-  const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", href: "/admin/stations" }] : SECTIONS;
+  const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", href: "/admin/stations", group: "admin" }] : SECTIONS;
 
   const initials = user?.fullName ? user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "";
 

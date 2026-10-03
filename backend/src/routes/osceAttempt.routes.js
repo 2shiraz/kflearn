@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   aiAssessAttempt,
   createAttempt,
+  discardAttempt,
   endAttempt,
   getAttempt,
   listAttempts,
@@ -21,6 +22,7 @@ router.post("/", attemptCreateLimiter, requireBodyFields(["stationId", "mode"]),
 router.get("/:attemptId", asyncHandler(getAttempt));
 router.post("/:attemptId/messages", aiActionLimiter, requireBodyFields(["text"]), validateStudentMessageLength, asyncHandler(sendPatientMessage));
 router.post("/:attemptId/end", validateEndAttempt, asyncHandler(endAttempt));
+router.post("/:attemptId/discard", asyncHandler(discardAttempt));
 router.post("/:attemptId/self-assessment", validateSelfAssessment, asyncHandler(selfAssessAttempt));
 router.post("/:attemptId/ai-assessment", aiActionLimiter, asyncHandler(aiAssessAttempt));
 router.post("/:attemptId/transcribe", aiActionLimiter, audioUpload.single("audio"), asyncHandler(transcribeAttemptAudio));

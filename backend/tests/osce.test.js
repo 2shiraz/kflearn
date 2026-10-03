@@ -698,3 +698,31 @@ async function registerTestUser(email, { credits = 100 } = {}) {
   if (credits > 0) await grantCredits({ userId: res.body.data.user.id, amount: credits, note: "test" });
   return `Bearer ${res.body.data.token}`;
 }
+
+test("leaving a station discards the unfinished attempt completely", async () => {
+  const seeded = await seedOsceContent();
+  const owner = await registerTestUser("leaver@example.com");
+  const other = await registerTestUser("bystander@example.com");
+  const stationId = seeded.module._id.toString();
+
+  const active = await request(app).post("/api/osce/attempts").set("Authorization", owner).send({ stationId, mode: "single-player" });
+  const id = active.body.data.attempt.id;
+  assert.equal((await request(app).post(`/api/osce/attempts/${id}/discard`).set("Authorization", other).send({})).status, 404);
+  assert.equal((await request(app).post(`/api/osce/attempts/${id}/discard`).set("Authorization", owner).send({})).status, 200);
+  assert.equal(await OsceAttempt.findById(id), null);
+  assert.equal((await request(app).post(`/api/osce/attempts/${id}/discard`).set("Authorization", owner).send({})).status, 404);
+
+  // Ended but not yet marked can still be discarded.
+  const ended = await request(app).post("/api/osce/attempts").set("Authorization", owner).send({ stationId, mode: "single-player" });
+  const endedId = ended.body.data.attempt.id;
+  await request(app).post(`/api/osce/attempts/${endedId}/end`).set("Authorization", owner).send({});
+  assert.equal((await request(app).post(`/api/osce/attempts/${endedId}/discard`).set("Authorization", owner).send({})).status, 200);
+
+  // Marked attempts stay in history.
+  const marked = await request(app).post("/api/osce/attempts").set("Authorization", owner).send({ stationId, mode: "single-player" });
+  const markedId = marked.body.data.attempt.id;
+  await request(app).post(`/api/osce/attempts/${markedId}/end`).set("Authorization", owner).send({});
+  await request(app).post(`/api/osce/attempts/${markedId}/self-assessment`).set("Authorization", owner).send({ checkedItemIds: [] });
+  assert.equal((await request(app).post(`/api/osce/attempts/${markedId}/discard`).set("Authorization", owner).send({})).status, 409);
+  assert.ok(await OsceAttempt.findById(markedId));
+});

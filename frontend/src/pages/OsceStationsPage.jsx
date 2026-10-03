@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import OsceStationBrowser, { StationAvailability } from "../components/OsceStationBrowser";
-import { OSCE_CATEGORIES } from "../lib/osceFilters.js";
+import LeaveStationDialog from "../components/LeaveStationDialog";
+import { useLeaveStationGuard } from "../hooks/useLeaveStationGuard";
+import { OSCE_CATEGORIES, displayTitle } from "../lib/osceFilters.js";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { TONES } from "../site/tones";
+import { TONES, specialtyLook } from "../site/tones";
 import {
   ArrowRight,
   Check,
@@ -25,7 +27,7 @@ import {
   X,
 } from "lucide-react";
 import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
-import { CardGridSkeleton, ChatSkeleton, ChecklistSkeleton, DetailSkeleton, FormSkeleton, ListSkeleton, ResultsSkeleton, TwoColumnSkeleton } from "../components/Skeleton";
+import { CardGridSkeleton, ChatSkeleton, ChecklistSkeleton, DetailSkeleton, FormSkeleton, ListSkeleton, OsceBrowserSkeleton, ResultsSkeleton, TwoColumnSkeleton } from "../components/Skeleton";
 import { ScoreRing, scoreTone } from "../components/StudyKit";
 import { Character, HealthIcon, MedIcon, VoiceBars } from "../site/Illustrations";
 import {
@@ -74,21 +76,6 @@ function groupModulesBySpecialty(modules) {
     else groups.push({ name: specialtyName, modules: [module] });
     return groups;
   }, []);
-}
-
-// Colour and Healthicon for an OSCE section, matched on the specialty name.
-// Unknown specialties cycle through the palette so neighbours differ.
-const SPECIALTY_LOOKS = [
-  [/respir|pulmon|chest/i, { tone: "sky", icon: "lungs" }],
-  [/cardi|heart/i, { tone: "coral", icon: "heart" }],
-  [/gastr|abdom|hepat|liver/i, { tone: "mint", icon: "stomach" }],
-  [/endocr|diabet|haemat|hemat|renal/i, { tone: "sun", icon: "bloodDrop" }],
-  [/pharm|drug|prescri/i, { tone: "violet", icon: "medicines" }],
-];
-const FALLBACK_TONES = ["indigo", "violet", "mint", "sky", "sun", "coral"];
-function specialtyLook(name = "", index = 0) {
-  const match = SPECIALTY_LOOKS.find(([re]) => re.test(name));
-  return match ? match[1] : { tone: FALLBACK_TONES[index % FALLBACK_TONES.length], icon: "stethoscope" };
 }
 
 // Patient portrait for a station, picked from its title so it stays stable.
@@ -283,7 +270,7 @@ export function OsceStationDetail() {
                 <Character name={patientFor(module.title)} size={64} tone={specialtyLook(module.specialty?.name).tone} className="hidden sm:inline-flex" />
                 <div className="min-w-0">
                   {module.presentingComplaint && <p className="font-chart text-xs text-s-mute">{module.presentingComplaint}</p>}
-                  <h1 className="mt-2 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{module.title}</h1>
+                  <h1 className="mt-2 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{displayTitle(module.title)}</h1>
                 </div>
               </div>
               <p className="mt-4 leading-relaxed text-s-mute">{module.shortDescription}</p>
@@ -409,6 +396,7 @@ export function SinglePlayerOsce() {
   const [checklistRevealed, setChecklistRevealed] = useState(false);
   const finishRef = useRef(false);
   const timer = useCountdown({ limitSeconds: state.content?.timeLimitSeconds || 360, enabled: Boolean(state.content) });
+  const guard = useLeaveStationGuard({ attemptId, active: Boolean(state.content) });
 
   useEffect(() => {
     getSinglePlayerContent(slug)
@@ -434,6 +422,7 @@ export function SinglePlayerOsce() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Self-practice" }]} />
+        <LeaveStationDialog open={guard.open} leaving={guard.leaving} error={guard.error} onStay={guard.stay} onLeave={guard.leave} />
         {state.loading && <Loading variant="single-player" />}
         {state.error && <ErrorMessage message={state.error} onRetry={() => window.location.reload()} />}
         {state.content && (
@@ -442,7 +431,7 @@ export function SinglePlayerOsce() {
               <div className="mb-2 flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="font-chart text-xs text-s-mute">Guided self-practice</p>
-                  <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{state.content.title}</h1>
+                  <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{displayTitle(state.content.title)}</h1>
                 </div>
                 <TimerBadge remainingSeconds={timer.remainingSeconds} />
               </div>
@@ -511,6 +500,7 @@ export function VirtualPatientSession() {
   const endRef = useRef(false);
   const threadEndRef = useRef(null);
   const timer = useCountdown({ limitSeconds: state.module?.timeLimitSeconds || 360, startedAt: state.attempt?.startedAt, enabled: Boolean(state.attempt && state.module) });
+  const guard = useLeaveStationGuard({ attemptId, active: state.attempt?.status === "active" });
 
   useEffect(() => {
     getOsceAttempt(attemptId)
@@ -656,6 +646,7 @@ export function VirtualPatientSession() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Virtual patient" }]} />
+        <LeaveStationDialog ai open={guard.open} leaving={guard.leaving} error={guard.error} onStay={guard.stay} onLeave={guard.leave} />
         {state.loading && <Loading variant="chat" />}
         {state.error && (
           <div className="mb-4">
@@ -673,7 +664,7 @@ export function VirtualPatientSession() {
                   </span>
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h1 className="truncate font-medium text-s-ink sm:text-lg">{state.module?.title}</h1>
+                  <h1 className="truncate font-medium text-s-ink sm:text-lg">{displayTitle(state.module?.title)}</h1>
                   <p className="truncate font-chart text-xs text-s-mute">
                     AI virtual patient{state.voiceMode === "browser" ? " / listening" : state.voiceMode === "groq" ? " / recording" : ""}
                   </p>
@@ -728,7 +719,7 @@ export function VirtualPatientSession() {
               )}
 
               <div className="border-t border-s-line bg-s-card/90 p-3 sm:p-4">
-                <div className="flex items-center gap-2 rounded-full border border-s-line bg-s-card py-1.5 pl-4 pr-1.5 transition-colors focus-within:border-s-accent">
+                <div className="flex items-center gap-2 rounded-full border border-s-line bg-s-card py-1.5 pl-4 pr-1.5 transition-[border-color,box-shadow] duration-200 focus-within:border-s-accent focus-within:ring-4 focus-within:ring-s-accent/12">
                   <label htmlFor="patient-question" className="sr-only">Your question</label>
                   <input
                     id="patient-question"
@@ -787,6 +778,7 @@ export function SelfAssessmentPage() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
   const [state, setState] = useState({ loading: true, attempt: null, checklist: null, checked: [], scores: {}, aiLoading: false, error: "", spendError: null });
+  const guard = useLeaveStationGuard({ attemptId, active: state.attempt?.status === "ended" && !state.aiLoading });
 
   const load = useCallback(() => {
     setState((s) => ({ ...s, loading: true, error: "" }));
@@ -829,6 +821,7 @@ export function SelfAssessmentPage() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Assessment" }]} />
+        <LeaveStationDialog ai={state.attempt?.mode === "virtual-patient"} open={guard.open} leaving={guard.leaving} error={guard.error} onStay={guard.stay} onLeave={guard.leave} />
         {state.loading && <Loading variant="assessment" />}
         {state.error && <ErrorMessage message={state.error} onRetry={load} />}
         {state.checklist && (
@@ -969,7 +962,7 @@ export function OsceAttemptHistoryPage() {
                     <MedIcon name={ai ? "stethoscope" : "memo"} size={26} />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-s-ink">{attempt.module?.title || "Station"}</p>
+                    <p className="truncate font-medium text-s-ink">{displayTitle(attempt.module?.title) || "Station"}</p>
                     <p className="mt-0.5 truncate font-chart text-xs text-s-mute">
                       {modeLabel(attempt.mode)} / {attempt.status === "ai-assessed" ? "AI marked" : "Self marked"}{attempt.startedAt ? ` / ${formatDate(attempt.startedAt)}` : ""}
                     </p>
@@ -1443,10 +1436,10 @@ function Checklist({ checklist, checked, scores = {}, onChange, onScoreChange })
             {section.items.map((item) => {
               const on = selected.has(item.itemId);
               return item.maxRawScore > 1 ? (
-                <li key={item.itemId} className="flex items-start gap-3.5 px-4 py-3.5">
+                <li key={item.itemId} className="flex flex-col gap-2.5 px-4 py-3.5 sm:flex-row sm:items-start sm:gap-3.5">
                   <select
                     aria-label={`Score: ${item.label}`}
-                    className="shrink-0 rounded-lg border border-s-line bg-s-card p-2 text-sm text-s-ink"
+                    className="min-h-11 w-full shrink-0 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink sm:order-1 sm:w-auto"
                     value={scores[item.itemId] ?? 0}
                     onChange={(event) => onScoreChange(item.itemId, Number(event.target.value))}
                   >
@@ -1456,7 +1449,7 @@ function Checklist({ checklist, checked, scores = {}, onChange, onScoreChange })
                       </option>
                     ))}
                   </select>
-                  <span className="min-w-0 flex-1 text-sm leading-relaxed text-s-ink">{item.label}</span>
+                  <span className="-order-1 min-w-0 flex-1 text-sm leading-relaxed text-s-ink sm:order-2 sm:pt-2.5">{item.label}</span>
                 </li>
               ) : (
                 <li key={item.itemId}>
@@ -1490,10 +1483,10 @@ function Checklist({ checklist, checked, scores = {}, onChange, onScoreChange })
 
 function Loading({ variant = "cards" }) {
   const variants = {
-    "osce-bank": <CardGridSkeleton cards={6} label="Loading stations" />,
-    "osce-section": <CardGridSkeleton cards={6} withHeader label="Loading stations" />,
+    "osce-bank": <OsceBrowserSkeleton variant="tiles" label="Loading stations" />,
+    "osce-section": <OsceBrowserSkeleton variant="cards" label="Loading stations" />,
     "module-detail": <DetailSkeleton label="Loading station" />,
-    "single-player": <TwoColumnSkeleton leftRows={8} rightRows={7} label="Loading station" />,
+    "single-player": <TwoColumnSkeleton label="Loading station" />,
     chat: <ChatSkeleton label="Loading the patient" />,
     assessment: <ChecklistSkeleton label="Loading checklist" />,
     results: <ResultsSkeleton label="Loading results" />,

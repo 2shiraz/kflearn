@@ -236,6 +236,21 @@ export async function endAttempt(req, res) {
   res.json({ success: true, data: attemptDto(updated) });
 }
 
+// The student left a station before finishing it. The attempt is deleted
+// outright so it leaves no history; credits already spent on an AI session are
+// not refunded (the conversation itself used the provider). Attempts that are
+// being marked, or already marked, are kept.
+export async function discardAttempt(req, res) {
+  await findOwnedAttempt(req.params.attemptId, req.user.id);
+  const removed = await OsceAttempt.findOneAndDelete({
+    _id: req.params.attemptId,
+    userId: req.user.id,
+    status: { $in: ["active", "ended"] },
+  });
+  if (!removed) throw invalidAttemptState();
+  res.json({ success: true });
+}
+
 export async function selfAssessAttempt(req, res) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
   if (attempt.status !== "ended") throw invalidAttemptState();

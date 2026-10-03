@@ -73,7 +73,7 @@ export function McqRead() {
       />
     );
   } else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
-  else if (!questions) body = <QuestionSkeleton label="Loading questions" />;
+  else if (!questions) body = <QuestionSkeleton toolbar label="Loading questions" />;
   else {
     body = (
       <>

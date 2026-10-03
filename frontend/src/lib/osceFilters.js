@@ -31,3 +31,9 @@ export function filterStations(stations, filters = {}) {
     return 0;
   });
 }
+
+// Some authored titles use a spaced dash as a separator ("Menopause — Focused
+// History"). Show it as a colon so the UI stays free of em and en dashes.
+export function displayTitle(title = "") {
+  return title.replace(/\s+[—–]\s+/g, ": ");
+}

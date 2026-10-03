@@ -20,3 +20,33 @@ export const SECTION_LOOK = {
   stations: { tone: "indigo", icon: "stethoscope" },
   progress: { tone: "indigo", icon: "cardiogram" },
 };
+
+// Colour and Fluent icon for an OSCE specialty, matched on its name. Unknown
+// specialties cycle through the palette so neighbours differ.
+const SPECIALTY_LOOKS = [
+  [/respir|pulmon|chest/i, { tone: "sky", icon: "lungs" }],
+  [/cardi|heart|cvs/i, { tone: "coral", icon: "anatomical-heart" }],
+  [/gastr|abdom|hepat|liver|\bgit\b/i, { tone: "mint", icon: "microbe" }],
+  [/endocr|diabet/i, { tone: "sun", icon: "drop-of-blood" }],
+  [/nervous|neuro|cns/i, { tone: "violet", icon: "brain" }],
+  [/gyn|obstet/i, { tone: "indigo", icon: "pregnant-woman" }],
+  [/infect|tropical/i, { tone: "coral", icon: "thermometer" }],
+  [/ortho/i, { tone: "sun", icon: "bone" }],
+  [/rheum/i, { tone: "mint", icon: "leg" }],
+  [/haemat|hemat|blood/i, { tone: "coral", icon: "drop-of-blood" }],
+  [/renal|nephro|urolog/i, { tone: "sky", icon: "test-tube" }],
+  [/psych|mental/i, { tone: "violet", icon: "speaking-head" }],
+  [/paed|pediat|child/i, { tone: "sun", icon: "person-standing" }],
+  [/ent\b|ear|otolar/i, { tone: "sky", icon: "ear" }],
+  [/ophthal|eye/i, { tone: "indigo", icon: "eye" }],
+  [/derma|skin/i, { tone: "coral", icon: "adhesive-bandage" }],
+  [/surg/i, { tone: "mint", icon: "scissors" }],
+  [/oncol|cancer/i, { tone: "violet", icon: "reminder-ribbon" }],
+  [/pharm|drug|prescri/i, { tone: "violet", icon: "pill" }],
+];
+const FALLBACK_TONES = ["indigo", "violet", "mint", "sky", "sun", "coral"];
+
+export function specialtyLook(name = "", index = 0) {
+  const match = SPECIALTY_LOOKS.find(([re]) => re.test(name));
+  return match ? match[1] : { tone: FALLBACK_TONES[index % FALLBACK_TONES.length], icon: "stethoscope" };
+}

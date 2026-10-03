@@ -259,6 +259,26 @@ export function endOsceAttempt(attemptId, payload = {}) {
   });
 }
 
+// Leaving a station before finishing it deletes the attempt (no history).
+export function discardOsceAttempt(attemptId) {
+  return apiFetch(`/osce/attempts/${attemptId}/discard`, { method: "POST", body: "{}" });
+}
+
+// Same, for when the tab is closing: keepalive lets the request outlive the page.
+export function discardOsceAttemptOnExit(attemptId) {
+  try {
+    fetch(`${API_BASE}/osce/attempts/${attemptId}/discard`, {
+      method: "POST",
+      credentials: "include",
+      keepalive: true,
+      headers: { "Content-Type": "application/json", "X-XSRF-Token": getCsrfToken() },
+      body: "{}",
+    }).catch(() => {});
+  } catch {
+    // Best effort only.
+  }
+}
+
 export function selfAssessOsceAttempt(attemptId, checkedItemIds, itemScores = []) {
   return apiFetch(`/osce/attempts/${attemptId}/self-assessment`, {
     method: "POST",
