@@ -31,9 +31,8 @@ import {
 import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
 import { McqPractice, McqsHome, McqYearPage } from "./pages/McqsPage";
 import { McqRead } from "./pages/McqReadPage";
+import { OspeHome, OspePractice, OspeRead, OspeYearPage } from "./pages/OspePage";
 import { ClinicalExamGuideHome, ClinicalExamGuideStation } from "./pages/ClinicalExaminationPage";
-import { HandoutNotesDetail, HandoutNotesHome } from "./pages/HandoutNotesPage";
-import CreditsPage from "./pages/CreditsPage";
 
 function LandingPage() {
   return (
@@ -76,16 +75,19 @@ export default function App() {
           <Route path="/admin/stations" element={<AdminOscePage />} />
           <Route path="/history-taking" element={<HistoryGuideHome />} />
           <Route path="/history-taking/:topicSlug" element={<HistoryGuideTopic />} />
+          <Route path="/history" element={<HistoryGuideHome />} />
           <Route path="/clinical-examination" element={<ClinicalExamGuideHome />} />
           <Route path="/clinical-examination/:stationSlug" element={<ClinicalExamGuideStation />} />
           <Route path="/mcqs" element={<McqsHome />} />
           <Route path="/mcqs/:yearSlug" element={<McqYearPage />} />
           <Route path="/mcqs/:yearSlug/read" element={<McqRead />} />
           <Route path="/mcqs/:yearSlug/practice" element={<McqPractice />} />
-          <Route path="/handout-notes" element={<HandoutNotesHome />} />
-          <Route path="/handout-notes/:slug" element={<HandoutNotesDetail />} />
+          <Route path="/ospe" element={<OspeHome />} />
+          <Route path="/ospe/:yearSlug" element={<OspeYearPage />} />
+          <Route path="/ospe/:yearSlug/read" element={<OspeRead />} />
+          <Route path="/ospe/:yearSlug/practice" element={<OspePractice />} />
+          <Route path="/handout-notes" element={<ComingSoonPage sectionKey="handouts" title="Handout Notes" />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />
-          <Route path="/credits" element={<CreditsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

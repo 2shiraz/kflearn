@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { mcqTotalCount } from "../data/mcqs/catalog";
+import { ospeTotalCount } from "../data/ospe";
 import { Link } from "react-router-dom";
-import { MessageSquareText, Stethoscope, FileText, FileQuestion, ClipboardList, ArrowRight } from "lucide-react";
+import { MessageSquareText, Stethoscope, FileText, FileQuestion, Microscope, ClipboardList, ArrowRight } from "lucide-react";
 import { getCurrentUser, getDashboardSummary } from "../lib/api";
 import { PageMain, RequireUser } from "../components/AppPage";
 import { topics as historyGuideTopics } from "../data/historyTakingGuide";
 import { stations as examStations } from "../data/clinicalExaminationGuide";
-import { handouts } from "../data/handoutNotes";
 
 const sections = [
   {
@@ -31,16 +31,23 @@ const sections = [
     iconText: "text-ink", badgeText: "text-brand",
   },
   {
+    key: "ospe", label: "OSPE", href: "/ospe",
+    desc: "Objective Structured Practical Examination stations with examiner checklists, organised by MBBS year, module and topic.",
+    staticCount: ospeTotalCount, countLabel: "station", icon: Microscope,
+    iconStyle: { "--g1": "#7FE0C0", "--g2": "#B0F0DA", "--glow": "rgba(127,224,192,0.35)" },
+    iconText: "text-ink", badgeText: "text-brand",
+  },
+  {
     key: "handouts", label: "Handout Notes", href: "/handout-notes",
-    desc: "Consolidated OSCE station handouts — introduction, clinical features, diagnosis, and management, organised by system.",
-    staticCount: handouts.length, countLabel: "handout", icon: FileText,
+    desc: "Concise revision notes and downloadable PDFs organised by specialty — ideal for quick review.",
+    countKey: "handouts", icon: FileText,
     iconStyle: { "--g1": "#7FB8FF", "--g2": "#C6A6FF", "--glow": "rgba(150,160,255,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },
   {
     key: "stations", label: "OSCE Stations", href: "/stations",
     desc: "Practise structured patient consultations for common presenting complaints across all specialties, with AI evaluation and viva questions.",
-    countKey: "stations", icon: MessageSquareText,
+    countKey: "history", icon: MessageSquareText,
     iconStyle: { "--g1": "#FF8FCF", "--g2": "#FFB3E0", "--glow": "rgba(255,143,207,0.35)" },
     iconText: "text-ink", badgeText: "text-brand",
   },

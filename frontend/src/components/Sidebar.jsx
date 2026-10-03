@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Stethoscope, LayoutGrid, ClipboardList, Coins, FileQuestion, MessageSquareText, FileText, TrendingUp, Settings, LogOut, Menu, ShieldCheck, X } from "lucide-react";
+import { Stethoscope, LayoutGrid, ClipboardList, FileQuestion, Microscope, MessageSquareText, FileText, TrendingUp, Settings, LogOut, Menu, ShieldCheck, X } from "lucide-react";
 import { getCurrentUser } from "../lib/api";
-import { useCredits } from "../lib/credits";
-
-function formatBalance(balance) {
-  return balance === null ? "—" : balance.toLocaleString();
-}
 
 export const SECTIONS = [
   { key: "dashboard", label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
   { key: "history", label: "History Taking Guide", icon: ClipboardList, href: "/history-taking" },
   { key: "clinical-exam", label: "Clinical Examination Guide", icon: Stethoscope, href: "/clinical-examination" },
   { key: "mcqs", label: "MCQs", icon: FileQuestion, href: "/mcqs" },
+  { key: "ospe", label: "OSPE", icon: Microscope, href: "/ospe" },
   { key: "handouts", label: "Handout Notes", icon: FileText, href: "/handout-notes" },
   { key: "stations", label: "OSCE Stations", icon: MessageSquareText, href: "/stations" },
   { key: "progress", label: "Progress", icon: TrendingUp, href: "/progress" },
@@ -21,8 +17,6 @@ export const SECTIONS = [
 export default function Sidebar({ active = "dashboard", onLogout }) {
   const user = getCurrentUser();
   const [open, setOpen] = useState(false);
-  const { balance } = useCredits();
-  const creditsActive = active === "credits";
   const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", icon: ShieldCheck, href: "/admin/stations" }] : SECTIONS;
 
   const initials = user?.fullName ? user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "";
@@ -46,9 +40,6 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
             <Stethoscope size={15} strokeWidth={2.5} />
           </span>
           <span className="truncate font-display text-[15px] font-bold text-ink">KF LearnSmart</span>
-        </Link>
-        <Link to="/credits" aria-label={`Credits: ${formatBalance(balance)}`} className="flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-amber-50 px-2.5 text-xs font-bold text-amber-900 ring-1 ring-amber-200">
-          <Coins size={14} /> {formatBalance(balance)}
         </Link>
         {initials && (
           <Link to="/settings" aria-label="Settings" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink/5 text-xs font-bold text-ink">
@@ -88,18 +79,6 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
             );
           })}
         </nav>
-
-        <Link
-          to="/credits"
-          title={`Credits: ${formatBalance(balance)}`}
-          className={`mb-2 flex flex-col items-center gap-0.5 rounded-2xl px-2 py-2.5 text-xs font-bold transition lg:flex-row lg:gap-3 lg:px-3 lg:py-3 lg:text-sm ${
-            creditsActive ? "gradient-brand text-white shadow-sm" : "bg-amber-50 text-amber-900 ring-1 ring-amber-200 hover:bg-amber-100"
-          }`}
-        >
-          <Coins size={19} strokeWidth={2} />
-          <span className="hidden font-medium lg:block">Credits</span>
-          <span className="lg:ml-auto">{formatBalance(balance)}</span>
-        </Link>
 
         <Link
           to="/settings"
@@ -172,16 +151,6 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
           </nav>
 
           <div className="mt-2 space-y-1.5 border-t border-line pt-3">
-            <Link
-              to="/credits"
-              onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition ${
-                creditsActive ? "gradient-brand text-white shadow-sm" : "text-ink-soft hover:bg-black/5 hover:text-ink"
-              }`}
-            >
-              <Coins size={19} strokeWidth={2} /> Credits
-              <span className="ml-auto font-bold">{formatBalance(balance)}</span>
-            </Link>
             <Link
               to="/settings"
               onClick={() => setOpen(false)}
