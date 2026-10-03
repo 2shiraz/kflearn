@@ -1,17 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-  Bone,
-  Brain,
-  CircleDot,
-  Droplet,
-  HeartPulse,
-  MessageCircle,
-  Ribbon,
-  Scissors,
-  ScrollText,
-  Wind,
-  Zap,
-} from "lucide-react";
+import { MessageCircle, ScrollText } from "lucide-react";
 import { Breadcrumbs, PageMain, Panel, RequireUser } from "../components/AppPage";
 import { ChecklistWidget, ExamTips, GuideBlock, GuideCard, GuideHero, GuideNotFound, GuideSection, GuideTitle, JumpNav, NumberedSteps, PanelHeading, PrevNext, QuoteBox, SectionHeading } from "../components/GuideBlocks";
 import { YEAR_TONES } from "../components/StudyKit";
@@ -27,7 +15,18 @@ import {
   universalOpening,
 } from "../data/historyTakingGuide";
 
-const TOPIC_ICONS = { Bone, HeartPulse, Wind, Zap, Brain, Scissors, Droplet, CircleDot, Ribbon };
+// Colour icon per topic (keyed by the topic's icon name in the data file).
+const TOPIC_ICONS = {
+  Bone: "bone",
+  HeartPulse: "anatomical-heart",
+  Wind: "lungs",
+  Zap: "face-with-spiral-eyes",
+  Brain: "brain",
+  Scissors: "scissors",
+  Droplet: "drop-of-blood",
+  CircleDot: "microbe",
+  Ribbon: "reminder-ribbon",
+};
 
 export function HistoryGuideHome() {
   return (
@@ -36,11 +35,8 @@ export function HistoryGuideHome() {
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History Taking Guide" }]} />
 
         <GuideHero
-          eyebrow="Study guide"
           title="History Taking Guide"
           description="The mnemonics, question sets and differentials to run a focused history in any station."
-          character="student-bilal"
-          tone="sun"
         />
 
         <JumpNav
@@ -92,7 +88,7 @@ export function HistoryGuideHome() {
                 <GuideCard
                   key={topic.slug}
                   to={`/history-taking/${topic.slug}`}
-                  icon={TOPIC_ICONS[topic.icon] || ScrollText}
+                  icon={TOPIC_ICONS[topic.icon] || "clipboard"}
                   tone={YEAR_TONES[i % YEAR_TONES.length]}
                   title={topic.title}
                   summary={topic.summary}
@@ -137,7 +133,7 @@ export function HistoryGuideTopic() {
   if (!topic) {
     return (
       <RequireUser active="history">
-        <PageMain>
+        <PageMain width="reading">
           <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History Taking Guide", to: "/history-taking" }, { label: "Not found" }]} />
           <GuideNotFound what="guide topic" backTo="/history-taking" backLabel="Back to the guide" />
         </PageMain>
@@ -149,9 +145,9 @@ export function HistoryGuideTopic() {
 
   return (
     <RequireUser active="history">
-      <PageMain>
+      <PageMain width="reading">
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "History Taking Guide", to: "/history-taking" }, { label: topic.title }]} />
-        <GuideTitle icon={TOPIC_ICONS[topic.icon] || ScrollText} tone="sun" eyebrow="History taking" title={topic.title} summary={topic.summary} />
+        <GuideTitle icon={TOPIC_ICONS[topic.icon] || "clipboard"} tone="sun" title={topic.title} summary={topic.summary} />
         <Panel className="site-rise" style={{ "--rise-delay": "80ms" }}>
           {topic.sections.map((section) => (
             <GuideSection key={section.heading} {...section} />

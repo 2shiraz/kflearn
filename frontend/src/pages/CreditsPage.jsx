@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Check, Minus, Plus, RotateCcw } from "lucide-react";
 import { Breadcrumbs, ErrorMessage, PageHeader, PageMain, Panel, RequireUser } from "../components/AppPage";
 import { ListSkeleton, Skeleton } from "../components/Skeleton";
-import { Character, HealthIcon } from "../site/Illustrations";
+import { Character, HealthIcon, MedIcon } from "../site/Illustrations";
 import { getCreditTransactions } from "../lib/api";
 import { refreshCredits, useCredits } from "../lib/credits";
 
@@ -53,10 +53,9 @@ export default function CreditsPage() {
 
   return (
     <RequireUser active="credits">
-      <PageMain>
+      <PageMain width="split">
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Credits" }]} />
         <PageHeader
-          className="mb-8"
           title="Credits"
           description="Credits are for the AI patient and AI marking. Guides, handouts, MCQs, OSPE and self-practice are always free."
         />
@@ -93,7 +92,7 @@ export default function CreditsPage() {
                 {USES.map((use) => (
                   <li key={use.label} className="flex items-start gap-3 rounded-2xl border border-s-line bg-s-card p-3.5">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-s-accent-soft text-s-accent" aria-hidden="true">
-                      <HealthIcon name={use.icon} size={24} />
+                      <MedIcon name={use.icon} size={24} />
                     </span>
                     <span className="min-w-0 text-sm">
                       <span className="block font-medium text-s-ink">{use.label}</span>

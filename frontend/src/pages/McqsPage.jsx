@@ -59,9 +59,7 @@ export function McqsHome() {
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "MCQs" }]} />
         <PageHeader
-          className="mb-8"
-          eyebrow="MCQs"
-          title="Question bank"
+          title="MCQs"
           description={`${plus(mcqTotalCount)} single-best-answer questions with explanations. Pick your year to begin.`}
         />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -120,8 +118,6 @@ export function McqYearPage() {
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "MCQs", to: "/mcqs" }, { label: year.name }]} />
         <PageHeader
-          className="mb-8"
-          eyebrow="MCQs"
           title={year.name}
           description="Read a topic with answers and explanations, or practise it and check yourself."
           actions={
@@ -239,9 +235,9 @@ export function McqPractice() {
 
   return (
     <RequireUser active="mcqs">
-      <PageMain>
+      <PageMain width="focused">
         <Breadcrumbs items={crumbs} />
-        <h1 className="site-rise mb-6 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{title}</h1>
+        <h1 className="site-rise mb-8 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
         {body}
       </PageMain>
     </RequireUser>
@@ -315,7 +311,7 @@ function Runner({ session, setSession }) {
   }
 
   return (
-    <Panel key={q.id} className="site-rise max-w-3xl md:p-8">
+    <Panel key={q.id} className="site-rise md:p-8">
       <StepBar
         label={`Question ${index + 1} of ${questions.length}`}
         aside={q.topic && <Chip>{q.topic}</Chip>}

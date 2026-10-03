@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, Mic, Minus, Plus, RotateCcw, X } from "lucide-react";
 import PageShell from "../components/PageShell";
-import { Character, EcgLine, HealthIcon, VoiceBars } from "../site/Illustrations";
+import { Character, EcgLine, MedIcon, VoiceBars } from "../site/Illustrations";
 import {
   EXAM_GUIDE_COUNT,
   HANDOUT_COUNT,
@@ -55,7 +55,7 @@ function Hero() {
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-14 px-4 pb-14 pt-8 sm:px-6 md:pb-20 md:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 lg:px-8 lg:pb-28">
         <div>
           <p className="site-rise inline-flex items-center gap-2 rounded-full bg-sky-soft px-3.5 py-1.5 text-sm font-medium text-s-ink">
-            <HealthIcon name="stethoscope" size={18} className="text-sky" />
+            <MedIcon name="stethoscope" size={18} className="text-sky" />
             For MBBS, FCPS and MCPS students
           </p>
           <h1
@@ -82,7 +82,7 @@ function Hero() {
               to="/sample-stations"
               className="site-press inline-flex items-center justify-center gap-2 rounded-full bg-sky-soft px-6 py-3.5 text-[15px] font-medium text-s-ink hover:bg-[#cfe5ff]"
             >
-              <HealthIcon name="medicalRecords" size={18} className="text-sky" />
+              <MedIcon name="medicalRecords" size={18} className="text-sky" />
               See sample stations
             </Link>
           </div>
@@ -90,13 +90,13 @@ function Hero() {
 
         <div className="site-rise relative" style={{ "--rise-delay": "140ms" }}>
           <span className="bob absolute -right-4 -top-9 z-10 hidden h-14 w-14 items-center justify-center rounded-2xl bg-coral-soft text-coral shadow-sm sm:flex">
-            <HealthIcon name="heart" size={30} />
+            <MedIcon name="heart" size={30} />
           </span>
           <span
             className="bob absolute -bottom-10 -left-5 z-10 hidden h-14 w-14 items-center justify-center rounded-2xl bg-mint-soft text-mint shadow-sm sm:flex"
             style={{ animationDelay: "1.2s" }}
           >
-            <HealthIcon name="lungs" size={30} />
+            <MedIcon name="lungs" size={30} />
           </span>
           <PatientDemo />
         </div>
@@ -304,15 +304,12 @@ function LibraryTile({ className = "", tone, icon, stat, title, body, to, large 
           className={`absolute -right-10 -top-10 flex h-48 w-48 items-center justify-center rounded-full ${t.soft} ${t.text} transition-transform duration-500 group-hover:scale-105`}
           aria-hidden="true"
         >
-          <HealthIcon name={icon} size={96} className="-translate-x-4 translate-y-4" />
+          <MedIcon name={icon} size={96} className="-translate-x-4 translate-y-4" />
         </span>
       ) : (
         <>
-          <span className={`pointer-events-none absolute -bottom-8 -right-8 opacity-[0.07] ${t.text}`} aria-hidden="true">
-            <HealthIcon name={icon} size={150} />
-          </span>
           <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${t.soft} ${t.text}`}>
-            <HealthIcon name={icon} size={32} />
+            <MedIcon name={icon} size={32} />
           </span>
         </>
       )}
@@ -354,7 +351,7 @@ function StationFlow() {
                   <Character name={step.character} size={88} tone={step.tone} className="ring-4 ring-s-card" />
                 ) : (
                   <span className={`flex h-22 w-22 shrink-0 items-center justify-center rounded-full ring-4 ring-s-card ${t.soft} ${t.text}`}>
-                    <HealthIcon name={step.icon} size={44} />
+                    <MedIcon name={step.icon} size={44} />
                   </span>
                 )}
                 <div className="md:mt-4">
@@ -392,7 +389,7 @@ function ModeCard({ tone, icon, title, tag, body }) {
   return (
     <div className={`flex flex-col gap-3 rounded-3xl p-6 sm:flex-row sm:items-start sm:gap-5 md:p-7 ${isIndigo ? "bg-s-accent-soft" : "bg-sun-soft"}`}>
       <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-s-card ${isIndigo ? "text-s-accent" : "text-sun"}`}>
-        <HealthIcon name={icon} size={28} />
+        <MedIcon name={icon} size={28} />
       </span>
       <div>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -417,7 +414,7 @@ function TryMcq() {
     <section className="mx-auto grid max-w-7xl items-start gap-10 px-4 py-12 md:py-16 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-8 lg:py-24">
       <div data-reveal className="lg:sticky lg:top-28">
         <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-soft text-sky">
-          <HealthIcon name="cardiogram" size={32} />
+          <MedIcon name="cardiogram" size={32} />
         </span>
         <h2 className="mt-6 text-3xl font-semibold leading-tight text-s-ink md:text-[2.6rem]">Got a minute? Try one.</h2>
         <p className="mt-4 max-w-md text-lg leading-relaxed text-s-mute">
@@ -655,7 +652,7 @@ function CoverageColumn({ tone, icon, label, count, blocks }) {
     <div className="rounded-2xl bg-s-card p-5">
       <div className="flex items-center gap-3">
         <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${tone.soft} ${tone.text}`}>
-          <HealthIcon name={icon} size={24} />
+          <MedIcon name={icon} size={24} />
         </span>
         <p className="text-lg font-medium text-s-ink">
           {plus(count)} {label}
@@ -723,13 +720,13 @@ function FinalCta() {
       <div data-reveal className="relative overflow-hidden rounded-3xl bg-s-accent px-6 py-14 text-s-on-accent md:px-14 md:py-16">
         <div className="pointer-events-none absolute right-10 top-1/2 hidden -translate-y-1/2 gap-3 lg:flex" aria-hidden="true">
           <span className="bob mt-16 flex h-20 w-20 items-center justify-center rounded-3xl bg-coral-soft text-coral">
-            <HealthIcon name="heart" size={44} />
+            <MedIcon name="heart" size={44} />
           </span>
           <span className="bob flex h-20 w-20 items-center justify-center rounded-3xl bg-sun-soft text-sun" style={{ animationDelay: "0.8s" }}>
-            <HealthIcon name="stethoscope" size={44} />
+            <MedIcon name="stethoscope" size={44} />
           </span>
           <span className="bob mt-24 flex h-20 w-20 items-center justify-center rounded-3xl bg-mint-soft text-mint" style={{ animationDelay: "1.6s" }}>
-            <HealthIcon name="lungs" size={44} />
+            <MedIcon name="lungs" size={44} />
           </span>
         </div>
         <div className="relative max-w-xl">

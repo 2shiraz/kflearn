@@ -4,7 +4,7 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronLeft, ChevronRight, PlayCircle, RotateCcw, Timer } from "lucide-react";
 import { Panel, PrimaryButton, SecondaryButton } from "./AppPage";
-import { Character, HealthIcon } from "../site/Illustrations";
+import { Character, MedIcon } from "../site/Illustrations";
 import { TONES } from "../site/tones";
 
 // Year cards cycle through the palette, like the landing "Coverage" tabs.
@@ -32,12 +32,9 @@ export function YearCard({ to, name, blocks, count, tone, icon, progress, index 
   const t = TONES[tone];
   return (
     <Link to={to} style={rise(index)} className={`site-rise site-grid site-press group relative flex flex-col overflow-hidden rounded-3xl border border-s-line p-6 ${t.ring}`}>
-      <span className={`pointer-events-none absolute -bottom-8 -right-8 opacity-[0.07] ${t.text}`} aria-hidden="true">
-        <HealthIcon name={icon} size={140} />
-      </span>
       <div className="relative flex items-start justify-between gap-3">
         <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${t.soft} ${t.text}`} aria-hidden="true">
-          <HealthIcon name={icon} size={32} />
+          <MedIcon name={icon} size={32} />
         </span>
         <Chip>{count}</Chip>
       </div>
@@ -57,7 +54,7 @@ export function SectionHeader({ tone, icon, name, meta, actions, index }) {
     <div className="site-rise mb-4 flex flex-wrap items-center justify-between gap-3" style={rise(index, 80)}>
       <div className="flex min-w-0 items-center gap-3">
         <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${t.soft} ${t.text}`} aria-hidden="true">
-          <HealthIcon name={icon} size={28} />
+          <MedIcon name={icon} size={28} />
         </span>
         <div className="min-w-0">
           <h2 className="text-xl font-semibold tracking-tight text-s-ink sm:text-2xl">{name}</h2>
@@ -90,7 +87,7 @@ export function TopicCard({ name, count, tone, icon, done, progress, readTo, pra
       <div className="flex items-start justify-between gap-3">
         <h3 className="min-w-0 text-base font-semibold leading-snug tracking-tight text-s-ink">{name}</h3>
         <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${done ? "bg-mint text-s-card" : `${t.soft} ${t.text}`}`} aria-label={done ? "All attempted" : undefined} role={done ? "img" : undefined}>
-          {done ? <Check size={18} strokeWidth={2.5} /> : <HealthIcon name={icon} size={22} />}
+          {done ? <Check size={18} strokeWidth={2.5} /> : <MedIcon name={icon} size={22} />}
         </span>
       </div>
       <div className="flex-1">{progress}</div>
@@ -149,7 +146,7 @@ export function Toggle({ checked, onChange, children }) {
 // Practice setup: a character, what's available, the options, and Start.
 export function SetupCard({ character, tone, available, hint, onStart, children }) {
   return (
-    <Panel className="site-rise max-w-xl">
+    <Panel className="site-rise">
       <div className="flex items-center gap-4">
         <Character name={character} size={64} tone={tone} className="bob" />
         <div>

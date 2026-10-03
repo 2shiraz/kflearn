@@ -11,7 +11,6 @@ import {
   History,
   Mic,
   Send,
-  ShieldCheck,
   Search,
   Settings2,
   Users,
@@ -27,7 +26,7 @@ import {
 import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
 import { CardGridSkeleton, ChatSkeleton, ChecklistSkeleton, DetailSkeleton, FormSkeleton, ListSkeleton, ResultsSkeleton, TwoColumnSkeleton } from "../components/Skeleton";
 import { ScoreRing, scoreTone } from "../components/StudyKit";
-import { Character, HealthIcon, VoiceBars } from "../site/Illustrations";
+import { Character, HealthIcon, MedIcon, VoiceBars } from "../site/Illustrations";
 import { TONES } from "../site/tones";
 import { plus } from "../site/siteContent";
 import {
@@ -193,9 +192,7 @@ export function OsceHome() {
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations" }]} />
         <PageHeader
-          className="mb-8"
-          eyebrow="OSCE stations"
-          title="Station bank"
+          title="OSCE Stations"
           description="Pick a section, choose a station, then practise with the brief or talk to the virtual patient."
           actions={
             <LinkButton to="/stations/attempts" variant="secondary">
@@ -225,12 +222,9 @@ export function OsceHome() {
                     style={{ "--rise-delay": `${i * 50}ms` }}
                     className={`site-rise site-grid site-press group relative flex min-h-44 flex-col overflow-hidden rounded-3xl border border-s-line p-6 ${t.ring}`}
                   >
-                    <span className={`pointer-events-none absolute -bottom-8 -right-8 opacity-[0.07] ${t.text}`} aria-hidden="true">
-                      <HealthIcon name={look.icon} size={140} />
-                    </span>
                     <div className="relative flex items-start justify-between gap-3">
                       <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${t.soft} ${t.text}`} aria-hidden="true">
-                        <HealthIcon name={look.icon} size={32} />
+                        <MedIcon name={look.icon} size={32} />
                       </span>
                       <Chip>{group.modules.length} {group.modules.length === 1 ? "station" : "stations"}</Chip>
                     </div>
@@ -286,9 +280,9 @@ export function OsceSectionPage() {
         )}
         {!state.loading && !state.error && selectedGroup && (
           <section>
-            <div className="site-rise mb-6 flex flex-wrap items-center gap-4">
+            <div className="site-rise mb-8 flex flex-wrap items-center gap-4">
               <span className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl ${t.soft} ${t.text}`} aria-hidden="true">
-                <HealthIcon name={look.icon} size={38} />
+                <MedIcon name={look.icon} size={38} />
               </span>
               <div className="min-w-0 flex-1">
                 <h1 className="text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{selectedGroup.name}</h1>
@@ -380,7 +374,7 @@ export function OsceStationDetail() {
               <div className="flex items-start gap-4">
                 <Character name={patientFor(module.title)} size={64} tone={specialtyLook(module.specialty?.name).tone} className="hidden sm:inline-flex" />
                 <div className="min-w-0">
-                  <p className="font-chart text-xs text-s-mute">{[module.specialty?.name, module.presentingComplaint].filter(Boolean).join(" / ")}</p>
+                  {module.presentingComplaint && <p className="font-chart text-xs text-s-mute">{module.presentingComplaint}</p>}
                   <h1 className="mt-2 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{module.title}</h1>
                 </div>
               </div>
@@ -474,7 +468,7 @@ function SelfPracticeCard({ onClick, loading }) {
     <Panel className="site-rise" style={{ "--rise-delay": "140ms" }}>
       <div className="flex items-start justify-between gap-3">
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-soft text-mint" aria-hidden="true">
-          <HealthIcon name="medicalRecords" size={28} />
+          <MedIcon name="medicalRecords" size={28} />
         </span>
         <span className="rounded-full bg-mint-soft px-2.5 py-1 font-chart text-xs text-s-good">Free</span>
       </div>
@@ -912,7 +906,7 @@ export function SelfAssessmentPage() {
         {state.loading && <Loading variant="assessment" />}
         {state.error && <ErrorMessage message={state.error} onRetry={load} />}
         {state.checklist && (
-          <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-[minmax(0,1fr)_17rem]">
+          <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_17rem]">
             <Panel className="site-rise">
               <h1 className="text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">Mark your station</h1>
               <p className="mt-2 leading-relaxed text-s-mute">Tick what you covered, or let the AI examiner read your transcript and mark it for you.</p>
@@ -1026,7 +1020,7 @@ export function OsceAttemptHistoryPage() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Attempts" }]} />
-        <PageHeader className="mb-6" title="Attempt history" description="Every marked station, newest first." />
+        <PageHeader title="Attempt history" description="Every marked station, newest first." />
         {state.loading && <Loading variant="attempts" />}
         {state.error && <ErrorMessage message={state.error} onRetry={load} />}
         {!state.loading && !state.error && state.attempts.length === 0 && (
@@ -1040,7 +1034,7 @@ export function OsceAttemptHistoryPage() {
               <li key={attempt.id} className="site-rise" style={{ "--rise-delay": `${Math.min(i, 8) * 40}ms` }}>
                 <Link to={`/stations/attempts/${attempt.id}/results`} className="site-grid site-press flex items-center gap-4 rounded-3xl border border-s-line p-4 hover:border-s-accent/40">
                   <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${ai ? "bg-s-accent-soft text-s-accent" : "bg-mint-soft text-mint"}`} aria-hidden="true">
-                    <HealthIcon name={ai ? "stethoscope" : "medicalRecords"} size={24} />
+                    <MedIcon name={ai ? "stethoscope" : "memo"} size={26} />
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium text-s-ink">{attempt.module?.title || "Station"}</p>
@@ -1224,11 +1218,8 @@ export function AdminOscePage() {
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin console" }]} />
         <PageHeader
-          className="mb-8"
-          eyebrow="Admin"
           title="Admin console"
           description="Stations, AI configuration and accounts in one workspace."
-          actions={<span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-s-accent-soft px-4 text-sm font-medium text-s-accent-strong"><ShieldCheck size={16} strokeWidth={2} aria-hidden="true" /> Admin only</span>}
         />
         <nav aria-label="Admin sections" className="mb-5 flex gap-2 overflow-x-auto pb-2">
           {tabs.map((tab) => (

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, Minus, Plus } from "lucide-react";
 import PageShell from "../components/PageShell";
 import { getPublicCreditPackages } from "../lib/api";
-import { Character, HealthIcon } from "../site/Illustrations";
+import { Character, HealthIcon, MedIcon } from "../site/Illustrations";
 import { EXAM_GUIDE_COUNT, HANDOUT_COUNT, HISTORY_TOPIC_COUNT, MCQ_COUNT, OSPE_COUNT, SIGNUP_LABEL, formatCount, plus } from "../site/siteContent";
 
 const included = [
@@ -93,7 +93,7 @@ function FreePlan() {
         {included.map((item) => (
           <li key={item.label} className="flex items-center gap-3 text-[15px] text-s-ink">
             <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.tone}`}>
-              <HealthIcon name={item.icon} size={24} />
+              <MedIcon name={item.icon} size={24} />
             </span>
             {item.label}
           </li>

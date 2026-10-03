@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { Character, HealthIcon } from "../site/Illustrations";
+import { Character, MedIcon } from "../site/Illustrations";
 import PageShell from "../components/PageShell";
 import { ROLE_OPTIONS } from "../lib/api";
 import {
@@ -82,7 +82,7 @@ export default function AboutPage() {
           {problems.map((p) => (
             <div key={p.title} data-reveal className="site-grid grid gap-4 rounded-3xl border border-s-line p-6 md:grid-cols-[3.5rem_1fr_1.4fr] md:items-center md:gap-8 md:p-8">
               <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${p.tone}`}>
-                <HealthIcon name={p.icon} size={30} />
+                <MedIcon name={p.icon} size={30} />
               </span>
               <h3 className="text-lg font-semibold text-s-ink">{p.title}</h3>
               <p className="leading-relaxed text-s-mute">{p.body}</p>
@@ -115,7 +115,7 @@ export default function AboutPage() {
               </div>
             </li>
             <li data-reveal className="flex gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-coral-soft text-coral"><HealthIcon name="stethoscope" size={26} /></span>
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-coral-soft text-coral"><MedIcon name="stethoscope" size={26} /></span>
               <div>
                 <p className="font-semibold text-s-ink">What it is not</p>
                 <p className="mt-1 leading-relaxed text-s-mute">
@@ -151,7 +151,7 @@ function AboutIllustration() {
     <div className="site-rise site-grid site-shadow relative aspect-4/3 w-full overflow-hidden rounded-3xl border border-s-line" style={{ "--rise-delay": "120ms" }} aria-hidden="true">
       {icons.map((ic, i) => (
         <span key={ic.name} className={`bob absolute flex h-11 w-11 items-center justify-center rounded-2xl sm:h-16 sm:w-16 ${ic.tone} ${ic.pos}`} style={{ animationDelay: `${i * 0.7}s` }}>
-          <HealthIcon name={ic.name} size={36} className="h-6 w-6 sm:h-9 sm:w-9" />
+          <MedIcon name={ic.name} size={36} className="h-6 w-6 sm:h-9 sm:w-9" />
         </span>
       ))}
       <div className="absolute inset-0 flex items-center justify-center">

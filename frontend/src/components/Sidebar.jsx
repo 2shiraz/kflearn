@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { LayoutGrid, Coins, Settings, LogOut, Menu, ChevronLeft, ChevronRight, ShieldCheck, X } from "lucide-react";
+import { LogOut, Menu, ChevronLeft, ChevronRight, X } from "lucide-react";
 import BrandMark from "./BrandMark";
-import { HealthIcon } from "../site/Illustrations";
+import { MedIcon } from "../site/Illustrations";
 import { SECTION_LOOK } from "../site/tones";
 import { getCurrentUser } from "../lib/api";
 import { useCredits } from "../lib/credits";
@@ -12,28 +12,31 @@ function formatBalance(balance) {
 }
 
 export const SECTIONS = [
-  { key: "dashboard", label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
+  { key: "dashboard", label: "Dashboard", href: "/dashboard" },
   { key: "stations", label: "OSCE Stations", href: "/stations" },
   { key: "mcqs", label: "MCQs", href: "/mcqs" },
   { key: "ospe", label: "OSPE", href: "/ospe" },
   { key: "history", label: "History Taking Guide", href: "/history-taking" },
-  { key: "clinical-exam", label: "Clinical Examination Guide", href: "/clinical-examination" },
+  { key: "clinical-exam", label: "Clinical Exam Guide", href: "/clinical-examination" },
   { key: "handouts", label: "Handout Notes", href: "/handout-notes" },
   { key: "progress", label: "Progress", href: "/progress" },
 ];
 
-// Icon in a small neutral circle, in black and white: the section's
-// Healthicon, or a lucide glyph for UI items (dashboard, credits, settings).
+// Colourful Fluent Emoji icon, the same set the pages use: the section's
+// own icon, or a fixed one for the account items. Log out keeps a plain
+// line glyph since it is an action, not a place.
+const ACCOUNT_ICONS = { dashboard: "hospital", credits: "coin", settings: "health-worker", admin: "memo" };
+
 function NavIcon({ item, active }) {
-  const look = SECTION_LOOK[item.key];
+  const name = SECTION_LOOK[item.key]?.icon || ACCOUNT_ICONS[item.key];
   return (
     <span
       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors ${
-        active ? "bg-s-card text-s-ink" : "bg-s-tint text-s-mute group-hover:text-s-ink"
+        active ? "bg-s-card ring-1 ring-s-line" : "bg-s-tint text-s-mute group-hover:text-s-ink"
       }`}
       aria-hidden="true"
     >
-      {look ? <HealthIcon name={look.icon} size={20} /> : <item.icon size={16} strokeWidth={2} />}
+      {name ? <MedIcon name={name} size={20} /> : <item.icon size={16} strokeWidth={2} />}
     </span>
   );
 }
@@ -75,12 +78,12 @@ function AccountLinks({ active, balance, mode, onNavigate, onLogout }) {
   return (
     <div className="flex flex-col gap-1 border-t border-s-line pt-3">
       <Link to="/credits" title={compact ? `Credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, mode)}>
-        <NavIcon item={{ key: "credits", icon: Coins }} active={creditsActive} />
+        <NavIcon item={{ key: "credits" }} active={creditsActive} />
         <span className={hide}>Credits</span>
         <span className={`${hide} ml-auto font-chart text-xs text-s-mute`}>{formatBalance(balance)}</span>
       </Link>
       <Link to="/settings" title={compact ? "Settings" : undefined} aria-current={settingsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(settingsActive, mode)}>
-        <NavIcon item={{ key: "settings", icon: Settings }} active={settingsActive} />
+        <NavIcon item={{ key: "settings" }} active={settingsActive} />
         <span className={hide}>Settings</span>
       </Link>
       <button type="button" title={compact ? "Sign out" : undefined} onClick={onLogout} className={`${itemClass(false, mode)} w-full hover:text-s-miss`}>
@@ -115,7 +118,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(readCollapsed);
   const { balance } = useCredits();
-  const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", icon: ShieldCheck, href: "/admin/stations" }] : SECTIONS;
+  const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", href: "/admin/stations" }] : SECTIONS;
 
   const initials = user?.fullName ? user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "";
 
@@ -156,7 +159,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
             <span className="truncate text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
           </Link>
           <Link to="/credits" aria-label={`Credits: ${formatBalance(balance)}`} className="site-press flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-2.5 font-chart text-xs text-s-ink hover:bg-s-tint/70">
-            <Coins size={15} strokeWidth={2} className="text-s-mute" aria-hidden="true" /> {formatBalance(balance)}
+            <MedIcon name="coin" size={18} /> {formatBalance(balance)}
           </Link>
           {initials && (
             <Link to="/settings" aria-label="Settings" className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full">

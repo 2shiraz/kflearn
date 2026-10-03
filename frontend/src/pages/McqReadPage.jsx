@@ -77,7 +77,7 @@ export function McqRead() {
   else {
     body = (
       <>
-        <div className="mb-5 flex max-w-3xl flex-wrap items-center justify-between gap-3">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="font-chart text-xs text-s-mute">
             Questions {start + 1}-{Math.min(start + PAGE_SIZE, questions.length)} of {questions.length}
           </p>
@@ -147,9 +147,9 @@ export function McqRead() {
 
   return (
     <RequireUser active="mcqs">
-      <PageMain>
+      <PageMain width="focused">
         <Breadcrumbs items={crumbs} />
-        <h1 className="site-rise mb-6 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{title}</h1>
+        <h1 className="site-rise mb-8 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
         {body}
       </PageMain>
     </RequireUser>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, ClipboardCheck, MapPin } from "lucide-react";
-import { Character, HealthIcon } from "../site/Illustrations";
+import { Character, MedIcon } from "../site/Illustrations";
 import PageShell from "../components/PageShell";
 import { SIGNUP_LABEL, sampleStations } from "../site/siteContent";
 
@@ -39,7 +39,7 @@ export default function SampleStationsPage() {
             >
               <div className="flex items-center gap-3">
                 <span className={`flex h-12 w-12 items-center justify-center rounded-2xl ${AREA[s.area].tone}`}>
-                  <HealthIcon name={AREA[s.area].icon} size={28} />
+                  <MedIcon name={AREA[s.area].icon} size={28} />
                 </span>
                 <p className="font-chart text-xs text-s-mute">{s.area}</p>
               </div>

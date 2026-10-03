@@ -75,8 +75,8 @@ export default function SettingsPage() {
 
   return (
     <RequireUser active="settings">
-      <PageMain>
-        <PageHeader className="mb-8" title="Profile and settings" description="Manage your account and practice details." />
+      <PageMain width="split">
+        <PageHeader title="Profile and settings" description="Manage your account and practice details." />
 
         <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
           <div className="site-rise site-grid h-fit overflow-hidden rounded-3xl border border-s-line">

@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { getCurrentUser, getDashboardSummary } from "../lib/api";
 import { ErrorMessage, PageMain, RequireUser } from "../components/AppPage";
 import { Skeleton } from "../components/Skeleton";
-import { Character, HealthIcon, VoiceBars } from "../site/Illustrations";
+import { Character, HealthIcon, MedIcon, VoiceBars } from "../site/Illustrations";
 import { SECTION_LOOK, TONES } from "../site/tones";
 import { plus } from "../site/siteContent";
 import { topics as historyGuideTopics } from "../data/historyTakingGuide";
@@ -27,7 +27,7 @@ const sections = [
     staticCount: ospeTotalCount, countLabel: "stations",
   },
   {
-    key: "clinical-exam", label: "Clinical Examination Guide", href: "/clinical-examination",
+    key: "clinical-exam", label: "Clinical Exam Guide", href: "/clinical-examination",
     desc: "Step-by-step order, mnemonics and findings, from core systems to MSK and neuro.",
     staticCount: examStations.length, countLabel: "guides",
   },
@@ -94,8 +94,7 @@ export default function DashboardPage() {
         <div className="site-rise flex items-center gap-4">
           <Character name={student.name} size={64} tone={student.tone} className="bob hidden sm:inline-flex" />
           <div className="min-w-0">
-            <p className="font-chart text-xs uppercase tracking-wider text-s-mute">Dashboard</p>
-            <h1 className="mt-1.5 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">
+            <h1 className="text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">
               {greeting()}, {user.fullName.split(" ")[0]}
             </h1>
             <p className="mt-1.5 text-s-mute">What would you like to practise today?</p>
@@ -184,15 +183,12 @@ function SectionTile({ section: s, index }) {
           className={`absolute -right-10 -top-10 flex h-44 w-44 items-center justify-center rounded-full ${t.soft} ${t.text} transition-transform duration-500 group-hover:scale-105`}
           aria-hidden="true"
         >
-          <HealthIcon name={look.icon} size={88} className="-translate-x-4 translate-y-4" />
+          <MedIcon name={look.icon} size={88} className="-translate-x-4 translate-y-4" />
         </span>
       ) : (
         <>
-          <span className={`pointer-events-none absolute -bottom-8 -right-8 opacity-[0.07] ${t.text}`} aria-hidden="true">
-            <HealthIcon name={look.icon} size={140} />
-          </span>
           <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${t.soft} ${t.text}`} aria-hidden="true">
-            <HealthIcon name={look.icon} size={32} />
+            <MedIcon name={look.icon} size={32} />
           </span>
         </>
       )}

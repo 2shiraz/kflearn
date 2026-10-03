@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { HealthIcon } from "../site/Illustrations";
+import { MedIcon } from "../site/Illustrations";
 import PageShell from "../components/PageShell";
 import { handouts } from "../data/handoutNotes";
 import { stations as examStations } from "../data/clinicalExaminationGuide";
@@ -117,7 +117,7 @@ export default function FeaturesPage() {
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                 <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${TONE[m.tone]}`}>
-                  <HealthIcon name={m.icon} size={32} />
+                  <MedIcon name={m.icon} size={32} />
                 </span>
                 <div>
                   <h2 className="text-2xl font-semibold text-s-ink">{m.name}</h2>

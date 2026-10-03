@@ -1,27 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-  Activity,
-  ArrowRight,
-  Bone,
-  Brain,
-  CircleDot,
-  Compass,
-  Dumbbell,
-  Ear,
-  Eye,
-  Footprints,
-  Grip,
-  Hand,
-  HeartPulse,
-  MessageCircle,
-  Milestone,
-  PersonStanding,
-  ScanFace,
-  ScrollText,
-  Syringe,
-  Waves,
-  Wind,
-} from "lucide-react";
+import { ArrowRight, ScrollText } from "lucide-react";
 import { Breadcrumbs, PageMain, Panel, RequireUser } from "../components/AppPage";
 import { ChecklistWidget, GuideBlock, GuideCard, GuideHero, GuideNotFound, GuideSection, GuideTitle, JumpNav, NumberedSteps, PanelHeading, PrevNext, QuoteBox, SectionHeading } from "../components/GuideBlocks";
 import { YEAR_TONES } from "../components/StudyKit";
@@ -38,15 +16,33 @@ import {
   universalOpening,
 } from "../data/clinicalExaminationGuide";
 
+// Colour icon per station (keyed by the station's icon name in the data file).
 const STATION_ICONS = {
-  HeartPulse, Wind, CircleDot, Brain, Hand, Footprints, Compass, MessageCircle, Eye, Ear, ScanFace, Activity,
-  PersonStanding, Bone, Milestone, Dumbbell, Grip, Syringe, Waves,
+  HeartPulse: "anatomical-heart",
+  Wind: "lungs",
+  CircleDot: "microbe",
+  PersonStanding: "person-standing",
+  Bone: "bone",
+  Milestone: "leg",
+  Dumbbell: "flexed-biceps",
+  Grip: "raised-hand",
+  Brain: "brain",
+  Hand: "raised-hand",
+  Footprints: "foot",
+  Compass: "person-walking",
+  MessageCircle: "speaking-head",
+  Eye: "eye",
+  Ear: "ear",
+  ScanFace: "nose",
+  Activity: "drop-of-blood",
+  Syringe: "foot",
+  Waves: "brain",
 };
 
 // Category display order for the "By station" grid.
 const CATEGORY_ORDER = ["Core", "Musculoskeletal", "Neurological", "Special senses & speech", "Advanced"];
 
-const stationIcon = (name) => STATION_ICONS[name] || ScrollText;
+const stationIcon = (name) => STATION_ICONS[name] || "stethoscope";
 const CATEGORY_TONES = { Core: "coral", Musculoskeletal: "sky", Neurological: "violet", "Special senses & speech": "mint", Advanced: "sun" };
 
 function StationMeta({ meta, order }) {
@@ -93,14 +89,11 @@ export function ClinicalExamGuideHome() {
   return (
     <RequireUser active="clinical-exam">
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Examination Guide" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Exam Guide" }]} />
 
         <GuideHero
-          eyebrow="Study guide"
-          title="Clinical Examination Guide"
+          title="Clinical Exam Guide"
           description={`The step-by-step order, mnemonics and findings for ${plus(stations.length)} examination stations.`}
-          character="examiner"
-          tone="coral"
         />
 
         <JumpNav
@@ -196,8 +189,8 @@ export function ClinicalExamGuideStation() {
   if (!station) {
     return (
       <RequireUser active="clinical-exam">
-        <PageMain>
-          <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Examination Guide", to: "/clinical-examination" }, { label: "Not found" }]} />
+        <PageMain width="reading">
+          <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Exam Guide", to: "/clinical-examination" }, { label: "Not found" }]} />
           <GuideNotFound what="examination station" backTo="/clinical-examination" backLabel="Back to the guide" />
         </PageMain>
       </RequireUser>
@@ -208,9 +201,9 @@ export function ClinicalExamGuideStation() {
 
   return (
     <RequireUser active="clinical-exam">
-      <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Examination Guide", to: "/clinical-examination" }, { label: station.title }]} />
-        <GuideTitle icon={stationIcon(station.icon)} tone={CATEGORY_TONES[station.category] || "coral"} eyebrow={station.category} title={station.title} summary={station.summary} />
+      <PageMain width="reading">
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Exam Guide", to: "/clinical-examination" }, { label: station.title }]} />
+        <GuideTitle icon={stationIcon(station.icon)} tone={CATEGORY_TONES[station.category] || "coral"} title={station.title} summary={station.summary} />
         <Panel className="site-rise" style={{ "--rise-delay": "80ms" }}>
           <StationMeta meta={station.meta} order={station.order} />
           {station.sections.map((section) => (

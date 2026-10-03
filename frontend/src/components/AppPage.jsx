@@ -43,23 +43,34 @@ export function RequireUser({ children, active = "stations", adminOnly = false }
   return <AppFrame active={active}>{children}</AppFrame>;
 }
 
-export function PageMain({ children }) {
+// Column widths: "wide" for grids of cards, "focused" for one task at a time
+// (answering a question, a station checklist), "reading" for long guide text.
+// The breadcrumb, title and content all sit in the same centred column.
+// Narrower widths centre the page content but leave the breadcrumb at the
+// usual left edge, so it sits in the same place on every page.
+const MAIN_WIDTHS = {
+  wide: "",
+  reading: "[&>*:not([data-crumbs])]:mx-auto [&>*:not([data-crumbs])]:max-w-4xl",
+  focused: "[&>*:not([data-crumbs])]:mx-auto [&>*:not([data-crumbs])]:max-w-3xl",
+  split: "[&>*:not([data-crumbs])]:mx-auto [&>*:not([data-crumbs])]:max-w-5xl",
+};
+
+export function PageMain({ children, width = "wide" }) {
   // min-w-0 overrides the flex item's default min-width:auto — without it, a wide
   // descendant (e.g. a reference table) forces this whole column wider than the
   // viewport instead of scrolling within its own overflow-x-auto wrapper, which
   // pushes the sidebar+content flex row into a page-wide horizontal scroll.
   // pt-22 clears Sidebar's fixed mobile top bar (only rendered below sm).
-  return <main className="mx-auto w-full min-w-0 max-w-7xl flex-1 px-4 pb-12 pt-22 sm:px-6 sm:pt-8 lg:px-8">{children}</main>;
+  return <main className={`mx-auto w-full min-w-0 max-w-7xl ${MAIN_WIDTHS[width]} flex-1 px-4 pb-12 pt-22 sm:px-6 sm:pt-8 lg:px-8`}>{children}</main>;
 }
 
-// Page title block: optional eyebrow (mono label), title, description, and
-// actions on the right.
-export function PageHeader({ eyebrow, title, description, actions, className = "" }) {
+// Page title block: title, optional description, and actions on the right.
+// Always followed by the same gap before the page content.
+export function PageHeader({ title, description, actions, className = "" }) {
   return (
-    <div className={`site-rise flex flex-wrap items-end justify-between gap-4 ${className}`}>
+    <div className={`site-rise mb-8 flex flex-wrap items-end justify-between gap-4 ${className}`}>
       <div className="min-w-0">
-        {eyebrow && <p className="font-chart text-xs uppercase tracking-wider text-s-mute">{eyebrow}</p>}
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
         {description && <p className="mt-2 max-w-2xl leading-relaxed text-s-mute">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -90,22 +101,24 @@ export function LinkButton({ children, to, className = "", variant = "primary" }
   return <Link to={to} className={`${variant === "secondary" ? secondaryClass : primaryClass} ${className}`}>{children}</Link>;
 }
 
+// Parent trail only. The page's own title is already its heading, and "Home"
+// is the sidebar's Dashboard link, so neither is repeated here. Top-level
+// pages end up with no trail and render nothing.
 export function Breadcrumbs({ items }) {
+  const trail = items.slice(0, -1).filter((item) => item.label !== "Home");
+  if (trail.length === 0) return null;
   return (
-    <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1 text-sm text-s-mute">
-      {items.map((item, index) => {
-        const isLast = index === items.length - 1;
-        return (
-          <span key={`${item.label}-${index}`} className="inline-flex items-center gap-1">
-            {item.to && !isLast ? (
-              <Link to={item.to} className="rounded-full px-2 py-1.5 hover:bg-s-tint/70 hover:text-s-ink">{item.label}</Link>
-            ) : (
-              <span aria-current={isLast ? "page" : undefined} className={isLast ? "px-2 py-1.5 font-medium text-s-ink" : "px-2 py-1.5"}>{item.label}</span>
-            )}
-            {!isLast && <ChevronRight size={14} strokeWidth={2} className="text-s-mute/60" aria-hidden="true" />}
-          </span>
-        );
-      })}
+    <nav data-crumbs aria-label="Breadcrumb" className="mb-3 flex flex-wrap items-center gap-1 text-sm text-s-mute">
+      {trail.map((item, index) => (
+        <span key={`${item.label}-${index}`} className="inline-flex items-center gap-1">
+          {index > 0 && <ChevronRight size={14} strokeWidth={2} className="text-s-mute/60" aria-hidden="true" />}
+          {item.to ? (
+            <Link to={item.to} className="-mx-1 rounded-md px-1 py-1 hover:text-s-ink hover:underline">{item.label}</Link>
+          ) : (
+            <span className="py-1">{item.label}</span>
+          )}
+        </span>
+      ))}
     </nav>
   );
 }

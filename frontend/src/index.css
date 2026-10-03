@@ -20,6 +20,11 @@ body {
 /* Form controls take the surrounding font. In the base layer, so Tailwind
    text-* utilities still win. */
 @layer base {
+  /* Reserve the scrollbar's space on every page, so short pages (no scrollbar)
+     and long ones keep the breadcrumb and content in the same spot. */
+  html {
+    scrollbar-gutter: stable;
+  }
   :is(button, input, textarea, select) {
     font: inherit;
   }

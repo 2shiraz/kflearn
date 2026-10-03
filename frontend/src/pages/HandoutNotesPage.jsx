@@ -1,17 +1,9 @@
 import { useParams } from "react-router-dom";
-import {
-  Bone,
-  Brain,
-  Droplet,
-  Filter,
-  HeartPulse,
-  ScrollText,
-  Soup,
-  Wind,
-} from "lucide-react";
+
 import { Breadcrumbs, PageMain, Panel, RequireUser } from "../components/AppPage";
 import { GuideCard, GuideHero, GuideNotFound, GuideSection, GuideTitle, JumpNav, PanelHeading, PrevNext, SectionHeading } from "../components/GuideBlocks";
 import { plus } from "../site/siteContent";
+import { MedIcon } from "../site/Illustrations";
 import {
   aboutThisCollection,
   CATEGORY_ORDER,
@@ -20,17 +12,18 @@ import {
   handouts,
 } from "../data/handoutNotes";
 
+// Colour icon per body system.
 const CATEGORY_ICONS = {
-  Cardiovascular: HeartPulse,
-  Respiratory: Wind,
-  "Endocrine & Metabolic": Droplet,
-  "Gastrointestinal & Hepatobiliary": Soup,
-  "Renal & Urology": Filter,
-  "Musculoskeletal & Rheumatology": Bone,
-  Neurology: Brain,
+  Cardiovascular: "anatomical-heart",
+  Respiratory: "lungs",
+  "Endocrine & Metabolic": "syringe",
+  "Gastrointestinal & Hepatobiliary": "microbe",
+  "Renal & Urology": "test-tube",
+  "Musculoskeletal & Rheumatology": "bone",
+  Neurology: "brain",
 };
 
-const categoryIcon = (category) => CATEGORY_ICONS[category] || ScrollText;
+const categoryIcon = (category) => CATEGORY_ICONS[category] || "pill";
 
 // One colour per body system, so a system reads the same on every card.
 const CATEGORY_TONES = {
@@ -51,11 +44,8 @@ export function HandoutNotesHome() {
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Handout Notes" }]} />
 
         <GuideHero
-          eyebrow="Handout notes"
           title="Handout Notes"
           description={`${plus(handouts.length)} station handouts. Each covers core concepts, clinical features, diagnosis, management and key takeaways.`}
-          character="student-hira"
-          tone="violet"
         />
 
         <JumpNav
@@ -85,11 +75,11 @@ export function HandoutNotesHome() {
               {CATEGORY_ORDER.map((category) => {
                 const categoryHandouts = handouts.filter((handout) => handout.category === category);
                 if (categoryHandouts.length === 0) return null;
-                const Icon = categoryIcon(category);
+                const iconName = categoryIcon(category);
                 return (
                   <div key={category}>
                     <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-s-ink">
-                      <Icon size={17} strokeWidth={2} className="text-s-mute" aria-hidden="true" />
+                      <MedIcon name={iconName} size={22} />
                       {category}
                       <span className="rounded-full bg-s-tint px-2.5 py-0.5 font-chart text-xs font-normal text-s-mute">{categoryHandouts.length}</span>
                     </h3>
@@ -98,7 +88,7 @@ export function HandoutNotesHome() {
                         <GuideCard
                           key={handout.slug}
                           to={`/handout-notes/${handout.slug}`}
-                          icon={Icon}
+                          icon={iconName}
                           tone={categoryTone(category)}
                           title={handout.title}
                           summary={handout.summary}
@@ -125,7 +115,7 @@ export function HandoutNotesDetail() {
   if (!handout) {
     return (
       <RequireUser active="handouts">
-        <PageMain>
+        <PageMain width="reading">
           <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Handout Notes", to: "/handout-notes" }, { label: "Not found" }]} />
           <GuideNotFound what="handout" backTo="/handout-notes" backLabel="Back to the handouts" />
         </PageMain>
@@ -137,9 +127,9 @@ export function HandoutNotesDetail() {
 
   return (
     <RequireUser active="handouts">
-      <PageMain>
+      <PageMain width="reading">
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Handout Notes", to: "/handout-notes" }, { label: handout.title }]} />
-        <GuideTitle icon={categoryIcon(handout.category)} tone={categoryTone(handout.category)} eyebrow={handout.category} title={handout.title} summary={handout.summary} />
+        <GuideTitle icon={categoryIcon(handout.category)} tone={categoryTone(handout.category)} title={handout.title} summary={handout.summary} />
         <Panel className="site-rise" style={{ "--rise-delay": "80ms" }}>
           {handout.sections.map((section) => (
             <GuideSection key={section.heading} {...section} />

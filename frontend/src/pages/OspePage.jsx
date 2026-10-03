@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Check, ClipboardCheck, Eye, EyeOff, PlayCircle, S
 import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
 import { QuestionSkeleton } from "../components/Skeleton";
 import { CheckRow, Chip, ChoicePills, Pager, PillLink, ProgressLine, ResultsSummary, SectionHeader, SetupCard, StepBar, TimerPill, Toggle, TopicCard, YEAR_TONES, YearCard, rise, scoreTone } from "../components/StudyKit";
-import { HealthIcon } from "../site/Illustrations";
+import { MedIcon } from "../site/Illustrations";
 import { plus } from "../site/siteContent";
 import { getBlock, getYear, loadStations, ospeTotalCount, ospeYears } from "../data/ospe";
 
@@ -93,9 +93,7 @@ export function OspeHome() {
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSPE" }]} />
         <PageHeader
-          className="mb-8"
-          eyebrow="OSPE"
-          title="Station bank"
+          title="OSPE"
           description={`${plus(ospeTotalCount)} practical stations, each with a specimen or scenario, candidate tasks and the examiner checklist. Pick your year to begin.`}
         />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -157,8 +155,6 @@ export function OspeYearPage() {
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSPE", to: "/ospe" }, { label: year.name }]} />
         <PageHeader
-          className="mb-8"
-          eyebrow="OSPE"
           title={year.name}
           description="Read stations with their examiner checklists, or practise against the clock and mark yourself."
           actions={
@@ -237,7 +233,7 @@ function StationBody({ station, label }) {
       <h2 className="mt-1.5 text-xl font-semibold leading-snug tracking-tight text-s-ink">{station.t}</h2>
       <div className="mt-4 flex gap-3 rounded-2xl bg-mint-soft/70 p-4">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-s-card text-mint" aria-hidden="true">
-          <HealthIcon name="microscope" size={24} />
+          <MedIcon name="microscope" size={24} />
         </span>
         <div className="min-w-0">
           <p className="text-sm font-medium text-s-ink">Specimen or scenario</p>
@@ -305,7 +301,7 @@ export function OspeRead() {
   else {
     body = (
       <>
-        <div className="mb-5 flex max-w-3xl flex-wrap items-center justify-between gap-3">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="font-chart text-xs text-s-mute">
             Stations {start + 1}-{Math.min(start + PAGE_SIZE, stations.length)} of {stations.length}
           </p>
@@ -360,9 +356,9 @@ export function OspeRead() {
 
   return (
     <RequireUser active="ospe">
-      <PageMain>
+      <PageMain width="focused">
         <Breadcrumbs items={crumbs} />
-        <h1 className="site-rise mb-6 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{title}</h1>
+        <h1 className="site-rise mb-8 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
         {body}
       </PageMain>
     </RequireUser>
@@ -405,9 +401,9 @@ export function OspePractice() {
 
   return (
     <RequireUser active="ospe">
-      <PageMain>
+      <PageMain width="focused">
         <Breadcrumbs items={crumbs} />
-        <h1 className="site-rise mb-6 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{title}</h1>
+        <h1 className="site-rise mb-8 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
         {body}
       </PageMain>
     </RequireUser>
@@ -475,7 +471,7 @@ function Runner({ session, setSession }) {
   const ticked = marks.filter(Boolean).length;
 
   return (
-    <Panel className="site-rise max-w-3xl md:p-8">
+    <Panel className="site-rise md:p-8">
       <StepBar
         label={`Station ${index + 1} of ${stations.length} / ${s.topic}`}
         aside={session.minutes > 0 && <Countdown seconds={session.minutes * 60} running={phase === "attempt"} />}

@@ -18,6 +18,37 @@ export function HealthIcon({ name, size = 28, className = "", label }) {
   );
 }
 
+// Full-colour 3D medical icon (Microsoft Fluent Emoji, MIT), served from
+// /illustrations/medical. Accepts a file name ("anatomical-heart") or one of
+// the older Healthicons names below, so existing call sites keep working.
+const MED_ALIASES = {
+  heart: "anatomical-heart",
+  bloodDrop: "drop-of-blood",
+  doctor: "health-worker",
+  patient: "clipboard",
+  book: "books",
+  medicines: "pill",
+  cardiogram: "chart-increasing",
+  stomach: "microbe",
+  medicalRecords: "memo",
+};
+
+export function MedIcon({ name, size = 32, className = "", alt = "" }) {
+  const file = MED_ALIASES[name] || name;
+  return (
+    <img
+      src={`/illustrations/medical/${file}.png`}
+      alt={alt}
+      aria-hidden={alt ? undefined : "true"}
+      width={size}
+      height={size}
+      decoding="async"
+      className={`shrink-0 select-none object-contain ${className}`}
+      draggable="false"
+    />
+  );
+}
+
 // Pixel-art character in a coloured circle.
 const RING = {
   indigo: "bg-s-accent-soft",

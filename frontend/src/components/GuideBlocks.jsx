@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Lightbulb, ListChecks, RotateCcw } from "lucide-react";
 import { EmptyState, LinkButton, Panel, SecondaryButton } from "./AppPage";
 import { CheckRow, rise } from "./StudyKit";
-import { Character } from "../site/Illustrations";
+import { Character, MedIcon } from "../site/Illustrations";
 import { TONES } from "../site/tones";
 
 export function GuideBlock({ block }) {
@@ -166,31 +166,32 @@ export function JumpNav({ items }) {
   );
 }
 
-// Guide home header: title block on the left, a character on the right.
-export function GuideHero({ eyebrow, title, description, character, tone }) {
+// Guide home header: title and description.
+export function GuideHero({ title, description }) {
   return (
-    <div className="site-rise mb-6 flex items-center justify-between gap-6">
-      <div className="min-w-0">
-        {eyebrow && <p className="font-chart text-xs uppercase tracking-wider text-s-mute">{eyebrow}</p>}
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
-        {description && <p className="mt-2 max-w-2xl leading-relaxed text-s-mute">{description}</p>}
-      </div>
-      <Character name={character} size={88} tone={tone} className="bob hidden shrink-0 sm:inline-flex" />
+    <div className="site-rise mb-8">
+      <h1 className="text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
+      {description && <p className="mt-2 max-w-2xl leading-relaxed text-s-mute">{description}</p>}
     </div>
   );
 }
 
+// A guide icon: a Fluent medical icon name (string), or a lucide component.
+function GuideIcon({ icon: Icon, size }) {
+  if (typeof Icon === "string") return <MedIcon name={Icon} size={size} />;
+  return <Icon size={Math.round(size * 0.6)} strokeWidth={2} />;
+}
+
 // Detail page header: the topic icon in a tinted tile, then title and summary.
-export function GuideTitle({ icon: Icon, tone, eyebrow, title, summary }) {
+export function GuideTitle({ icon, tone, title, summary }) {
   const t = TONES[tone];
   return (
-    <div className="site-rise mb-6 flex items-start gap-4">
+    <div className="site-rise mb-8 flex items-start gap-4">
       <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${t.soft} ${t.text}`} aria-hidden="true">
-        <Icon size={26} strokeWidth={2} />
+        <GuideIcon icon={icon} size={38} />
       </span>
       <div className="min-w-0">
-        {eyebrow && <p className="font-chart text-xs text-s-mute">{eyebrow}</p>}
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{title}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{title}</h1>
         {summary && <p className="mt-1.5 max-w-2xl leading-relaxed text-s-mute">{summary}</p>}
       </div>
     </div>
@@ -219,12 +220,12 @@ export function PanelHeading({ icon: Icon, title, subtitle }) {
 }
 
 // Link card for a guide topic, station or handout.
-export function GuideCard({ to, icon: Icon, tone, title, summary, cta = "Read guide", index = 0 }) {
+export function GuideCard({ to, icon, tone, title, summary, cta = "Read guide", index = 0 }) {
   const t = TONES[tone];
   return (
     <Link to={to} style={rise(index, 40)} className={`site-rise site-grid site-press group flex flex-col rounded-3xl border border-s-line p-5 ${t.ring}`}>
       <span className={`flex h-12 w-12 items-center justify-center rounded-2xl ${t.soft} ${t.text}`} aria-hidden="true">
-        <Icon size={22} strokeWidth={2} />
+        <GuideIcon icon={icon} size={34} />
       </span>
       <h3 className="mt-4 text-lg font-semibold leading-snug tracking-tight text-s-ink">{title}</h3>
       <p className="mt-1.5 flex-1 text-sm leading-relaxed text-s-mute">{summary}</p>
