@@ -49,14 +49,12 @@ function NavIcon({ item, active }) {
   const Icon = NAV_ICONS[item.key];
   return (
     <span
-      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors ${
-        item.key === "credits"
-          ? "text-sun"
-          : active ? "bg-s-card text-s-ink ring-1 ring-s-line" : "bg-s-tint text-s-mute group-hover:text-s-ink"
+      className={`flex h-8 w-8 shrink-0 items-center justify-center transition-colors ${
+        item.key === "credits" ? "text-sun" : active ? "text-s-accent" : "text-s-mute group-hover:text-s-ink"
       }`}
       aria-hidden="true"
     >
-      {item.key === "credits" ? <Icon size={18} strokeWidth={1.75} fill="currentColor" /> : <Icon size={16} strokeWidth={2} />}
+      {item.key === "credits" ? <Icon size={18} strokeWidth={1.75} fill="currentColor" /> : <Icon size={18} strokeWidth={1.9} />}
     </span>
   );
 }
@@ -64,10 +62,16 @@ function NavIcon({ item, active }) {
 // Layout modes: "drawer" (mobile menu, labels always), "rail" (tablet icons,
 // labels from lg), "collapsed" (icons only at every size).
 const LABEL_CLASS = { drawer: "", rail: "sr-only lg:not-sr-only", collapsed: "sr-only" };
-const ALIGN_CLASS = { drawer: "", rail: "justify-center pr-1.5 lg:justify-start lg:pr-3", collapsed: "justify-center pr-1.5" };
+// Icon-only layouts use a centred square so the active highlight is a true
+// circle around the icon; the expanded sidebar uses a full-width pill.
+const ALIGN_CLASS = {
+  drawer: "gap-3 p-1.5 pr-3",
+  rail: "mx-auto h-11 w-11 justify-center lg:mx-0 lg:h-auto lg:w-auto lg:justify-start lg:gap-3 lg:p-1.5 lg:pr-3",
+  collapsed: "mx-auto h-11 w-11 justify-center",
+};
 
 function itemClass(active, mode) {
-  return `site-press group flex min-h-11 items-center gap-3 rounded-full p-1.5 pr-3 text-sm font-medium ${ALIGN_CLASS[mode]} ${
+  return `site-press group flex min-h-11 items-center rounded-full text-sm font-medium ${ALIGN_CLASS[mode]} ${
     active ? "bg-s-accent-soft text-s-ink" : "text-s-mute hover:bg-s-tint/70 hover:text-s-ink"
   }`;
 }
@@ -134,7 +138,7 @@ function AccountLinks({ active, balance, mode, onNavigate, onLogout }) {
         <NavIcon item={{ key: "settings" }} active={settingsActive} />
         <span className={hide}>Settings</span>
       </Link>
-      <button type="button" title={compact ? "Sign out" : undefined} onClick={onLogout} className={`${itemClass(false, mode)} w-full hover:text-s-miss`}>
+      <button type="button" title={compact ? "Sign out" : undefined} onClick={onLogout} className={`${itemClass(false, mode)} ${mode === "drawer" ? "w-full" : mode === "rail" ? "lg:w-full" : ""} hover:text-s-miss`}>
         <NavIcon item={{ key: "logout" }} active={false} />
         <span className={hide}>Sign out</span>
       </button>
