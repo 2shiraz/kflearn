@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -7,34 +8,82 @@ import FeatureGrid from "./components/FeatureGrid";
 import FAQ from "./components/FAQ";
 import Disclaimer from "./components/Disclaimer";
 import Footer from "./components/Footer";
-import SigninPage from "./pages/SigninPage";
-import SignupPage from "./pages/SignupPage";
-import DashboardPage from "./pages/DashboardPage";
-import ComingSoonPage from "./pages/ComingSoonPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import SettingsPage from "./pages/SettingsPage";
-import FeaturesPage from "./pages/FeaturesPage";
-import SampleStationsPage from "./pages/SampleStationsPage";
-import PricingPage from "./pages/PricingPage";
-import AboutPage from "./pages/AboutPage";
-import {
-  AdminOscePage,
-  OsceAttemptHistoryPage,
-  OsceHome,
-  OsceStationDetail,
-  OsceResultPage,
-  OsceSectionPage,
-  SelfAssessmentPage,
-  SinglePlayerOsce,
-  VirtualPatientSession,
-} from "./pages/OsceStationsPage";
-import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
-import { McqPractice, McqsHome, McqYearPage } from "./pages/McqsPage";
-import { McqRead } from "./pages/McqReadPage";
-import { OspeHome, OspePractice, OspeRead, OspeYearPage } from "./pages/OspePage";
-import { ClinicalExamGuideHome, ClinicalExamGuideStation } from "./pages/ClinicalExaminationPage";
-import { HandoutNotesDetail, HandoutNotesHome } from "./pages/HandoutNotesPage";
-import CreditsPage from "./pages/CreditsPage";
+// Every route except the landing page is code-split: its page (and any static
+// content it imports) downloads only when the route is first visited.
+// After a redeploy, a tab opened earlier may request chunk files that no longer
+// exist; reload once to pick up the new build instead of showing a blank page.
+const RELOAD_KEY = "kf_chunk_reload";
+const lazyPage = (load, name = "default") => lazy(() => load().then(
+  (m) => {
+    try { sessionStorage.removeItem(RELOAD_KEY); } catch { /* storage unavailable */ }
+    return { default: m[name] };
+  },
+  (error) => {
+    let reloaded = true;
+    try {
+      reloaded = sessionStorage.getItem(RELOAD_KEY) === "1";
+      if (!reloaded) sessionStorage.setItem(RELOAD_KEY, "1");
+    } catch { /* storage unavailable */ }
+    if (reloaded) throw error;
+    window.location.reload();
+    return new Promise(() => {});
+  },
+));
+
+const SigninPage = lazyPage(() => import("./pages/SigninPage"));
+const SignupPage = lazyPage(() => import("./pages/SignupPage"));
+const DashboardPage = lazyPage(() => import("./pages/DashboardPage"));
+const ComingSoonPage = lazyPage(() => import("./pages/ComingSoonPage"));
+const NotFoundPage = lazyPage(() => import("./pages/NotFoundPage"));
+const SettingsPage = lazyPage(() => import("./pages/SettingsPage"));
+const FeaturesPage = lazyPage(() => import("./pages/FeaturesPage"));
+const SampleStationsPage = lazyPage(() => import("./pages/SampleStationsPage"));
+const PricingPage = lazyPage(() => import("./pages/PricingPage"));
+const AboutPage = lazyPage(() => import("./pages/AboutPage"));
+const CreditsPage = lazyPage(() => import("./pages/CreditsPage"));
+
+const osce = () => import("./pages/OsceStationsPage");
+const AdminOscePage = lazyPage(osce, "AdminOscePage");
+const OsceAttemptHistoryPage = lazyPage(osce, "OsceAttemptHistoryPage");
+const OsceHome = lazyPage(osce, "OsceHome");
+const OsceStationDetail = lazyPage(osce, "OsceStationDetail");
+const OsceResultPage = lazyPage(osce, "OsceResultPage");
+const OsceSectionPage = lazyPage(osce, "OsceSectionPage");
+const SelfAssessmentPage = lazyPage(osce, "SelfAssessmentPage");
+const SinglePlayerOsce = lazyPage(osce, "SinglePlayerOsce");
+const VirtualPatientSession = lazyPage(osce, "VirtualPatientSession");
+
+const historyGuide = () => import("./pages/HistoryGuidePage");
+const HistoryGuideHome = lazyPage(historyGuide, "HistoryGuideHome");
+const HistoryGuideTopic = lazyPage(historyGuide, "HistoryGuideTopic");
+
+const mcqs = () => import("./pages/McqsPage");
+const McqsHome = lazyPage(mcqs, "McqsHome");
+const McqYearPage = lazyPage(mcqs, "McqYearPage");
+const McqPractice = lazyPage(mcqs, "McqPractice");
+const McqRead = lazyPage(() => import("./pages/McqReadPage"), "McqRead");
+
+const ospe = () => import("./pages/OspePage");
+const OspeHome = lazyPage(ospe, "OspeHome");
+const OspeYearPage = lazyPage(ospe, "OspeYearPage");
+const OspeRead = lazyPage(ospe, "OspeRead");
+const OspePractice = lazyPage(ospe, "OspePractice");
+
+const clinicalExam = () => import("./pages/ClinicalExaminationPage");
+const ClinicalExamGuideHome = lazyPage(clinicalExam, "ClinicalExamGuideHome");
+const ClinicalExamGuideStation = lazyPage(clinicalExam, "ClinicalExamGuideStation");
+
+const handouts = () => import("./pages/HandoutNotesPage");
+const HandoutNotesHome = lazyPage(handouts, "HandoutNotesHome");
+const HandoutNotesDetail = lazyPage(handouts, "HandoutNotesDetail");
+
+function RouteFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center" role="status" aria-label="Loading">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink/15 border-t-ink/60" />
+    </div>
+  );
+}
 
 function LandingPage() {
   return (
@@ -55,6 +104,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="app-gradient-bg min-h-screen">
+        <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/features" element={<FeaturesPage />} />
@@ -93,6 +143,7 @@ export default function App() {
           <Route path="/credits" element={<CreditsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </Suspense>
       </div>
     </BrowserRouter>
   );
