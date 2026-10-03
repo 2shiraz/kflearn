@@ -437,3 +437,56 @@ export function SetupSkeleton({ label }) {
     </SkeletonStatus>
   );
 }
+// Progress page: indigo score card with four tiles beside it, specialty rows,
+// then two panels.
+export function ProgressSkeleton({ label }) {
+  return (
+    <SkeletonStatus label={label} className="space-y-10">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="rounded-3xl bg-s-accent/90 p-6 md:col-span-2 lg:row-span-2 sm:p-7">
+          <Skeleton className="h-4 w-56 bg-s-on-accent/20" />
+          <Skeleton className="mt-4 h-14 w-32 bg-s-on-accent/25" />
+          <Skeleton className="mt-6 h-28 w-full rounded-2xl bg-s-on-accent/15" />
+          <div className="mt-6 grid grid-cols-3 gap-3">
+            {repeat(3).map((i) => <Skeleton key={i} className="h-20 rounded-2xl bg-s-on-accent/15" />)}
+          </div>
+        </div>
+        {repeat(4).map((i) => (
+          <SkeletonPanel key={i}>
+            <Skeleton className="h-11 w-11 rounded-2xl" />
+            <Skeleton className="mt-4 h-8 w-20" />
+            <Skeleton className="mt-2 h-4 w-32" />
+            <Skeleton className="mt-4 h-3 w-24" />
+          </SkeletonPanel>
+        ))}
+      </div>
+      <div>
+        <Skeleton className="mb-4 h-6 w-48" />
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {repeat(6).map((i) => (
+            <SkeletonPanel key={i} className="flex items-center gap-4 p-4 sm:p-4">
+              <Skeleton className="h-12 w-12 shrink-0 rounded-2xl" />
+              <div className="flex-1">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="mt-3 h-1.5 w-full" />
+                <Skeleton className="mt-2 h-3 w-24" />
+              </div>
+              <Skeleton className="h-6 w-12 shrink-0" />
+            </SkeletonPanel>
+          ))}
+        </div>
+      </div>
+      <div className="grid gap-5 lg:grid-cols-2">
+        {repeat(2).map((i) => (
+          <SkeletonPanel key={i}>
+            <Skeleton className="h-6 w-56" />
+            <Skeleton className="mt-2 h-4 w-40" />
+            <div className="mt-5 space-y-2.5">
+              {repeat(4).map((j) => <Skeleton key={j} className="h-14 w-full rounded-2xl" />)}
+            </div>
+          </SkeletonPanel>
+        ))}
+      </div>
+    </SkeletonStatus>
+  );
+}

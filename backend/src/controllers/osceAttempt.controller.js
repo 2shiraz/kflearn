@@ -139,7 +139,9 @@ export async function getAttempt(req, res) {
 }
 
 export async function listAttempts(req, res) {
-  const attempts = await OsceAttempt.find({ userId: req.user.id, status: { $in: ["self-assessed", "ai-assessed"] } }).populate("stationId").sort({ createdAt: -1 });
+  const attempts = await OsceAttempt.find({ userId: req.user.id, status: { $in: ["self-assessed", "ai-assessed"] } })
+    .populate({ path: "stationId", populate: { path: "specialtyId", select: "name slug" } })
+    .sort({ createdAt: -1 });
   res.json({
     success: true,
     data: attempts.map((attempt) => ({
@@ -150,10 +152,15 @@ export async function listAttempts(req, res) {
       startedAt: attempt.startedAt,
       endedAt: attempt.endedAt,
       finalScore: attempt.finalScore,
+      elapsedSeconds: attempt.elapsedSeconds || 0,
+      missedItems: attempt.feedback?.missedItems || [],
       module: attempt.stationId ? {
+        id: attempt.stationId._id,
         title: attempt.stationId.title,
         slug: attempt.stationId.slug,
         presentingComplaint: attempt.stationId.presentingComplaint,
+        category: attempt.stationId.category || attempt.stationId.stationType || "",
+        specialty: attempt.stationId.specialtyId?.name ? { name: attempt.stationId.specialtyId.name, slug: attempt.stationId.specialtyId.slug } : null,
       } : null,
     })),
   });

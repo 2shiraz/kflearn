@@ -27,9 +27,9 @@ const lazyPage = (load, name = "default") => lazy(() => load().then(
 const SigninPage = lazyPage(() => import("./pages/SigninPage"));
 const SignupPage = lazyPage(() => import("./pages/SignupPage"));
 const DashboardPage = lazyPage(() => import("./pages/DashboardPage"));
-const ComingSoonPage = lazyPage(() => import("./pages/ComingSoonPage"));
 const NotFoundPage = lazyPage(() => import("./pages/NotFoundPage"));
 const SettingsPage = lazyPage(() => import("./pages/SettingsPage"));
+const ProgressPage = lazyPage(() => import("./pages/ProgressPage"));
 const FeaturesPage = lazyPage(() => import("./pages/FeaturesPage"));
 const SampleStationsPage = lazyPage(() => import("./pages/SampleStationsPage"));
 const PricingPage = lazyPage(() => import("./pages/PricingPage"));
@@ -119,7 +119,7 @@ export default function App() {
           <Route path="/ospe/:yearSlug/practice" element={<OspePractice />} />
           <Route path="/handout-notes" element={<HandoutNotesHome />} />
           <Route path="/handout-notes/:slug" element={<HandoutNotesDetail />} />
-          <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />
+          <Route path="/progress" element={<ProgressPage />} />
           <Route path="/credits" element={<CreditsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
