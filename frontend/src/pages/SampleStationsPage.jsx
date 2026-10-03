@@ -72,7 +72,7 @@ export default function SampleStationsPage() {
             ))}
           </ul>
           <p className="mt-5 text-sm leading-relaxed text-s-mute">
-            Guided self-practice is included with a free account. The AI virtual patient and AI assessment use credits.
+            Guided self-practice is included with a free account.
           </p>
           <Link
             to="/signup"

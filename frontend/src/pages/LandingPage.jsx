@@ -16,6 +16,7 @@ import {
   demoPatient,
   faqs,
   formatCount,
+  plus,
   sampleMcq,
   yearCoverage,
 } from "../site/siteContent";
@@ -69,7 +70,7 @@ function Hero() {
             </span>
           </h1>
           <p className="site-rise mt-8 max-w-lg text-lg leading-relaxed text-s-mute" style={{ "--rise-delay": "120ms" }}>
-            Run OSCE history stations by voice or text, get marked on the examiner checklist, and drill {formatCount(MCQ_COUNT)} MCQs.
+            Run full OSCE stations by voice or text, get marked on the examiner checklist, and drill {plus(MCQ_COUNT)} MCQs.
           </p>
           <div className="site-rise mt-9 grid gap-3 sm:flex sm:flex-wrap sm:items-center" style={{ "--rise-delay": "180ms" }}>
             <Link
@@ -243,7 +244,7 @@ function Library() {
           className="md:col-span-3"
           tone="sky"
           icon="book"
-          stat={formatCount(MCQ_COUNT)}
+          stat={plus(MCQ_COUNT)}
           title="MCQs with explanations"
           body="First Year to Final Year. Read a topic with answers open, or run a shuffled practice set."
           to="/features#mcqs"
@@ -253,7 +254,7 @@ function Library() {
           className="md:col-span-3"
           tone="mint"
           icon="microscope"
-          stat={formatCount(OSPE_COUNT)}
+          stat={plus(OSPE_COUNT)}
           title="OSPE stations"
           body="Specimens and scenarios with candidate tasks and the examiner checklist to mark yourself."
           to="/features#ospe"
@@ -263,7 +264,7 @@ function Library() {
           className="md:col-span-2"
           tone="coral"
           icon="heart"
-          stat={EXAM_GUIDE_COUNT}
+          stat={plus(EXAM_GUIDE_COUNT)}
           title="Examination guides"
           body="Step-by-step technique, from cardiovascular to cranial nerves."
           to="/features#clinical-examination"
@@ -272,7 +273,7 @@ function Library() {
           className="md:col-span-2"
           tone="sun"
           icon="patient"
-          stat={HISTORY_TOPIC_COUNT}
+          stat={plus(HISTORY_TOPIC_COUNT)}
           title="History-taking guides"
           body="A universal framework plus chest pain, breathlessness, headache and more."
           to="/features#history-taking"
@@ -281,7 +282,7 @@ function Library() {
           className="md:col-span-2"
           tone="violet"
           icon="medicines"
-          stat={HANDOUT_COUNT}
+          stat={plus(HANDOUT_COUNT)}
           title="Handout notes"
           body={`Features, diagnosis and management across ${HANDOUT_SYSTEM_COUNT} body systems.`}
           to="/features#handouts"
@@ -330,7 +331,7 @@ function LibraryTile({ className = "", tone, icon, stat, title, body, to, large 
 
 const flow = [
   { icon: "medicalRecords", tone: "sky", title: "Read the brief", body: "The setting, the patient and your tasks, like the card on the station door." },
-  { character: "patient-daniel", tone: "coral", title: "Take the history", body: "Type or speak your questions. The patient only tells you what you ask about." },
+  { character: "patient-daniel", tone: "coral", title: "Work the station", body: "Talk to the patient by voice or text. They only reveal what you ask about." },
   { character: "examiner", tone: "mint", title: "Get marked", body: "AI assessment checks your transcript against the station's checklist." },
   { icon: "cardiogram", tone: "violet", title: "Review and repeat", body: "See your score, a summary and the items you missed. Every attempt is saved." },
 ];
@@ -371,14 +372,14 @@ function StationFlow() {
             tone="sun"
             icon="medicalRecords"
             title="Guided self-practice"
-            tag="Free with every account"
+            tag="Study mode"
             body="The patient script and checklist are open. Study the station, then tick off what you covered."
           />
           <ModeCard
             tone="indigo"
             icon="doctor"
             title="AI virtual patient"
-            tag="Uses credits"
+            tag="Exam mode"
             body="Facts and checklist stay hidden. Interview the patient, then choose AI assessment or mark yourself."
           />
         </div>
@@ -658,7 +659,7 @@ function CoverageColumn({ tone, icon, label, count, blocks }) {
           <HealthIcon name={icon} size={24} />
         </span>
         <p className="text-lg font-medium text-s-ink">
-          {formatCount(count)} {label}
+          {plus(count)} {label}
         </p>
       </div>
       <ul className="mt-4 flex flex-wrap gap-2">

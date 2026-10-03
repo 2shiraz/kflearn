@@ -5,7 +5,7 @@ import PageShell from "../components/PageShell";
 import { handouts } from "../data/handoutNotes";
 import { stations as examStations } from "../data/clinicalExaminationGuide";
 import { topics as historyTopics } from "../data/historyTakingGuide";
-import { MCQ_COUNT, OSPE_COUNT, SIGNUP_LABEL, formatCount, yearCoverage } from "../site/siteContent";
+import { MCQ_COUNT, OSPE_COUNT, SIGNUP_LABEL, plus, yearCoverage } from "../site/siteContent";
 
 const TONE = {
   indigo: "bg-s-accent-soft text-s-accent",
@@ -23,9 +23,9 @@ const modules = [
     icon: "doctor",
     tone: "indigo",
     name: "OSCE stations",
-    lead: "History-taking stations with a scripted AI patient, a time limit and an examiner marking checklist.",
+    lead: "Full OSCE stations, each with a scripted AI patient, a time limit and the examiner marking checklist.",
     points: [
-      "AI virtual patient: ask questions by typing or speaking, and have replies read aloud if you like",
+      "AI virtual patient: talk to the patient by typing or speaking, and have replies read aloud if you like",
       "The patient only reveals facts you ask about; the checklist stays hidden until you finish",
       "AI assessment scores your transcript item by item and lists what you missed",
       "Guided self-practice shows the script and checklist so you can study a station openly",
@@ -36,7 +36,7 @@ const modules = [
     id: "mcqs",
     icon: "book",
     tone: "sky",
-    name: `${formatCount(MCQ_COUNT)} MCQs`,
+    name: `${plus(MCQ_COUNT)} MCQs`,
     lead: `Single-best-answer questions with explanations for MBBS ${yearCoverage[0].label} to ${yearCoverage[yearCoverage.length - 1].label}.`,
     points: [
       "Browse by year, then module or block, then topic",
@@ -49,7 +49,7 @@ const modules = [
     id: "ospe",
     icon: "microscope",
     tone: "mint",
-    name: `${formatCount(OSPE_COUNT)} OSPE stations`,
+    name: `${plus(OSPE_COUNT)} OSPE stations`,
     lead: "Specimens and scenarios with candidate tasks and the examiner scoring checklist, for MBBS First to Fourth Year.",
     points: [
       "Organised by year, module or block, and topic",
@@ -63,7 +63,7 @@ const modules = [
     icon: "heart",
     tone: "coral",
     name: "Clinical examination guide",
-    lead: `${examStations.length} examinations written as step-by-step technique, from introduction to closing.`,
+    lead: `${plus(examStations.length)} examinations written as step-by-step technique, from introduction to closing.`,
     chips: examStations.map((s) => s.title.replace(/ Examination$/, "")),
   },
   {
@@ -71,7 +71,7 @@ const modules = [
     icon: "patient",
     tone: "sun",
     name: "History-taking guide",
-    lead: `A universal history framework, communication skills and ${historyTopics.length} focused presentations.`,
+    lead: `A universal history framework, communication skills and ${plus(historyTopics.length)} focused presentations.`,
     chips: historyTopics.map((t) => t.title),
   },
   {
@@ -79,21 +79,8 @@ const modules = [
     icon: "medicines",
     tone: "violet",
     name: "Handout notes",
-    lead: `${handouts.length} handouts covering introduction, clinical features, diagnosis and management, grouped by system.`,
+    lead: `${plus(handouts.length)} handouts covering introduction, clinical features, diagnosis and management, grouped by system.`,
     chips: handoutSystems,
-  },
-  {
-    id: "credits",
-    icon: "medicalRecords",
-    tone: "indigo",
-    name: "Credits",
-    lead: "Credits are only used for the AI features. Everything else on this page is included with a free account.",
-    points: [
-      "Starting an AI virtual patient session uses credits",
-      "Requesting AI assessment uses credits, and they are returned if the assessment fails",
-      "Buy a credit package from the pricing page when you need more",
-    ],
-    link: { to: "/pricing", label: "See credit packages" },
   },
 ];
 

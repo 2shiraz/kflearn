@@ -10,15 +10,15 @@ import {
   MCQ_COUNT,
   OSPE_COUNT,
   SIGNUP_LABEL,
-  formatCount,
+  plus,
 } from "../site/siteContent";
 
 const stats = [
-  { value: formatCount(MCQ_COUNT), label: "MCQs" },
-  { value: formatCount(OSPE_COUNT), label: "OSPE stations" },
-  { value: EXAM_GUIDE_COUNT, label: "Examination guides" },
-  { value: HISTORY_TOPIC_COUNT, label: "History guides" },
-  { value: HANDOUT_COUNT, label: "Handout notes" },
+  { value: plus(MCQ_COUNT), label: "MCQs" },
+  { value: plus(OSPE_COUNT), label: "OSPE stations" },
+  { value: plus(EXAM_GUIDE_COUNT), label: "Examination guides" },
+  { value: plus(HISTORY_TOPIC_COUNT), label: "History-taking guides" },
+  { value: plus(HANDOUT_COUNT), label: "Handout notes" },
 ];
 
 const problems = [
@@ -26,7 +26,7 @@ const problems = [
     icon: "patient",
     tone: "bg-sun-soft text-sun",
     title: "OSCE practice needs a patient and an examiner",
-    body: "Rehearsing a history station usually means finding a partner to play the patient and someone to mark you. The AI virtual patient and checklist let you practise alone, at any hour.",
+    body: "Rehearsing an OSCE station usually means finding a partner to play the patient and someone to mark you. The AI virtual patient and checklist let you practise alone, at any hour.",
   },
   {
     icon: "medicalRecords",
@@ -49,7 +49,7 @@ export default function AboutPage() {
         <div>
           <h1 className="site-rise text-4xl font-semibold leading-tight text-s-ink md:text-5xl">A study partner for clinical exams</h1>
           <p className="site-rise mt-5 max-w-xl text-lg leading-relaxed text-s-mute" style={{ "--rise-delay": "80ms" }}>
-            KF LearnSmart helps medical students in Pakistan prepare for OSCE, OSPE and written exams, with an AI patient for practising history taking.
+            KF LearnSmart helps medical students in Pakistan prepare for OSCE, OSPE and written exams, with an AI patient for practising OSCE stations.
           </p>
           <div className="site-rise mt-8" style={{ "--rise-delay": "140ms" }}>
             <p className="text-sm font-semibold text-s-ink">Built for</p>

@@ -16,6 +16,10 @@ export const OSPE_COUNT = ospeTotalCount;
 
 export const formatCount = (n) => n.toLocaleString("en-US");
 
+// Content keeps growing (or gets pruned), so public figures are shown as
+// "at least" counts: 5,000+ rather than an exact number that goes stale.
+export const plus = (n) => `${formatCount(n)}+`;
+
 export const SIGNUP_LABEL = "Create free account";
 
 const YEAR_LABELS = { 1: "First Year", 2: "Second Year", 3: "Third Year", 4: "Fourth Year", 5: "Final Year" };
@@ -133,7 +137,7 @@ export const WEIGHT_MARKS = { critical: 3, major: 2, minor: 1 };
 export const faqs = [
   {
     q: "Is KF LearnSmart free to use?",
-    a: "Creating an account is free. The MCQ bank, OSPE stations, history-taking guide, clinical examination guide, handout notes and guided self-practice on OSCE stations are all included. Credits are only used for the AI virtual patient and AI assessment.",
+    a: "Yes. A free account includes the MCQ bank, OSPE stations, every guide, handout notes and guided self-practice on OSCE stations. The AI virtual patient comes with a practice pack.",
   },
   {
     q: "How does the AI virtual patient work?",
@@ -142,10 +146,6 @@ export const faqs = [
   {
     q: "How is my station marked?",
     a: "When you end a station you can request AI assessment. It checks your transcript against the station's marking checklist and gives you a score, a written summary and the items you missed. You can also mark yourself against the checklist instead.",
-  },
-  {
-    q: "What happens if an AI assessment fails?",
-    a: "If the assessment cannot be completed, the credits for it are returned to your balance automatically and you can try again.",
   },
   {
     q: "Do I need a microphone?",

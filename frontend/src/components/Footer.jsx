@@ -32,7 +32,7 @@ export default function Footer() {
               <span className="text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-s-mute">
-              OSCE, OSPE and MCQ preparation for medical students in Pakistan, with an AI virtual patient for history taking.
+              OSCE, OSPE and MCQ preparation for medical students in Pakistan, with an AI virtual patient for every OSCE station.
             </p>
           </div>
           {columns.map((col) => (
