@@ -141,6 +141,15 @@ export async function deleteAccountRequest({ password }) {
   clearLegacySessionStorage();
 }
 
+// Ends the first-run welcome tour. The cached user is updated first so the
+// tour doesn't come back on the next page even if the request fails.
+export function markTourDone() {
+  const user = getCurrentUser();
+  if (!user?.tourPending) return Promise.resolve();
+  storeUser({ ...user, tourPending: false });
+  return updateProfileRequest({ tourDone: true }).catch(() => {});
+}
+
 export function saveProfileDetails(user, profile) {
   const merged = { ...user, ...profile, profile: { ...(user?.profile || {}), ...profile } };
   localStorage.setItem(SESSION_KEY, JSON.stringify(merged));

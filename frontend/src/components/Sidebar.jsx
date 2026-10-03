@@ -95,7 +95,7 @@ function NavList({ sections, active, mode, onNavigate }) {
         const label = GROUP_LABELS[g.key];
         const headingId = `nav-group-${g.key}`;
         return (
-          <div key={g.key} role="group" aria-labelledby={label ? headingId : undefined} className={gi > 0 ? "mt-2" : ""}>
+          <div key={g.key} data-tour={`group-${g.key}`} role="group" aria-labelledby={label ? headingId : undefined} className={gi > 0 ? "mt-2" : ""}>
             {gi > 0 && (
               <>
                 <p id={headingId} className={`${GROUP_TEXT_CLASS[mode]} px-3 pb-1.5 pt-3 text-xs font-medium text-s-mute/80`}>{label}</p>
@@ -107,7 +107,7 @@ function NavList({ sections, active, mode, onNavigate }) {
                 const isActive = s.key === active;
                 return (
                   <li key={s.key}>
-                    <Link to={s.href} title={mode !== "drawer" ? s.label : undefined} aria-current={isActive ? "page" : undefined} onClick={onNavigate} className={itemClass(isActive, mode)}>
+                    <Link to={s.href} data-tour={s.key} title={mode !== "drawer" ? s.label : undefined} aria-current={isActive ? "page" : undefined} onClick={onNavigate} className={itemClass(isActive, mode)}>
                       <NavIcon item={s} active={isActive} />
                       <span className={`${LABEL_CLASS[mode]} truncate`}>{s.label}</span>
                     </Link>
@@ -129,12 +129,12 @@ function AccountLinks({ active, balance, mode, onNavigate, onLogout }) {
   const compact = mode !== "drawer";
   return (
     <div className="flex flex-col gap-1 border-t border-s-line pt-3">
-      <Link to="/credits" title={compact ? `AI credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, mode)}>
+      <Link to="/credits" data-tour="credits" title={compact ? `AI credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, mode)}>
         <NavIcon item={{ key: "credits" }} active={creditsActive} />
         <span className={hide}>AI Credits</span>
         <span className={`${hide} ml-auto font-chart text-xs text-s-mute`}>{formatBalance(balance)}</span>
       </Link>
-      <Link to="/settings" title={compact ? "Settings" : undefined} aria-current={settingsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(settingsActive, mode)}>
+      <Link to="/settings" data-tour="settings" title={compact ? "Settings" : undefined} aria-current={settingsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(settingsActive, mode)}>
         <NavIcon item={{ key: "settings" }} active={settingsActive} />
         <span className={hide}>Settings</span>
       </Link>
@@ -216,14 +216,14 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
     <>
       <header className="fixed inset-x-0 top-0 z-30 border-b border-s-line bg-s-page/85 backdrop-blur-lg sm:hidden">
         <div className="flex h-16 items-center gap-1.5 px-2">
-          <button type="button" aria-label="Open menu" aria-expanded={open} aria-controls="app-drawer" onClick={() => setOpen(true)} className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-ink hover:bg-s-tint/70">
+          <button type="button" data-tour="menu" aria-label="Open menu" aria-expanded={open} aria-controls="app-drawer" onClick={() => setOpen(true)} className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-ink hover:bg-s-tint/70">
             <Menu size={20} strokeWidth={1.75} />
           </button>
           <Link to="/dashboard" className="flex min-h-11 min-w-0 flex-1 items-center gap-2">
             <BrandMark size={30} />
             <span className="truncate text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
           </Link>
-          <Link to="/credits" aria-label={`AI credits: ${formatBalance(balance)}`} className="site-press flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-2.5 font-chart text-xs text-s-ink hover:bg-s-tint/70">
+          <Link to="/credits" data-tour="credits" aria-label={`AI credits: ${formatBalance(balance)}`} className="site-press flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-2.5 font-chart text-xs text-s-ink hover:bg-s-tint/70">
             <Zap size={16} strokeWidth={1.75} fill="currentColor" className="text-sun" aria-hidden="true" /> {formatBalance(balance)}
           </Link>
           {initials && (

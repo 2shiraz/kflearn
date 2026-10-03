@@ -16,6 +16,7 @@ function toUserDto(user) {
     role: user.role,
     roleLabel: user.roleLabel || "",
     avatar: avatarFor(user),
+    tourPending: Boolean(user.tourPending),
     institution: profile.institution || "",
     programme: profile.programme || "",
     yearLevel: profile.yearLevel || "",
@@ -96,6 +97,7 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     role: "student",
     roleLabel: String(roleLabel || "").trim(),
     avatar: randomAvatarId(),
+    tourPending: true,
     profile: safeProfile,
   });
 
@@ -159,6 +161,11 @@ export async function updateCurrentUser(userId, payload) {
   if (payload.avatar !== undefined) {
     if (!isAvatarId(payload.avatar)) throw badProfile();
     user.avatar = payload.avatar;
+  }
+  // The client can only mark the tour as done; replaying it is client-side.
+  if (payload.tourDone !== undefined) {
+    if (payload.tourDone !== true) throw badProfile();
+    user.tourPending = false;
   }
   if (payload.profile !== undefined) user.profile = { ...user.profile, ...cleanProfile(payload.profile) };
 

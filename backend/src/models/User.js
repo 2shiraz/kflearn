@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema(
     roleLabel: { type: String, default: "" },
     // Id of one of the bundled avatars (see config/avatars.js), never image data.
     avatar: { type: String, default: "" },
+    // Set at signup so the welcome tour runs once; cleared when it's finished
+    // or skipped. Accounts made before the tour existed default to false.
+    tourPending: { type: Boolean, default: false },
     profile: {
       institution: { type: String, default: "" },
       programme: { type: String, default: "" },

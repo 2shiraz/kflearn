@@ -3,6 +3,7 @@
 // new sections can reuse the same sidebar/layout/breadcrumb primitives instead
 // of redefining them. Styling follows the public site: the app sits inside the
 // .site token scope, cards are rounded-3xl, buttons and chips are pills.
+import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { AlertCircle, ChevronRight, RotateCw } from "lucide-react";
 import Sidebar from "./Sidebar";
@@ -16,11 +17,25 @@ function signOut() {
 
 // The .site scope plus the app canvas. Also used by pages that mount the
 // sidebar themselves (ComingSoonPage).
+// The welcome tour runs once on the dashboard after signup. Loaded only when
+// it's about to show.
+const WelcomeTour = lazy(() => import("./WelcomeTour"));
+
+function TourGate({ active }) {
+  if (active !== "dashboard" || !getCurrentUser()?.tourPending) return null;
+  return (
+    <Suspense fallback={null}>
+      <WelcomeTour />
+    </Suspense>
+  );
+}
+
 export function AppFrame({ active, children }) {
   return (
     <div className="site site-app flex min-h-dvh">
       <Sidebar active={active} onLogout={signOut} />
       {children}
+      <TourGate active={active} />
     </div>
   );
 }

@@ -128,3 +128,26 @@ test("admin accounts can't be deleted from settings", async () => {
   assert.equal(res.status, 403);
   assert.ok(await User.exists({ _id: user.id }));
 });
+
+test("the welcome tour is pending for new accounts until marked done", async () => {
+  const { token, user } = await register();
+  assert.equal(user.tourPending, true);
+
+  const bad = await request(app).patch("/api/auth/me").set(auth(token)).send({ tourDone: false });
+  assert.equal(bad.status, 400);
+
+  const ok = await request(app).patch("/api/auth/me").set(auth(token)).send({ tourDone: true });
+  assert.equal(ok.status, 200);
+  assert.equal(ok.body.data.user.tourPending, false);
+  assert.equal((await User.findById(user.id).lean()).tourPending, false);
+
+  const login = await request(app).post("/api/auth/login").send({ email: user.email, password: PASSWORD });
+  assert.equal(login.body.data.user.tourPending, false);
+});
+
+test("accounts made before the tour existed don't get it", async () => {
+  const { token, user } = await register();
+  await User.updateOne({ _id: user.id }, { $unset: { tourPending: 1 } });
+  const me = await request(app).get("/api/auth/me").set(auth(token));
+  assert.equal(me.body.data.user.tourPending, false);
+});
