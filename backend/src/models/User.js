@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema(
     // Set at signup so the welcome tour runs once; cleared when it's finished
     // or skipped. Accounts made before the tour existed default to false.
     tourPending: { type: Boolean, default: false },
+    // Set by an admin. A suspended account can't sign in and its sessions end.
+    suspended: { type: Boolean, default: false },
     profile: {
       institution: { type: String, default: "" },
       programme: { type: String, default: "" },

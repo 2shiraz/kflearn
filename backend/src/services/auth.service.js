@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
-import { STARTING_CREDITS } from "../config/credits.js";
+import { getPricing, getSiteSettings } from "./siteSettings.service.js";
 import { avatarFor, isAvatarId, randomAvatarId } from "../config/avatars.js";
 import { CreditTransaction } from "../models/CreditTransaction.js";
 import { OsceAttempt } from "../models/OsceAttempt.js";
@@ -81,6 +81,13 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     throw error;
   }
   const safeProfile = cleanProfile(profile);
+  if (!(await getSiteSettings()).signupsOpen) {
+    const error = new Error("New signups are closed right now.");
+    error.status = 403;
+    error.code = "SIGNUPS_CLOSED";
+    throw error;
+  }
+  const { welcomeCredits } = await getPricing();
 
   const existing = await User.findOne({ email: normalizedEmail }).lean();
   if (existing) {
@@ -99,20 +106,22 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     roleLabel: String(roleLabel || "").trim(),
     avatar: randomAvatarId(),
     tourPending: true,
-    creditBalance: STARTING_CREDITS,
+    creditBalance: welcomeCredits,
     profile: safeProfile,
   });
 
-  try {
-    await CreditTransaction.create({
-      userId: user._id, type: "grant", reason: "welcome-grant",
-      amount: STARTING_CREDITS, balanceAfter: STARTING_CREDITS,
-      note: "Welcome credits for your new account.", createdBy: "system",
-    });
-  } catch (error) {
-    // Don't leave a partially registered account with untracked credits.
-    await User.deleteOne({ _id: user._id });
-    throw error;
+  if (welcomeCredits > 0) {
+    try {
+      await CreditTransaction.create({
+        userId: user._id, type: "grant", reason: "welcome-grant",
+        amount: welcomeCredits, balanceAfter: welcomeCredits,
+        note: "Welcome credits for your new account.", createdBy: "system",
+      });
+    } catch (error) {
+      // Don't leave a partially registered account with untracked credits.
+      await User.deleteOne({ _id: user._id });
+      throw error;
+    }
   }
 
   const { token, expiresInMs } = signToken(user);
@@ -130,6 +139,12 @@ export async function loginUser({ email, password }) {
   if (!user || !user.passwordHash || !(await bcrypt.compare(password || "", user.passwordHash))) {
     const error = new Error("Incorrect email or password.");
     error.status = 401;
+    throw error;
+  }
+  if (user.suspended) {
+    const error = new Error("This account has been suspended. Please contact support.");
+    error.status = 403;
+    error.code = "ACCOUNT_SUSPENDED";
     throw error;
   }
 

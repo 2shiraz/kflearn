@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
-import { registerRequest, ROLE_OPTIONS, YEAR_LEVEL_OPTIONS } from "../lib/api";
+import { getPublicSite, registerRequest, ROLE_OPTIONS, YEAR_LEVEL_OPTIONS } from "../lib/api";
 import { SignupAside } from "../components/AuthAside";
 import AuthShell, { FormError, inputClass, primaryButtonClass, secondaryButtonClass } from "../components/AuthShell";
 
@@ -13,6 +13,7 @@ export default function SignupPage() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
+  const [signupsOpen, setSignupsOpen] = useState(true);
   const [account, setAccount] = useState({ fullName: "", email: "", password: "" });
   const [role, setRole] = useState("");
   const [profile, setProfile] = useState({
@@ -45,6 +46,20 @@ export default function SignupPage() {
       setStatus("error");
       setError(err.message);
     }
+  }
+
+  useEffect(() => {
+    getPublicSite().then((data) => setSignupsOpen(data?.signupsOpen !== false)).catch(() => {});
+  }, []);
+
+  if (!signupsOpen) {
+    return (
+      <AuthShell aside={<SignupAside />}>
+        <h1 className="mt-2 text-2xl font-semibold text-s-ink">Signups are paused</h1>
+        <p className="mt-2 leading-relaxed text-s-mute">We're not taking new accounts right now. Please check back soon.</p>
+        <Link to="/signin" className={`${primaryButtonClass} mt-7 w-full`}>Sign in instead</Link>
+      </AuthShell>
+    );
   }
 
   return (

@@ -9,7 +9,8 @@ import { selfAssessChecklist } from "../services/scoring.service.js";
 import { messageId } from "../utils/ids.js";
 import { transcribeAudio } from "../services/transcription.service.js";
 import { refundCredits, spendCredits } from "../services/credit.service.js";
-import { CREDIT_COSTS, MAX_STUDENT_MESSAGES_PER_ATTEMPT, MAX_TRANSCRIPTIONS_PER_ATTEMPT } from "../config/credits.js";
+import { MAX_STUDENT_MESSAGES_PER_ATTEMPT, MAX_TRANSCRIPTIONS_PER_ATTEMPT } from "../config/credits.js";
+import { getPricing, getSiteSettings, sectionClosed } from "../services/siteSettings.service.js";
 
 async function findOwnedAttempt(attemptId, userId) {
   if (!mongoose.isObjectIdOrHexString(attemptId)) {
@@ -75,6 +76,11 @@ async function releaseUsageSlot(attemptId, userId, field) {
 
 export async function createAttempt(req, res) {
   const { stationId, mode, aiProvider } = req.body;
+  const site = await getSiteSettings();
+  if (req.user.role !== "admin") {
+    if (!site.sections.stations) throw sectionClosed();
+    if (mode === "virtual-patient" && !site.aiPatient) throw sectionClosed("The AI patient is switched off right now. Practise with the checklist instead.");
+  }
   const { module, patientScript, checklist } = await getStationClinicalBundle(stationId);
   const aiSettings = await getAiSettings();
   if (module.status !== "published") {
@@ -109,7 +115,7 @@ export async function createAttempt(req, res) {
   // Pay first, then create: the attempt only exists (and is only marked paid)
   // once the debit has succeeded. If creation fails, the debit is refunded.
   const attemptId = new mongoose.Types.ObjectId();
-  const cost = CREDIT_COSTS.virtualPatient;
+  const cost = (await getPricing()).costs.virtualPatient;
   const balance = await spendCredits({ userId: req.user.id, amount: cost, reason: "virtual-patient", attemptId });
   let attempt;
   try {
@@ -294,6 +300,9 @@ export async function aiAssessAttempt(req, res) {
   // self-practice is self-marked and never reaches this endpoint in the UI;
   // reject it here so the server enforces that boundary regardless of client.
   if (attempt.mode !== "virtual-patient") throw invalidAttemptState();
+  if (req.user.role !== "admin" && !(await getSiteSettings()).aiPatient) {
+    throw sectionClosed("AI marking is switched off right now. Mark this station yourself instead.");
+  }
   const staleBefore = new Date(Date.now() - 10 * 60 * 1000);
   if (attempt.status !== "ended" && !(attempt.status === "assessing" && attempt.assessmentStartedAt < staleBefore)) {
     throw invalidAttemptState();
@@ -317,7 +326,7 @@ export async function aiAssessAttempt(req, res) {
 
   // Charge once per attempt, inside the lease (only one request can hold it).
   // If a previous run was charged and then crashed, a stale-lease retry is free.
-  const cost = CREDIT_COSTS.aiAssessment;
+  const cost = (await getPricing()).costs.aiAssessment;
   let chargedNow = false;
   let balance;
   if (!reserved.billing?.aiAssessmentCharged) {

@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import OsceStationBrowser, { StationAvailability } from "../components/OsceStationBrowser";
 import LeaveStationDialog from "../components/LeaveStationDialog";
+import AdminAccounts from "../components/admin/AdminAccounts";
+import AdminAnnouncements from "../components/admin/AdminAnnouncements";
+import AdminPricing from "../components/admin/AdminPricing";
+import AdminAccess from "../components/admin/AdminAccess";
+import StationEditDialog from "../components/admin/StationEditDialog";
 import { useLeaveStationGuard } from "../hooks/useLeaveStationGuard";
 import { OSCE_CATEGORIES, displayTitle } from "../lib/osceFilters.js";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -24,6 +29,9 @@ import {
   Square,
   Stethoscope,
   Timer,
+  ToggleRight,
+  Megaphone,
+  Pencil,
   X,
 } from "lucide-react";
 import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
@@ -987,7 +995,7 @@ export function AdminOscePage() {
   const [stationFilter, setStationFilter] = useState("all");
   const [stationCategoryFilter, setStationCategoryFilter] = useState("");
   const [stationModeFilter, setStationModeFilter] = useState("");
-  const [userSearch, setUserSearch] = useState("");
+  const [editStationId, setEditStationId] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [statusBusyId, setStatusBusyId] = useState(null);
   const [state, setState] = useState({
@@ -1124,8 +1132,11 @@ export function AdminOscePage() {
   const tabs = [
     { id: "overview", label: "Overview", icon: Layers3 },
     { id: "stations", label: "OSCE stations", icon: Stethoscope },
-    { id: "ai", label: "AI & models", icon: Settings2 },
     { id: "users", label: "Accounts", icon: Users },
+    { id: "announcements", label: "Announcements", icon: Megaphone },
+    { id: "pricing", label: "Pricing", icon: Coins },
+    { id: "access", label: "Site access", icon: ToggleRight },
+    { id: "ai", label: "AI & models", icon: Settings2 },
   ];
   const counts = Object.fromEntries(["draft", "approved", "published", "archived"].map((status) => [status, state.modules.filter((station) => station.status === status).length]));
   const visibleStations = state.modules.filter((station) =>
@@ -1133,9 +1144,6 @@ export function AdminOscePage() {
     (!stationModeFilter || station.aiVirtualPatientAvailable === (stationModeFilter === "ai")) &&
     (stationFilter === "all" || (stationFilter === "review" ? ["draft", "approved"].includes(station.status) : station.status === stationFilter)) &&
     `${station.title} ${station.slug} ${station.specialty?.name || ""}`.toLowerCase().includes(stationSearch.toLowerCase().trim()),
-  );
-  const visibleUsers = state.users.filter((user) =>
-    `${user.fullName} ${user.email} ${user.role}`.toLowerCase().includes(userSearch.toLowerCase().trim()),
   );
   const defaultProvider = state.aiStatus?.providers?.find((provider) => provider.id === state.aiStatus.defaultProvider);
 
@@ -1186,8 +1194,12 @@ export function AdminOscePage() {
                 <h2 className="text-lg font-semibold tracking-tight text-s-ink">Configuration</h2>
                 <p className="mt-1 text-sm text-s-mute">Virtual patient, assessment, and speech-to-text models are configured under AI &amp; models.</p>
                 {!defaultProvider?.configured && <p className="mt-4 flex items-start gap-2 rounded-2xl bg-sun-soft p-3.5 text-sm text-s-ink"><AlertTriangle size={17} strokeWidth={2} className="shrink-0 text-sun" aria-hidden="true" /> The default provider has no configured key. AI sessions may be unavailable.</p>}
-                <p className="mt-4 text-sm text-s-mute">AI credit prices and usage caps are server configuration. Grants remain CLI-only and are recorded in the AI credit ledger.</p>
-                <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "ai" }))} className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Review AI settings <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
+                <p className="mt-4 text-sm text-s-mute">AI credit prices, signup credits and packages are under Pricing. Which sections students can use, signups and the AI patient switch are under Site access.</p>
+                <div className="mt-2 flex flex-wrap gap-x-4">
+                  <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "ai" }))} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">AI settings <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
+                  <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "pricing" }))} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Pricing <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
+                  <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "access" }))} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Site access <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
+                </div>
               </Panel>
             </div>
           </div>
@@ -1211,6 +1223,7 @@ export function AdminOscePage() {
                 <div key={station.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
                   <div className="min-w-0 flex-1"><p className="font-semibold text-s-ink">{station.title}</p><p className="break-all text-xs text-s-mute">{station.specialty?.name || "General"} / {station.slug}</p><p className="my-1 text-xs text-s-mute">{station.categoryLabel}</p><StationAvailability station={station} /></div>
                   <span className={`rounded-full px-2.5 py-1 font-chart text-xs capitalize ${STATUS_STYLES[station.status] || "bg-s-tint text-s-mute"}`}>{station.status}</span>
+                  <SecondaryButton onClick={() => setEditStationId(station.id)} className="px-4"><Pencil size={15} strokeWidth={2} aria-hidden="true" /> Edit</SecondaryButton>
                   <label className="sr-only" htmlFor={`station-status-${station.id}`}>Change status for {station.title}</label>
                   <select id={`station-status-${station.id}`} aria-label={`Change status for ${station.title}`} value={station.status} disabled={statusBusyId === station.id} onChange={(e) => changeStatus(station.id, e.target.value)} className="min-h-11 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent disabled:opacity-50">
                     {Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}
@@ -1318,53 +1331,18 @@ export function AdminOscePage() {
             </form>
           </Panel>
         )}
-        {!state.loading && state.activeTab === "users" && (
-          <Panel>
-            <h2 className="text-2xl font-semibold tracking-tight text-s-ink">Accounts</h2>
-            <p className="mt-1 text-sm text-s-mute">{state.users.length} registered accounts. Account roles and AI credit balances are read-only here; grants use the audited CLI.</p>
-            <label className="relative mt-5 block max-w-md"><span className="sr-only">Search accounts</span><Search size={17} strokeWidth={2} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-s-mute" aria-hidden="true" /><input value={userSearch} onChange={(e) => setUserSearch(e.target.value)} placeholder="Search name, email, or role" className="w-full min-h-11 rounded-xl border border-s-line bg-s-card py-2.5 pl-10 pr-3 text-sm text-s-ink outline-none placeholder:text-s-mute focus:border-s-accent" /></label>
-            {/* Phones: one card per user — a 5-column table has no room to breathe below sm. */}
-            <div className="mt-5 space-y-2 sm:hidden">
-              {visibleUsers.map((user) => (
-                <div key={user.id} className="rounded-2xl border border-s-line bg-s-card p-4 text-sm">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="font-semibold text-s-ink">{user.fullName}</p>
-                    <span className="shrink-0 rounded-full bg-s-accent-soft px-2.5 py-1 font-chart text-xs text-s-accent-strong">{user.role}</span>
-                  </div>
-                  <p className="mt-1 break-all text-s-mute">{user.email}</p>
-                  <p className="mt-1 text-s-mute">{user.roleLabel || user.profile?.programme || "-"} / {user.creditBalance} AI credits / Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-5 hidden overflow-x-auto sm:block">
-              <table className="w-full min-w-[720px] text-left text-sm">
-                <thead className="text-xs uppercase text-s-mute">
-                  <tr>
-                    <th className="border-b border-s-line py-3 pr-3">Name</th>
-                    <th className="border-b border-s-line py-3 pr-3">Email</th>
-                    <th className="border-b border-s-line py-3 pr-3">Role</th>
-                    <th className="border-b border-s-line py-3 pr-3">Profile</th>
-                    <th className="border-b border-s-line py-3 pr-3">AI Credits</th>
-                    <th className="border-b border-s-line py-3 pr-3">Joined</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {visibleUsers.map((user) => (
-                    <tr key={user.id}>
-                      <td className="border-b border-s-line py-3 pr-3 font-semibold text-s-ink">{user.fullName}</td>
-                      <td className="border-b border-s-line py-3 pr-3 text-s-mute">{user.email}</td>
-                      <td className="border-b border-s-line py-3 pr-3"><span className="rounded-full bg-s-accent-soft px-2.5 py-1 font-chart text-xs text-s-accent-strong">{user.role}</span></td>
-                      <td className="border-b border-s-line py-3 pr-3 text-s-mute">{user.roleLabel || user.profile?.programme || "-"}</td>
-                      <td className="border-b border-s-line py-3 pr-3 font-semibold text-s-ink">{user.creditBalance}</td>
-                      <td className="border-b border-s-line py-3 pr-3 text-s-mute">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {visibleUsers.length === 0 && <p className="py-5 text-center text-sm text-s-mute">No accounts match this search.</p>}
-          </Panel>
-        )}
+        {!state.loading && state.activeTab === "users" && <AdminAccounts />}
+        {!state.loading && state.activeTab === "announcements" && <AdminAnnouncements />}
+        {!state.loading && state.activeTab === "pricing" && <AdminPricing />}
+        {!state.loading && state.activeTab === "access" && <AdminAccess />}
+        <StationEditDialog
+          stationId={editStationId}
+          onClose={() => setEditStationId(null)}
+          onSaved={async () => {
+            const modules = await listAdminOsceStations();
+            setState((s) => ({ ...s, modules, message: "Station saved." }));
+          }}
+        />
       </PageMain>
     </RequireUser>
   );

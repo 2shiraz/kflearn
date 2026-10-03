@@ -22,7 +22,10 @@ export default function ProgressPage() {
 
   const load = useCallback(() => {
     setState((s) => ({ ...s, loading: true, error: "" }));
-    Promise.all([listOsceAttempts(), listOsceStations()])
+    // With the OSCE section switched off the station bank answers 403; show
+    // the rest of the progress rather than an error.
+    const closedAsEmpty = (empty) => (err) => { if (err.code === "SECTION_CLOSED") return empty; throw err; };
+    Promise.all([listOsceAttempts(), listOsceStations().catch(closedAsEmpty({ modules: [] }))])
       .then(([attempts, stations]) => setState({ loading: false, attempts: attempts || [], stations: stations.modules || [], error: "" }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);

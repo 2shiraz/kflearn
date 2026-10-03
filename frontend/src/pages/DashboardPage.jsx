@@ -12,6 +12,8 @@ import { SECTION_LOOK, TONES, specialtyLook } from "../site/tones";
 import { plus } from "../site/siteContent";
 import { displayTitle } from "../lib/osceFilters";
 import { osceSummary } from "../lib/progress";
+import { sectionOpen, useSite } from "../lib/site";
+import AnnouncementBanner from "../components/AnnouncementBanner";
 import { topics as historyGuideTopics } from "../data/historyTakingGuide";
 import { stations as examStations } from "../data/clinicalExaminationGuide";
 import { handouts } from "../data/handoutNotes";
@@ -46,6 +48,18 @@ const sections = [
   },
 ];
 
+// Column spans on the six-column grid, so the tiles still fill whole rows when
+// the admin switches some sections off.
+const SPAN = { 2: "md:col-span-2", 3: "md:col-span-3", 6: "md:col-span-6" };
+function withSpans(list) {
+  const large = list.filter((s) => s.large);
+  const small = list.filter((s) => !s.large);
+  return [
+    ...large.map((s) => ({ ...s, span: SPAN[large.length === 1 ? 6 : 3] })),
+    ...small.map((s) => ({ ...s, span: SPAN[6 / small.length] || SPAN[2] })),
+  ];
+}
+
 // One of the student characters, picked from the name so it stays the same.
 const STUDENTS = [
   { name: "student-ayesha", tone: "sky" },
@@ -67,6 +81,7 @@ function greeting() {
 
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
+  const site = useSite();
   const [summary, setSummary] = useState({ loading: true, modules: {}, error: "" });
   const [osce, setOsce] = useState({ loading: true, attempts: [], stations: [] });
 
@@ -98,6 +113,7 @@ export default function DashboardPage() {
   return (
     <RequireUser active="dashboard">
       <PageMain>
+        <AnnouncementBanner />
         <div className="site-rise flex items-center gap-4">
           <Character name={student.name} size={64} tone={student.tone} className="bob hidden sm:inline-flex" />
           <div className="min-w-0">
@@ -114,10 +130,10 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <FeaturedOsce loading={summary.loading} count={stationCount} osce={osce} />
+        {sectionOpen(site, "stations", user) && <FeaturedOsce loading={summary.loading} count={stationCount} osce={osce} />}
 
         <div className="mt-4 grid gap-4 md:grid-cols-6">
-          {sections.map((s, i) => (
+          {withSpans(sections.filter((s) => sectionOpen(site, s.key, user))).map((s, i) => (
             <SectionTile key={s.key} section={s} index={i} />
           ))}
         </div>
@@ -247,7 +263,7 @@ function SectionTile({ section: s, index }) {
     <Link
       to={s.href}
       style={{ "--rise-delay": `${160 + index * 60}ms` }}
-      className={`site-rise site-grid site-press group relative flex flex-col overflow-hidden rounded-3xl border border-s-line p-6 ${t.ring} ${s.large ? "md:col-span-3 md:p-7" : "md:col-span-2"}`}
+      className={`site-rise site-grid site-press group relative flex flex-col overflow-hidden rounded-3xl border border-s-line p-6 ${t.ring} ${s.span} ${s.large ? "md:p-7" : ""}`}
     >
       {s.large ? (
         <span

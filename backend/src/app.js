@@ -16,6 +16,10 @@ import adminOsceRoutes from "./routes/adminOsce.routes.js";
 import adminUserRoutes from "./routes/adminUser.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import creditRoutes from "./routes/credit.routes.js";
+import siteRoutes from "./routes/site.routes.js";
+import adminSettingsRoutes from "./routes/adminSettings.routes.js";
+import { getPublicSite } from "./controllers/site.controller.js";
+import { asyncHandler } from "./utils/asyncHandler.js";
 import { getPublicCreditPackages } from "./controllers/credit.controller.js";
 
 export function createApp() {
@@ -35,7 +39,8 @@ export function createApp() {
   });
   app.use("/api", apiLimiter);
   app.use("/api/auth", authRoutes);
-  app.get("/api/public/credit-packages", getPublicCreditPackages);
+  app.get("/api/public/credit-packages", asyncHandler(getPublicCreditPackages));
+  app.get("/api/public/site", asyncHandler(getPublicSite));
   app.use(authenticate);
   app.use(csrfProtection);
   app.use("/api/dashboard", dashboardRoutes);
@@ -45,6 +50,8 @@ export function createApp() {
   app.use("/api/ai", aiRoutes);
   app.use("/api/admin/osce", adminOsceRoutes);
   app.use("/api/admin/users", adminUserRoutes);
+  app.use("/api/site", siteRoutes);
+  app.use("/api/admin", adminSettingsRoutes);
 
   app.use(notFound);
   app.use(errorHandler);

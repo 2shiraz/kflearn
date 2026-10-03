@@ -20,7 +20,7 @@ export async function authenticate(req, res, next) {
 
     const payload = jwt.verify(token, env.jwtSecret, { algorithms: ["HS256"] });
     const user = await User.findById(payload.sub).lean();
-    if (!user || payload.sv !== (user.sessionVersion || 0)) {
+    if (!user || user.suspended || payload.sv !== (user.sessionVersion || 0)) {
       return res.status(401).json({ success: false, message: "Authentication required." });
     }
 

@@ -311,6 +311,74 @@ export function transcribeOsceAudio(attemptId, audioBlob) {
   });
 }
 
+// ---- Site settings (what students can see) ----
+export function getSiteConfig() {
+  return apiFetch("/site");
+}
+
+export function getPublicSite() {
+  return publicFetch("/public/site", { method: "GET" });
+}
+
+// ---- Admin: settings, pricing, announcements ----
+export function getAdminSettings() {
+  return apiFetch("/admin/settings");
+}
+
+export function updateAdminSite(payload) {
+  return apiFetch("/admin/settings/site", { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export function updateAdminPricing(payload) {
+  return apiFetch("/admin/settings/pricing", { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export function listAdminAnnouncements() {
+  return apiFetch("/admin/announcements");
+}
+
+export function createAdminAnnouncement(payload) {
+  return apiFetch("/admin/announcements", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export function updateAdminAnnouncement(id, payload) {
+  return apiFetch(`/admin/announcements/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export function deleteAdminAnnouncement(id) {
+  return apiFetch(`/admin/announcements/${id}`, { method: "DELETE" });
+}
+
+// ---- Admin: accounts ----
+export function getAdminUser(id) {
+  return apiFetch(`/admin/users/${id}`);
+}
+
+export function updateAdminUser(id, payload) {
+  return apiFetch(`/admin/users/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export function adjustAdminUserCredits(id, payload) {
+  return apiFetch(`/admin/users/${id}/credits`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+export function deleteAdminUser(id, confirmation) {
+  return apiFetch(`/admin/users/${id}/delete`, { method: "POST", body: JSON.stringify({ confirmation }) });
+}
+
+// ---- Admin: station editing ----
+export function getAdminStation(id) {
+  return apiFetch(`/admin/osce/${id}`);
+}
+
+export function updateAdminStation(id, payload) {
+  return apiFetch(`/admin/osce/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export function listAdminSpecialties() {
+  return apiFetch("/admin/osce/specialties");
+}
+
 export function listAdminOsceStations() {
   return apiFetch("/admin/osce");
 }

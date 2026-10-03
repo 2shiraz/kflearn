@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { CREDIT_COSTS, CREDIT_PACKAGES, MAX_CREDIT_OPERATION, MAX_STUDENT_MESSAGES_PER_ATTEMPT } from "../config/credits.js";
+import { MAX_CREDIT_OPERATION, MAX_STUDENT_MESSAGES_PER_ATTEMPT } from "../config/credits.js";
+import { getPricing } from "./siteSettings.service.js";
 import { CreditTransaction } from "../models/CreditTransaction.js";
 import { User } from "../models/User.js";
 
@@ -67,6 +68,34 @@ export async function grantCredits({ userId, amount, note = "", createdBy = "sys
   return user.creditBalance;
 }
 
+// Admin balance correction from the Accounts screen. Positive adds credits,
+// negative removes them (never below zero). Always ledgered with who did it.
+export async function adminAdjustCredits({ userId, amount, note = "", createdBy }) {
+  if (!Number.isSafeInteger(amount) || amount === 0 || Math.abs(amount) > MAX_CREDIT_OPERATION) {
+    const error = new Error("Enter a whole number of credits, not zero.");
+    error.status = 400;
+    throw error;
+  }
+  const filter = amount < 0 ? { _id: userId, creditBalance: { $gte: -amount } } : { _id: userId };
+  const user = await User.findOneAndUpdate(filter, { $inc: { creditBalance: amount } }, { new: true, projection: { creditBalance: 1 } });
+  if (!user) {
+    const exists = await User.exists({ _id: userId });
+    const error = new Error(exists ? "That would take the balance below zero." : "Account not found.");
+    error.status = exists ? 409 : 404;
+    throw error;
+  }
+  try {
+    await CreditTransaction.create({
+      userId, type: amount > 0 ? "grant" : "deduct", reason: "admin-adjust",
+      amount, balanceAfter: user.creditBalance, note: String(note).slice(0, 200), createdBy,
+    });
+  } catch (error) {
+    await User.updateOne({ _id: userId }, { $inc: { creditBalance: -amount } });
+    throw error;
+  }
+  return user.creditBalance;
+}
+
 export async function listTransactions(userId, limit = 50) {
   const rows = await CreditTransaction.find({ userId: new mongoose.Types.ObjectId(userId) })
     .sort({ createdAt: -1, _id: -1 })
@@ -85,16 +114,18 @@ export async function listTransactions(userId, limit = 50) {
 
 // Public, unauthenticated view for the marketing pricing page: package names,
 // credit amounts and prices only. Per-action costs stay behind authentication.
-export function publicCreditPackages() {
-  return CREDIT_PACKAGES.map(({ id, name, credits, pricePkr }) => ({ id, name, credits, pricePkr }));
+export async function publicCreditPackages() {
+  const { packages } = await getPricing();
+  return packages.map(({ id, name, credits, pricePkr }) => ({ id, name, credits, pricePkr }));
 }
 
-export function creditPricing() {
-  const fullStation = CREDIT_COSTS.virtualPatient + CREDIT_COSTS.aiAssessment;
+export async function creditPricing() {
+  const { costs, packages } = await getPricing();
+  const fullStation = costs.virtualPatient + costs.aiAssessment;
   return {
-    costs: { ...CREDIT_COSTS, fullStation },
+    costs: { ...costs, fullStation },
     limits: { studentMessagesPerStation: MAX_STUDENT_MESSAGES_PER_ATTEMPT },
-    packages: CREDIT_PACKAGES.map((pkg) => ({
+    packages: packages.map((pkg) => ({
       ...pkg,
       fullStations: Math.floor(pkg.credits / fullStation),
     })),

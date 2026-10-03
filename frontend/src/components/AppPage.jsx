@@ -9,6 +9,7 @@ import { AlertCircle, ChevronRight, RotateCw } from "lucide-react";
 import Sidebar from "./Sidebar";
 import { Character } from "../site/Illustrations";
 import { getCurrentUser, logout } from "../lib/api";
+import { sectionOpen, useSite } from "../lib/site";
 
 function signOut() {
   logout();
@@ -40,8 +41,12 @@ export function AppFrame({ active, children }) {
   );
 }
 
+// Sidebar keys the admin can switch off (see Admin > Site access).
+const SWITCHABLE_SECTIONS = ["stations", "mcqs", "ospe", "history", "clinical-exam", "handouts", "progress"];
+
 export function RequireUser({ children, active = "stations", adminOnly = false }) {
   const user = getCurrentUser();
+  const site = useSite();
   if (!user) {
     window.location.href = "/signin";
     return null;
@@ -51,6 +56,15 @@ export function RequireUser({ children, active = "stations", adminOnly = false }
       <AppFrame active="admin">
         <PageMain>
           <EmptyState character="examiner" tone="coral" title="Admin access is required" body="This area is only open to admin accounts." action={<LinkButton to="/dashboard">Back to dashboard</LinkButton>} />
+        </PageMain>
+      </AppFrame>
+    );
+  }
+  if (site.loaded && SWITCHABLE_SECTIONS.includes(active) && !sectionOpen(site, active, user)) {
+    return (
+      <AppFrame active={active}>
+        <PageMain>
+          <EmptyState character="examiner" tone="sun" title="This section isn't available right now" body="It has been switched off for the moment. Everything else is open as usual." action={<LinkButton to="/dashboard">Back to dashboard</LinkButton>} />
         </PageMain>
       </AppFrame>
     );

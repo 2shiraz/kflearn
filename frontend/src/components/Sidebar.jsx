@@ -8,6 +8,7 @@ import BrandMark from "./BrandMark";
 import { UserAvatar } from "../site/Illustrations";
 import { getCurrentUser, USER_EVENT } from "../lib/api";
 import { useCredits } from "../lib/credits";
+import { sectionOpen, useSite } from "../lib/site";
 
 function formatBalance(balance) {
   return balance === null ? "..." : balance.toLocaleString();
@@ -213,7 +214,9 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(readCollapsed);
   const { balance } = useCredits();
-  const navSections = user?.role === "admin" ? [...SECTIONS, { key: "admin", label: "Admin", href: "/admin/stations", group: "admin" }] : SECTIONS;
+  const site = useSite();
+  const openSections = SECTIONS.filter((s) => sectionOpen(site, s.key, user));
+  const navSections = user?.role === "admin" ? [...openSections, { key: "admin", label: "Admin", href: "/admin/stations", group: "admin" }] : openSections;
 
   const initials = user?.fullName ? user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "";
 
