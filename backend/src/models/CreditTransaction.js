@@ -6,7 +6,7 @@ const creditTransactionSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
     type: { type: String, enum: ["grant", "spend", "refund", "deduct"], required: true },
-    reason: { type: String, enum: ["virtual-patient", "ai-assessment", "admin-grant", "purchase", "welcome-grant", "admin-adjust"], required: true },
+    reason: { type: String, enum: ["virtual-patient", "ai-assessment", "admin-grant", "purchase", "welcome-grant", "admin-adjust", "purchase-refund"], required: true },
     // Signed: negative for spend, positive for grant/refund.
     amount: {
       type: Number,

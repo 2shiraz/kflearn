@@ -19,6 +19,7 @@ const REASON_LABELS = {
   "admin-grant": "Added by admin",
   "admin-adjust": "Admin adjustment",
   purchase: "Purchase",
+  "purchase-refund": "Purchase refunded",
   "welcome-grant": "Welcome credits",
 };
 

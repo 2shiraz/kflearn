@@ -11,6 +11,8 @@ function niceMax(values) {
   return Math.ceil(max / step) * step;
 }
 
+const pointLabel = (p) => p.label || shortDay(p.date);
+
 function HiddenTable({ caption, series }) {
   return (
     <table className="sr-only">
@@ -18,7 +20,7 @@ function HiddenTable({ caption, series }) {
       <thead><tr><th>Day</th>{series.map((s) => <th key={s.label}>{s.label}</th>)}</tr></thead>
       <tbody>
         {series[0].points.map((p, i) => (
-          <tr key={p.date}><td>{shortDay(p.date)}</td>{series.map((s) => <td key={s.label}>{s.points[i].count}</td>)}</tr>
+          <tr key={p.date}><td>{pointLabel(p)}</td>{series.map((s) => <td key={s.label}>{s.points[i].count}</td>)}</tr>
         ))}
       </tbody>
     </table>
@@ -80,8 +82,9 @@ export function LineChart({ caption, series, height = 180 }) {
   );
 }
 
-// Vertical bars, one per day.
-export function BarChart({ caption, label, points }) {
+// Vertical bars, one per day (or per point). format turns a value into
+// display text, e.g. a price.
+export function BarChart({ caption, label, points, format = (v) => v.toLocaleString() }) {
   const max = niceMax(points.map((p) => p.count));
   const [hover, setHover] = useState(null);
   return (
@@ -94,14 +97,15 @@ export function BarChart({ caption, label, points }) {
         ))}
         {hover !== null && (
           <div className="pointer-events-none absolute top-0 z-10 -translate-x-1/2 rounded-xl border border-s-line bg-s-card px-3 py-2 text-xs shadow-lg" style={{ left: `${((hover + 0.5) / points.length) * 100}%` }}>
-            <p className="font-chart text-s-mute">{shortDay(points[hover].date)}</p>
-            <p className="mt-0.5 whitespace-nowrap text-s-ink"><span className="font-semibold">{points[hover].count}</span> {label.toLowerCase()}</p>
+            <p className="font-chart text-s-mute">{pointLabel(points[hover])}</p>
+            <p className="mt-0.5 whitespace-nowrap text-s-ink"><span className="font-semibold">{format(points[hover].count)}</span> {label.toLowerCase()}</p>
+            {points[hover].detail && <p className="whitespace-nowrap text-s-mute">{points[hover].detail}</p>}
           </div>
         )}
       </div>
       <div className="mt-2 flex justify-between font-chart text-[11px] text-s-mute">
-        <span>{shortDay(points[0].date)}</span>
-        <span>{shortDay(points[points.length - 1].date)}</span>
+        <span>{pointLabel(points[0])}</span>
+        <span>{pointLabel(points[points.length - 1])}</span>
       </div>
       <HiddenTable caption={caption} series={[{ label, points }]} />
     </figure>

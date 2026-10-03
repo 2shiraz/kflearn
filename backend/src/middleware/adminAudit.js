@@ -14,12 +14,15 @@ const LABELS = [
   [/^POST \/admin\/osce$/, "Created a station"],
   [/^PATCH \/admin\/osce\/[^/]+\/status$/, "Changed a station's status"],
   [/^PATCH \/admin\/osce\/[^/]+$/, "Edited a station"],
+  [/^DELETE \/admin\/osce\/[^/]+$/, "Deleted a station"],
+  [/^POST \/admin\/payments$/, "Recorded a payment"],
+  [/^POST \/admin\/payments\/[^/]+\/refund$/, "Refunded a payment"],
   [/^PATCH \/ai\/status$/, "Changed AI settings"],
 ];
 
 // Field names are logged so the record says what changed; values are not,
 // because they can include API keys.
-const SKIP_FIELDS = new Set(["password", "confirmation"]);
+const SKIP_FIELDS = new Set(["password", "confirmation", "confirmTitle"]);
 
 export function auditAdminChanges(req, res, next) {
   if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return next();

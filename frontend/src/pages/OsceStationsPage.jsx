@@ -12,6 +12,7 @@ import AdminBranding from "../components/admin/AdminBranding";
 import AdminActivity from "../components/admin/AdminActivity";
 import ImportStationsDialog from "../components/admin/ImportStationsDialog";
 import AdminShell from "../components/admin/AdminShell";
+import AdminRevenue from "../components/admin/AdminRevenue";
 import DeleteStationDialog from "../components/admin/DeleteStationDialog";
 import { useLeaveStationGuard } from "../hooks/useLeaveStationGuard";
 import { OSCE_CATEGORIES, displayTitle } from "../lib/osceFilters.js";
@@ -23,6 +24,7 @@ import {
   Check,
   Clock3,
   Coins,
+  Wallet,
   Eye,
   History,
   Mic,
@@ -1101,15 +1103,16 @@ function AdminConsole() {
     }
   }
 
-  // Grouped so the vertical menu reads as: content, people, settings.
+  // Grouped so the vertical menu reads as: content, people, money, settings.
   const tabs = [
     { id: "overview", label: "Overview", icon: Layers3, group: "" },
     { id: "stations", label: "OSCE stations", icon: Stethoscope, group: "Content" },
     { id: "announcements", label: "Announcements", icon: Megaphone, group: "Content" },
     { id: "users", label: "Accounts", icon: Users, group: "People" },
     { id: "activity", label: "Activity log", icon: ScrollText, group: "People" },
+    { id: "revenue", label: "Revenue", icon: Wallet, group: "Money" },
+    { id: "pricing", label: "Pricing", icon: Coins, group: "Money" },
     { id: "access", label: "Site access", icon: ToggleRight, group: "Settings" },
-    { id: "pricing", label: "Pricing", icon: Coins, group: "Settings" },
     { id: "branding", label: "Branding", icon: Palette, group: "Settings" },
     { id: "ai", label: "AI & models", icon: Settings2, group: "Settings" },
   ];
@@ -1241,6 +1244,7 @@ function AdminConsole() {
         {!state.loading && activeTab === "users" && <AdminAccounts />}
         {!state.loading && activeTab === "announcements" && <AdminAnnouncements />}
         {!state.loading && activeTab === "pricing" && <AdminPricing />}
+        {!state.loading && activeTab === "revenue" && <AdminRevenue />}
         {!state.loading && activeTab === "access" && <AdminAccess />}
         {!state.loading && activeTab === "branding" && <AdminBranding />}
         {!state.loading && activeTab === "activity" && <AdminActivity />}

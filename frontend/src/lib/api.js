@@ -358,6 +358,38 @@ export function updateAdminBranding(payload) {
   return apiFetch("/admin/settings/branding", { method: "PATCH", body: JSON.stringify(payload) });
 }
 
+// ---- Admin: revenue and payments ----
+export function getAdminRevenue(days = 30, bucket = "") {
+  return apiFetch(`/admin/revenue?days=${days}${bucket ? `&bucket=${bucket}` : ""}`);
+}
+
+export function listAdminPayments({ status = "", q = "", page = 1 } = {}) {
+  const params = new URLSearchParams({ page: String(page) });
+  if (status) params.set("status", status);
+  if (q) params.set("q", q);
+  return apiFetch(`/admin/payments?${params}`);
+}
+
+export function recordAdminPayment(payment) {
+  return apiFetch("/admin/payments", { method: "POST", body: JSON.stringify(payment) });
+}
+
+export function refundAdminPayment(id, { removeCredits = false, note = "" } = {}) {
+  return apiFetch(`/admin/payments/${id}/refund`, { method: "POST", body: JSON.stringify({ removeCredits, note }) });
+}
+
+// Downloads every payment as a CSV file.
+export async function downloadAdminPayments() {
+  const res = await fetch(`${API_BASE}/admin/payments/export`, { credentials: "include" });
+  if (!res.ok) throw new Error("Couldn't export payments.");
+  const url = URL.createObjectURL(await res.blob());
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `payments-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 export function getAdminStats(days = 30) {
   return apiFetch(`/admin/stats?days=${days}`);
 }

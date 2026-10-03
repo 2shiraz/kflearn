@@ -12,6 +12,8 @@ const REASON_LABELS = {
   "admin-grant": "AI credits added",
   "welcome-grant": "Welcome credits",
   purchase: "AI credit package purchase",
+  "purchase-refund": "Purchase refunded",
+  "admin-adjust": "AI credits adjusted",
 };
 
 function describe(row) {

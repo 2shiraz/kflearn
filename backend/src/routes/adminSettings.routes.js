@@ -10,6 +10,7 @@ import {
   adminUpdateSite,
 } from "../controllers/site.controller.js";
 import { getAdminActivity, getAdminStats } from "../controllers/adminStats.controller.js";
+import { createPayment, exportPayments, getPayments, getRevenue, refundPaymentHandler } from "../controllers/adminRevenue.controller.js";
 import { requireRole } from "../middleware/role.js";
 import { adminWriteLimiter } from "../middleware/rateLimit.js";
 import { auditAdminChanges } from "../middleware/adminAudit.js";
@@ -25,6 +26,11 @@ router.patch("/settings/pricing", asyncHandler(adminUpdatePricing));
 router.patch("/settings/branding", asyncHandler(adminUpdateBranding));
 router.get("/stats", asyncHandler(getAdminStats));
 router.get("/activity", asyncHandler(getAdminActivity));
+router.get("/revenue", asyncHandler(getRevenue));
+router.get("/payments", asyncHandler(getPayments));
+router.get("/payments/export", asyncHandler(exportPayments));
+router.post("/payments", asyncHandler(createPayment));
+router.post("/payments/:id/refund", asyncHandler(refundPaymentHandler));
 router.get("/announcements", asyncHandler(adminListAnnouncements));
 router.post("/announcements", asyncHandler(adminCreateAnnouncement));
 router.patch("/announcements/:id", validateObjectIdParam("id"), asyncHandler(adminUpdateAnnouncement));
