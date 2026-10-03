@@ -45,7 +45,7 @@ const problems = [
 export default function AboutPage() {
   return (
     <PageShell>
-      <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-28 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-8 lg:pt-36">
+      <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-8 lg:pt-20">
         <div>
           <h1 className="site-rise text-4xl font-semibold leading-tight text-s-ink md:text-5xl">A study partner for clinical exams</h1>
           <p className="site-rise mt-5 max-w-xl text-lg leading-relaxed text-s-mute" style={{ "--rise-delay": "80ms" }}>

@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
-import { getCurrentUser, logout } from "../lib/api";
-import Sidebar from "../components/Sidebar";
+import { getCurrentUser } from "../lib/api";
+import { AppFrame, EmptyState, LinkButton, PageMain } from "../components/AppPage";
 
 export default function ComingSoonPage({ sectionKey, title }) {
   const user = getCurrentUser();
@@ -10,17 +9,19 @@ export default function ComingSoonPage({ sectionKey, title }) {
   }
 
   return (
-    <div className="app-gradient-bg flex min-h-screen">
-      <Sidebar active={sectionKey} onLogout={() => { logout(); window.location.href = "/signin"; }} />
-      <main className="mt-14 flex min-w-0 flex-1 items-center justify-center px-6 sm:mt-0">
-        <div className="gradient-card rounded-lg p-8 text-center" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" }}>
-          <h1 className="font-display text-2xl font-extrabold text-ink">{title}</h1>
-          <p className="mt-2 text-ink-soft">This section isn't built yet - coming in the next pass.</p>
-          <Link to="/dashboard" className="gradient-brand mt-6 inline-block rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition">
-            Back to Dashboard
-          </Link>
+    <AppFrame active={sectionKey}>
+      <PageMain>
+        <div className="site-rise flex min-h-[60dvh] items-center justify-center">
+          <EmptyState
+            character="student-usman"
+            tone="mint"
+            title={title}
+            body="This section is on its way. Your practice history will show up here."
+            action={<LinkButton to="/dashboard">Back to dashboard</LinkButton>}
+            className="w-full max-w-lg"
+          />
         </div>
-      </main>
-    </div>
+      </PageMain>
+    </AppFrame>
   );
 }

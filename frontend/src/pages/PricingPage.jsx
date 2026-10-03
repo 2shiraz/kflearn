@@ -54,7 +54,7 @@ export default function PricingPage() {
   return (
     <PageShell>
       <section className="site-hero border-b border-s-line">
-        <div className="mx-auto max-w-7xl px-4 pb-12 pt-28 sm:px-6 md:pb-16 md:pt-36 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 pb-12 pt-10 sm:px-6 md:pb-16 md:pt-16 lg:px-8">
           <h1 className="site-rise max-w-3xl text-4xl font-semibold leading-tight text-s-ink md:text-5xl">
             Study free. Add the AI patient when you're ready.
           </h1>

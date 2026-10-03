@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  Bot,
+  ArrowRight,
+  Check,
   ChevronLeft,
   ChevronRight,
+  Clock3,
   Coins,
   Eye,
-  FileText,
   History,
   Mic,
   Send,
@@ -21,8 +22,14 @@ import {
   Square,
   Stethoscope,
   Timer,
+  X,
 } from "lucide-react";
-import { Breadcrumbs, ErrorMessage, LinkButton, PageMain, Panel, PrimaryButton, RequireUser } from "../components/AppPage";
+import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
+import { CardGridSkeleton, ChatSkeleton, ChecklistSkeleton, DetailSkeleton, FormSkeleton, ListSkeleton, ResultsSkeleton, TwoColumnSkeleton } from "../components/Skeleton";
+import { ScoreRing, scoreTone } from "../components/StudyKit";
+import { Character, HealthIcon, VoiceBars } from "../site/Illustrations";
+import { TONES } from "../site/tones";
+import { plus } from "../site/siteContent";
 import {
   aiAssessOsceAttempt,
   createAdminOsceContent,
@@ -47,12 +54,12 @@ import { isCreditError, refreshCredits, setCreditBalance, useCredits } from "../
 // Shows a spend error; credit errors get a direct link to the packages page.
 function SpendError({ error }) {
   if (!error) return null;
-  if (!isCreditError(error)) return <ErrorMessage message={error.message} />;
+  if (!isCreditError(error)) return <div className="mt-3"><ErrorMessage message={error.message} /></div>;
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-      <Coins size={16} className="shrink-0" />
-      <span className="flex-1">{error.message}</span>
-      <Link to="/credits" className="font-bold underline">Get credits</Link>
+    <div role="alert" className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl border border-sun/25 bg-sun-soft p-4 text-sm text-s-ink">
+      <Coins size={18} strokeWidth={2} className="shrink-0 text-sun" aria-hidden="true" />
+      <span className="min-w-0 flex-1">{error.message}</span>
+      <Link to="/credits" className="site-press inline-flex min-h-11 items-center rounded-full bg-s-card px-4 font-semibold text-s-ink ring-1 ring-sun/30 hover:bg-sun-soft">Get credits</Link>
     </div>
   );
 }
@@ -69,6 +76,27 @@ function groupModulesBySpecialty(modules) {
     else groups.push({ name: specialtyName, modules: [module] });
     return groups;
   }, []);
+}
+
+// Colour and Healthicon for an OSCE section, matched on the specialty name.
+// Unknown specialties cycle through the palette so neighbours differ.
+const SPECIALTY_LOOKS = [
+  [/respir|pulmon|chest/i, { tone: "sky", icon: "lungs" }],
+  [/cardi|heart/i, { tone: "coral", icon: "heart" }],
+  [/gastr|abdom|hepat|liver/i, { tone: "mint", icon: "stomach" }],
+  [/endocr|diabet|haemat|hemat|renal/i, { tone: "sun", icon: "bloodDrop" }],
+  [/pharm|drug|prescri/i, { tone: "violet", icon: "medicines" }],
+];
+const FALLBACK_TONES = ["indigo", "violet", "mint", "sky", "sun", "coral"];
+function specialtyLook(name = "", index = 0) {
+  const match = SPECIALTY_LOOKS.find(([re]) => re.test(name));
+  return match ? match[1] : { tone: FALLBACK_TONES[index % FALLBACK_TONES.length], icon: "stethoscope" };
+}
+
+// Patient portrait for a station, picked from its title so it stays stable.
+function patientFor(title = "") {
+  const sum = [...title].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  return sum % 2 ? "patient-maya" : "patient-daniel";
 }
 
 function formatTime(seconds = 0) {
@@ -107,8 +135,12 @@ function useCountdown({ limitSeconds = 360, startedAt, enabled = true }) {
 function TimerBadge({ remainingSeconds }) {
   const urgent = remainingSeconds <= 60;
   return (
-    <span className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-extrabold ${urgent ? "border-rose-100 bg-rose-50 text-rose-700" : "border-line bg-white/90 text-ink"}`}>
-      <Timer size={16} />
+    <span
+      role="timer"
+      aria-label={`Time remaining ${formatTime(remainingSeconds)}`}
+      className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 font-chart text-sm transition-colors ${urgent ? "bg-coral-soft text-s-miss" : "bg-s-card text-s-ink ring-1 ring-s-line"}`}
+    >
+      <Timer size={16} strokeWidth={2} aria-hidden="true" />
       {formatTime(remainingSeconds)}
     </span>
   );
@@ -116,11 +148,15 @@ function TimerBadge({ remainingSeconds }) {
 
 function AiBadge({ children = "AI" }) {
   return (
-    <span className="ai-chip inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-extrabold text-white">
-      <Sparkles size={13} />
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-s-accent-soft px-2.5 py-1 font-chart text-xs text-s-accent-strong">
+      <Sparkles size={13} strokeWidth={2} aria-hidden="true" />
       {children}
     </span>
   );
+}
+
+function Chip({ children, className = "" }) {
+  return <span className={`inline-flex items-center gap-1.5 rounded-full bg-s-tint px-2.5 py-1 font-chart text-xs text-s-mute ${className}`}>{children}</span>;
 }
 
 function modeLabel(mode) {
@@ -129,16 +165,26 @@ function modeLabel(mode) {
   return mode;
 }
 
+function formatDate(value) {
+  if (!value) return "";
+  return new Date(value).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+}
+
 const CHAT_CHAR_LIMIT = 640;
 
 export function OsceHome() {
   const [state, setState] = useState({ loading: true, modules: [], attempts: [], error: "" });
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setState((s) => ({ ...s, loading: true, error: "" }));
     Promise.all([listOsceStations(), listOsceAttempts()])
       .then(([modulesData, attemptsData]) => setState({ loading: false, modules: modulesData.modules || [], attempts: attemptsData || [], error: "" }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const groups = groupModulesBySpecialty(state.modules);
 
@@ -146,38 +192,55 @@ export function OsceHome() {
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations" }]} />
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-ink-soft">OSCE Stations</p>
-            <h1 className="mt-1 text-4xl font-extrabold text-ink">Station bank</h1>
-            <p className="mt-2 max-w-2xl text-ink-soft">Choose a published OSCE station, practise with instructions or a virtual patient, then assess your performance.</p>
-          </div>
-          <Link to="/stations/attempts" className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-ink">
-            <History size={16} /> Attempts
-          </Link>
-        </div>
+        <PageHeader
+          className="mb-8"
+          eyebrow="OSCE stations"
+          title="Station bank"
+          description="Pick a section, choose a station, then practise with the brief or talk to the virtual patient."
+          actions={
+            <LinkButton to="/stations/attempts" variant="secondary">
+              <History size={16} strokeWidth={2} aria-hidden="true" /> Attempts
+            </LinkButton>
+          }
+        />
 
         {state.loading && <Loading variant="osce-bank" />}
-        {state.error && <ErrorMessage message={state.error} />}
-        {!state.loading && !state.error && (
+        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
+        {!state.loading && !state.error && groups.length === 0 && (
+          <EmptyState character="examiner" tone="mint" title="No stations yet" body="Published OSCE stations will appear here." action={<LinkButton to="/dashboard" variant="secondary">Back to dashboard</LinkButton>} />
+        )}
+        {!state.loading && !state.error && groups.length > 0 && (
           <>
-            <div className="mb-4 text-sm text-ink-soft">{state.modules.length} OSCE stations across {groups.length} {groups.length === 1 ? "section" : "sections"}.</div>
+            <p className="mb-4 text-sm text-s-mute">
+              {plus(state.modules.length)} stations across {groups.length} {groups.length === 1 ? "section" : "sections"}.
+            </p>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {groups.map((group) => (
-                <Link key={group.name} to={sectionPath(group.name)} className="gradient-card group rounded-lg p-5 text-left">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Section</p>
-                      <h2 className="text-2xl font-extrabold text-ink">{group.name}</h2>
+              {groups.map((group, i) => {
+                const look = specialtyLook(group.name, i);
+                const t = TONES[look.tone];
+                return (
+                  <Link
+                    key={group.name}
+                    to={sectionPath(group.name)}
+                    style={{ "--rise-delay": `${i * 50}ms` }}
+                    className={`site-rise site-grid site-press group relative flex min-h-44 flex-col overflow-hidden rounded-3xl border border-s-line p-6 ${t.ring}`}
+                  >
+                    <span className={`pointer-events-none absolute -bottom-8 -right-8 opacity-[0.07] ${t.text}`} aria-hidden="true">
+                      <HealthIcon name={look.icon} size={140} />
+                    </span>
+                    <div className="relative flex items-start justify-between gap-3">
+                      <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${t.soft} ${t.text}`} aria-hidden="true">
+                        <HealthIcon name={look.icon} size={32} />
+                      </span>
+                      <Chip>{group.modules.length} {group.modules.length === 1 ? "station" : "stations"}</Chip>
                     </div>
-                    <span className="gradient-icon flex h-10 w-10 items-center justify-center rounded-lg text-ink"><Stethoscope size={18} /></span>
-                  </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-semibold text-ink">{group.modules.length} stations</span>
-                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand">Open <ChevronRight size={15} className="transition group-hover:translate-x-1" /></span>
-                  </div>
-                </Link>
-              ))}
+                    <h2 className="relative mt-5 flex-1 text-xl font-semibold tracking-tight text-s-ink">{group.name}</h2>
+                    <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-s-ink">
+                      Open section <ArrowRight size={15} strokeWidth={2} className={`${t.text} transition-transform group-hover:translate-x-0.5`} aria-hidden="true" />
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </>
         )}
@@ -193,54 +256,73 @@ export function OsceSectionPage() {
   const pageSize = 6;
   const decodedSectionName = decodeURIComponent(sectionName || "");
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setState((s) => ({ ...s, loading: true, error: "" }));
     Promise.all([listOsceStations(), listOsceAttempts()])
       .then(([modulesData, attemptsData]) => setState({ loading: false, modules: modulesData.modules || [], attempts: attemptsData || [], error: "" }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);
 
+  useEffect(() => {
+    load();
+  }, [load]);
+
   const groups = groupModulesBySpecialty(state.modules);
-  const selectedGroup = groups.find((group) => group.name === decodedSectionName);
+  const groupIndex = groups.findIndex((group) => group.name === decodedSectionName);
+  const selectedGroup = groups[groupIndex];
   const totalPages = selectedGroup ? Math.max(1, Math.ceil(selectedGroup.modules.length / pageSize)) : 1;
   const pagedModules = selectedGroup?.modules.slice((page - 1) * pageSize, page * pageSize) || [];
+  const look = specialtyLook(decodedSectionName, Math.max(0, groupIndex));
+  const t = TONES[look.tone];
 
   return (
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: decodedSectionName || "Section" }]} />
         {state.loading && <Loading variant="osce-section" />}
-        {state.error && <ErrorMessage message={state.error} />}
-        {!state.loading && !state.error && !selectedGroup && <ErrorMessage message="Station section not found." />}
+        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
+        {!state.loading && !state.error && !selectedGroup && (
+          <EmptyState character="student-bilal" tone="sun" title="Section not found" body="This section may have been renamed. Pick one from the station bank." action={<LinkButton to="/stations">Station bank</LinkButton>} />
+        )}
         {!state.loading && !state.error && selectedGroup && (
           <section>
-            <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Section</p>
-                <h1 className="text-4xl font-extrabold text-ink">{selectedGroup.name}</h1>
-                <p className="mt-2 text-ink-soft">Choose a station from this section.</p>
+            <div className="site-rise mb-6 flex flex-wrap items-center gap-4">
+              <span className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl ${t.soft} ${t.text}`} aria-hidden="true">
+                <HealthIcon name={look.icon} size={38} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{selectedGroup.name}</h1>
+                <p className="mt-1 text-s-mute">Choose a station from this section.</p>
               </div>
-              <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-semibold text-ink">Page {page} of {totalPages}</span>
+              {totalPages > 1 && <Chip>Page {page} of {totalPages}</Chip>}
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {pagedModules.map((module) => (
-                <Link key={module.id} to={`/stations/${module.slug}`} className="gradient-card rounded-lg p-5">
-                  <div className="mb-4 flex items-start justify-between gap-3">
-                    <span className="gradient-icon flex h-10 w-10 items-center justify-center rounded-lg text-ink"><Stethoscope size={18} /></span>
-                    <span className="gradient-pill rounded-lg px-2.5 py-1 text-xs font-semibold text-ink">{module.difficulty}</span>
+              {pagedModules.map((module, i) => (
+                <Link
+                  key={module.id}
+                  to={`/stations/${module.slug}`}
+                  style={{ "--rise-delay": `${i * 50}ms` }}
+                  className={`site-rise site-grid site-press group flex flex-col rounded-3xl border border-s-line p-6 ${t.ring}`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <Character name={patientFor(module.title)} size={48} tone={look.tone} />
+                    {module.difficulty && <Chip className="capitalize">{module.difficulty}</Chip>}
                   </div>
-                  <h2 className="text-xl font-extrabold text-ink">{module.title}</h2>
-                  <p className="mt-1 text-sm text-ink-soft">{module.shortDescription}</p>
-                  <div className="mt-4 flex flex-wrap gap-2 text-xs text-ink-soft">
-                    <span>{Math.round(module.timeLimitSeconds / 60)} min</span>
-                    <span>{module.presentingComplaint}</span>
+                  <h2 className="mt-4 text-lg font-semibold tracking-tight text-s-ink">{module.title}</h2>
+                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-s-mute">{module.shortDescription}</p>
+                  <div className="mt-4 flex flex-wrap items-center gap-2">
+                    <Chip><Clock3 size={12} strokeWidth={2} aria-hidden="true" /> {Math.round(module.timeLimitSeconds / 60)} min</Chip>
+                    {module.presentingComplaint && <Chip>{module.presentingComplaint}</Chip>}
                   </div>
                 </Link>
               ))}
             </div>
-            <div className="mt-5 flex items-center justify-between gap-3">
-              <button type="button" disabled={page === 1} onClick={() => setPage((p) => Math.max(1, p - 1))} className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-ink disabled:opacity-40"><ChevronLeft size={16} /> Previous</button>
-              <button type="button" disabled={page === totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))} className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-ink disabled:opacity-40">Next <ChevronRight size={16} /></button>
-            </div>
+            {totalPages > 1 && (
+              <div className="mt-6 flex items-center justify-between gap-3">
+                <SecondaryButton disabled={page === 1} onClick={() => setPage((p) => Math.max(1, p - 1))}><ChevronLeft size={16} strokeWidth={2} aria-hidden="true" /> Previous</SecondaryButton>
+                <SecondaryButton disabled={page === totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))}>Next <ChevronRight size={16} strokeWidth={2} aria-hidden="true" /></SecondaryButton>
+              </div>
+            )}
           </section>
         )}
       </PageMain>
@@ -255,11 +337,16 @@ export function OsceStationDetail() {
   const { balance, pricing } = useCredits();
   const aiCost = pricing?.costs.virtualPatient;
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setState((s) => ({ ...s, loading: true, error: "" }));
     getOsceStation(slug)
       .then((module) => setState({ loading: false, module, error: "", starting: "", startError: null }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [slug]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   async function start(mode) {
     setState((s) => ({ ...s, starting: mode, startError: null }));
@@ -274,36 +361,44 @@ export function OsceStationDetail() {
     }
   }
 
+  const module = state.module;
+  const shortfall = aiCost && balance !== null && balance < aiCost;
+
   return (
     <RequireUser>
       <PageMain>
-        {state.module ? (
-          <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: state.module.specialty?.name || "Section", to: sectionPath(state.module.specialty?.name || "General") }, { label: state.module.title }]} />
+        {module ? (
+          <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: module.specialty?.name || "Section", to: sectionPath(module.specialty?.name || "General") }, { label: module.title }]} />
         ) : (
           <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Station" }]} />
         )}
         {state.loading && <Loading variant="module-detail" />}
-        {state.error && <ErrorMessage message={state.error} />}
-        {state.module && (
-          <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-            <Panel>
-              <p className="text-sm font-semibold text-ink-soft">{state.module.specialty?.name} / {state.module.presentingComplaint}</p>
-              <h1 className="mt-2 text-4xl font-extrabold text-ink">{state.module.title}</h1>
-              <p className="mt-3 text-ink-soft">{state.module.shortDescription}</p>
-              <CandidateInstructions module={state.module} />
+        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
+        {module && (
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+            <Panel className="site-rise">
+              <div className="flex items-start gap-4">
+                <Character name={patientFor(module.title)} size={64} tone={specialtyLook(module.specialty?.name).tone} className="hidden sm:inline-flex" />
+                <div className="min-w-0">
+                  <p className="font-chart text-xs text-s-mute">{[module.specialty?.name, module.presentingComplaint].filter(Boolean).join(" / ")}</p>
+                  <h1 className="mt-2 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{module.title}</h1>
+                </div>
+              </div>
+              <p className="mt-4 leading-relaxed text-s-mute">{module.shortDescription}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {module.timeLimitSeconds && <Chip><Clock3 size={12} strokeWidth={2} aria-hidden="true" /> {Math.round(module.timeLimitSeconds / 60)} min</Chip>}
+                {module.difficulty && <Chip className="capitalize">{module.difficulty}</Chip>}
+              </div>
+              <CandidateInstructions module={module} />
             </Panel>
             <div className="space-y-4">
-              <PracticeCard icon={FileText} title="Guided Self-Practice" body="Reveal the patient script and checklist for self-marked practice." onClick={() => start("single-player")} loading={state.starting === "single-player"} costLabel="Free" />
-              <PracticeCard
-                icon={Bot}
-                title="AI Virtual Patient"
-                body="Talk to the patient without seeing hidden facts or checklist answers."
+              <VirtualPatientCard
+                module={module}
                 onClick={() => start("virtual-patient")}
                 loading={state.starting === "virtual-patient"}
-                costLabel={aiCost ? `${aiCost} credits` : ""}
-                shortfall={aiCost && balance !== null && balance < aiCost ? `You have ${balance} credit${balance === 1 ? "" : "s"}.` : ""}
-                ai
+                shortfall={shortfall ? `You have ${balance} credit${balance === 1 ? "" : "s"}.` : ""}
               />
+              <SelfPracticeCard onClick={() => start("single-player")} loading={state.starting === "single-player"} />
               <SpendError error={state.startError} />
             </div>
           </div>
@@ -313,46 +408,81 @@ export function OsceStationDetail() {
   );
 }
 
-function CandidateInstructions({ module }) {
+// The station door card: setting, patient and numbered tasks.
+function CandidateInstructions({ module, bare = false }) {
   const instructions = module.candidateInstructions || {};
   const tasks = (instructions.tasks || []).filter((task) => !task.toLowerCase().includes("examiner may ask"));
   return (
-    <div className="mt-6 border-t border-line pt-5">
-      <h2 className="text-lg font-bold text-ink">Candidate instructions</h2>
-      <p className="mt-2 text-sm text-ink-soft">{instructions.context}</p>
-      <p className="mt-2 text-sm text-ink-soft">{instructions.patientSummary}</p>
-      <div className="mt-4 space-y-2">
-        {tasks.map((task) => (
-          <p key={task} className="text-sm font-bold text-ink">{task}</p>
-        ))}
-      </div>
+    <div className={bare ? "" : "mt-6 border-t border-s-line pt-5"}>
+      {!bare && <h2 className="text-lg font-semibold tracking-tight text-s-ink">Candidate instructions</h2>}
+      {instructions.context && <p className="mt-2 text-sm leading-relaxed text-s-mute">{instructions.context}</p>}
+      {instructions.patientSummary && <p className="mt-2 text-sm leading-relaxed text-s-mute">{instructions.patientSummary}</p>}
+      {tasks.length > 0 && (
+        <ol className="mt-4 space-y-2.5">
+          {tasks.map((task, i) => (
+            <li key={task} className="flex gap-3 text-sm font-medium leading-relaxed text-s-ink">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-s-accent-soft font-chart text-xs text-s-accent-strong" aria-hidden="true">{i + 1}</span>
+              <span className="pt-0.5">{task}</span>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }
 
-function PracticeCard({ icon: Icon, title, body, onClick, loading, costLabel = "", shortfall = "", ai = false }) {
+function VirtualPatientCard({ module, onClick, loading, shortfall }) {
   return (
-    <Panel className={ai ? "ai-panel" : ""}>
-      <div className="flex items-start justify-between gap-3">
-        <span className={ai ? "ai-icon flex h-10 w-10 items-center justify-center rounded-lg text-white" : "gradient-icon flex h-10 w-10 items-center justify-center rounded-lg text-ink"}><Icon size={18} /></span>
-        {ai && <AiBadge>AI powered</AiBadge>}
+    <div className="site-rise relative overflow-hidden rounded-3xl bg-s-accent p-6 text-s-on-accent" style={{ "--rise-delay": "80ms" }}>
+      <span className="pointer-events-none absolute -bottom-10 -right-10 opacity-[0.08]" aria-hidden="true">
+        <HealthIcon name="stethoscope" size={180} />
+      </span>
+      <div className="relative flex items-center gap-3">
+        <span className="relative">
+          <Character name={patientFor(module.title)} size={52} tone="indigo" className="ring-4 ring-s-on-accent/20" />
+          <span className="absolute -bottom-1 left-1/2 flex h-5 -translate-x-1/2 items-center rounded-full bg-s-card px-1.5 text-s-accent shadow-sm">
+            <VoiceBars />
+          </span>
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-s-on-accent/15 px-2.5 py-1 font-chart text-xs">
+          <Sparkles size={13} strokeWidth={2} aria-hidden="true" /> Voice or text
+        </span>
       </div>
-      <h3 className="mt-4 text-xl font-extrabold text-ink">{title}</h3>
-      <p className="mt-1 text-sm text-ink-soft">{body}</p>
-      {costLabel && (
-        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-900 ring-1 ring-amber-200">
-          <Coins size={13} /> {costLabel}
-        </p>
-      )}
+      <h3 className="relative mt-4 text-xl font-semibold tracking-tight">AI virtual patient</h3>
+      <p className="relative mt-1.5 text-sm leading-relaxed text-s-on-accent/85">Take the history by voice or text. The patient only reveals what you ask about.</p>
       {shortfall ? (
-        <p className="mt-4 text-sm text-ink-soft">
-          {shortfall} <Link to="/credits" className="font-bold text-ink underline">Get credits</Link> to start.
+        <p className="relative mt-5 text-sm text-s-on-accent/90">
+          {shortfall}{" "}
+          <Link to="/credits" className="font-semibold underline underline-offset-2">Get credits</Link> to start.
         </p>
       ) : (
-        <PrimaryButton onClick={onClick} disabled={loading} className={`mt-5 w-full ${ai ? "ai-button" : ""}`}>
-          {loading ? "Starting..." : "Start"}
-        </PrimaryButton>
+        <button
+          type="button"
+          onClick={onClick}
+          disabled={loading}
+          className="site-press relative mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-s-card px-5 text-sm font-semibold text-s-accent hover:bg-s-accent-soft disabled:opacity-60"
+        >
+          {loading ? "Starting..." : <>Talk to the patient <ArrowRight size={16} strokeWidth={2} aria-hidden="true" /></>}
+        </button>
       )}
+    </div>
+  );
+}
+
+function SelfPracticeCard({ onClick, loading }) {
+  return (
+    <Panel className="site-rise" style={{ "--rise-delay": "140ms" }}>
+      <div className="flex items-start justify-between gap-3">
+        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-soft text-mint" aria-hidden="true">
+          <HealthIcon name="medicalRecords" size={28} />
+        </span>
+        <span className="rounded-full bg-mint-soft px-2.5 py-1 font-chart text-xs text-s-good">Free</span>
+      </div>
+      <h3 className="mt-4 text-lg font-semibold tracking-tight text-s-ink">Guided self-practice</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-s-mute">Read the patient script, then reveal the checklist and mark yourself.</p>
+      <SecondaryButton onClick={onClick} disabled={loading} className="mt-5 w-full">
+        {loading ? "Starting..." : "Start self-practice"}
+      </SecondaryButton>
     </Panel>
   );
 }
@@ -390,52 +520,61 @@ export function SinglePlayerOsce() {
   return (
     <RequireUser>
       <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Single player" }]} />
+        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Self-practice" }]} />
         {state.loading && <Loading variant="single-player" />}
-        {state.error && <ErrorMessage message={state.error} />}
+        {state.error && <ErrorMessage message={state.error} onRetry={() => window.location.reload()} />}
         {state.content && (
-          <div className="grid gap-5 xl:grid-cols-[1fr_420px]">
-            <Panel>
-              <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-                <h1 className="text-3xl font-extrabold text-ink">{state.content.title}</h1>
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
+            <Panel className="site-rise">
+              <div className="mb-2 flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-chart text-xs text-s-mute">Guided self-practice</p>
+                  <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{state.content.title}</h1>
+                </div>
                 <TimerBadge remainingSeconds={timer.remainingSeconds} />
               </div>
               <CandidateInstructions module={state.content} />
-              <h2 className="mt-6 text-lg font-bold text-ink">Patient script</h2>
-              <div className="mt-3 grid gap-2">
-                {state.content.patientScript.facts.map((fact) => (
-                  <div key={fact.factId} className="rounded-lg border border-line bg-white/80 p-3 text-sm">
-                    <span className="font-semibold text-ink">{fact.section}: {fact.label}</span>
-                    <p className="mt-1 text-ink-soft">{fact.naturalResponse}</p>
-                  </div>
-                ))}
+              <div className="mt-6 border-t border-s-line pt-5">
+                <div className="flex items-center gap-3">
+                  <Character name={patientFor(state.content.title)} size={40} tone="indigo" />
+                  <h2 className="text-lg font-semibold tracking-tight text-s-ink">Patient script</h2>
+                </div>
+                <div className="mt-4 grid gap-2.5">
+                  {state.content.patientScript.facts.map((fact) => (
+                    <div key={fact.factId} className="rounded-2xl border border-s-line bg-s-card p-4 text-sm">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Chip>{fact.section}</Chip>
+                        <span className="font-medium text-s-ink">{fact.label}</span>
+                      </div>
+                      <p className="mt-2 leading-relaxed text-s-mute">{fact.naturalResponse}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </Panel>
-            <Panel className="self-start">
+            <Panel className="site-rise self-start xl:sticky xl:top-6" style={{ "--rise-delay": "80ms" }}>
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-lg font-bold text-ink">Marking checklist</h2>
-                {!checklistRevealed && (
-                  <button
-                    type="button"
-                    onClick={() => setChecklistRevealed(true)}
-                    className="glass-surface inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold text-ink"
-                  >
-                    <Eye size={14} /> Reveal checklist
-                  </button>
-                )}
+                <h2 className="text-lg font-semibold tracking-tight text-s-ink">Marking checklist</h2>
+                {checklistRevealed && <Chip>{state.checked.length} ticked</Chip>}
               </div>
               {checklistRevealed ? (
                 <Checklist checklist={state.content.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
               ) : (
-                <p className="mt-3 rounded-lg border border-dashed border-line bg-white/60 p-3 text-sm text-ink-soft">
-                  Hidden for now so you self-test properly — take the history from the patient script first, then reveal the checklist to self-mark.
-                </p>
+                <div className="mt-4 flex flex-col items-center rounded-2xl border border-dashed border-s-line bg-s-card px-5 py-6 text-center">
+                  <Character name="examiner" size={64} tone="mint" />
+                  <p className="mt-3 text-sm leading-relaxed text-s-mute">
+                    Hidden for now so you test yourself properly. Work through the patient script first, then reveal the checklist to mark yourself.
+                  </p>
+                  <SecondaryButton onClick={() => setChecklistRevealed(true)} className="mt-4">
+                    <Eye size={16} strokeWidth={2} aria-hidden="true" /> Reveal checklist
+                  </SecondaryButton>
+                </div>
               )}
               <label className="mt-5 block">
-                <span className="text-sm font-semibold text-ink">Notes</span>
-                <textarea className="mt-2 min-h-28 w-full rounded-lg border border-line bg-white/80 p-3 text-sm outline-none focus:border-brand" value={state.notes} onChange={(e) => setState((s) => ({ ...s, notes: e.target.value }))} />
+                <span className="text-sm font-medium text-s-ink">Notes</span>
+                <textarea className="mt-2 min-h-28 w-full rounded-xl border border-s-line bg-s-card p-3 text-sm text-s-ink outline-none transition-colors focus:border-s-accent" value={state.notes} onChange={(e) => setState((s) => ({ ...s, notes: e.target.value }))} />
               </label>
-              <PrimaryButton onClick={finish} className="mt-4 w-full">End session &amp; score</PrimaryButton>
+              <PrimaryButton onClick={finish} className="mt-4 w-full">End session and score</PrimaryButton>
             </Panel>
           </div>
         )}
@@ -592,78 +731,132 @@ export function VirtualPatientSession() {
     if (timer.isExpired && state.attempt && state.module) endSession();
   }, [timer.isExpired, state.attempt, state.module]);
 
+  const patient = patientFor(state.module?.title);
+  const nearLimit = state.text.length > CHAT_CHAR_LIMIT - 80;
+
   return (
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Virtual patient" }]} />
         {state.loading && <Loading variant="chat" />}
-        {state.error && <ErrorMessage message={state.error} />}
+        {state.error && (
+          <div className="mb-4">
+            <ErrorMessage message={state.error} onRetry={state.attempt ? undefined : () => window.location.reload()} />
+          </div>
+        )}
         {state.attempt && (
           <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
-            <Panel className="chat-shell flex h-[calc(100vh-170px)] min-h-[560px] flex-col overflow-hidden p-0">
-              <div className="flex items-center justify-between gap-3 border-b border-line bg-white/90 px-4 py-3 sm:px-5">
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h1 className="text-xl font-extrabold text-ink sm:text-2xl">{state.module?.title}</h1>
-                    <AiBadge>AI patient</AiBadge>
-                  </div>
-                  <p className="text-sm text-ink-soft">
-                    AI virtual patient{state.voiceMode === "browser" ? " / browser dictation" : state.voiceMode === "groq" ? " / fallback recording" : ""}
+            <div className="site-rise site-grid site-shadow flex h-[calc(100dvh-190px)] min-h-[520px] flex-col overflow-hidden rounded-3xl border border-s-line sm:h-[calc(100dvh-150px)]">
+              <div className="flex items-center gap-3 border-b border-s-line bg-s-card/90 px-4 py-3 sm:gap-4 sm:px-5 sm:py-4">
+                <span className="relative shrink-0">
+                  <Character name={patient} size={52} tone="indigo" />
+                  <span className="absolute -bottom-1 left-1/2 flex h-5 -translate-x-1/2 items-center rounded-full bg-s-card px-1.5 text-s-accent shadow-sm">
+                    {state.sending ? <VoiceBars /> : <Mic size={12} strokeWidth={2} aria-hidden="true" />}
+                  </span>
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h1 className="truncate font-medium text-s-ink sm:text-lg">{state.module?.title}</h1>
+                  <p className="truncate font-chart text-xs text-s-mute">
+                    AI virtual patient{state.voiceMode === "browser" ? " / listening" : state.voiceMode === "groq" ? " / recording" : ""}
                   </p>
                 </div>
-                <div className="flex flex-wrap items-center justify-end gap-3">
-                  <label className="glass-surface flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold text-ink">
-                    <input type="checkbox" checked={state.speakPatient} onChange={(e) => setState((s) => ({ ...s, speakPatient: e.target.checked }))} />
-                    Speak replies
-                  </label>
-                  <TimerBadge remainingSeconds={timer.remainingSeconds} />
-                </div>
+                <TimerBadge remainingSeconds={timer.remainingSeconds} />
               </div>
-              <div className="chat-thread flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-4 sm:px-5">
+
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-5 sm:px-5" aria-live="polite">
                 {state.attempt.messages.length === 0 ? (
-                  <div className="m-auto max-w-md text-center">
-                    <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand shadow-sm"><Bot size={20} /></div>
-                    <p className="text-sm font-semibold text-ink-soft">Patient opening</p>
-                    <p className="mt-2 rounded-lg border border-line bg-white/95 p-4 text-base font-semibold text-ink shadow-sm">{state.module?.openingStatement}</p>
+                  <div className="m-auto flex max-w-md flex-col items-center text-center">
+                    <p className="font-chart text-xs text-s-mute">The patient opens</p>
+                    <p className="mt-3 rounded-2xl rounded-bl-md bg-s-card px-5 py-4 text-left text-[15px] leading-relaxed text-s-ink shadow-sm">{state.module?.openingStatement}</p>
+                    <p className="mt-4 text-sm text-s-mute">Ask your first question below, by typing or with the mic.</p>
                   </div>
                 ) : (
-                  <div className="space-y-3">
-                    {state.attempt.messages.map((message) => (
-                      <div key={message.id} className={`flex ${message.role === "student" ? "justify-end" : "justify-start"}`}>
-                        <div className={`chat-bubble ${message.role === "student" ? "chat-bubble-user" : "chat-bubble-patient"}`}>
-                          {message.role === "patient" && <span className="mb-1 flex items-center gap-1.5 text-[11px] font-bold uppercase text-brand"><Sparkles size={12} /> Patient</span>}
-                          <p>{message.finalText}</p>
+                  <div className="space-y-3 text-[15px] leading-snug">
+                    {state.attempt.messages.map((message) =>
+                      message.role === "student" ? (
+                        <p key={message.id} className="ml-auto w-fit max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-s-accent px-4 py-2.5 text-s-on-accent sm:max-w-[75%]">
+                          {message.finalText}
+                        </p>
+                      ) : (
+                        <div key={message.id} className="flex items-end gap-2">
+                          <Character name={patient} size={28} tone="indigo" className="hidden sm:inline-flex" />
+                          <p className="w-fit max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-bl-md bg-s-card px-4 py-2.5 text-s-ink shadow-sm sm:max-w-[75%]">{message.finalText}</p>
                         </div>
+                      ),
+                    )}
+                    {state.sending && (
+                      <div className="flex items-end gap-2">
+                        <Character name={patient} size={28} tone="indigo" className="hidden sm:inline-flex" />
+                        <p className="flex w-fit gap-1 rounded-2xl rounded-bl-md bg-s-card px-4 py-3.5 shadow-sm" aria-label="The patient is answering">
+                          {[0, 1, 2].map((d) => (
+                            <span key={d} className="typing-dot h-1.5 w-1.5 rounded-full bg-s-mute" style={{ animationDelay: `${d * 150}ms` }} />
+                          ))}
+                        </p>
                       </div>
-                    ))}
+                    )}
                   </div>
                 )}
                 <div ref={threadEndRef} />
               </div>
+
               {state.transcript && (
-                <div className="mx-3 mb-3 rounded-lg border border-line bg-white/90 p-3 sm:mx-5">
-                  <label className="text-xs font-semibold text-ink-soft">Transcript review</label>
-                  <textarea className="mt-2 w-full rounded-lg border border-line p-2 text-sm" value={state.transcript} onChange={(e) => setState((s) => ({ ...s, transcript: e.target.value }))} />
-                  <PrimaryButton onClick={() => send(state.transcript, "voice", state.transcript)} className="mt-2">Confirm transcript</PrimaryButton>
+                <div className="mx-3 mb-3 rounded-2xl border border-s-accent/25 bg-s-accent-soft/60 p-3 sm:mx-5">
+                  <label htmlFor="transcript-review" className="flex items-center gap-1.5 text-xs font-medium text-s-accent-strong">
+                    <Mic size={13} strokeWidth={2} aria-hidden="true" /> Check what we heard, then send
+                  </label>
+                  <textarea id="transcript-review" className="mt-2 w-full rounded-xl border border-s-line bg-s-card p-2.5 text-sm text-s-ink outline-none focus:border-s-accent" value={state.transcript} onChange={(e) => setState((s) => ({ ...s, transcript: e.target.value }))} />
+                  <PrimaryButton onClick={() => send(state.transcript, "voice", state.transcript)} className="mt-2">Send question</PrimaryButton>
                 </div>
               )}
-              <div className="border-t border-line bg-white/90 p-3 sm:p-4">
-                <div className="flex items-end gap-2 rounded-lg border border-line bg-white p-2 shadow-sm">
-                  <div className="flex-1">
-                    <input maxLength={CHAT_CHAR_LIMIT} className="min-h-10 w-full bg-transparent px-2 text-sm outline-none" value={state.text} onChange={(e) => setState((s) => ({ ...s, text: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter") send(); }} placeholder="Ask one focused question..." />
-                    <p className={`px-2 text-[11px] font-semibold ${state.text.length > CHAT_CHAR_LIMIT - 80 ? "text-rose-600" : "text-ink-soft"}`}>
-                      {state.text.length} / {CHAT_CHAR_LIMIT} characters
-                    </p>
-                  </div>
-                  <button aria-label="Record voice question" onClick={toggleRecording} className={`flex h-10 w-10 items-center justify-center rounded-lg border border-line ${state.recording ? "bg-rose-50 text-rose-600" : "bg-white text-ink"}`}>{state.recording ? <Square size={17} /> : <Mic size={17} />}</button>
-                  <PrimaryButton onClick={() => send()} disabled={state.sending || state.text.length > CHAT_CHAR_LIMIT} className="h-10 px-3">{state.sending ? "..." : <Send size={16} />}</PrimaryButton>
+
+              <div className="border-t border-s-line bg-s-card/90 p-3 sm:p-4">
+                <div className="flex items-center gap-2 rounded-full border border-s-line bg-s-card py-1.5 pl-4 pr-1.5 transition-colors focus-within:border-s-accent">
+                  <label htmlFor="patient-question" className="sr-only">Your question</label>
+                  <input
+                    id="patient-question"
+                    maxLength={CHAT_CHAR_LIMIT}
+                    className="min-h-11 min-w-0 flex-1 bg-transparent text-[15px] text-s-ink outline-none placeholder:text-s-mute"
+                    value={state.text}
+                    onChange={(e) => setState((s) => ({ ...s, text: e.target.value }))}
+                    onKeyDown={(e) => { if (e.key === "Enter") send(); }}
+                    placeholder="Ask one focused question..."
+                  />
+                  <button
+                    type="button"
+                    aria-label={state.recording ? "Stop recording" : "Record voice question"}
+                    aria-pressed={state.recording}
+                    onClick={toggleRecording}
+                    className={`site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${state.recording ? "bg-coral text-s-on-accent" : "bg-s-tint text-s-ink hover:bg-s-accent-soft"}`}
+                  >
+                    {state.recording ? <Square size={16} strokeWidth={2} /> : <Mic size={18} strokeWidth={2} />}
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Send question"
+                    onClick={() => send()}
+                    disabled={state.sending || state.text.length > CHAT_CHAR_LIMIT}
+                    className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-s-accent text-s-on-accent hover:bg-s-accent-strong disabled:opacity-50"
+                  >
+                    <Send size={17} strokeWidth={2} />
+                  </button>
+                </div>
+                <div className="mt-2 flex items-center justify-between gap-3 px-2 text-xs">
+                  <label className="flex min-h-11 cursor-pointer items-center gap-2 text-s-mute">
+                    <input type="checkbox" checked={state.speakPatient} onChange={(e) => setState((s) => ({ ...s, speakPatient: e.target.checked }))} className="peer sr-only" />
+                    <span className="relative h-5 w-9 shrink-0 rounded-full bg-s-line transition-colors peer-checked:bg-s-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-s-accent after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-s-card after:shadow-sm after:transition-transform peer-checked:after:translate-x-4" aria-hidden="true" />
+                    Read replies aloud
+                  </label>
+                  <span className={`font-chart ${nearLimit ? "text-s-miss" : "text-s-mute"}`}>
+                    {state.text.length} / {CHAT_CHAR_LIMIT}
+                  </span>
                 </div>
               </div>
-            </Panel>
-            <Panel>
-              <h2 className="text-lg font-bold text-ink">Candidate instructions</h2>
-              <CandidateInstructions module={state.module} />
-              <PrimaryButton onClick={endSession} className="mt-6 w-full">End Session</PrimaryButton>
+            </div>
+
+            <Panel className="site-rise self-start xl:sticky xl:top-6" style={{ "--rise-delay": "80ms" }}>
+              <h2 className="text-lg font-semibold tracking-tight text-s-ink">Candidate instructions</h2>
+              <CandidateInstructions module={state.module} bare />
+              <PrimaryButton onClick={endSession} className="mt-6 w-full">End session</PrimaryButton>
             </Panel>
           </div>
         )}
@@ -676,14 +869,17 @@ export function SelfAssessmentPage() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
   const [state, setState] = useState({ loading: true, attempt: null, checklist: null, checked: [], aiLoading: false, error: "", spendError: null });
-  const { pricing } = useCredits();
-  const aiCost = pricing?.costs.aiAssessment;
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setState((s) => ({ ...s, loading: true, error: "" }));
     getOsceAttempt(attemptId)
       .then((data) => setState((s) => ({ ...s, loading: false, attempt: data.attempt, checklist: data.checklist })))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [attemptId]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   async function selfAssess() {
     try {
@@ -706,25 +902,35 @@ export function SelfAssessmentPage() {
     }
   }
 
+  const totalItems = state.checklist ? state.checklist.sections.reduce((sum, section) => sum + section.items.length, 0) : 0;
+  const tickedPct = totalItems ? Math.round((state.checked.length / totalItems) * 100) : 0;
+
   return (
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Assessment" }]} />
         {state.loading && <Loading variant="assessment" />}
-        {state.error && <ErrorMessage message={state.error} />}
+        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
         {state.checklist && (
-          <Panel className="mx-auto max-w-3xl">
-            <h1 className="text-3xl font-extrabold text-ink">Choose assessment</h1>
-            <p className="mt-2 text-ink-soft">Mark your own checklist or ask the AI examiner to evaluate the transcript semantically.</p>
-            <Checklist checklist={state.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
-            <div className="mt-5 flex flex-wrap gap-3">
-              <PrimaryButton onClick={selfAssess}>Submit Self Assessment</PrimaryButton>
-              <PrimaryButton onClick={aiAssess} disabled={state.aiLoading} className="ai-button inline-flex items-center gap-2">
-                <Sparkles size={16} /> {state.aiLoading ? "Assessing..." : `AI Assessment${aiCost ? ` · ${aiCost} credits` : ""}`}
+          <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-[minmax(0,1fr)_17rem]">
+            <Panel className="site-rise">
+              <h1 className="text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">Mark your station</h1>
+              <p className="mt-2 leading-relaxed text-s-mute">Tick what you covered, or let the AI examiner read your transcript and mark it for you.</p>
+              <Checklist checklist={state.checklist} checked={state.checked} onChange={(checked) => setState((s) => ({ ...s, checked }))} />
+            </Panel>
+            <Panel className="site-rise flex flex-col items-center text-center md:sticky md:top-6 md:self-start" style={{ "--rise-delay": "80ms" }}>
+              <Character name="examiner" size={64} tone="mint" />
+              <ScoreRing pct={tickedPct} tone="text-mint" className="mt-4 h-32 w-32">
+                <span className="text-3xl font-semibold tracking-tight text-s-ink">{state.checked.length}</span>
+                <span className="font-chart text-xs text-s-mute">of {totalItems} ticked</span>
+              </ScoreRing>
+              <PrimaryButton onClick={aiAssess} disabled={state.aiLoading} className="mt-6 w-full">
+                <Sparkles size={16} strokeWidth={2} aria-hidden="true" /> {state.aiLoading ? "Assessing..." : "AI assessment"}
               </PrimaryButton>
-            </div>
-            <SpendError error={state.spendError} />
-          </Panel>
+              <SecondaryButton onClick={selfAssess} className="mt-2 w-full">Submit my marking</SecondaryButton>
+              <div className="w-full text-left"><SpendError error={state.spendError} /></div>
+            </Panel>
+          </div>
         )}
       </PageMain>
     </RequireUser>
@@ -734,35 +940,66 @@ export function SelfAssessmentPage() {
 export function OsceResultPage() {
   const { attemptId } = useParams();
   const [state, setState] = useState({ loading: true, data: null, error: "" });
-  useEffect(() => {
+
+  const load = useCallback(() => {
+    setState((s) => ({ ...s, loading: true, error: "" }));
     getOsceAttempt(attemptId)
       .then((data) => setState({ loading: false, data, error: "" }))
       .catch((err) => setState({ loading: false, data: null, error: err.message }));
   }, [attemptId]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
   const attempt = state.data?.attempt;
+  const pct = attempt?.finalScore?.percentage ?? 0;
+  const tone = scoreTone(pct);
+  const missed = attempt?.feedback?.missedItems || [];
 
   return (
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Results" }]} />
         {state.loading && <Loading variant="results" />}
-        {state.error && <ErrorMessage message={state.error} />}
+        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
         {attempt && (
-          <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
-            <Panel>
-              <p className="text-sm font-semibold text-ink-soft">Final score</p>
-              <p className="mt-2 text-5xl font-extrabold text-ink">{attempt.finalScore?.percentage ?? 0}%</p>
-              <p className="mt-2 text-sm text-ink-soft">{attempt.finalScore?.rawScore ?? 0} / {attempt.finalScore?.maxRawScore ?? 0} raw marks</p>
-              {attempt.aiAssessment?.provider && <p className="mt-2 text-xs font-semibold text-ink-soft">{attempt.aiAssessment.provider} / {attempt.aiAssessment.model}</p>}
-              <LinkButton to="/stations/attempts" className="mt-5 w-full">Attempt history</LinkButton>
+          <div className="grid gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
+            <Panel className="site-rise flex flex-col items-center text-center lg:self-start">
+              <p className="font-chart text-xs text-s-mute">Final score</p>
+              <ScoreRing pct={pct} tone={tone.ring} className="mt-4 h-40 w-40">
+                <span className="text-4xl font-semibold tracking-tight text-s-ink">{pct}%</span>
+                <span className="font-chart text-xs text-s-mute">{attempt.finalScore?.rawScore ?? 0} / {attempt.finalScore?.maxRawScore ?? 0} marks</span>
+              </ScoreRing>
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                <Chip>{modeLabel(attempt.mode)}</Chip>
+                {attempt.aiAssessment?.provider && <AiBadge>AI marked</AiBadge>}
+              </div>
+              <LinkButton to="/stations" className="mt-6 w-full">Practise another station</LinkButton>
+              <LinkButton to="/stations/attempts" variant="secondary" className="mt-2 w-full">Attempt history</LinkButton>
             </Panel>
-            <Panel>
-              <h1 className="text-2xl font-extrabold text-ink">Feedback</h1>
-              <p className="mt-2 text-ink-soft">{attempt.feedback?.summary || "No feedback yet."}</p>
-              <h2 className="mt-5 font-bold text-ink">Missed items</h2>
-              <ul className="mt-2 space-y-2 text-sm text-ink-soft">
-                {(attempt.feedback?.missedItems || []).map((item) => <li key={item}>- {item}</li>)}
-              </ul>
+            <Panel className="site-rise" style={{ "--rise-delay": "80ms" }}>
+              <div className="flex items-center gap-3">
+                <Character name="examiner" size={48} tone="mint" />
+                <h1 className="text-2xl font-semibold tracking-tight text-s-ink">Examiner feedback</h1>
+              </div>
+              <p className="mt-4 leading-relaxed text-s-mute">{attempt.feedback?.summary || "No written feedback for this attempt."}</p>
+              <h2 className="mt-6 font-semibold text-s-ink">Missed items</h2>
+              {missed.length > 0 ? (
+                <ul className="mt-3 space-y-2">
+                  {missed.map((item) => (
+                    <li key={item} className="flex gap-3 rounded-2xl border border-s-line bg-s-card p-3.5 text-sm leading-relaxed text-s-ink">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-coral-soft text-coral" aria-hidden="true"><X size={13} strokeWidth={2.5} /></span>
+                      <span className="pt-0.5">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-3 flex items-center gap-3 rounded-2xl bg-mint-soft p-3.5 text-sm text-s-ink">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-mint text-s-card" aria-hidden="true"><Check size={13} strokeWidth={3} /></span>
+                  Nothing missed on the checklist.
+                </p>
+              )}
             </Panel>
           </div>
         )}
@@ -773,36 +1010,63 @@ export function OsceResultPage() {
 
 export function OsceAttemptHistoryPage() {
   const [state, setState] = useState({ loading: true, attempts: [], error: "" });
-  useEffect(() => {
+
+  const load = useCallback(() => {
+    setState((s) => ({ ...s, loading: true, error: "" }));
     listOsceAttempts()
       .then((attempts) => setState({ loading: false, attempts, error: "" }))
       .catch((err) => setState({ loading: false, attempts: [], error: err.message }));
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
   return (
     <RequireUser>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Attempts" }]} />
-        <h1 className="mb-5 text-3xl font-extrabold text-ink">Attempt history</h1>
+        <PageHeader className="mb-6" title="Attempt history" description="Every marked station, newest first." />
         {state.loading && <Loading variant="attempts" />}
-        {state.error && <ErrorMessage message={state.error} />}
-        <div className="space-y-3">
-          {state.attempts.map((attempt) => (
-            <Link key={attempt.id} to={`/stations/attempts/${attempt.id}/results`} className="glass-surface block rounded-lg p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="font-bold text-ink">{attempt.module?.title}</p>
-                  <p className="text-sm text-ink-soft">{modeLabel(attempt.mode)} / {attempt.status}</p>
-                </div>
-                <p className="text-xl font-extrabold text-ink">{attempt.finalScore?.percentage ?? "-"}%</p>
-              </div>
-            </Link>
-          ))}
-          {!state.loading && state.attempts.length === 0 && <Panel>No attempts yet.</Panel>}
-        </div>
+        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
+        {!state.loading && !state.error && state.attempts.length === 0 && (
+          <EmptyState character="student-hira" tone="coral" title="No attempts yet" body="Finish and mark a station, and it will show up here with your score." action={<LinkButton to="/stations">Browse stations</LinkButton>} />
+        )}
+        <ul className="space-y-3">
+          {state.attempts.map((attempt, i) => {
+            const pct = attempt.finalScore?.percentage;
+            const ai = attempt.mode === "virtual-patient";
+            return (
+              <li key={attempt.id} className="site-rise" style={{ "--rise-delay": `${Math.min(i, 8) * 40}ms` }}>
+                <Link to={`/stations/attempts/${attempt.id}/results`} className="site-grid site-press flex items-center gap-4 rounded-3xl border border-s-line p-4 hover:border-s-accent/40">
+                  <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${ai ? "bg-s-accent-soft text-s-accent" : "bg-mint-soft text-mint"}`} aria-hidden="true">
+                    <HealthIcon name={ai ? "stethoscope" : "medicalRecords"} size={24} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium text-s-ink">{attempt.module?.title || "Station"}</p>
+                    <p className="mt-0.5 truncate font-chart text-xs text-s-mute">
+                      {modeLabel(attempt.mode)} / {attempt.status === "ai-assessed" ? "AI marked" : "Self marked"}{attempt.startedAt ? ` / ${formatDate(attempt.startedAt)}` : ""}
+                    </p>
+                  </div>
+                  <span className={`shrink-0 rounded-full px-3 py-1.5 font-chart text-sm ${pct == null ? "bg-s-tint text-s-mute" : scoreTone(pct).chip}`}>
+                    {pct == null ? "-" : `${pct}%`}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </PageMain>
     </RequireUser>
   );
 }
+
+const STATUS_STYLES = {
+  draft: "bg-sun-soft text-s-ink",
+  approved: "bg-sky-soft text-s-ink",
+  published: "bg-mint-soft text-s-good",
+  archived: "bg-s-tint text-s-mute",
+};
 
 export function AdminOscePage() {
   const [stationSearch, setStationSearch] = useState("");
@@ -959,24 +1223,23 @@ export function AdminOscePage() {
     <RequireUser active="admin" adminOnly>
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Admin console" }]} />
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-ink-soft">Admin</p>
-            <h1 className="mt-1 text-4xl font-extrabold text-ink">Admin console</h1>
-            <p className="mt-2 max-w-2xl text-ink-soft">Stations, AI configuration, and accounts in one workspace.</p>
-          </div>
-          <span className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-ink"><ShieldCheck size={16} /> Admin only</span>
-        </div>
+        <PageHeader
+          className="mb-8"
+          eyebrow="Admin"
+          title="Admin console"
+          description="Stations, AI configuration and accounts in one workspace."
+          actions={<span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-s-accent-soft px-4 text-sm font-medium text-s-accent-strong"><ShieldCheck size={16} strokeWidth={2} aria-hidden="true" /> Admin only</span>}
+        />
         <nav aria-label="Admin sections" className="mb-5 flex gap-2 overflow-x-auto pb-2">
           {tabs.map((tab) => (
-            <button key={tab.id} type="button" aria-current={state.activeTab === tab.id ? "page" : undefined} onClick={() => setState((s) => ({ ...s, activeTab: tab.id, error: "", message: "" }))} className={`inline-flex shrink-0 items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-bold transition ${state.activeTab === tab.id ? "gradient-brand text-white shadow-sm" : "glass-surface text-ink hover:bg-white"}`}>
-              <tab.icon size={16} /> {tab.label}
+            <button key={tab.id} type="button" aria-current={state.activeTab === tab.id ? "page" : undefined} onClick={() => setState((s) => ({ ...s, activeTab: tab.id, error: "", message: "" }))} className={`site-press inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-medium ${state.activeTab === tab.id ? "bg-s-accent text-s-on-accent" : "border border-s-line bg-s-card text-s-mute hover:border-s-accent/40 hover:text-s-ink"}`}>
+              <tab.icon size={16} strokeWidth={2} aria-hidden="true" /> {tab.label}
             </button>
           ))}
         </nav>
         {state.loading && <Loading variant="admin" />}
-        {state.error && <ErrorMessage message={state.error} />}
-        {state.message && <p className="mt-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">{state.message}</p>}
+        {state.error && <div className="mt-4"><ErrorMessage message={state.error} /></div>}
+        {state.message && <p role="status" className="mt-4 flex items-center gap-2 rounded-2xl bg-mint-soft p-3.5 text-sm text-s-good"><Check size={16} strokeWidth={2.5} aria-hidden="true" />{state.message}</p>}
         {!state.loading && state.activeTab === "overview" && (
           <div className="mt-6 space-y-5">
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -986,63 +1249,63 @@ export function AdminOscePage() {
                 { label: "Accounts", value: state.users.length, detail: "Registered users", target: "users" },
                 { label: "AI provider", value: defaultProvider?.label || "Not set", detail: defaultProvider?.configured ? "Key configured" : "Key missing", target: "ai" },
               ].map((card) => (
-                <button key={card.label} type="button" onClick={() => { if (card.filter) setStationFilter(card.filter); setState((s) => ({ ...s, activeTab: card.target })); }} className="gradient-card rounded-lg p-5 text-left transition hover:-translate-y-0.5">
-                  <span className="text-xs font-bold uppercase tracking-wide text-ink-soft">{card.label}</span>
-                  <span className="mt-3 block font-display text-3xl font-extrabold text-ink">{card.value}</span>
-                  <span className="mt-1 block text-sm text-ink-soft">{card.detail}</span>
+                <button key={card.label} type="button" onClick={() => { if (card.filter) setStationFilter(card.filter); setState((s) => ({ ...s, activeTab: card.target })); }} className="site-grid site-press rounded-3xl border border-s-line p-5 text-left hover:border-s-accent/40">
+                  <span className="font-chart text-xs text-s-mute">{card.label}</span>
+                  <span className="mt-3 block text-3xl font-semibold tracking-tight text-s-ink">{card.value}</span>
+                  <span className="mt-1 block text-sm text-s-mute">{card.detail}</span>
                 </button>
               ))}
             </div>
             <div className="grid gap-5 lg:grid-cols-2">
               <Panel>
-                <h2 className="text-lg font-extrabold text-ink">Station workflow</h2>
-                <p className="mt-1 text-sm text-ink-soft">Create a draft, review it, then make it visible to students.</p>
+                <h2 className="text-lg font-semibold tracking-tight text-s-ink">Station workflow</h2>
+                <p className="mt-1 text-sm text-s-mute">Create a draft, review it, then make it visible to students.</p>
                 <div className="mt-5 grid grid-cols-4 gap-2 text-center">
-                  {Object.entries(counts).map(([status, count]) => <div key={status} className="rounded-lg bg-white/70 p-3"><p className="text-xl font-extrabold text-ink">{count}</p><p className="mt-1 text-xs capitalize text-ink-soft">{status}</p></div>)}
+                  {Object.entries(counts).map(([status, count]) => <div key={status} className="rounded-2xl bg-s-tint/60 p-3"><p className="text-xl font-semibold text-s-ink">{count}</p><p className="mt-1 text-xs capitalize text-s-mute">{status}</p></div>)}
                 </div>
-                <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "stations" }))} className="mt-5 text-sm font-bold text-brand hover:underline">Manage stations →</button>
+                <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "stations" }))} className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Manage stations <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
               </Panel>
               <Panel>
-                <h2 className="text-lg font-extrabold text-ink">Configuration</h2>
-                <p className="mt-1 text-sm text-ink-soft">Virtual patient, assessment, and speech-to-text models are configured under AI &amp; models.</p>
-                {!defaultProvider?.configured && <p className="mt-4 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"><AlertTriangle size={17} className="shrink-0" /> The default provider has no configured key. AI sessions may be unavailable.</p>}
-                <p className="mt-4 text-sm text-ink-soft">Credit prices and usage caps are server configuration. Grants remain CLI-only and are recorded in the credit ledger.</p>
-                <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "ai" }))} className="mt-5 text-sm font-bold text-brand hover:underline">Review AI settings →</button>
+                <h2 className="text-lg font-semibold tracking-tight text-s-ink">Configuration</h2>
+                <p className="mt-1 text-sm text-s-mute">Virtual patient, assessment, and speech-to-text models are configured under AI &amp; models.</p>
+                {!defaultProvider?.configured && <p className="mt-4 flex items-start gap-2 rounded-2xl bg-sun-soft p-3.5 text-sm text-s-ink"><AlertTriangle size={17} strokeWidth={2} className="shrink-0 text-sun" aria-hidden="true" /> The default provider has no configured key. AI sessions may be unavailable.</p>}
+                <p className="mt-4 text-sm text-s-mute">Credit prices and usage caps are server configuration. Grants remain CLI-only and are recorded in the credit ledger.</p>
+                <button type="button" onClick={() => setState((s) => ({ ...s, activeTab: "ai" }))} className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-sm font-medium text-s-accent hover:underline">Review AI settings <ArrowRight size={15} strokeWidth={2} aria-hidden="true" /></button>
               </Panel>
             </div>
           </div>
         )}
         {!state.loading && state.activeTab === "stations" && <div className="mt-6 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div><h2 className="text-2xl font-extrabold text-ink">OSCE stations</h2><p className="text-sm text-ink-soft">Search, review, publish, or archive station content.</p></div>
-            <PrimaryButton type="button" onClick={() => setShowCreateForm((open) => !open)} className="inline-flex items-center gap-2"><Plus size={16} /> {showCreateForm ? "Close editor" : "New station"}</PrimaryButton>
+            <div><h2 className="text-2xl font-semibold tracking-tight text-s-ink">OSCE stations</h2><p className="text-sm text-s-mute">Search, review, publish, or archive station content.</p></div>
+            <PrimaryButton type="button" onClick={() => setShowCreateForm((open) => !open)}><Plus size={16} strokeWidth={2} aria-hidden="true" /> {showCreateForm ? "Close editor" : "New station"}</PrimaryButton>
           </div>
           <Panel>
             <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_180px]">
-              <label className="relative"><span className="sr-only">Search stations</span><Search size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-soft" /><input value={stationSearch} onChange={(e) => setStationSearch(e.target.value)} placeholder="Search title, slug, or specialty" className="w-full rounded-lg border border-line bg-white/90 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-brand" /></label>
-              <label><span className="sr-only">Filter by status</span><select value={stationFilter} onChange={(e) => setStationFilter(e.target.value)} className="w-full rounded-lg border border-line bg-white/90 p-2.5 text-sm outline-none focus:border-brand"><option value="all">All statuses</option><option value="review">Needs review</option>{Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}</select></label>
+              <label className="relative"><span className="sr-only">Search stations</span><Search size={17} strokeWidth={2} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-s-mute" aria-hidden="true" /><input value={stationSearch} onChange={(e) => setStationSearch(e.target.value)} placeholder="Search title, slug, or specialty" className="w-full min-h-11 rounded-xl border border-s-line bg-s-card py-2.5 pl-10 pr-3 text-sm text-s-ink outline-none placeholder:text-s-mute focus:border-s-accent" /></label>
+              <label><span className="sr-only">Filter by status</span><select value={stationFilter} onChange={(e) => setStationFilter(e.target.value)} className="w-full min-h-11 rounded-xl border border-s-line bg-s-card p-2.5 text-sm text-s-ink outline-none focus:border-s-accent"><option value="all">All statuses</option><option value="review">Needs review</option>{Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}</select></label>
             </div>
-            <div className="mt-4 divide-y divide-line">
+            <div className="mt-4 divide-y divide-s-line">
               {visibleStations.map((station) => (
                 <div key={station.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
-                  <div className="min-w-0 flex-1"><p className="font-semibold text-ink">{station.title}</p><p className="break-all text-xs text-ink-soft">{station.specialty?.name || "General"} · {station.slug}</p></div>
-                  <span className="gradient-pill rounded-lg px-2.5 py-1 text-xs font-bold capitalize text-ink">{station.status}</span>
+                  <div className="min-w-0 flex-1"><p className="font-semibold text-s-ink">{station.title}</p><p className="break-all text-xs text-s-mute">{station.specialty?.name || "General"} / {station.slug}</p></div>
+                  <span className={`rounded-full px-2.5 py-1 font-chart text-xs capitalize ${STATUS_STYLES[station.status] || "bg-s-tint text-s-mute"}`}>{station.status}</span>
                   <label className="sr-only" htmlFor={`station-status-${station.id}`}>Change status for {station.title}</label>
-                  <select id={`station-status-${station.id}`} aria-label={`Change status for ${station.title}`} value={station.status} disabled={statusBusyId === station.id} onChange={(e) => changeStatus(station.id, e.target.value)} className="rounded-lg border border-line bg-white p-2 text-sm text-ink disabled:opacity-50">
+                  <select id={`station-status-${station.id}`} aria-label={`Change status for ${station.title}`} value={station.status} disabled={statusBusyId === station.id} onChange={(e) => changeStatus(station.id, e.target.value)} className="min-h-11 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent disabled:opacity-50">
                     {Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}
                   </select>
                 </div>
               ))}
-              {visibleStations.length === 0 && <p className="py-5 text-center text-sm text-ink-soft">No stations match this search.</p>}
+              {visibleStations.length === 0 && <p className="py-5 text-center text-sm text-s-mute">No stations match this search.</p>}
             </div>
           </Panel>
           {showCreateForm && <Panel>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="text-xl font-extrabold text-ink">Create station draft</h2>
-                <p className="mt-1 text-sm text-ink-soft">Drafts are hidden from students until published. Review the patient facts and checklist before publishing.</p>
+                <h2 className="text-xl font-semibold tracking-tight text-s-ink">Create station draft</h2>
+                <p className="mt-1 text-sm text-s-mute">Drafts are hidden from students until published. Review the patient facts and checklist before publishing.</p>
               </div>
-              <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-bold text-ink">OSCE station</span>
+              <span className="rounded-full bg-s-accent-soft px-3 py-1.5 font-chart text-xs text-s-accent-strong">OSCE station</span>
             </div>
             <form onSubmit={createDraft} className="mt-5 space-y-5">
               <div className="grid gap-3 md:grid-cols-2">
@@ -1050,8 +1313,8 @@ export function AdminOscePage() {
                 <TextInput label="Station title" value={state.form.title} onChange={(value) => updateForm("title", value)} required />
                 <TextInput label="Slug" value={state.form.slug} onChange={(value) => updateForm("slug", slugify(value))} placeholder="auto-created if blank" />
                 <TextInput label="Presenting complaint" value={state.form.presentingComplaint} onChange={(value) => updateForm("presentingComplaint", value)} required />
-                <label className="block text-sm font-semibold text-ink">Difficulty
-                  <select className="mt-1 w-full rounded-lg border border-line bg-white/90 p-2.5" value={state.form.difficulty} onChange={(e) => updateForm("difficulty", e.target.value)}>
+                <label className="block text-sm font-medium text-s-ink">Difficulty
+                  <select className="mt-2 min-h-11 w-full rounded-xl border border-s-line bg-s-card p-2.5 text-sm font-normal text-s-ink outline-none focus:border-s-accent" value={state.form.difficulty} onChange={(e) => updateForm("difficulty", e.target.value)}>
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
                     <option value="advanced">Advanced</option>
@@ -1077,24 +1340,24 @@ export function AdminOscePage() {
           </Panel>}
         </div>}
         {!state.loading && state.activeTab === "ai" && (
-          <Panel className="ai-panel">
+          <Panel>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <AiBadge>AI control</AiBadge>
-                <h2 className="mt-3 text-2xl font-extrabold text-ink">Inference settings</h2>
-                <p className="mt-1 max-w-2xl text-sm text-ink-soft">Choose the provider and models for virtual patients, assessment, and voice transcription. API keys are write-only.</p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-tight text-s-ink">Inference settings</h2>
+                <p className="mt-1 max-w-2xl text-sm text-s-mute">Choose the provider and models for virtual patients, assessment, and voice transcription. API keys are write-only.</p>
               </div>
-              <div className="text-right text-xs font-semibold text-ink-soft">
+              <div className="text-right text-xs font-semibold text-s-mute">
                 {(state.aiStatus?.providers || []).map((provider) => (
                   <p key={provider.id}>{provider.label}: {provider.configured ? provider.apiKeyPreview || "configured" : "not configured"}</p>
                 ))}
               </div>
             </div>
             <form onSubmit={saveAiSettings} className="mt-6 space-y-5">
-              <p className="rounded-lg border border-line bg-white/70 p-3 text-sm text-ink-soft">Changes apply to new AI requests. Removing a saved key does not remove a key supplied through server environment variables.</p>
+              <p className="rounded-2xl bg-s-tint/60 p-3.5 text-sm text-s-mute">Changes apply to new AI requests. Removing a saved key does not remove a key supplied through server environment variables.</p>
               <div className="grid gap-3 md:grid-cols-2">
-                <label className="block text-sm font-semibold text-ink">Default provider
-                  <select className="mt-1 w-full rounded-lg border border-line bg-white/90 p-2.5" value={state.aiForm.defaultProvider} onChange={(e) => updateAiForm("defaultProvider", e.target.value)}>
+                <label className="block text-sm font-medium text-s-ink">Default provider
+                  <select className="mt-2 min-h-11 w-full rounded-xl border border-s-line bg-s-card p-2.5 text-sm font-normal text-s-ink outline-none focus:border-s-accent" value={state.aiForm.defaultProvider} onChange={(e) => updateAiForm("defaultProvider", e.target.value)}>
                     <option value="groq">Groq</option>
                     <option value="openai">OpenAI</option>
                   </select>
@@ -1102,23 +1365,23 @@ export function AdminOscePage() {
                 <TextInput label="Per-message token limit" type="number" min="20" max="2000" value={state.aiForm.maxStudentMessageTokens} onChange={(value) => updateAiForm("maxStudentMessageTokens", value)} />
               </div>
               {!(state.aiStatus?.providers || []).find((provider) => provider.id === state.aiForm.defaultProvider)?.configured && !state.aiForm[`${state.aiForm.defaultProvider}ApiKey`] &&
-                <p className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"><AlertTriangle size={17} className="shrink-0" /> This provider has no API key. Add one before using AI sessions.</p>}
+                <p className="flex items-start gap-2 rounded-2xl bg-sun-soft p-3.5 text-sm text-s-ink"><AlertTriangle size={17} strokeWidth={2} className="shrink-0 text-sun" aria-hidden="true" /> This provider has no API key. Add one before using AI sessions.</p>}
               <div className="grid gap-5 xl:grid-cols-2">
-                <div className="rounded-lg border border-line bg-white/80 p-4">
-                  <h3 className="font-extrabold text-ink">Groq</h3>
+                <div className="rounded-2xl border border-s-line bg-s-card p-4">
+                  <h3 className="font-semibold tracking-tight text-s-ink">Groq</h3>
                   <div className="mt-3 space-y-3">
                     <TextInput label="Groq API key" type="password" autoComplete="new-password" value={state.aiForm.groqApiKey === "__CLEAR__" ? "" : state.aiForm.groqApiKey} onChange={(value) => updateAiForm("groqApiKey", value)} placeholder={state.aiForm.groqApiKey === "__CLEAR__" ? "Removal pending" : "Leave blank to keep existing"} />
-                    {state.aiStatus?.providers?.find((provider) => provider.id === "groq")?.configured && <button type="button" onClick={() => updateAiForm("groqApiKey", state.aiForm.groqApiKey === "__CLEAR__" ? "" : "__CLEAR__")} className="text-xs font-semibold text-rose-700 hover:underline">{state.aiForm.groqApiKey === "__CLEAR__" ? "Undo key removal" : "Remove saved key on save"}</button>}
+                    {state.aiStatus?.providers?.find((provider) => provider.id === "groq")?.configured && <button type="button" onClick={() => updateAiForm("groqApiKey", state.aiForm.groqApiKey === "__CLEAR__" ? "" : "__CLEAR__")} className="min-h-11 text-xs font-medium text-s-miss hover:underline">{state.aiForm.groqApiKey === "__CLEAR__" ? "Undo key removal" : "Remove saved key on save"}</button>}
                     <TextInput label="Chat model" value={state.aiForm.groqChatModel} onChange={(value) => updateAiForm("groqChatModel", value)} />
                     <TextInput label="Assessment model" value={state.aiForm.groqEvalModel} onChange={(value) => updateAiForm("groqEvalModel", value)} />
                     <TextInput label="Speech-to-text model" value={state.aiForm.groqSttModel} onChange={(value) => updateAiForm("groqSttModel", value)} />
                   </div>
                 </div>
-                <div className="rounded-lg border border-line bg-white/80 p-4">
-                  <h3 className="font-extrabold text-ink">OpenAI</h3>
+                <div className="rounded-2xl border border-s-line bg-s-card p-4">
+                  <h3 className="font-semibold tracking-tight text-s-ink">OpenAI</h3>
                   <div className="mt-3 space-y-3">
                     <TextInput label="OpenAI API key" type="password" autoComplete="new-password" value={state.aiForm.openaiApiKey === "__CLEAR__" ? "" : state.aiForm.openaiApiKey} onChange={(value) => updateAiForm("openaiApiKey", value)} placeholder={state.aiForm.openaiApiKey === "__CLEAR__" ? "Removal pending" : "Leave blank to keep existing"} />
-                    {state.aiStatus?.providers?.find((provider) => provider.id === "openai")?.configured && <button type="button" onClick={() => updateAiForm("openaiApiKey", state.aiForm.openaiApiKey === "__CLEAR__" ? "" : "__CLEAR__")} className="text-xs font-semibold text-rose-700 hover:underline">{state.aiForm.openaiApiKey === "__CLEAR__" ? "Undo key removal" : "Remove saved key on save"}</button>}
+                    {state.aiStatus?.providers?.find((provider) => provider.id === "openai")?.configured && <button type="button" onClick={() => updateAiForm("openaiApiKey", state.aiForm.openaiApiKey === "__CLEAR__" ? "" : "__CLEAR__")} className="min-h-11 text-xs font-medium text-s-miss hover:underline">{state.aiForm.openaiApiKey === "__CLEAR__" ? "Undo key removal" : "Remove saved key on save"}</button>}
                     <TextInput label="Chat model" value={state.aiForm.openaiChatModel} onChange={(value) => updateAiForm("openaiChatModel", value)} />
                     <TextInput label="Assessment model" value={state.aiForm.openaiEvalModel} onChange={(value) => updateAiForm("openaiEvalModel", value)} />
                   </div>
@@ -1130,49 +1393,49 @@ export function AdminOscePage() {
         )}
         {!state.loading && state.activeTab === "users" && (
           <Panel>
-            <h2 className="text-2xl font-extrabold text-ink">Accounts</h2>
-            <p className="mt-1 text-sm text-ink-soft">{state.users.length} registered accounts. Account roles and credit balances are read-only here; grants use the audited CLI.</p>
-            <label className="relative mt-5 block max-w-md"><span className="sr-only">Search accounts</span><Search size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-soft" /><input value={userSearch} onChange={(e) => setUserSearch(e.target.value)} placeholder="Search name, email, or role" className="w-full rounded-lg border border-line bg-white/90 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-brand" /></label>
+            <h2 className="text-2xl font-semibold tracking-tight text-s-ink">Accounts</h2>
+            <p className="mt-1 text-sm text-s-mute">{state.users.length} registered accounts. Account roles and credit balances are read-only here; grants use the audited CLI.</p>
+            <label className="relative mt-5 block max-w-md"><span className="sr-only">Search accounts</span><Search size={17} strokeWidth={2} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-s-mute" aria-hidden="true" /><input value={userSearch} onChange={(e) => setUserSearch(e.target.value)} placeholder="Search name, email, or role" className="w-full min-h-11 rounded-xl border border-s-line bg-s-card py-2.5 pl-10 pr-3 text-sm text-s-ink outline-none placeholder:text-s-mute focus:border-s-accent" /></label>
             {/* Phones: one card per user — a 5-column table has no room to breathe below sm. */}
             <div className="mt-5 space-y-2 sm:hidden">
               {visibleUsers.map((user) => (
-                <div key={user.id} className="rounded-lg border border-line bg-white/60 p-3 text-sm">
+                <div key={user.id} className="rounded-2xl border border-s-line bg-s-card p-4 text-sm">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="font-semibold text-ink">{user.fullName}</p>
-                    <span className="gradient-pill shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold text-ink">{user.role}</span>
+                    <p className="font-semibold text-s-ink">{user.fullName}</p>
+                    <span className="shrink-0 rounded-full bg-s-accent-soft px-2.5 py-1 font-chart text-xs text-s-accent-strong">{user.role}</span>
                   </div>
-                  <p className="mt-1 break-all text-ink-soft">{user.email}</p>
-                  <p className="mt-1 text-ink-soft">{user.roleLabel || user.profile?.programme || "-"} · {user.creditBalance} credits · Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</p>
+                  <p className="mt-1 break-all text-s-mute">{user.email}</p>
+                  <p className="mt-1 text-s-mute">{user.roleLabel || user.profile?.programme || "-"} / {user.creditBalance} credits / Joined {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</p>
                 </div>
               ))}
             </div>
             <div className="mt-5 hidden overflow-x-auto sm:block">
               <table className="w-full min-w-[720px] text-left text-sm">
-                <thead className="text-xs uppercase text-ink-soft">
+                <thead className="text-xs uppercase text-s-mute">
                   <tr>
-                    <th className="border-b border-line py-3 pr-3">Name</th>
-                    <th className="border-b border-line py-3 pr-3">Email</th>
-                    <th className="border-b border-line py-3 pr-3">Role</th>
-                    <th className="border-b border-line py-3 pr-3">Profile</th>
-                    <th className="border-b border-line py-3 pr-3">Credits</th>
-                    <th className="border-b border-line py-3 pr-3">Joined</th>
+                    <th className="border-b border-s-line py-3 pr-3">Name</th>
+                    <th className="border-b border-s-line py-3 pr-3">Email</th>
+                    <th className="border-b border-s-line py-3 pr-3">Role</th>
+                    <th className="border-b border-s-line py-3 pr-3">Profile</th>
+                    <th className="border-b border-s-line py-3 pr-3">Credits</th>
+                    <th className="border-b border-s-line py-3 pr-3">Joined</th>
                   </tr>
                 </thead>
                 <tbody>
                   {visibleUsers.map((user) => (
                     <tr key={user.id}>
-                      <td className="border-b border-line py-3 pr-3 font-semibold text-ink">{user.fullName}</td>
-                      <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.email}</td>
-                      <td className="border-b border-line py-3 pr-3"><span className="gradient-pill rounded-lg px-2.5 py-1 text-xs font-bold text-ink">{user.role}</span></td>
-                      <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.roleLabel || user.profile?.programme || "-"}</td>
-                      <td className="border-b border-line py-3 pr-3 font-semibold text-ink">{user.creditBalance}</td>
-                      <td className="border-b border-line py-3 pr-3 text-ink-soft">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</td>
+                      <td className="border-b border-s-line py-3 pr-3 font-semibold text-s-ink">{user.fullName}</td>
+                      <td className="border-b border-s-line py-3 pr-3 text-s-mute">{user.email}</td>
+                      <td className="border-b border-s-line py-3 pr-3"><span className="rounded-full bg-s-accent-soft px-2.5 py-1 font-chart text-xs text-s-accent-strong">{user.role}</span></td>
+                      <td className="border-b border-s-line py-3 pr-3 text-s-mute">{user.roleLabel || user.profile?.programme || "-"}</td>
+                      <td className="border-b border-s-line py-3 pr-3 font-semibold text-s-ink">{user.creditBalance}</td>
+                      <td className="border-b border-s-line py-3 pr-3 text-s-mute">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            {visibleUsers.length === 0 && <p className="py-5 text-center text-sm text-ink-soft">No accounts match this search.</p>}
+            {visibleUsers.length === 0 && <p className="py-5 text-center text-sm text-s-mute">No accounts match this search.</p>}
           </Panel>
         )}
       </PageMain>
@@ -1180,6 +1443,19 @@ export function AdminOscePage() {
   );
 }
 
+const WEIGHT_TAGS = {
+  critical: { label: "Critical", className: "bg-coral-soft text-s-miss" },
+  major: { label: "Major", className: "bg-s-tint text-s-mute" },
+  minor: { label: "Minor", className: "bg-s-tint text-s-mute" },
+};
+
+function WeightTag({ weight, className = "" }) {
+  const tag = WEIGHT_TAGS[weight];
+  if (!tag) return null;
+  return <span className={`rounded-full px-2.5 py-1 font-chart text-xs ${tag.className} ${className}`}>{tag.label}</span>;
+}
+
+// Checklist rows styled like the landing "Mark yourself like the examiner".
 function Checklist({ checklist, checked, onChange }) {
   const selected = new Set(checked);
   function toggle(itemId) {
@@ -1189,18 +1465,37 @@ function Checklist({ checklist, checked, onChange }) {
     onChange([...next]);
   }
   return (
-    <div className="mt-5 space-y-5">
+    <div className="mt-5 space-y-6">
       {checklist.sections.map((section) => (
         <div key={section.sectionId}>
-          <h3 className="font-bold text-ink">{section.title}</h3>
-          <div className="mt-2 space-y-2">
-            {section.items.map((item) => (
-              <label key={item.itemId} className="flex cursor-pointer gap-3 rounded-lg border border-line bg-white/80 p-3 text-sm">
-                <input type="checkbox" checked={selected.has(item.itemId)} onChange={() => toggle(item.itemId)} />
-                <span><span className="font-semibold text-ink">{item.label}</span><span className="block text-ink-soft">{item.remediationText}</span></span>
-              </label>
-            ))}
-          </div>
+          <h3 className="font-semibold text-s-ink">{section.title}</h3>
+          <ul className="mt-2.5 divide-y divide-s-line overflow-hidden rounded-2xl border border-s-line bg-s-card">
+            {section.items.map((item) => {
+              const on = selected.has(item.itemId);
+              return (
+                <li key={item.itemId}>
+                  <label className="flex cursor-pointer items-start gap-3.5 px-4 py-3.5 transition-colors hover:bg-s-page">
+                    <input type="checkbox" checked={on} onChange={() => toggle(item.itemId)} className="peer sr-only" />
+                    <span
+                      className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-s-accent ${
+                        on ? "border-mint bg-mint text-s-card" : "border-s-line bg-s-card"
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {on && <Check size={14} strokeWidth={3} />}
+                    </span>
+                    <span className="min-w-0 flex-1 text-sm">
+                      <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="font-medium text-s-ink">{item.label}</span>
+                        <WeightTag weight={item.weightCategory} />
+                      </span>
+                      {item.remediationText && <span className="mt-0.5 block leading-relaxed text-s-mute">{item.remediationText}</span>}
+                    </span>
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       ))}
     </div>
@@ -1209,244 +1504,37 @@ function Checklist({ checklist, checked, onChange }) {
 
 function Loading({ variant = "cards" }) {
   const variants = {
-    "osce-bank": <CardGridSkeleton cards={6} />,
-    "osce-section": <CardGridSkeleton cards={6} withHeader />,
-    "module-detail": <ModuleDetailSkeleton />,
-    "single-player": <TwoColumnSkeleton leftRows={8} rightRows={7} />,
-    chat: <ChatSkeleton />,
-    assessment: <AssessmentSkeleton />,
-    results: <ResultsSkeleton />,
-    attempts: <AttemptListSkeleton />,
-    admin: <AdminSkeleton />,
+    "osce-bank": <CardGridSkeleton cards={6} label="Loading stations" />,
+    "osce-section": <CardGridSkeleton cards={6} withHeader label="Loading stations" />,
+    "module-detail": <DetailSkeleton label="Loading station" />,
+    "single-player": <TwoColumnSkeleton leftRows={8} rightRows={7} label="Loading station" />,
+    chat: <ChatSkeleton label="Loading the patient" />,
+    assessment: <ChecklistSkeleton label="Loading checklist" />,
+    results: <ResultsSkeleton label="Loading results" />,
+    attempts: <ListSkeleton label="Loading attempts" />,
+    admin: <FormSkeleton label="Loading" />,
     cards: <CardGridSkeleton cards={3} />,
   };
-  return <div className="animate-pulse">{variants[variant] || variants.cards}</div>;
+  return variants[variant] || variants.cards;
 }
 
-function SkeletonLine({ className = "" }) {
-  return <div className={`rounded bg-slate-200/80 ${className}`} />;
-}
-
-function SkeletonPanel({ children, className = "" }) {
-  return <div className={`glass-surface rounded-lg p-5 ${className}`}>{children}</div>;
-}
-
-function CardGridSkeleton({ cards = 3, withHeader = false }) {
-  return (
-    <div className="space-y-4">
-      {withHeader && (
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <SkeletonLine className="h-3 w-24" />
-            <SkeletonLine className="mt-3 h-8 w-56" />
-          </div>
-          <SkeletonLine className="h-8 w-24" />
-        </div>
-      )}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {Array.from({ length: cards }).map((_, item) => (
-          <SkeletonPanel key={item}>
-            <div className="flex items-start justify-between">
-              <div>
-                <SkeletonLine className="h-3 w-20" />
-                <SkeletonLine className="mt-3 h-7 w-40" />
-              </div>
-              <SkeletonLine className="h-10 w-10 rounded-lg" />
-            </div>
-            <SkeletonLine className="mt-6 h-5 w-24" />
-            <SkeletonLine className="mt-3 h-4 w-full" />
-          </SkeletonPanel>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ModuleDetailSkeleton() {
-  return (
-    <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-      <SkeletonPanel>
-        <SkeletonLine className="h-4 w-56" />
-        <SkeletonLine className="mt-4 h-10 w-3/4" />
-        <SkeletonLine className="mt-4 h-4 w-full max-w-2xl" />
-        <SkeletonLine className="mt-2 h-4 w-4/5" />
-        <div className="mt-8 space-y-3 border-t border-line pt-5">
-          <SkeletonLine className="h-5 w-44" />
-          <SkeletonLine className="h-4 w-full" />
-          <SkeletonLine className="h-4 w-5/6" />
-          <SkeletonLine className="h-4 w-3/4" />
-        </div>
-      </SkeletonPanel>
-      <div className="space-y-4">
-        <SkeletonPanel><PracticeCardSkeleton /></SkeletonPanel>
-        <SkeletonPanel><PracticeCardSkeleton /></SkeletonPanel>
-      </div>
-    </div>
-  );
-}
-
-function PracticeCardSkeleton() {
-  return (
-    <>
-      <div className="flex items-center justify-between">
-        <SkeletonLine className="h-10 w-10 rounded-lg" />
-        <SkeletonLine className="h-6 w-20" />
-      </div>
-      <SkeletonLine className="mt-5 h-6 w-44" />
-      <SkeletonLine className="mt-3 h-4 w-full" />
-      <SkeletonLine className="mt-2 h-4 w-2/3" />
-      <SkeletonLine className="mt-5 h-10 w-full" />
-    </>
-  );
-}
-
-function TwoColumnSkeleton({ leftRows = 6, rightRows = 5 }) {
-  return (
-    <div className="grid gap-5 xl:grid-cols-[1fr_420px]">
-      <SkeletonPanel>
-        <div className="flex items-start justify-between gap-3">
-          <SkeletonLine className="h-9 w-2/3" />
-          <SkeletonLine className="h-8 w-20" />
-        </div>
-        <div className="mt-7 grid gap-2">
-          {Array.from({ length: leftRows }).map((_, item) => (
-            <div key={item} className="rounded-lg border border-line bg-white/60 p-3">
-              <SkeletonLine className="h-4 w-44" />
-              <SkeletonLine className="mt-2 h-4 w-full" />
-            </div>
-          ))}
-        </div>
-      </SkeletonPanel>
-      <SkeletonPanel>
-        <SkeletonLine className="h-6 w-36" />
-        <div className="mt-5 space-y-3">
-          {Array.from({ length: rightRows }).map((_, item) => (
-            <SkeletonLine key={item} className="h-12 w-full" />
-          ))}
-        </div>
-      </SkeletonPanel>
-    </div>
-  );
-}
-
-function ChatSkeleton() {
-  return (
-    <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
-      <SkeletonPanel className="flex h-[calc(100vh-170px)] min-h-[560px] flex-col overflow-hidden p-0">
-        <div className="border-b border-line p-5">
-          <SkeletonLine className="h-7 w-64" />
-          <SkeletonLine className="mt-2 h-4 w-40" />
-        </div>
-        <div className="flex flex-1 flex-col gap-4 p-5">
-          <SkeletonLine className="h-12 w-3/5" />
-          <SkeletonLine className="ml-auto h-12 w-1/2" />
-          <SkeletonLine className="h-20 w-2/3" />
-          <SkeletonLine className="ml-auto h-12 w-3/5" />
-        </div>
-        <div className="border-t border-line p-4">
-          <SkeletonLine className="h-12 w-full" />
-        </div>
-      </SkeletonPanel>
-      <SkeletonPanel>
-        <SkeletonLine className="h-6 w-44" />
-        <SkeletonLine className="mt-4 h-4 w-full" />
-        <SkeletonLine className="mt-2 h-4 w-5/6" />
-        <SkeletonLine className="mt-7 h-10 w-full" />
-      </SkeletonPanel>
-    </div>
-  );
-}
-
-function AssessmentSkeleton() {
-  return (
-    <SkeletonPanel className="mx-auto max-w-3xl">
-      <SkeletonLine className="h-8 w-56" />
-      <SkeletonLine className="mt-3 h-4 w-full max-w-xl" />
-      <div className="mt-6 space-y-3">
-        {Array.from({ length: 6 }).map((_, item) => <SkeletonLine key={item} className="h-14 w-full" />)}
-      </div>
-      <div className="mt-5 flex gap-3">
-        <SkeletonLine className="h-10 w-44" />
-        <SkeletonLine className="h-10 w-36" />
-      </div>
-    </SkeletonPanel>
-  );
-}
-
-function ResultsSkeleton() {
-  return (
-    <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
-      <SkeletonPanel>
-        <SkeletonLine className="h-4 w-24" />
-        <SkeletonLine className="mt-4 h-12 w-32" />
-        <SkeletonLine className="mt-3 h-4 w-40" />
-        <SkeletonLine className="mt-6 h-10 w-full" />
-      </SkeletonPanel>
-      <SkeletonPanel>
-        <SkeletonLine className="h-7 w-32" />
-        <SkeletonLine className="mt-4 h-4 w-full" />
-        <SkeletonLine className="mt-2 h-4 w-5/6" />
-        <SkeletonLine className="mt-7 h-5 w-28" />
-        <SkeletonLine className="mt-3 h-4 w-3/4" />
-      </SkeletonPanel>
-    </div>
-  );
-}
-
-function AttemptListSkeleton() {
-  return (
-    <div className="space-y-3">
-      {Array.from({ length: 5 }).map((_, item) => (
-        <SkeletonPanel key={item} className="p-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex-1">
-              <SkeletonLine className="h-5 w-1/2" />
-              <SkeletonLine className="mt-2 h-4 w-36" />
-            </div>
-            <SkeletonLine className="h-8 w-16" />
-          </div>
-        </SkeletonPanel>
-      ))}
-    </div>
-  );
-}
-
-function AdminSkeleton() {
-  return (
-    <div className="mt-6 grid gap-5 xl:grid-cols-[1fr_420px]">
-      <SkeletonPanel>
-        <SkeletonLine className="h-7 w-40" />
-        <div className="mt-6 grid gap-3 md:grid-cols-2">
-          {Array.from({ length: 6 }).map((_, item) => <SkeletonLine key={item} className="h-11 w-full" />)}
-        </div>
-        <SkeletonLine className="mt-5 h-24 w-full" />
-        <SkeletonLine className="mt-5 h-10 w-full" />
-      </SkeletonPanel>
-      <SkeletonPanel>
-        <SkeletonLine className="h-7 w-48" />
-        <div className="mt-4 space-y-3">
-          {Array.from({ length: 5 }).map((_, item) => <SkeletonLine key={item} className="h-16 w-full" />)}
-        </div>
-      </SkeletonPanel>
-    </div>
-  );
-}
+const fieldClass = "mt-2 min-h-11 w-full rounded-xl border border-s-line bg-s-card p-2.5 text-sm font-normal text-s-ink outline-none transition-colors placeholder:text-s-mute focus:border-s-accent";
 
 function TextInput({ label, value, onChange, ...props }) {
   return (
-    <label className="block text-sm font-semibold text-ink">
+    <label className="block text-sm font-medium text-s-ink">
       {label}
-      <input className="mt-1 w-full rounded-lg border border-line bg-white/90 p-2.5 outline-none focus:border-brand" value={value} onChange={(e) => onChange(e.target.value)} {...props} />
+      <input className={fieldClass} value={value} onChange={(e) => onChange(e.target.value)} {...props} />
     </label>
   );
 }
 
 function TextArea({ label, helper, value, onChange, rows = 4, ...props }) {
   return (
-    <label className="block text-sm font-semibold text-ink">
+    <label className="block text-sm font-medium text-s-ink">
       {label}
-      {helper && <span className="ml-2 text-xs font-medium text-ink-soft">{helper}</span>}
-      <textarea className="mt-1 w-full rounded-lg border border-line bg-white/90 p-2.5 outline-none focus:border-brand" rows={rows} value={value} onChange={(e) => onChange(e.target.value)} {...props} />
+      {helper && <span className="mt-0.5 block text-xs font-normal leading-relaxed text-s-mute">{helper}</span>}
+      <textarea className={fieldClass} rows={rows} value={value} onChange={(e) => onChange(e.target.value)} {...props} />
     </label>
   );
 }

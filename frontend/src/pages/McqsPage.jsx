@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, ChevronRight, FileQuestion, GraduationCap, Layers, PlayCircle, RotateCcw, Shuffle, XCircle } from "lucide-react";
-import { Breadcrumbs, ErrorMessage, LinkButton, PageMain, Panel, PrimaryButton, RequireUser } from "../components/AppPage";
+import { useParams, useSearchParams } from "react-router-dom";
+import { ArrowRight, BookOpen, Check, PlayCircle, Shuffle, X } from "lucide-react";
+import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, PrimaryButton, RequireUser } from "../components/AppPage";
+import { QuestionSkeleton } from "../components/Skeleton";
+import { Chip, ChoicePills, PillLink, ProgressLine, ResultsSummary, SectionHeader, SetupCard, StepBar, Toggle, TopicCard, YEAR_TONES, YearCard } from "../components/StudyKit";
+import { plus } from "../site/siteContent";
 import { getBlock, getYear, loadQuestions, mcqTotalCount, mcqYears } from "../data/mcqs/catalog";
 
 // ---- local progress (per browser; practice only, not a graded record) ----
@@ -39,18 +42,6 @@ function progressFor(progress, yearNumber, fromIndex, count) {
   return { answered, correct };
 }
 
-function ProgressBar({ answered, total }) {
-  const pct = total ? Math.round((answered / total) * 100) : 0;
-  return (
-    <div className="mt-3">
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/5">
-        <div className="gradient-brand h-full rounded-full transition-[width] duration-700 ease-out" style={{ width: `${pct}%` }} />
-      </div>
-      <p className="mt-1 text-xs text-ink-soft">{answered} of {total} attempted</p>
-    </div>
-  );
-}
-
 function shuffle(list) {
   const copy = [...list];
   for (let i = copy.length - 1; i > 0; i -= 1) {
@@ -60,22 +51,6 @@ function shuffle(list) {
   return copy;
 }
 
-// Card colour palettes — same --g1/--g2/--glow variables the dashboard and
-// station-bank cards use with .gradient-card / .gradient-icon.
-const PALETTES = [
-  { "--g1": "#FF8FCF", "--g2": "#FFB3E0", "--glow": "rgba(255,143,207,0.35)" },
-  { "--g1": "#7FB8FF", "--g2": "#A6D0FF", "--glow": "rgba(127,184,255,0.35)" },
-  { "--g1": "#FFD84D", "--g2": "#FFE38A", "--glow": "rgba(255,216,77,0.35)" },
-  { "--g1": "#C6A6FF", "--g2": "#DCC8FF", "--glow": "rgba(198,166,255,0.35)" },
-  { "--g1": "#7FE0C0", "--g2": "#B0F0DA", "--glow": "rgba(127,224,192,0.35)" },
-];
-const palette = (i) => PALETTES[i % PALETTES.length];
-const stagger = (i) => ({ animationDelay: `${80 + i * 60}ms` });
-
-function CountPill({ children }) {
-  return <span className="gradient-pill rounded-lg px-3 py-1.5 text-xs font-semibold text-ink">{children}</span>;
-}
-
 // ---- /mcqs ----
 export function McqsHome() {
   const progress = readProgress();
@@ -83,47 +58,45 @@ export function McqsHome() {
     <RequireUser active="mcqs">
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "MCQs" }]} />
-        <div className="mb-6 animate-fade-up">
-          <p className="text-sm font-semibold text-ink-soft">MCQs</p>
-          <h1 className="mt-1 text-4xl font-extrabold text-ink">Question bank</h1>
-          <p className="mt-2 max-w-2xl text-ink-soft">
-            {mcqTotalCount.toLocaleString()} single-best-answer questions with explanations. Choose your year to begin.
-          </p>
-        </div>
-        <p className="mb-3 text-sm text-ink-soft">{mcqYears.length} years available.</p>
+        <PageHeader
+          className="mb-8"
+          eyebrow="MCQs"
+          title="Question bank"
+          description={`${plus(mcqTotalCount)} single-best-answer questions with explanations. Pick your year to begin.`}
+        />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {mcqYears.map((year, i) => {
             const p = progressFor(progress, year.year, 0, year.count);
+            const tone = YEAR_TONES[i % YEAR_TONES.length];
             return (
-              <Link
+              <YearCard
                 key={year.slug}
                 to={`/mcqs/${year.slug}`}
-                style={{ ...palette(i), ...stagger(i) }}
-                className="gradient-card group flex animate-fade-up flex-col rounded-lg p-5"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Year</p>
-                    <h2 className="text-2xl font-extrabold text-ink">{year.name}</h2>
-                  </div>
-                  <span className="gradient-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-ink transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
-                    <GraduationCap size={18} />
-                  </span>
-                </div>
-                <p className="mt-2 line-clamp-2 text-sm text-ink-soft">{year.blocks.map((b) => b.name).join(" · ")}</p>
-                <ProgressBar answered={p.answered} total={year.count} />
-                <div className="mt-4 flex items-center justify-between">
-                  <CountPill>{year.count.toLocaleString()} MCQs</CountPill>
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand">
-                    Open <ChevronRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </Link>
+                name={year.name}
+                blocks={year.blocks.map((b) => b.name).join(", ")}
+                count={`${plus(year.count)} MCQs`}
+                tone={tone}
+                icon="book"
+                index={i}
+                progress={<ProgressLine value={p.answered} total={year.count} tone={tone} caption={`${p.answered} of ${year.count} attempted`} />}
+              />
             );
           })}
         </div>
       </PageMain>
     </RequireUser>
+  );
+}
+
+function NotFound({ backTo, backLabel }) {
+  return (
+    <EmptyState
+      character="student-bilal"
+      tone="sun"
+      title="We couldn't find that section"
+      body="It may have moved. Pick it again from the list."
+      action={<LinkButton to={backTo}>{backLabel}</LinkButton>}
+    />
   );
 }
 
@@ -136,7 +109,7 @@ export function McqYearPage() {
   if (!year) {
     return (
       <RequireUser active="mcqs">
-        <PageMain><ErrorMessage message="This year was not found." /></PageMain>
+        <PageMain><NotFound backTo="/mcqs" backLabel="All years" /></PageMain>
       </RequireUser>
     );
   }
@@ -146,98 +119,58 @@ export function McqYearPage() {
     <RequireUser active="mcqs">
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "MCQs", to: "/mcqs" }, { label: year.name }]} />
-        <div className="mb-6 flex animate-fade-up flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-ink-soft">MCQs</p>
-            <h1 className="mt-1 text-4xl font-extrabold text-ink">{year.name}</h1>
-            <p className="mt-2 text-ink-soft">Read a topic with answers and explanations, or practise it and check yourself.</p>
-          </div>
-          <LinkButton to={`/mcqs/${year.slug}/practice`}>
-            <Shuffle className="mr-2 h-4 w-4" /> Mixed practice
-          </LinkButton>
-        </div>
+        <PageHeader
+          className="mb-8"
+          eyebrow="MCQs"
+          title={year.name}
+          description="Read a topic with answers and explanations, or practise it and check yourself."
+          actions={
+            <LinkButton to={`/mcqs/${year.slug}/practice`}>
+              <Shuffle size={16} strokeWidth={2} aria-hidden="true" /> Mixed practice
+            </LinkButton>
+          }
+        />
 
-        <div className="space-y-8">
+        <div className="space-y-10">
           {year.blocks.map((block, blockIndex) => {
             const blockStart = offset;
             const bp = progressFor(progress, year.year, blockStart, block.count);
             let topicOffset = blockStart;
             offset += block.count;
+            const tone = YEAR_TONES[blockIndex % YEAR_TONES.length];
             return (
-              <section key={block.slug} className="animate-fade-up" style={stagger(blockIndex)}>
-                <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <span
-                      style={palette(blockIndex)}
-                      className="gradient-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink"
-                    >
-                      <Layers size={19} />
-                    </span>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Section</p>
-                      <h2 className="text-2xl font-extrabold text-ink">{block.name}</h2>
-                      <p className="text-sm text-ink-soft">
-                        {block.count} MCQs · {block.topics.length} topics
-                        {bp.answered ? ` · ${Math.round((bp.correct / bp.answered) * 100)}% correct so far` : ""}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Link
-                      to={`/mcqs/${year.slug}/read?block=${block.slug}`}
-                      className="glass-surface inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-ink transition hover:-translate-y-0.5"
-                    >
-                      <BookOpen size={16} /> Read section
-                    </Link>
-                    <Link
-                      to={`/mcqs/${year.slug}/practice?block=${block.slug}`}
-                      className="glass-surface inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-ink transition hover:-translate-y-0.5"
-                    >
-                      <PlayCircle size={16} /> Practise section
-                    </Link>
-                  </div>
-                </div>
-
+              <section key={block.slug}>
+                <SectionHeader
+                  tone={tone}
+                  icon="book"
+                  index={blockIndex}
+                  name={block.name}
+                  meta={`${block.count} MCQs / ${block.topics.length} topics${bp.answered ? ` / ${Math.round((bp.correct / bp.answered) * 100)}% correct so far` : ""}`}
+                  actions={
+                    <>
+                      <PillLink to={`/mcqs/${year.slug}/read?block=${block.slug}`} icon={BookOpen}>Read section</PillLink>
+                      <PillLink to={`/mcqs/${year.slug}/practice?block=${block.slug}`} icon={PlayCircle}>Practise section</PillLink>
+                    </>
+                  }
+                />
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {block.topics.map((topic, topicIndex) => {
                     const tp = progressFor(progress, year.year, topicOffset, topic.count);
                     topicOffset += topic.count;
                     const query = `block=${block.slug}&topic=${topic.slug}`;
-                    const done = tp.answered === topic.count;
                     return (
-                      <div
+                      <TopicCard
                         key={topic.slug}
-                        style={{ ...palette(blockIndex + topicIndex), ...stagger(topicIndex) }}
-                        className="gradient-card group flex animate-fade-up flex-col rounded-lg p-5"
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Topic</p>
-                            <h3 className="text-lg font-extrabold leading-snug text-ink">{topic.name}</h3>
-                          </div>
-                          <span className="gradient-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-ink transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
-                            {done ? <CheckCircle2 size={18} /> : <FileQuestion size={18} />}
-                          </span>
-                        </div>
-                        <ProgressBar answered={tp.answered} total={topic.count} />
-                        <div className="mt-4 flex items-center justify-between gap-2 pt-1 md:mt-auto">
-                          <CountPill>{topic.count} MCQs</CountPill>
-                          <div className="flex gap-2">
-                            <Link
-                              to={`/mcqs/${year.slug}/read?${query}`}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white/80 px-3 py-1.5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:bg-white"
-                            >
-                              <BookOpen size={14} /> Read
-                            </Link>
-                            <Link
-                              to={`/mcqs/${year.slug}/practice?${query}`}
-                              className="gradient-brand inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
-                            >
-                              <PlayCircle size={14} /> Practise
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
+                        name={topic.name}
+                        count={`${topic.count} MCQs`}
+                        tone={tone}
+                        icon="book"
+                        index={topicIndex}
+                        done={tp.answered === topic.count}
+                        progress={<ProgressLine value={tp.answered} total={topic.count} tone={tone} caption={`${tp.answered} of ${topic.count} attempted`} />}
+                        readTo={`/mcqs/${year.slug}/read?${query}`}
+                        practiseTo={`/mcqs/${year.slug}/practice?${query}`}
+                      />
                     );
                   })}
                 </div>
@@ -252,6 +185,7 @@ export function McqYearPage() {
 
 // ---- /mcqs/:yearSlug/practice?block=&topic= ----
 const COUNT_OPTIONS = [10, 20, 40, 0]; // 0 = all
+const LETTERS = "ABCDE";
 
 export function McqPractice() {
   const { yearSlug } = useParams();
@@ -281,7 +215,7 @@ export function McqPractice() {
     return () => { active = false; };
   }, [yearSlug, blockSlug, topicSlug]);
 
-  const title = topic?.name || block?.name || (year ? `${year.name} — mixed` : "MCQs");
+  const title = topic?.name || block?.name || (year ? `${year.name}, mixed practice` : "MCQs");
   const crumbs = [
     { label: "Home", to: "/dashboard" },
     { label: "MCQs", to: "/mcqs" },
@@ -296,9 +230,9 @@ export function McqPractice() {
   }
 
   let body;
-  if (!year || (blockSlug && !block) || (topicSlug && !topic)) body = <ErrorMessage message="This section was not found." />;
-  else if (error) body = <ErrorMessage message={error} />;
-  else if (!pool) body = <Panel><p className="text-ink-soft">Loading questions…</p></Panel>;
+  if (!year || (blockSlug && !block) || (topicSlug && !topic)) body = <NotFound backTo={year ? `/mcqs/${year.slug}` : "/mcqs"} backLabel="Back to sections" />;
+  else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
+  else if (!pool) body = <QuestionSkeleton count={1} label="Loading questions" />;
   else if (!session) body = <Setup pool={pool} config={config} setConfig={setConfig} onStart={start} />;
   else if (session.finished) body = <Results session={session} onRestart={() => setSession(null)} backTo={`/mcqs/${year.slug}`} />;
   else body = <Runner session={session} setSession={setSession} />;
@@ -307,7 +241,7 @@ export function McqPractice() {
     <RequireUser active="mcqs">
       <PageMain>
         <Breadcrumbs items={crumbs} />
-        <h1 className="mb-5 text-3xl font-extrabold text-ink">{title}</h1>
+        <h1 className="site-rise mb-6 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{title}</h1>
         {body}
       </PageMain>
     </RequireUser>
@@ -315,28 +249,39 @@ export function McqPractice() {
 }
 
 function Setup({ pool, config, setConfig, onStart }) {
+  const options = COUNT_OPTIONS.filter((n) => n === 0 || n < pool.length).map((n) => ({ value: n, label: n === 0 ? `All (${pool.length})` : String(n) }));
   return (
-    <Panel className="max-w-xl">
-      <p className="text-ink-soft">{pool.length} questions available.</p>
-      <p className="mt-5 text-sm font-semibold text-ink">Number of questions</p>
-      <div className="mt-2 flex flex-wrap gap-2">
-        {COUNT_OPTIONS.filter((n) => n === 0 || n < pool.length).map((n) => (
-          <button
-            key={n}
-            type="button"
-            onClick={() => setConfig({ ...config, count: n })}
-            className={`rounded-lg border px-4 py-2 text-sm font-semibold ${config.count === n ? "border-brand bg-brand/10 text-ink" : "border-line text-ink-soft"}`}
-          >
-            {n === 0 ? `All (${pool.length})` : n}
-          </button>
-        ))}
+    <SetupCard character="student-ayesha" tone="sky" available={`${pool.length} questions available.`} onStart={onStart}>
+      <ChoicePills label="Number of questions" options={options} value={config.count} onChange={(count) => setConfig({ ...config, count })} />
+      <div className="mt-4">
+        <Toggle checked={config.random} onChange={(random) => setConfig({ ...config, random })}>Shuffle question order</Toggle>
       </div>
-      <label className="mt-5 flex items-center gap-2 text-sm text-ink">
-        <input type="checkbox" checked={config.random} onChange={(e) => setConfig({ ...config, random: e.target.checked })} />
-        Shuffle question order
-      </label>
-      <PrimaryButton className="mt-6" onClick={onStart}>Start practice</PrimaryButton>
-    </Panel>
+    </SetupCard>
+  );
+}
+
+// Answer option, styled like the landing "Try one" card.
+function OptionButton({ index, text, state, disabled, onClick }) {
+  const styles = {
+    idle: "border-s-line bg-s-card hover:border-s-accent/60",
+    chosen: "border-s-accent bg-s-accent-soft",
+    correct: "border-mint bg-mint-soft",
+    wrong: "border-coral bg-coral-soft",
+    dim: "border-s-line bg-s-card opacity-60",
+  };
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      aria-pressed={state === "chosen"}
+      onClick={onClick}
+      className={`site-press flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left text-[15px] leading-snug text-s-ink ${styles[state]}`}
+    >
+      <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-chart text-xs ${state === "chosen" ? "bg-s-accent text-s-on-accent" : "bg-s-tint text-s-mute"}`}>
+        {state === "correct" ? <Check size={14} strokeWidth={2.5} className="text-mint" /> : state === "wrong" ? <X size={14} strokeWidth={2.5} className="text-coral" /> : LETTERS[index]}
+      </span>
+      <span className="flex-1">{text}</span>
+    </button>
   );
 }
 
@@ -345,6 +290,7 @@ function Runner({ session, setSession }) {
   const q = questions[index];
   const chosen = answers[q.id];
   const isLast = index === questions.length - 1;
+  const correct = chosen === q.a;
 
   function choose(optionIndex) {
     if (revealed) return;
@@ -361,61 +307,49 @@ function Runner({ session, setSession }) {
     else setSession({ ...session, index: index + 1, revealed: false });
   }
 
+  function optionState(i) {
+    if (!revealed) return chosen === i ? "chosen" : "idle";
+    if (i === q.a) return "correct";
+    if (chosen === i) return "wrong";
+    return "dim";
+  }
+
   return (
-    <Panel className="max-w-3xl">
-      <div className="flex items-center justify-between text-sm text-ink-soft">
-        <span>Question {index + 1} of {questions.length}</span>
-        <span>{q.topic}</span>
-      </div>
-      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-black/5">
-        <div className="gradient-brand h-full" style={{ width: `${((index + (revealed ? 1 : 0)) / questions.length) * 100}%` }} />
-      </div>
+    <Panel key={q.id} className="site-rise max-w-3xl md:p-8">
+      <StepBar
+        label={`Question ${index + 1} of ${questions.length}`}
+        aside={q.topic && <Chip>{q.topic}</Chip>}
+        value={index + (revealed ? 1 : 0)}
+        total={questions.length}
+        tone="sky"
+      />
 
-      <p className="mt-5 text-lg font-semibold leading-relaxed text-ink">{q.s}</p>
+      <p className="mt-6 text-lg leading-relaxed text-s-ink">{q.s}</p>
 
-      <div className="mt-4 space-y-2">
-        {q.o.map((option, i) => {
-          let style = "border-line bg-white/60 hover:bg-white";
-          if (!revealed && chosen === i) style = "border-brand bg-brand/10";
-          if (revealed && i === q.a) style = "border-emerald-400 bg-emerald-50";
-          if (revealed && chosen === i && i !== q.a) style = "border-rose-400 bg-rose-50";
-          return (
-            <button
-              key={i}
-              type="button"
-              disabled={revealed}
-              onClick={() => choose(i)}
-              className={`flex w-full items-start gap-3 rounded-lg border p-3 text-left text-ink ${style}`}
-            >
-              <span className="font-bold">{"ABCDE"[i]}.</span>
-              <span className="flex-1">{option}</span>
-              {revealed && i === q.a && <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />}
-              {revealed && chosen === i && i !== q.a && <XCircle className="h-5 w-5 shrink-0 text-rose-600" />}
-            </button>
-          );
-        })}
+      <div className="mt-6 space-y-2.5">
+        {q.o.map((option, i) => (
+          <OptionButton key={i} index={i} text={option} state={optionState(i)} disabled={revealed} onClick={() => choose(i)} />
+        ))}
       </div>
 
       {revealed && (
-        <div className={`mt-4 rounded-lg border p-4 text-sm ${chosen === q.a ? "border-emerald-200 bg-emerald-50" : "border-rose-200 bg-rose-50"}`}>
-          <p className="font-bold text-ink">
-            {chosen === q.a ? "Correct." : `Incorrect — the answer is ${"ABCDE"[q.a]}.`}
-          </p>
-          <p className="mt-1 text-ink">{q.e}</p>
+        <div aria-live="polite" className={`mt-5 rounded-2xl px-4 py-4 ${correct ? "bg-mint-soft" : "bg-coral-soft"}`}>
+          <p className="font-medium text-s-ink">{correct ? "Correct. Nicely done." : `Not quite. The answer is ${LETTERS[q.a]}.`}</p>
+          {q.e && <p className="mt-1.5 leading-relaxed text-s-ink/80">{q.e}</p>}
         </div>
       )}
 
-      <div className="mt-5 flex items-center justify-between gap-3">
+      <div className="mt-6 flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={() => setSession({ ...session, finished: true })}
-          className="text-sm font-semibold text-ink-soft underline underline-offset-2"
+          className="min-h-11 rounded-full px-3 text-sm font-medium text-s-mute hover:bg-s-tint/70 hover:text-s-ink"
         >
           End session
         </button>
         {revealed ? (
           <PrimaryButton onClick={next}>
-            {isLast ? "See results" : <span className="inline-flex items-center">Next <ArrowRight className="ml-1 h-4 w-4" /></span>}
+            {isLast ? "See results" : <>Next <ArrowRight size={16} strokeWidth={2} aria-hidden="true" /></>}
           </PrimaryButton>
         ) : (
           <PrimaryButton onClick={check} disabled={chosen === undefined}>Check answer</PrimaryButton>
@@ -437,37 +371,42 @@ function Results({ session, onRestart, backTo }) {
 
   return (
     <div className="max-w-3xl space-y-4">
-      <Panel>
-        <p className="text-sm text-ink-soft">Your score</p>
-        <p className="text-4xl font-extrabold text-ink">{pct}%</p>
-        <p className="mt-1 text-ink-soft">{correct.length} correct out of {attempted.length} attempted</p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <PrimaryButton onClick={onRestart}><span className="inline-flex items-center"><RotateCcw className="mr-2 h-4 w-4" />Practise again</span></PrimaryButton>
-          <Link to={backTo} className="inline-flex items-center rounded-lg border border-line px-4 py-2.5 text-sm font-semibold text-ink">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to sections
-          </Link>
-        </div>
-      </Panel>
+      <ResultsSummary
+        pct={pct}
+        title="correct"
+        detail={`${correct.length} correct out of ${attempted.length} attempted.`}
+        onRestart={onRestart}
+        backTo={backTo}
+      />
 
       {attempted.length > 0 && (
-        <Panel>
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-extrabold text-ink">Review</h2>
-            <label className="flex items-center gap-2 text-sm text-ink-soft">
-              <input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} />
-              Show correct answers too
-            </label>
+        <Panel className="site-rise" style={{ "--rise-delay": "80ms" }}>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold tracking-tight text-s-ink">Review</h2>
+            <Toggle checked={showAll} onChange={setShowAll}>Show correct answers too</Toggle>
           </div>
-          {review.length === 0 && <p className="mt-3 text-ink-soft">No mistakes to review.</p>}
-          <ol className="mt-3 space-y-4">
+          {review.length === 0 && (
+            <p className="mt-3 flex items-center gap-3 rounded-2xl bg-mint-soft p-3.5 text-sm text-s-ink">
+              <Check size={16} strokeWidth={2.5} className="text-mint" aria-hidden="true" /> No mistakes to review.
+            </p>
+          )}
+          <ol className="mt-4 space-y-3">
             {review.map((q) => {
               const picked = session.answers[q.id];
               return (
-                <li key={q.id} className="border-t border-line pt-3">
-                  <p className="font-semibold text-ink">{q.s}</p>
-                  {picked !== q.a && <p className="mt-1 text-sm text-rose-700">Your answer: {"ABCDE"[picked]}. {q.o[picked]}</p>}
-                  <p className="mt-1 text-sm text-emerald-700">Correct: {"ABCDE"[q.a]}. {q.o[q.a]}</p>
-                  <p className="mt-1 text-sm text-ink-soft">{q.e}</p>
+                <li key={q.id} className="rounded-2xl border border-s-line bg-s-card p-4">
+                  <p className="font-medium leading-relaxed text-s-ink">{q.s}</p>
+                  {picked !== q.a && (
+                    <p className="mt-2 flex gap-2 text-sm text-s-miss">
+                      <X size={16} strokeWidth={2.5} className="mt-0.5 shrink-0" aria-hidden="true" />
+                      <span>Your answer: {LETTERS[picked]}. {q.o[picked]}</span>
+                    </p>
+                  )}
+                  <p className="mt-1.5 flex gap-2 text-sm text-s-good">
+                    <Check size={16} strokeWidth={2.5} className="mt-0.5 shrink-0" aria-hidden="true" />
+                    <span>Correct: {LETTERS[q.a]}. {q.o[q.a]}</span>
+                  </p>
+                  {q.e && <p className="mt-2 text-sm leading-relaxed text-s-mute">{q.e}</p>}
                 </li>
               );
             })}

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CheckCircle2, Eye, EyeOff, PlayCircle } from "lucide-react";
-import { Breadcrumbs, ErrorMessage, PageMain, Panel, RequireUser } from "../components/AppPage";
+import { useParams, useSearchParams } from "react-router-dom";
+import { Check, Eye, EyeOff, PlayCircle } from "lucide-react";
+import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageMain, Panel, RequireUser, SecondaryButton } from "../components/AppPage";
+import { QuestionSkeleton } from "../components/Skeleton";
+import { Chip, Pager, PillLink, rise } from "../components/StudyKit";
 import { getBlock, getYear, loadQuestions } from "../data/mcqs/catalog";
 
 // ---- /mcqs/:yearSlug/read?block=&topic= ----
@@ -40,7 +42,7 @@ export function McqRead() {
     return () => { active = false; };
   }, [yearSlug, blockSlug, topicSlug]);
 
-  const title = topic?.name || block?.name || (year ? `${year.name} — all questions` : "MCQs");
+  const title = topic?.name || block?.name || (year ? `${year.name}, all questions` : "MCQs");
   const query = params.toString();
   const practiceHref = `/mcqs/${yearSlug}/practice${query ? `?${query}` : ""}`;
   const crumbs = [
@@ -60,73 +62,75 @@ export function McqRead() {
   }
 
   let body;
-  if (!year || (blockSlug && !block) || (topicSlug && !topic)) body = <ErrorMessage message="This section was not found." />;
-  else if (error) body = <ErrorMessage message={error} />;
-  else if (!questions) body = <Panel><p className="text-ink-soft">Loading questions…</p></Panel>;
+  if (!year || (blockSlug && !block) || (topicSlug && !topic)) {
+    body = (
+      <EmptyState
+        character="student-bilal"
+        tone="sun"
+        title="We couldn't find that section"
+        body="It may have moved. Pick it again from the list."
+        action={<LinkButton to={year ? `/mcqs/${year.slug}` : "/mcqs"}>Back to sections</LinkButton>}
+      />
+    );
+  } else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
+  else if (!questions) body = <QuestionSkeleton label="Loading questions" />;
   else {
     body = (
       <>
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-ink-soft">
-            Questions {start + 1}–{Math.min(start + PAGE_SIZE, questions.length)} of {questions.length}
+        <div className="mb-5 flex max-w-3xl flex-wrap items-center justify-between gap-3">
+          <p className="font-chart text-xs text-s-mute">
+            Questions {start + 1}-{Math.min(start + PAGE_SIZE, questions.length)} of {questions.length}
           </p>
           <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => { setHideAnswers((h) => !h); setRevealed({}); }}
-              className="inline-flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-sm font-semibold text-ink hover:bg-white"
-            >
-              {hideAnswers ? <Eye size={16} /> : <EyeOff size={16} />}
+            <SecondaryButton onClick={() => { setHideAnswers((h) => !h); setRevealed({}); }}>
+              {hideAnswers ? <Eye size={16} strokeWidth={2} aria-hidden="true" /> : <EyeOff size={16} strokeWidth={2} aria-hidden="true" />}
               {hideAnswers ? "Show all answers" : "Hide answers"}
-            </button>
-            <Link
-              to={practiceHref}
-              className="gradient-brand inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-white"
-            >
-              <PlayCircle size={16} /> Practise these
-            </Link>
+            </SecondaryButton>
+            <PillLink to={practiceHref} icon={PlayCircle} primary>Practise these</PillLink>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="max-w-3xl space-y-4">
           {pageQuestions.map((q, i) => {
             const showAnswer = !hideAnswers || revealed[q.id];
             return (
-              <Panel key={q.id}>
-                <p className="text-xs text-ink-soft">
-                  Q{start + i + 1}{!topic && q.topic ? ` · ${q.topic}` : ""}
-                </p>
-                <p className="mt-1 font-semibold leading-relaxed text-ink">{q.s}</p>
-                <ul className="mt-3 space-y-1.5">
+              <Panel key={q.id} className="site-rise" style={rise(i, 40)}>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Chip className="bg-sky-soft text-s-ink">Q{start + i + 1}</Chip>
+                  {!topic && q.topic && <Chip>{q.topic}</Chip>}
+                </div>
+                <p className="mt-3 leading-relaxed text-s-ink">{q.s}</p>
+                <ul className="mt-4 space-y-2">
                   {q.o.map((option, index) => {
                     const isCorrect = showAnswer && index === q.a;
                     return (
                       <li
                         key={index}
-                        className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-sm ${
-                          isCorrect ? "border-emerald-300 bg-emerald-50 text-ink" : "border-line text-ink-soft"
+                        className={`flex items-center gap-3 rounded-2xl border px-4 py-2.5 text-sm ${
+                          isCorrect ? "border-mint bg-mint-soft text-s-ink" : "border-s-line bg-s-card text-s-mute"
                         }`}
                       >
-                        <span className="font-semibold">{LETTERS[index]})</span>
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-s-tint font-chart text-xs text-s-mute">
+                          {isCorrect ? <Check size={13} strokeWidth={2.5} className="text-mint" aria-label="Correct answer" /> : LETTERS[index]}
+                        </span>
                         <span className="flex-1">{option}</span>
-                        {isCorrect && <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-600" />}
                       </li>
                     );
                   })}
                 </ul>
                 {showAnswer ? (
                   q.e && (
-                    <div className="mt-3 rounded-lg bg-white/70 p-3 text-sm leading-relaxed text-ink-soft">
-                      <span className="font-semibold text-ink">Explanation: </span>{q.e}
+                    <div className="mt-4 rounded-2xl bg-s-tint/70 p-4 text-sm leading-relaxed text-s-mute">
+                      <span className="font-medium text-s-ink">Explanation: </span>{q.e}
                     </div>
                   )
                 ) : (
                   <button
                     type="button"
                     onClick={() => setRevealed((r) => ({ ...r, [q.id]: true }))}
-                    className="mt-3 text-sm font-semibold text-brand hover:underline"
+                    className="site-press mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-full bg-sky-soft px-4 text-sm font-medium text-s-ink hover:bg-s-accent-soft"
                   >
-                    Show answer
+                    <Eye size={15} strokeWidth={2} aria-hidden="true" /> Show answer
                   </button>
                 )}
               </Panel>
@@ -134,27 +138,9 @@ export function McqRead() {
           })}
         </div>
 
-        {totalPages > 1 && (
-          <div className="mt-5 flex items-center justify-between gap-3">
-            <button
-              type="button"
-              disabled={page === 1}
-              onClick={() => goTo(page - 1)}
-              className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-ink disabled:opacity-40"
-            >
-              <ArrowLeft size={16} /> Previous
-            </button>
-            <span className="text-sm text-ink-soft">Page {page} of {totalPages}</span>
-            <button
-              type="button"
-              disabled={page === totalPages}
-              onClick={() => goTo(page + 1)}
-              className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-ink disabled:opacity-40"
-            >
-              Next <ArrowRight size={16} />
-            </button>
-          </div>
-        )}
+        <div className="max-w-3xl">
+          <Pager page={page} totalPages={totalPages} onPage={goTo} />
+        </div>
       </>
     );
   }
@@ -163,7 +149,7 @@ export function McqRead() {
     <RequireUser active="mcqs">
       <PageMain>
         <Breadcrumbs items={crumbs} />
-        <h1 className="mb-5 text-3xl font-extrabold text-ink">{title}</h1>
+        <h1 className="site-rise mb-6 text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">{title}</h1>
         {body}
       </PageMain>
     </RequireUser>

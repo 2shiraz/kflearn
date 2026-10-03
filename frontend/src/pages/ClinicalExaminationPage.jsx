@@ -1,7 +1,6 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Activity,
-  ArrowLeft,
   ArrowRight,
   Bone,
   Brain,
@@ -14,7 +13,6 @@ import {
   Grip,
   Hand,
   HeartPulse,
-  ListChecks,
   MessageCircle,
   Milestone,
   PersonStanding,
@@ -24,8 +22,10 @@ import {
   Waves,
   Wind,
 } from "lucide-react";
-import { Breadcrumbs, ErrorMessage, PageMain, Panel, RequireUser } from "../components/AppPage";
-import { ChecklistWidget, GuideBlock, GuideSection, JumpNav } from "../components/GuideBlocks";
+import { Breadcrumbs, PageMain, Panel, RequireUser } from "../components/AppPage";
+import { ChecklistWidget, GuideBlock, GuideCard, GuideHero, GuideNotFound, GuideSection, GuideTitle, JumpNav, NumberedSteps, PanelHeading, PrevNext, QuoteBox, SectionHeading } from "../components/GuideBlocks";
+import { YEAR_TONES } from "../components/StudyKit";
+import { plus } from "../site/siteContent";
 import {
   coreMnemonic,
   finalChecklist,
@@ -46,32 +46,43 @@ const STATION_ICONS = {
 // Category display order for the "By station" grid.
 const CATEGORY_ORDER = ["Core", "Musculoskeletal", "Neurological", "Special senses & speech", "Advanced"];
 
-function StationIcon({ name, ...props }) {
-  const Icon = STATION_ICONS[name] || ScrollText;
-  return <Icon {...props} />;
-}
+const stationIcon = (name) => STATION_ICONS[name] || ScrollText;
+const CATEGORY_TONES = { Core: "coral", Musculoskeletal: "sky", Neurological: "violet", "Special senses & speech": "mint", Advanced: "sun" };
 
 function StationMeta({ meta, order }) {
   if (!meta && !order) return null;
   return (
-    <div className="mb-5 space-y-3">
+    <div className="mb-6 space-y-4">
       {meta && (meta.position || meta.exposure) && (
-        <div className="flex flex-wrap gap-x-6 gap-y-1 rounded-lg border border-line bg-white/60 p-3 text-sm">
-          {meta.position && <span><span className="font-semibold text-ink">Position:</span> <span className="text-ink-soft">{meta.position}</span></span>}
-          {meta.exposure && <span><span className="font-semibold text-ink">Exposure:</span> <span className="text-ink-soft">{meta.exposure}</span></span>}
+        <div className="grid gap-2 sm:grid-cols-2">
+          {meta.position && (
+            <div className="rounded-2xl bg-s-tint/60 p-3.5 text-sm">
+              <p className="font-chart text-xs text-s-mute">Position</p>
+              <p className="mt-1 text-s-ink">{meta.position}</p>
+            </div>
+          )}
+          {meta.exposure && (
+            <div className="rounded-2xl bg-s-tint/60 p-3.5 text-sm">
+              <p className="font-chart text-xs text-s-mute">Exposure</p>
+              <p className="mt-1 text-s-ink">{meta.exposure}</p>
+            </div>
+          )}
         </div>
       )}
       {order && order.length > 0 && (
         <div>
-          <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-ink-soft">Step-by-step order</p>
-          <div className="flex flex-wrap items-center gap-1.5">
+          <p className="mb-2 text-sm font-medium text-s-ink">Step-by-step order</p>
+          <ol className="flex flex-wrap items-center gap-1.5">
             {order.map((step, index) => (
-              <span key={index} className="flex items-center gap-1.5">
-                <span className="glass-surface rounded-lg px-2.5 py-1 text-xs font-semibold text-ink">{step}</span>
-                {index < order.length - 1 && <ArrowRight size={11} className="shrink-0 text-ink-soft/60" />}
-              </span>
+              <li key={index} className="flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-s-line bg-s-card py-1 pl-1 pr-3 text-xs font-medium text-s-ink">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-coral-soft font-chart text-[10px] text-s-miss" aria-hidden="true">{index + 1}</span>
+                  {step}
+                </span>
+                {index < order.length - 1 && <ArrowRight size={12} strokeWidth={2} className="shrink-0 text-s-mute/60" aria-hidden="true" />}
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       )}
     </div>
@@ -84,13 +95,13 @@ export function ClinicalExamGuideHome() {
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Examination Guide" }]} />
 
-        <div className="mb-6">
-          <p className="text-sm font-semibold text-ink-soft">Static reference</p>
-          <h1 className="mt-1 text-4xl font-extrabold text-ink">Clinical Examination Guide</h1>
-          <p className="mt-2 max-w-2xl text-ink-soft">
-            The step-by-step order, mnemonics, and findings for all {stations.length} OSCE examination stations.
-          </p>
-        </div>
+        <GuideHero
+          eyebrow="Study guide"
+          title="Clinical Examination Guide"
+          description={`The step-by-step order, mnemonics and findings for ${plus(stations.length)} examination stations.`}
+          character="examiner"
+          tone="coral"
+        />
 
         <JumpNav
           items={[
@@ -104,81 +115,65 @@ export function ClinicalExamGuideHome() {
           ]}
         />
 
-        <div className="grid gap-5">
-          <Panel id="universal-opening">
-            <h2 className="text-lg font-bold text-ink">{universalOpening.title}</h2>
-            <p className="text-sm text-ink-soft">{universalOpening.subtitle}</p>
-            <ol className="mt-3 space-y-2">
-              {universalOpening.steps.map((step, index) => (
-                <li key={step.label} className="flex gap-3 rounded-lg border border-line bg-white/80 p-3 text-sm">
-                  <span className="gradient-brand flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-extrabold text-white">{index + 1}</span>
-                  <span>
-                    <span className="font-semibold text-ink">{step.label}</span>
-                    {step.detail && <> — <span className="text-ink-soft">{step.detail}</span></>}
-                  </span>
-                </li>
-              ))}
-            </ol>
-            {universalOpening.note && <p className="mt-3 text-sm font-medium text-ink">{universalOpening.note}</p>}
+        <div className="grid gap-6">
+          <Panel id="universal-opening" className="scroll-mt-24">
+            <PanelHeading title={universalOpening.title} subtitle={universalOpening.subtitle} />
+            <NumberedSteps steps={universalOpening.steps} />
+            {universalOpening.note && <p className="mt-4 text-sm font-medium text-s-ink">{universalOpening.note}</p>}
           </Panel>
 
-          <div id="core-mnemonic" className="grid gap-5 lg:grid-cols-2">
+          <div id="core-mnemonic" className="grid scroll-mt-24 gap-5 lg:grid-cols-2">
             <Panel>
-              <h2 className="font-display text-xl font-extrabold text-ink">{coreMnemonic.name}</h2>
-              <p className="text-sm text-ink-soft">{coreMnemonic.subtitle}</p>
+              <PanelHeading title={coreMnemonic.name} subtitle={coreMnemonic.subtitle} />
               <GuideBlock block={coreMnemonic} />
-              {coreMnemonic.note && <p className="mt-3 text-sm font-medium text-ink">{coreMnemonic.note}</p>}
+              {coreMnemonic.note && <p className="mt-4 text-sm font-medium text-s-ink">{coreMnemonic.note}</p>}
             </Panel>
-            <Panel id="msk-framework">
-              <h2 className="font-display text-xl font-extrabold text-ink">{mskFramework.name}</h2>
-              <p className="text-sm text-ink-soft">{mskFramework.subtitle}</p>
+            <Panel id="msk-framework" className="scroll-mt-24">
+              <PanelHeading title={mskFramework.name} subtitle={mskFramework.subtitle} />
               <GuideBlock block={mskFramework} />
             </Panel>
           </div>
 
-          <div id="by-station">
-            <h2 className="mb-1 text-lg font-bold text-ink">By station</h2>
-            <p className="mb-3 text-sm text-ink-soft">All {stations.length} examination stations, grouped by category.</p>
-            <div className="space-y-6">
-              {CATEGORY_ORDER.map((category) => {
+          <section id="by-station" className="scroll-mt-24">
+            <SectionHeading description="Every examination station, grouped by category.">By station</SectionHeading>
+            <div className="space-y-8">
+              {CATEGORY_ORDER.map((category, categoryIndex) => {
                 const categoryStations = stations.filter((station) => station.category === category);
                 if (categoryStations.length === 0) return null;
+                const tone = CATEGORY_TONES[category] || YEAR_TONES[categoryIndex % YEAR_TONES.length];
                 return (
                   <div key={category}>
-                    <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-ink-soft">{category}</h3>
+                    <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-s-ink">
+                      {category}
+                      <span className="rounded-full bg-s-tint px-2.5 py-0.5 font-chart text-xs font-normal text-s-mute">{categoryStations.length}</span>
+                    </h3>
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                      {categoryStations.map((station) => (
-                        <Link key={station.slug} to={`/clinical-examination/${station.slug}`} className="gradient-card group block rounded-lg p-5">
-                          <span className="gradient-icon flex h-11 w-11 items-center justify-center rounded-lg text-ink">
-                            <StationIcon name={station.icon} size={20} />
-                          </span>
-                          <h3 className="mt-4 font-display text-lg font-extrabold text-ink">{station.title}</h3>
-                          <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{station.summary}</p>
-                          <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-ink group-hover:underline">
-                            Read guide <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-                          </span>
-                        </Link>
+                      {categoryStations.map((station, i) => (
+                        <GuideCard
+                          key={station.slug}
+                          to={`/clinical-examination/${station.slug}`}
+                          icon={stationIcon(station.icon)}
+                          tone={tone}
+                          title={station.title}
+                          summary={station.summary}
+                          index={i}
+                        />
                       ))}
                     </div>
                   </div>
                 );
               })}
             </div>
-          </div>
+          </section>
 
-          <Panel id="master-reference">
-            <h2 className="text-lg font-bold text-ink">{masterQuickReference.title}</h2>
-            <p className="text-sm text-ink-soft">{masterQuickReference.subtitle}</p>
+          <Panel id="master-reference" className="scroll-mt-24">
+            <PanelHeading title={masterQuickReference.title} subtitle={masterQuickReference.subtitle} />
             <GuideBlock block={{ type: "table", ...masterQuickReference.table }} />
           </Panel>
 
-          <Panel id="presentation-template">
-            <div className="flex items-center gap-2">
-              <ScrollText size={18} className="text-ink-soft" />
-              <h2 className="text-lg font-bold text-ink">{presentationTemplate.title}</h2>
-            </div>
-            <p className="text-sm text-ink-soft">{presentationTemplate.subtitle}</p>
-            <p className="mt-3 rounded-lg border border-line bg-white/60 p-4 text-sm italic leading-relaxed text-ink-soft">{presentationTemplate.text}</p>
+          <Panel id="presentation-template" className="scroll-mt-24">
+            <PanelHeading icon={ScrollText} title={presentationTemplate.title} subtitle={presentationTemplate.subtitle} />
+            <QuoteBox>{presentationTemplate.text}</QuoteBox>
           </Panel>
 
           <ChecklistWidget
@@ -203,10 +198,7 @@ export function ClinicalExamGuideStation() {
       <RequireUser active="clinical-exam">
         <PageMain>
           <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Examination Guide", to: "/clinical-examination" }, { label: "Not found" }]} />
-          <ErrorMessage message="That examination station doesn't exist." />
-          <Link to="/clinical-examination" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-ink hover:underline">
-            <ArrowLeft size={14} /> Back to the guide
-          </Link>
+          <GuideNotFound what="examination station" backTo="/clinical-examination" backLabel="Back to the guide" />
         </PageMain>
       </RequireUser>
     );
@@ -218,40 +210,14 @@ export function ClinicalExamGuideStation() {
     <RequireUser active="clinical-exam">
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "Clinical Examination Guide", to: "/clinical-examination" }, { label: station.title }]} />
-
-        <div className="mb-6 flex items-start gap-4">
-          <span className="gradient-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-lg text-ink">
-            <StationIcon name={station.icon} size={26} />
-          </span>
-          <div>
-            {station.category && <p className="text-xs font-bold uppercase tracking-wide text-ink-soft">{station.category}</p>}
-            <h1 className="text-3xl font-extrabold text-ink">{station.title}</h1>
-            <p className="mt-1 max-w-2xl text-ink-soft">{station.summary}</p>
-          </div>
-        </div>
-
-        <Panel>
+        <GuideTitle icon={stationIcon(station.icon)} tone={CATEGORY_TONES[station.category] || "coral"} eyebrow={station.category} title={station.title} summary={station.summary} />
+        <Panel className="site-rise" style={{ "--rise-delay": "80ms" }}>
           <StationMeta meta={station.meta} order={station.order} />
           {station.sections.map((section) => (
             <GuideSection key={section.heading} {...section} />
           ))}
         </Panel>
-
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-          {prev ? (
-            <Link to={`/clinical-examination/${prev.slug}`} className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-ink">
-              <ArrowLeft size={14} /> {prev.title}
-            </Link>
-          ) : <span />}
-          <Link to="/clinical-examination" className="inline-flex items-center gap-2 text-sm font-semibold text-ink-soft hover:text-ink">
-            <ListChecks size={14} /> All stations
-          </Link>
-          {next ? (
-            <Link to={`/clinical-examination/${next.slug}`} className="glass-surface inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-ink">
-              {next.title} <ArrowRight size={14} />
-            </Link>
-          ) : <span />}
-        </div>
+        <PrevNext prev={prev} next={next} base="/clinical-examination" allLabel="All stations" />
       </PageMain>
     </RequireUser>
   );

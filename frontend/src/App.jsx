@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
+import BrandMark from "./components/BrandMark";
 // Every route except the landing page is code-split: its page (and any static
 // content it imports) downloads only when the route is first visited.
 // After a redeploy, a tab opened earlier may request chunk files that no longer
@@ -72,8 +73,9 @@ const HandoutNotesDetail = lazyPage(handouts, "HandoutNotesDetail");
 
 function RouteFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center" role="status" aria-label="Loading">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink/15 border-t-ink/60" />
+    <div className="site flex min-h-dvh items-center justify-center" role="status">
+      <span className="bob"><BrandMark size={44} /></span>
+      <span className="sr-only">Loading</span>
     </div>
   );
 }
@@ -81,7 +83,7 @@ function RouteFallback() {
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="app-gradient-bg min-h-screen">
+      <div className="min-h-dvh">
         <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<LandingPage />} />

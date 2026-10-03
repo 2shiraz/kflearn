@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { BookOpen, Building2, CalendarClock, Camera, Check, GraduationCap, Mail, Sparkles, Target, User } from "lucide-react";
 import { fetchCurrentUser, getCurrentUser, updateProfileRequest } from "../lib/api";
-import { PageMain, RequireUser } from "../components/AppPage";
+import { PageHeader, PageMain, PrimaryButton, RequireUser } from "../components/AppPage";
+import { FormError, inputClass } from "../components/AuthShell";
+import { HealthIcon } from "../site/Illustrations";
 
 export default function SettingsPage() {
   const [user, setUser] = useState(null);
@@ -69,52 +71,50 @@ export default function SettingsPage() {
   }
 
   const initials = form.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+  const subtitle = [form.yearLevel, form.institution].filter(Boolean).join(", ");
 
   return (
     <RequireUser active="settings">
       <PageMain>
-        <div className="flex items-center gap-3">
-          <span className="gradient-brand flex h-11 w-11 items-center justify-center rounded-lg text-white">
-            <User size={20} />
-          </span>
-          <div>
-            <h1 className="font-display text-3xl font-extrabold text-ink">Profile &amp; Settings</h1>
-            <p className="text-sm text-ink-soft">Manage your account and practice preferences.</p>
-          </div>
-        </div>
+        <PageHeader className="mb-8" title="Profile and settings" description="Manage your account and practice details." />
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-[280px_1fr]">
-          <div className="gradient-card h-fit rounded-lg" style={{ "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(127,139,255,0.35)" }}>
-            <div className="h-16 bg-gradient-to-r from-[#FF8FCF] to-[#7FB8FF]" />
+        <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
+          <div className="site-rise site-grid h-fit overflow-hidden rounded-3xl border border-s-line">
+            <div className="relative h-20 bg-linear-to-r from-s-accent-soft via-sky-soft to-mint-soft">
+              <span className="pointer-events-none absolute -right-4 -top-4 text-s-accent opacity-[0.12]" aria-hidden="true">
+                <HealthIcon name="stethoscope" size={96} />
+              </span>
+            </div>
             <div className="px-6 pb-6 text-center">
-              <div className="group relative -mt-10 inline-block">
-                <span className="gradient-brand flex h-20 w-20 items-center justify-center rounded-lg border-4 border-white text-2xl font-bold text-white shadow-md">
+              <div className="relative -mt-10 inline-block">
+                <span className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-s-card bg-s-accent text-2xl font-semibold text-s-on-accent site-shadow">
                   {initials}
                 </span>
                 <button
                   type="button"
                   disabled
-                  title="Photo upload isn't wired up yet"
-                  className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-lg border-2 border-white bg-ink text-white opacity-60"
+                  title="Photo upload isn't available yet"
+                  aria-label="Change photo (not available yet)"
+                  className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full border-2 border-s-card bg-s-ink text-s-on-accent opacity-60"
                 >
-                  <Camera size={13} />
+                  <Camera size={14} strokeWidth={2} />
                 </button>
               </div>
 
-              <p className="mt-3 font-display text-lg font-extrabold text-ink">{form.fullName}</p>
-              <p className="text-sm text-ink-soft">{form.yearLevel} - {form.institution}</p>
+              <p className="mt-3 text-lg font-semibold tracking-tight text-s-ink">{form.fullName}</p>
+              {subtitle && <p className="text-sm text-s-mute">{subtitle}</p>}
 
-              <div className="mt-4 flex justify-center gap-2">
-                <span className="gradient-pill rounded-lg px-3 py-1 text-xs font-bold text-ink">{form.role}</span>
+              <div className="mt-4 flex justify-center">
+                <span className="rounded-full bg-s-accent-soft px-3 py-1 font-chart text-xs text-s-accent-strong">{form.role}</span>
               </div>
             </div>
           </div>
 
-          <form onSubmit={handleSave} className="glass-surface rounded-lg p-7">
-            <h2 className="flex items-center gap-2 font-display text-base font-extrabold text-ink">
-              <GraduationCap size={18} className="text-brand" /> Academic profile
+          <form onSubmit={handleSave} className="site-rise site-grid rounded-3xl border border-s-line p-6 sm:p-7" style={{ "--rise-delay": "80ms" }}>
+            <h2 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-s-ink">
+              <GraduationCap size={18} strokeWidth={2} className="text-s-accent" aria-hidden="true" /> Academic profile
             </h2>
-            <p className="mt-1 text-sm text-ink-soft">This helps us recommend the right stations and timelines for you.</p>
+            <p className="mt-1 text-sm text-s-mute">This helps us suggest the right stations and timelines for you.</p>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <Field icon={User} label="Full name" name="fullName" value={form.fullName} onChange={handleChange} />
@@ -127,22 +127,19 @@ export default function SettingsPage() {
               <Field icon={CalendarClock} label="Expected exam date" name="expectedExamDate" placeholder="e.g. March 2027" value={form.expectedExamDate} onChange={handleChange} />
             </div>
 
-            <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-line pt-6">
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="gradient-brand rounded-lg px-6 py-2.5 text-sm font-semibold text-white transition"
-              >
+            {status === "error" && <div className="mt-6"><FormError>{error}</FormError></div>}
+
+            <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-s-line pt-6">
+              <PrimaryButton type="submit" disabled={status === "loading"}>
                 {status === "loading" ? "Saving..." : "Save changes"}
-              </button>
+              </PrimaryButton>
               {saved && (
-                <span className="flex items-center gap-1.5 rounded-lg bg-white/80 px-3 py-1.5 text-sm font-medium text-good">
-                  <Check size={15} /> Saved
+                <span role="status" className="flex items-center gap-1.5 rounded-full bg-mint-soft px-3 py-1.5 text-sm font-medium text-s-good">
+                  <Check size={15} strokeWidth={2.5} aria-hidden="true" /> Saved
                 </span>
               )}
-              {status === "error" && <span className="rounded-lg bg-rose-50 px-3 py-1.5 text-sm font-medium text-rose-600">{error}</span>}
-              <span className="ml-auto flex items-center gap-1 text-xs text-ink-soft">
-                <Sparkles size={13} /> Used to personalise your dashboard
+              <span className="flex items-center gap-1.5 text-xs text-s-mute sm:ml-auto">
+                <Sparkles size={13} strokeWidth={2} aria-hidden="true" /> Used to personalise your dashboard
               </span>
             </div>
           </form>
@@ -155,9 +152,9 @@ export default function SettingsPage() {
 function Field({ icon: Icon, label, name, value, onChange, type = "text", placeholder, disabled = false }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-medium text-ink">{label}</span>
+      <span className="mb-2 block text-sm font-medium text-s-ink">{label}</span>
       <div className="relative">
-        <Icon size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft" />
+        <Icon size={16} strokeWidth={2} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-s-mute" aria-hidden="true" />
         <input
           name={name}
           type={type}
@@ -165,7 +162,7 @@ function Field({ icon: Icon, label, name, value, onChange, type = "text", placeh
           placeholder={placeholder}
           onChange={onChange}
           disabled={disabled}
-          className="w-full rounded-lg border border-line bg-white/80 py-2.5 pl-10 pr-3.5 text-sm text-ink outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20 disabled:opacity-60"
+          className={`${inputClass} pl-10 disabled:cursor-not-allowed disabled:bg-s-tint/60 disabled:text-s-mute`}
         />
       </div>
     </label>
