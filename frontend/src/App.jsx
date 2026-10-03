@@ -17,6 +17,8 @@ import FeaturesPage from "./pages/FeaturesPage";
 import SampleStationsPage from "./pages/SampleStationsPage";
 import PricingPage from "./pages/PricingPage";
 import AboutPage from "./pages/AboutPage";
+import HowItWorksPage from "./pages/HowItWorksPage";
+import WhatYouGetPage from "./pages/WhatYouGetPage";
 import {
   AdminOscePage,
   OsceAttemptHistoryPage,
@@ -60,6 +62,8 @@ export default function App() {
           <Route path="/sample-stations" element={<SampleStationsPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/what-you-get" element={<WhatYouGetPage />} />
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />

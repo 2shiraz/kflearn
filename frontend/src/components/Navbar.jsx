@@ -5,6 +5,7 @@ import { Bell, Menu, Stethoscope, X } from "lucide-react";
 const links = [
   { label: "Features", to: "/features" },
   { label: "Sample Stations", to: "/sample-stations" },
+  { label: "How It Works & AI", to: "/how-it-works" },
   { label: "Pricing", to: "/pricing" },
   { label: "About", to: "/about" },
 ];

@@ -1,4 +1,5 @@
 import { ArrowRight, GraduationCap } from "lucide-react";
+import { Link } from "react-router-dom";
 import StationPreviewCard from "./StationPreviewCard";
 
 export default function Hero() {
@@ -20,19 +21,30 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a
-              href="#"
+            <Link
+              to="/signup"
               className="gradient-brand flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-white transition"
             >
               Start Practising <ArrowRight size={16} />
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/sample-stations"
               className="glass-surface rounded-lg px-6 py-3 text-sm font-semibold text-ink transition hover:border-brand"
             >
               Explore Sample Stations
-            </a>
+            </Link>
           </div>
+
+          <p className="mt-4 text-sm text-ink-soft">
+            Want to know what you get?{" "}
+            <Link to="/what-you-get" className="font-semibold text-brand hover:underline">
+              See what is inside your account
+            </Link>
+            {" "}or{" "}
+            <Link to="/how-it-works" className="font-semibold text-brand hover:underline">
+              read how AI is used
+            </Link>
+          </p>
 
           <p className="mt-6 max-w-md text-xs leading-relaxed text-ink-soft">
             PHMS is a formative self-assessment tool. Not an official examination platform. AI

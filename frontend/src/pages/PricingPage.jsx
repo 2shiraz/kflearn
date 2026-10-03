@@ -10,7 +10,7 @@ const tiers = [
   },
   {
     name: "Premium", price: "PKR 799", period: "/ month",
-    features: ["Full 200+ station library", "Unlimited AI Virtual Examiner", "AI Feedback Coach with viva prep", "Progress analytics dashboard", "Downloadable PDF checklists"],
+    features: ["Full interactive station library", "Unlimited AI Virtual Examiner", "AI Feedback Coach with viva prep", "Progress analytics dashboard", "Downloadable PDF checklists"],
     cta: "Start Premium", highlighted: true,
   },
   {

@@ -26,8 +26,8 @@ export default function SampleStationsPage() {
         <div className="mx-auto max-w-4xl px-6 text-center lg:px-10">
           <h1 className="font-display text-4xl font-extrabold text-ink">Sample OSCE stations</h1>
           <p className="mx-auto mt-4 max-w-2xl text-ink-soft">
-            A preview from the 200+ station bank, organised by specialty and mark format - the
-            same structure you'll see on exam day.
+            A preview of the interactive station bank, organised by specialty and mark format - the
+            same structure you'll see in the full stations.
           </p>
         </div>
       </section>

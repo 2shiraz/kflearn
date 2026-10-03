@@ -1,8 +1,8 @@
 const stats = [
-  { value: "200+", label: "Clinical stations" },
-  { value: "12", label: "Specialties covered" },
-  { value: "AI-powered", label: "Checklist evaluation" },
-  { value: "Free", label: "Core access" },
+  { value: "8", label: "Interactive OSCE stations" },
+  { value: "4", label: "Specialties" },
+  { value: "170", label: "MCQs in five banks" },
+  { value: "47", label: "OSCE handouts" },
 ];
 
 export default function StatsBar() {

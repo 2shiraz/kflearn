@@ -1,28 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-
-const faqs = [
-  {
-    q: "Is KF LearnSmart an official examination platform?",
-    a: "No. KF LearnSmart is a formative self-assessment and preparation tool. It does not replace formal OSCE examinations or institutional assessment, and AI feedback is not a clinical result or certification.",
-  },
-  {
-    q: "What specialties are covered?",
-    a: "The station bank spans 12 specialties including Medicine, Surgery, and Obstetrics, organised by organ system and topic so you can drill down to exactly what you need.",
-  },
-  {
-    q: "Do I need a good internet connection?",
-    a: "No - the platform is built for 3G connections as low as 1 Mbps, with core pages loading in under 3 seconds and compressed illustrations to minimise data use.",
-  },
-  {
-    q: "Can I practise without a microphone?",
-    a: "Yes. Every station supports typed input as a full alternative to voice - a microphone is only needed if you choose voice mode.",
-  },
-  {
-    q: "Is there a free version?",
-    a: "Yes. The free tier gives you access to a core set of stations and guides. Premium unlocks the full content library and all AI features.",
-  },
-];
+import { faqs } from "../data/faqs";
 
 function FaqItem({ q, a, isOpen, onToggle }) {
   return (

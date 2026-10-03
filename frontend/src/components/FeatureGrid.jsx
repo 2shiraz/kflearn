@@ -1,40 +1,40 @@
-import { BarChart3, BookOpen, MessageSquare, Sparkles, Stethoscope, Users } from "lucide-react";
+import { BarChart3, BookOpen, FileText, MessageSquare, Sparkles, Stethoscope } from "lucide-react";
 
 export const FEATURES = [
   {
     icon: Stethoscope,
     title: "OSCE Station Bank",
-    desc: "200+ clinical stations across all major specialties with structured checklists reviewed by clinical educators.",
+    desc: "8 interactive stations across Respiratory, Gynaecology, Gastroenterology and Endocrinology, each with a weighted checklist of critical, major and minor items.",
     style: { "--g1": "#FF8FCF", "--g2": "#FFB3E0", "--glow": "rgba(255,143,207,0.35)" },
   },
   {
     icon: MessageSquare,
-    title: "Virtual Patient Practice",
-    desc: "Interactive virtual patient consultations. Ask questions naturally - the patient only reveals what you ask.",
+    title: "AI Virtual Patient",
+    desc: "Ask questions in your own words. The patient only reveals what you ask, and replies come from that patient's script.",
     style: { "--g1": "#C6A6FF", "--g2": "#E0CBFF", "--glow": "rgba(198,166,255,0.35)" },
   },
   {
-    icon: BookOpen,
-    title: "Examination Guides",
-    desc: "Step-by-step guides with annotated technique, normal and abnormal findings, and downloadable PDFs.",
-    style: { "--g1": "#7FB8FF", "--g2": "#A6D0FF", "--glow": "rgba(127,184,255,0.35)" },
-  },
-  {
     icon: Sparkles,
-    title: "AI Virtual Examiner",
-    desc: "Evaluates your response against the station checklist using AI. Shows evidence drawn from your own words.",
+    title: "AI Checklist Marking",
+    desc: "After the session, the AI marks each checklist item and cites evidence from your transcript. The app calculates your score.",
     style: { "--g1": "#7FE3C4", "--g2": "#A8F0DA", "--glow": "rgba(127,227,196,0.35)" },
   },
   {
-    icon: BarChart3,
-    title: "Progress Analytics",
-    desc: "Track scores over time, identify weak specialties, and generate personalised practice plans.",
+    icon: BookOpen,
+    title: "History & Examination Guides",
+    desc: "9 history-taking topics and 12 clinical examination guides with technique, normal and abnormal findings.",
+    style: { "--g1": "#7FB8FF", "--g2": "#A6D0FF", "--glow": "rgba(127,184,255,0.35)" },
+  },
+  {
+    icon: FileText,
+    title: "Handouts & MCQ Bank",
+    desc: "47 consolidated OSCE handouts and 170 MCQs across five banks, with topic-wise practice mode.",
     style: { "--g1": "#FFD84D", "--g2": "#FFE38A", "--glow": "rgba(255,216,77,0.35)" },
   },
   {
-    icon: Users,
-    title: "Find a Partner",
-    desc: "Connect with other students for peer OSCE practice - rotating between examiner and candidate roles.",
+    icon: BarChart3,
+    title: "Attempt History",
+    desc: "Every attempt is saved with its score and feedback, so you can review how you have improved over time.",
     style: { "--g1": "#FF8FCF", "--g2": "#7FB8FF", "--glow": "rgba(160,150,255,0.35)" },
   },
 ];
