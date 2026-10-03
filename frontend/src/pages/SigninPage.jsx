@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { loginRequest } from "../lib/api";
+import { SigninAside } from "../components/AuthAside";
 import AuthShell, { FormError, inputClass, primaryButtonClass } from "../components/AuthShell";
 
 export default function SigninPage() {
@@ -30,6 +31,7 @@ export default function SigninPage() {
 
   return (
     <AuthShell
+      aside={<SigninAside />}
       footer={
         <>
           New to KF LearnSmart?{" "}

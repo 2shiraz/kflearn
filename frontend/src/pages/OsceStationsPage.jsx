@@ -1009,7 +1009,7 @@ export function OsceResultPage() {
                   Nothing missed on the checklist.
                 </p>
               )}
-              {!!state.data.module?.learningNotes && (
+              {!!(state.data.module?.learningNotes || state.data.module?.keyAnswerGuide || state.data.module?.examinerInstructions) && (
                 <div className="mt-6 border-t border-s-line pt-5">
                   <h2 className="font-semibold text-s-ink">Station review</h2>
                   <StationReview module={state.data.module} />

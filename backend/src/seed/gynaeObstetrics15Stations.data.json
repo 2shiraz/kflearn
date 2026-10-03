@@ -1,0 +1,1579 @@
+{
+  "metadata": {
+    "title": "GYNAECOLOGY & OBSTETRICS OSCE",
+    "subtitle": "15 Structured Stations",
+    "audienceAndScoring": "Final-Year MBBS • 8 minutes per station • 20-point analytic checklist",
+    "includedMaterials": "Candidate materials • Standardised scripts • Examiner guides • Learning notes",
+    "facultyNote": [
+      "Built in the same architecture as the preceding OSCE manuals. All patient names in source-derived scenarios have been changed.",
+      "The uploaded notes are used as the scenario base for menopause, dysmenorrhoea, PCOS/hirsutism, vaginal discharge/STI assessment, infertility, contraception and pre-conception counselling.",
+      "The station mix deliberately includes 9 obstetric and 6 gynaecology stations, reflecting the strong obstetric weighting used in CPSP MCPS TOACS while remaining suitable for final-year MBBS practice.",
+      "Older statements in the source notes are not copied blindly. Exact drug doses, antihypertensive thresholds, magnesium sulphate regimens, thromboprophylaxis, abortion law/process, contraceptive eligibility and emergency protocols must be checked against current approved institutional, provincial and national guidance before summative use.",
+      "Core priorities are respectful communication, consent/chaperone use, maternal stabilisation, fetal assessment, timely escalation, interpretation of common clinical data and safe management planning."
+    ],
+    "assessmentDesign": [
+      "15 stations; 8 minutes each.",
+      "Each station uses 10 observable criteria scored 0–2 (20 marks).",
+      "Critical safety errors may justify an overall fail despite the analytic score.",
+      "Local policy and current national guidance supersede this teaching document."
+    ],
+    "contents": [
+      "1. Menopause — Focused History & Counselling",
+      "2. Primary Dysmenorrhoea — Focused Adolescent Consultation",
+      "3. PCOS / Hirsutism — Assessment & Counselling",
+      "4. Vaginal Discharge / PID — Focused Assessment",
+      "5. Female Infertility — Initial Assessment",
+      "6. Postpartum & Emergency Contraception Counselling",
+      "7. Pre-Conception Counselling",
+      "8. Booking Antenatal Visit",
+      "9. Obstetric Abdominal Examination & EDD",
+      "10. Pre-Eclampsia — Recognition & Initial Management",
+      "11. Eclampsia — Emergency Management",
+      "12. Labour Assessment & Partograph Interpretation",
+      "13. CTG Interpretation & Fetal Compromise",
+      "14. Primary Postpartum Haemorrhage",
+      "15. Early Pregnancy Pain & Bleeding — Suspected Ectopic Pregnancy"
+    ]
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Menopause — Focused History & Counselling",
+      "primaryCompetency": "History, diagnosis and shared decision-making",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Nadia Farooq, 49, reports hot flushes, night sweats, vaginal dryness and sleep disturbance.",
+        "Take a focused history and explain your assessment and management options. Examination is not required."
+      ],
+      "candidateHandout": [
+        "Clarify menstrual pattern and last menstrual period.",
+        "Screen for postmenopausal bleeding, mood symptoms, cardiovascular/bone risk and contraindications to systemic hormone therapy."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Last menstrual period 16 months ago; periods became irregular before stopping.",
+        "Hot flushes and night sweats disturb sleep. Vaginal dryness and dyspareunia; recurrent urinary symptoms.",
+        "No postmenopausal bleeding. Mild hypertension. Smokes 10 cigarettes/day.",
+        "Concern: “Will I get osteoporosis or a heart attack now?”"
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Likely natural menopause based on age, symptoms and >12 months amenorrhoea; routine FSH testing is usually unnecessary in typical women over 45 unless diagnosis is uncertain.",
+        "Discuss lifestyle, smoking cessation, exercise, calcium/vitamin D adequacy and bone/cardiovascular risk assessment.",
+        "For bothersome vasomotor symptoms discuss systemic menopausal hormone therapy when appropriate after contraindication/risk review; uterus present requires endometrial protection.",
+        "For genitourinary symptoms discuss vaginal moisturisers/lubricants and low-dose vaginal oestrogen when suitable.",
+        "Any postmenopausal bleeding requires prompt evaluation."
+      ],
+      "suggestedApproach": [
+        "Establish menstrual status → symptom burden → red flags → risk/contraindication review → shared treatment decision → safety net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity, privacy and consent."
+        },
+        {
+          "order": 2,
+          "criterion": "Confirms LMP, amenorrhoea duration and prior cycle change."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses vasomotor, sleep, mood and genitourinary symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Specifically asks about postmenopausal bleeding."
+        },
+        {
+          "order": 5,
+          "criterion": "Reviews VTE, breast/endometrial cancer, liver/cardiovascular history and relevant medications."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses smoking, BP, weight, bone and lifestyle risks."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains likely menopause accurately and avoids unnecessary routine FSH testing in a typical >45-year-old."
+        },
+        {
+          "order": 8,
+          "criterion": "Discusses non-pharmacological and hormone/non-hormone options using shared decision-making."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains vaginal oestrogen/lubricant options for genitourinary symptoms."
+        },
+        {
+          "order": 10,
+          "criterion": "Safety-nets bleeding and arranges follow-up/review."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "When is FSH testing useful?",
+        "What symptom mandates investigation rather than reassurance?"
+      ],
+      "expectedCompetencies": [
+        "Communication",
+        "Menopause diagnosis",
+        "Risk assessment",
+        "Shared decision-making"
+      ],
+      "criticalSafetyErrors": [
+        "Reassuring postmenopausal bleeding without investigation.",
+        "Offering systemic hormone therapy without reviewing contraindications and uterine status."
+      ],
+      "sourceNote": [
+        "Source-derived from the uploaded menopause scenario; patient name changed. Investigation and treatment wording modernised."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Primary Dysmenorrhoea — Focused Adolescent Consultation",
+      "primaryCompetency": "Adolescent history, confidentiality and management",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms Areeba Shah, 17, has cramping lower abdominal pain during the first 1–2 days of menstruation and misses college because of it.",
+        "Take a focused history and explain initial management."
+      ],
+      "candidateHandout": [
+        "Establish whether pain is primary or suggests secondary pathology.",
+        "Use age-appropriate confidentiality and sensitive sexual history where relevant."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Menarche at 14; cycles regular every 28–30 days; normal flow.",
+        "Pain began about a year after menarche, occurs with onset of bleeding, radiates to back and improves after 1–2 days.",
+        "Occasional nausea/diarrhoea. No intermenstrual bleeding, abnormal discharge or chronic pelvic pain.",
+        "Not sexually active. Main concern is missing classes."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Pattern is compatible with primary dysmenorrhoea.",
+        "No routine pelvic examination or extensive investigation is required when history is classic and there are no red flags.",
+        "Management: education, heat/exercise and NSAID therapy if appropriate; hormonal contraception can be considered if desired/suitable.",
+        "Refer/investigate for secondary causes if new severe pain, dyspareunia, abnormal bleeding/discharge, infertility, pelvic mass, or failure of adequate first-line treatment."
+      ],
+      "suggestedApproach": [
+        "Confidential setting → menstrual/pain history → secondary red flags → impact/ICE → first-line plan → review."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Establishes confidentiality and obtains consent."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises timing, severity, radiation and relation to menstruation."
+        },
+        {
+          "order": 3,
+          "criterion": "Takes menstrual history including regularity, flow and intermenstrual bleeding."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens pregnancy/STI risk sensitively when relevant."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens secondary causes: discharge, dyspareunia, chronic pelvic pain, bowel/bladder symptoms."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses impact on school/work and analgesic use."
+        },
+        {
+          "order": 7,
+          "criterion": "Recognises likely primary dysmenorrhoea."
+        },
+        {
+          "order": 8,
+          "criterion": "Offers appropriate non-pharmacological and NSAID first-line measures."
+        },
+        {
+          "order": 9,
+          "criterion": "Discusses hormonal options if appropriate and patient interested."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides review and safety-net criteria for investigation/referral."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Name two features suggesting secondary dysmenorrhoea.",
+        "Why may examination be unnecessary in a typical adolescent presentation?"
+      ],
+      "expectedCompetencies": [
+        "Adolescent communication",
+        "Menstrual history",
+        "Differential diagnosis",
+        "Initial management"
+      ],
+      "criticalSafetyErrors": [
+        "Ignoring pregnancy possibility in a sexually active patient.",
+        "Failure to investigate progressive/red-flag pelvic pain."
+      ],
+      "sourceNote": [
+        "Source-derived from the uploaded primary dysmenorrhoea scenario; patient name changed and testing simplified to current clinical reasoning."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "PCOS / Hirsutism — Assessment & Counselling",
+      "primaryCompetency": "Endocrine-gynaecology history, differential and long-term risk counselling",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms Hiba Qureshi, 23, presents with increasing facial hair and weight gain.",
+        "Take a focused history, propose investigations and counsel her about likely management."
+      ],
+      "candidateHandout": [
+        "Assess menstrual dysfunction, hyperandrogenism and metabolic risk.",
+        "Exclude important mimics and urgent virilisation."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Facial hair increasing for 8 months; acne present.",
+        "Cycles every 45–60 days. BMI 32 kg/m².",
+        "No rapid voice deepening, clitoromegaly or severe sudden virilisation.",
+        "Concerned about appearance and future fertility."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "PCOS is likely if ovulatory dysfunction and clinical/biochemical hyperandrogenism are present after excluding alternative causes.",
+        "Assess BP/BMI, pregnancy possibility, androgen excess severity and metabolic risk.",
+        "Investigations may include pregnancy test when relevant, total/free androgen assessment, TSH/prolactin and other tests guided by presentation; pelvic ultrasound is not required in every case to make the diagnosis.",
+        "Lifestyle/weight management is central. Discuss menstrual protection, acne/hirsutism treatment and fertility planning according to goals; screen for dysglycaemia and other cardiometabolic risk."
+      ],
+      "suggestedApproach": [
+        "Symptoms → menstrual history → virilisation red flags → metabolic risk → exclude mimics → goal-based management."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, obtains consent and explores patient priorities."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises hirsutism/acne onset and progression."
+        },
+        {
+          "order": 3,
+          "criterion": "Takes full menstrual and pregnancy/contraception history."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens rapid virilisation and androgen-secreting tumour red flags."
+        },
+        {
+          "order": 5,
+          "criterion": "Reviews weight, diabetes, thyroid, prolactin/drug and family history."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses BMI/BP and appropriate physical signs."
+        },
+        {
+          "order": 7,
+          "criterion": "Proposes appropriate targeted investigations rather than relying on ultrasound alone."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains PCOS and long-term metabolic/endometrial implications."
+        },
+        {
+          "order": 9,
+          "criterion": "Discusses lifestyle, cycle control and cosmetic/antiandrogen options safely."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses fertility concerns and follow-up/metabolic screening."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Is a “string of pearls” ultrasound mandatory for diagnosis?",
+        "Name two important alternative causes of hirsutism."
+      ],
+      "expectedCompetencies": [
+        "Focused endocrine history",
+        "PCOS diagnosis",
+        "Metabolic risk",
+        "Patient-centred counselling"
+      ],
+      "criticalSafetyErrors": [
+        "Missing rapid virilisation suggesting tumour.",
+        "Using potentially teratogenic antiandrogen therapy without reliable contraception."
+      ],
+      "sourceNote": [
+        "Source-derived from the uploaded PCOS/hirsutism scenario; patient name changed and diagnostic approach updated."
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Vaginal Discharge / PID — Focused Assessment",
+      "primaryCompetency": "Sensitive sexual history, examination planning and STI management",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms Maham Riaz, 26, presents with vaginal discharge, lower abdominal pain and intermenstrual spotting.",
+        "Take a focused history and state your examination, investigations and initial management."
+      ],
+      "candidateHandout": [
+        "Use a non-judgmental sexual history and offer a chaperone for intimate examination.",
+        "PID is a clinical diagnosis; delay in treatment can increase complications."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "New sexual partner 2 months ago; condoms used inconsistently.",
+        "Mucopurulent discharge, pelvic pain and pain during intercourse. No syncope or severe unilateral pain.",
+        "Examiner findings if requested: temperature 37.8°C, lower abdominal tenderness; speculum shows mucopurulent cervical discharge; bimanual exam shows cervical motion and adnexal tenderness."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Differentials include cervicitis/STI, PID, bacterial vaginosis/candidiasis/trichomoniasis and pregnancy-related pathology.",
+        "Always check pregnancy status in reproductive-age pelvic pain.",
+        "Obtain NAAT for chlamydia/gonorrhoea and other tests based on local pathway; consider microscopy/culture where appropriate.",
+        "If PID clinically likely, start empiric treatment according to current local STI/PID protocol while tests are pending, provide analgesia, partner notification/treatment support and abstinence until treatment completed as advised."
+      ],
+      "suggestedApproach": [
+        "Privacy → discharge/pain history → pregnancy/STI risk → red flags → speculum/bimanual with chaperone → tests → empiric PID treatment when indicated."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Ensures privacy, consent and non-judgmental language."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises discharge: amount, colour, odour, itch/soreness."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks pelvic pain, dyspareunia, dysuria and abnormal bleeding."
+        },
+        {
+          "order": 4,
+          "criterion": "Takes sensitive sexual/contraception/STI history."
+        },
+        {
+          "order": 5,
+          "criterion": "Checks LMP and pregnancy possibility."
+        },
+        {
+          "order": 6,
+          "criterion": "Screens ectopic/sepsis red flags."
+        },
+        {
+          "order": 7,
+          "criterion": "Plans abdominal, speculum and bimanual examination with chaperone."
+        },
+        {
+          "order": 8,
+          "criterion": "Requests pregnancy test and appropriate STI NAAT/testing."
+        },
+        {
+          "order": 9,
+          "criterion": "Recognises clinical PID and treats empirically according to current protocol when indicated."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides partner/safer-sex advice, follow-up and safety-netting."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What findings support PID clinically?",
+        "Why should pregnancy testing be routine in this presentation?"
+      ],
+      "expectedCompetencies": [
+        "Sensitive communication",
+        "Pelvic examination planning",
+        "STI diagnostics",
+        "PID management"
+      ],
+      "criticalSafetyErrors": [
+        "Missing ectopic pregnancy.",
+        "Delaying treatment in clear PID while awaiting all test results."
+      ],
+      "sourceNote": [
+        "Source-derived from the uploaded sexually transmitted vaginal discharge material, expanded into a PID-focused OSCE station."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Female Infertility — Initial Assessment",
+      "primaryCompetency": "Couple-based infertility history and rational investigation",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Sara Nadeem, 31, has been trying to conceive for 18 months without success.",
+        "Take a focused history and explain the initial assessment plan."
+      ],
+      "candidateHandout": [
+        "Infertility assessment is couple-based; evaluate both partners.",
+        "Ask duration/frequency of intercourse, ovulation/menstrual history, tubal risk and male factors."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Married 3 years; regular unprotected intercourse 2–3 times/week for 18 months.",
+        "Cycles irregular every 40–50 days. No previous pregnancy.",
+        "Past chlamydia treated 5 years ago. No pelvic surgery.",
+        "Husband has not yet had semen analysis."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Possible ovulatory dysfunction with tubal risk; male factor must also be assessed.",
+        "Initial workup usually includes semen analysis, confirmation of ovulation/ovulatory dysfunction, pelvic assessment and tubal patency testing when indicated.",
+        "Earlier referral may be warranted with older maternal age, amenorrhoea, significant pelvic disease or known male factor.",
+        "Counsel on folic acid/preconception health and regular intercourse around fertile period without creating excessive stress."
+      ],
+      "suggestedApproach": [
+        "Duration → intercourse/sexual function → menstrual/ovulatory history → pregnancy history → tubal/endometriosis risk → male assessment → targeted workup."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies duration and frequency of unprotected intercourse."
+        },
+        {
+          "order": 2,
+          "criterion": "Takes menstrual/ovulatory history."
+        },
+        {
+          "order": 3,
+          "criterion": "Reviews prior pregnancies/miscarriages and contraception."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens STI/PID, endometriosis, pelvic surgery and ectopic history."
+        },
+        {
+          "order": 5,
+          "criterion": "Reviews endocrine/weight/medication and lifestyle factors."
+        },
+        {
+          "order": 6,
+          "criterion": "Asks male-factor history and sexual dysfunction sensitively."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains that both partners require assessment."
+        },
+        {
+          "order": 8,
+          "criterion": "Plans semen analysis and appropriate female investigations."
+        },
+        {
+          "order": 9,
+          "criterion": "Provides preconception advice and explains referral criteria."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses emotional impact and arranges continuity/follow-up."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What is the first-line male investigation?",
+        "Name two reasons to refer earlier than the usual timeframe."
+      ],
+      "expectedCompetencies": [
+        "Infertility history",
+        "Couple-centred care",
+        "Investigation planning",
+        "Communication"
+      ],
+      "criticalSafetyErrors": [
+        "Investigating only the woman.",
+        "Ignoring STI/PID or ectopic risk history."
+      ],
+      "sourceNote": [
+        "Source-derived from the uploaded female infertility material; patient name changed and investigation plan modernised."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Postpartum & Emergency Contraception Counselling",
+      "primaryCompetency": "Contraceptive choice, eligibility and shared decision-making",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Anum Malik, 27, is 6 weeks postpartum and wants reliable contraception. She also asks what she should do if a condom breaks in future.",
+        "Counsel her on suitable ongoing contraception and emergency contraception."
+      ],
+      "candidateHandout": [
+        "Establish breastfeeding status, medical eligibility, pregnancy risk and patient preference.",
+        "Long-acting reversible contraception should be discussed alongside pills, injectables and barrier methods."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Delivered vaginally 6 weeks ago; no postpartum complications.",
+        "Breastfeeding mixed feeds. No migraine with aura, VTE, liver disease or breast cancer. Non-smoker.",
+        "Prefers a method she does not have to remember daily, but wants to understand pills as well."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Discuss LARC: implant and intrauterine contraception, plus progestogen-only methods and combined hormonal contraception when medically eligible and timing is appropriate.",
+        "Use current medical eligibility criteria for postpartum oestrogen-containing contraception and VTE risk.",
+        "Emergency contraception options include copper IUD and oral methods; timing, breastfeeding and drug interactions matter.",
+        "Condoms provide STI protection and can be used in addition."
+      ],
+      "suggestedApproach": [
+        "Postpartum/breastfeeding status → pregnancy exclusion → medical eligibility → preferences → compare effectiveness → explain EC backup → safety net."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms postpartum timing, breastfeeding and return of intercourse/menses."
+        },
+        {
+          "order": 2,
+          "criterion": "Checks pregnancy possibility and current contraception."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens key contraindications/VTE, migraine, smoking, BP, liver and breast disease."
+        },
+        {
+          "order": 4,
+          "criterion": "Explains LARC options and relative effectiveness."
+        },
+        {
+          "order": 5,
+          "criterion": "Discusses progestogen-only methods appropriately postpartum."
+        },
+        {
+          "order": 6,
+          "criterion": "Discusses combined hormonal contraception only after medical eligibility/timing review."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains condoms/STI protection."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains emergency contraception options and need for prompt use according to current guidance."
+        },
+        {
+          "order": 9,
+          "criterion": "Uses shared decision-making and checks understanding."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides follow-up, side-effect warning signs and method-specific safety-netting."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Which emergency contraception method is most effective?",
+        "Why does postpartum timing matter for combined hormonal contraception?"
+      ],
+      "expectedCompetencies": [
+        "Contraceptive counselling",
+        "Medical eligibility",
+        "Shared decision-making",
+        "Emergency contraception"
+      ],
+      "criticalSafetyErrors": [
+        "Offering oestrogen-containing contraception without postpartum/VTE risk assessment.",
+        "Failing to discuss pregnancy exclusion or STI protection where relevant."
+      ],
+      "sourceNote": [
+        "Source-derived from the uploaded postpartum contraception and emergency contraception scenarios; names changed and eligibility wording updated to current-guideline use."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Pre-Conception Counselling",
+      "primaryCompetency": "Risk optimisation before pregnancy",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms Zoya Ahmed, 26, plans her first pregnancy in the next few months.",
+        "Take a focused history and provide pre-conception counselling."
+      ],
+      "candidateHandout": [
+        "Aim to optimise maternal health, medication safety, vaccination status and fetal risk before conception."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "First-cousin marriage planned. BMI 29. No chronic illness known.",
+        "Takes an over-the-counter vitamin supplement. Rubella status unknown.",
+        "No previous pregnancies."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Review chronic disease, medications/teratogens, genetic/family history, consanguinity, vaccination status and infection screening according to local antenatal policy.",
+        "Recommend folic acid before conception and through early pregnancy; use higher-dose folate when clinically indicated by recognised risk factors.",
+        "Advise healthy weight, smoking/alcohol avoidance, balanced diet, exercise and medication review.",
+        "Offer genetic counselling/testing where indicated by family history or consanguinity and local programme."
+      ],
+      "suggestedApproach": [
+        "Pregnancy intention → medical/medication review → family/genetic risk → infections/vaccines → folate/lifestyle → referral if high risk."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Congratulates and clarifies pregnancy timeline."
+        },
+        {
+          "order": 2,
+          "criterion": "Takes medical, surgical and mental health history."
+        },
+        {
+          "order": 3,
+          "criterion": "Reviews all prescribed/OTC/herbal medications."
+        },
+        {
+          "order": 4,
+          "criterion": "Asks family/genetic history and consanguinity."
+        },
+        {
+          "order": 5,
+          "criterion": "Reviews prior pregnancy and menstrual history."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses smoking, alcohol, weight, diet and exercise."
+        },
+        {
+          "order": 7,
+          "criterion": "Reviews rubella/varicella and other vaccination/infection screening needs."
+        },
+        {
+          "order": 8,
+          "criterion": "Advises folic acid and explains higher-dose indications."
+        },
+        {
+          "order": 9,
+          "criterion": "Offers genetic/specialist referral where appropriate."
+        },
+        {
+          "order": 10,
+          "criterion": "Checks understanding and arranges follow-up/booking when pregnant."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Who needs higher-dose folic acid?",
+        "What medication categories require review before pregnancy?"
+      ],
+      "expectedCompetencies": [
+        "Preventive obstetrics",
+        "Medication safety",
+        "Genetic risk",
+        "Health promotion"
+      ],
+      "criticalSafetyErrors": [
+        "Stopping essential chronic medication abruptly without specialist plan.",
+        "Missing major teratogen or severe uncontrolled chronic disease."
+      ],
+      "sourceNote": [
+        "Source-derived from the uploaded pre-conception counselling scenario; patient name changed and advice framed around current local guidance."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Booking Antenatal Visit",
+      "primaryCompetency": "Comprehensive first antenatal assessment and screening plan",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Eman Hussain, 29, is 10 weeks pregnant with her first pregnancy and attends for booking.",
+        "Take a focused booking history and explain the initial examination and investigations."
+      ],
+      "candidateHandout": [
+        "A booking visit establishes gestation, maternal risk and baseline screening.",
+        "Use local/national antenatal screening schedules."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "LMP suggests 10+2 weeks; mild nausea, no bleeding or pain.",
+        "No medical disease; no previous surgery. First pregnancy.",
+        "Family history of diabetes in mother."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "History: dating, symptoms/red flags, medical/surgical/psychiatric, drug/allergy, obstetric/gynae, family/genetic, social/safeguarding and infection risk.",
+        "Examination: vitals including BP, BMI, general systemic assessment; obstetric exam as gestation appropriate.",
+        "Baseline tests commonly include blood group/Rh and antibody screen, CBC and infection screening per national/local policy; urine testing and additional risk-based tests.",
+        "Discuss screening for fetal aneuploidy/anomaly according to gestational age/local programme and schedule follow-up."
+      ],
+      "suggestedApproach": [
+        "Confirm pregnancy/dates → identify maternal risk → baseline examination → labs/screening → health promotion → follow-up plan."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms gestational age/LMP and pregnancy symptoms."
+        },
+        {
+          "order": 2,
+          "criterion": "Screens pain, bleeding, severe vomiting and other red flags."
+        },
+        {
+          "order": 3,
+          "criterion": "Takes full medical/surgical/drug/allergy history."
+        },
+        {
+          "order": 4,
+          "criterion": "Takes obstetric/gynaecological and family/genetic history."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses social, smoking/substance, domestic safety and support sensitively."
+        },
+        {
+          "order": 6,
+          "criterion": "Plans BP, BMI and appropriate general/obstetric examination."
+        },
+        {
+          "order": 7,
+          "criterion": "Requests core baseline blood/urine and infection-screening tests per local protocol."
+        },
+        {
+          "order": 8,
+          "criterion": "Discusses Rh status/antibody screening and implications."
+        },
+        {
+          "order": 9,
+          "criterion": "Discusses fetal screening/anomaly scan pathway at appropriate gestation."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides supplements, diet/exercise/medication safety advice and next appointment."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What are the core booking blood tests?",
+        "Why is blood group and antibody screening important?"
+      ],
+      "expectedCompetencies": [
+        "Antenatal history",
+        "Risk stratification",
+        "Screening",
+        "Health promotion"
+      ],
+      "criticalSafetyErrors": [
+        "Missing significant bleeding/pain or severe medical comorbidity.",
+        "Failing to identify Rh/antibody status or key infection screening needs."
+      ],
+      "sourceNote": [
+        "Source-supported by the uploaded antenatal/preconception sections; expanded into a high-yield final-year booking station."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Obstetric Abdominal Examination & EDD",
+      "primaryCompetency": "Clinical obstetric examination and gestational assessment",
+      "format": "Observed examination station / obstetric model or simulated patient",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Alina Khan, 34 weeks pregnant, attends routine antenatal review.",
+        "Perform a focused obstetric abdominal examination on the model/simulated patient and present your findings. Calculate EDD from the supplied LMP."
+      ],
+      "candidateHandout": [
+        "Respect privacy, obtain consent and offer a chaperone.",
+        "Assess fundal height, lie, presentation, position, engagement and fetal heart as appropriate."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "LMP card: 12 January 2026.",
+        "Simulation findings: symphysis-fundal height 34 cm; longitudinal lie; cephalic presentation; back on maternal left; head 3/5 palpable abdominally; fetal heart 142/min."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Use systematic inspection, fundal height and Leopold manoeuvres.",
+        "Expected EDD by Naegele method from 12 January 2026 is approximately 19 October 2026, subject to cycle length and dating ultrasound.",
+        "Present findings succinctly and correlate size with gestational age."
+      ],
+      "suggestedApproach": [
+        "Preparation/consent → inspection → fundal height → lie/presentation → position → engagement → fetal heart → summary/EDD."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms gestation, consent and chaperone/privacy."
+        },
+        {
+          "order": 2,
+          "criterion": "Positions patient appropriately and exposes respectfully."
+        },
+        {
+          "order": 3,
+          "criterion": "Inspects abdomen for scars, contour and fetal movements."
+        },
+        {
+          "order": 4,
+          "criterion": "Measures symphysis-fundal height correctly."
+        },
+        {
+          "order": 5,
+          "criterion": "Uses fundal/lateral/pelvic grips to determine lie and presentation."
+        },
+        {
+          "order": 6,
+          "criterion": "Identifies fetal back/position."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses engagement of presenting part appropriately."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses fetal heart rate/site appropriately."
+        },
+        {
+          "order": 9,
+          "criterion": "Presents findings clearly and identifies size-date concordance."
+        },
+        {
+          "order": 10,
+          "criterion": "Calculates EDD correctly from supplied LMP and notes dating scan priority when available."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What does 3/5 palpable mean?",
+        "Which is more reliable for dating: late fundal height or an early dating ultrasound?"
+      ],
+      "expectedCompetencies": [
+        "Examination technique",
+        "Fetal lie/presentation",
+        "Gestational assessment",
+        "Clinical presentation"
+      ],
+      "criticalSafetyErrors": [
+        "Painful or unsafe examination technique.",
+        "Failure to recognise non-cephalic presentation at term when present."
+      ],
+      "sourceNote": [
+        "Source includes an EDD section; this station expands it into the core obstetric abdominal examination expected in MBBS/CPSP-style clinical assessment."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Pre-Eclampsia — Recognition & Initial Management",
+      "primaryCompetency": "Hypertensive disorder assessment and maternal-fetal safety",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Noor Fatima, 32 years, 34 weeks pregnant, presents with headache and visual blurring.",
+        "Take a focused history, interpret the supplied observations and explain your immediate management."
+      ],
+      "candidateHandout": [
+        "Severe headache, visual symptoms, epigastric/right upper quadrant pain, severe hypertension and abnormal labs are danger signs."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "New frontal headache and flashing lights for 4 hours; mild epigastric discomfort.",
+        "BP 168/112 mmHg repeated after rest; urine dip protein 2+.",
+        "No seizure. Fetal movements present but slightly reduced."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "This is suspected pre-eclampsia with severe features and requires urgent obstetric assessment/admission.",
+        "Immediate priorities: maternal ABC, repeat accurate BP, IV access, blood tests including CBC/platelets, renal and liver function; quantify proteinuria according to protocol; fetal assessment/CTG and ultrasound as indicated.",
+        "Treat severe hypertension promptly using an approved pregnancy-safe agent and consider magnesium sulphate for seizure prophylaxis when indicated by current protocol.",
+        "Definitive management depends on maternal/fetal condition and gestation; senior obstetric decision regarding timing of birth is essential."
+      ],
+      "suggestedApproach": [
+        "Recognise severity → ABC/vitals → labs → antihypertensive → magnesium consideration → fetal assessment → senior delivery planning."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Identifies headache/visual/RUQ symptoms as severe warning features."
+        },
+        {
+          "order": 2,
+          "criterion": "Confirms BP measurement/repeat and assesses other vitals."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens oedema, dyspnoea, reduced urine, bleeding and neurological symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses fetal movements and gestational age."
+        },
+        {
+          "order": 5,
+          "criterion": "Requests CBC/platelets, renal, liver and proteinuria assessment."
+        },
+        {
+          "order": 6,
+          "criterion": "Recognises severe hypertension requiring urgent treatment."
+        },
+        {
+          "order": 7,
+          "criterion": "Chooses pregnancy-appropriate antihypertensive strategy per protocol."
+        },
+        {
+          "order": 8,
+          "criterion": "Considers magnesium sulphate for seizure prophylaxis according to severe-feature criteria/local protocol."
+        },
+        {
+          "order": 9,
+          "criterion": "Arranges fetal assessment and urgent senior obstetric review."
+        },
+        {
+          "order": 10,
+          "criterion": "Explains need for admission and potential delivery depending on maternal/fetal status."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Name three severe features of pre-eclampsia.",
+        "What is the definitive treatment of pre-eclampsia?"
+      ],
+      "expectedCompetencies": [
+        "Emergency obstetrics",
+        "Hypertension management",
+        "Maternal-fetal assessment",
+        "Escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Sending home a patient with severe hypertension or neurological symptoms.",
+        "Delaying treatment of persistent severe-range BP."
+      ],
+      "sourceNote": [
+        "Added high-yield obstetric emergency station for final-year MBBS and CPSP-style assessment. Exact thresholds/drug regimens must follow current institutional protocol."
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Eclampsia — Emergency Management",
+      "primaryCompetency": "Seizure in pregnancy: resuscitation and definitive escalation",
+      "format": "Observed / interactive emergency simulation",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "A 35-week pregnant woman, Mrs Laiba Siddiqui, develops a generalised tonic-clonic seizure in the antenatal unit.",
+        "Demonstrate or verbalise your immediate management."
+      ],
+      "candidateHandout": [
+        "Eclampsia is a time-critical obstetric emergency. Maternal resuscitation comes first."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Simulation: active convulsion lasting 90 seconds; BP after seizure 174/116 mmHg.",
+        "Fetal heart will be provided after maternal stabilisation if requested."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Call for help; protect from injury, left lateral position when possible, airway/oxygen/suction as required, monitoring and IV access.",
+        "Magnesium sulphate is first-line anticonvulsant for eclampsia; use the current institutional regimen and monitor for toxicity.",
+        "Treat severe hypertension promptly.",
+        "Assess for complications and labs; fetal assessment after maternal stabilisation.",
+        "Plan delivery after stabilisation with senior obstetric/anaesthetic/neonatal involvement; eclampsia alone does not mandate immediate caesarean without considering obstetric circumstances."
+      ],
+      "suggestedApproach": [
+        "Call help → ABC/left lateral → magnesium → control BP → monitor/labs → fetal assessment → delivery plan."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Calls obstetric/anaesthetic emergency help immediately."
+        },
+        {
+          "order": 2,
+          "criterion": "Protects airway and patient from injury; avoids putting objects in mouth."
+        },
+        {
+          "order": 3,
+          "criterion": "Positions left lateral when feasible and gives oxygen/suction based on need."
+        },
+        {
+          "order": 4,
+          "criterion": "Establishes monitoring and IV access."
+        },
+        {
+          "order": 5,
+          "criterion": "Administers magnesium sulphate per current protocol."
+        },
+        {
+          "order": 6,
+          "criterion": "Knows recurrent seizure management and magnesium toxicity monitoring."
+        },
+        {
+          "order": 7,
+          "criterion": "Treats persistent severe hypertension promptly."
+        },
+        {
+          "order": 8,
+          "criterion": "Requests appropriate pre-eclampsia labs and fluid/urine monitoring."
+        },
+        {
+          "order": 9,
+          "criterion": "Assesses fetus after maternal stabilisation."
+        },
+        {
+          "order": 10,
+          "criterion": "Plans birth with senior multidisciplinary team after stabilisation."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What is first-line anticonvulsant therapy for eclampsia?",
+        "What findings suggest magnesium toxicity?"
+      ],
+      "expectedCompetencies": [
+        "Resuscitation",
+        "Magnesium use",
+        "Hypertension control",
+        "Delivery planning"
+      ],
+      "criticalSafetyErrors": [
+        "Using diazepam routinely instead of magnesium as first-line eclampsia therapy.",
+        "Failure to protect airway or treat severe hypertension."
+      ],
+      "sourceNote": [
+        "Added high-yield obstetric emergency station. Use current approved magnesium sulphate and antihypertensive protocols."
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Labour Assessment & Partograph Interpretation",
+      "primaryCompetency": "Progress of labour and escalation for abnormal progress",
+      "format": "Unobserved/static data interpretation with examiner interaction",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Hira Aslam, primigravida at 40+1 weeks, is in labour. Review the supplied partograph and state your assessment and plan."
+      ],
+      "candidateHandout": [
+        "Assess maternal observations, contractions, cervical dilatation, descent, membranes/liquor and fetal heart pattern."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Data card: 5 cm at 14:00; 6 cm at 18:00 despite regular painful contractions; head 2/5 palpable; membranes ruptured with clear liquor; FHR 145/min; maternal vitals normal."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Recognise slow progress in active labour and reassess the “3 Ps”: power, passenger and passage.",
+        "Confirm adequate contractions, fetal position/presentation, bladder status and exclude cephalopelvic disproportion.",
+        "Escalate to senior obstetric review; management may include amniotomy/oxytocin only when appropriate and after contraindications are excluded.",
+        "Continue maternal and fetal monitoring and avoid rigid action-line treatment without clinical context/current local partograph standard."
+      ],
+      "suggestedApproach": [
+        "Check maternal/fetal wellbeing → interpret progress → assess 3 Ps → senior review → safe augmentation/delivery plan if indicated."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Interprets cervical dilatation trend accurately."
+        },
+        {
+          "order": 2,
+          "criterion": "Assesses fetal heart and liquor/membrane status."
+        },
+        {
+          "order": 3,
+          "criterion": "Reviews contraction frequency/duration."
+        },
+        {
+          "order": 4,
+          "criterion": "Checks maternal pulse/BP/temp and hydration/urine."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses descent and fetal position/presentation."
+        },
+        {
+          "order": 6,
+          "criterion": "Recognises abnormal/slow labour progress."
+        },
+        {
+          "order": 7,
+          "criterion": "Considers power, passenger and passage causes."
+        },
+        {
+          "order": 8,
+          "criterion": "Escalates for senior obstetric review before unsafe augmentation."
+        },
+        {
+          "order": 9,
+          "criterion": "States appropriate options for augmentation or operative delivery based on full assessment."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates findings and ongoing monitoring plan clearly."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What are the “3 Ps” of labour dystocia?",
+        "What must be assessed before oxytocin augmentation?"
+      ],
+      "expectedCompetencies": [
+        "Partograph interpretation",
+        "Labour diagnosis",
+        "Maternal-fetal monitoring",
+        "Escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Starting oxytocin without excluding obstruction/CPD.",
+        "Ignoring fetal or maternal compromise while focusing only on cervical dilatation."
+      ],
+      "sourceNote": [
+        "Added high-yield labour/TOACS station. Partograph conventions vary; use the institution’s current labour-care chart and protocol."
+      ]
+    },
+    {
+      "number": 13,
+      "title": "CTG Interpretation & Fetal Compromise",
+      "primaryCompetency": "Structured fetal heart tracing interpretation",
+      "format": "Static CTG/data interpretation station",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Review the CTG trace description provided and give a structured interpretation and immediate plan."
+      ],
+      "candidateHandout": [
+        "Use a systematic approach: clinical context, baseline rate, variability, accelerations, decelerations and uterine activity.",
+        "Classify according to the current locally adopted CTG guideline."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Context: 39 weeks, oxytocin infusion in labour.",
+        "Trace card: baseline 170 bpm, variability 3 bpm for 50 minutes, recurrent late decelerations after most contractions; 6 contractions in 10 minutes."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "This tracing is concerning/pathological by common contemporary frameworks because of tachycardia, reduced variability and recurrent late decelerations, with uterine tachysystole.",
+        "Immediate actions: call senior help, stop/reduce oxytocin, left lateral position, assess maternal vitals and reversible causes, correct hypotension/dehydration as clinically indicated, avoid routine maternal oxygen if not hypoxic, consider acute tocolysis if excessive contractions persist according to protocol.",
+        "Expedite birth if abnormalities do not rapidly resolve or there is acute deterioration, using the fastest safe route."
+      ],
+      "suggestedApproach": [
+        "Context → contractions → baseline → variability → decelerations → overall classification → reversible measures → expedite if unresolved."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "States clinical context and contraction frequency."
+        },
+        {
+          "order": 2,
+          "criterion": "Identifies baseline tachycardia."
+        },
+        {
+          "order": 3,
+          "criterion": "Identifies reduced variability."
+        },
+        {
+          "order": 4,
+          "criterion": "Identifies recurrent late decelerations."
+        },
+        {
+          "order": 5,
+          "criterion": "Recognises uterine tachysystole/hyperstimulation."
+        },
+        {
+          "order": 6,
+          "criterion": "Classifies CTG as significantly abnormal using current local framework."
+        },
+        {
+          "order": 7,
+          "criterion": "Stops/reduces oxytocin and calls senior help."
+        },
+        {
+          "order": 8,
+          "criterion": "Repositions and assesses maternal reversible causes/vitals."
+        },
+        {
+          "order": 9,
+          "criterion": "Considers tocolysis/other corrective measures per protocol."
+        },
+        {
+          "order": 10,
+          "criterion": "Plans expedited birth if persistent deterioration and documents communication."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What is the significance of recurrent late decelerations?",
+        "What is the first action if oxytocin-related hyperstimulation is present?"
+      ],
+      "expectedCompetencies": [
+        "CTG interpretation",
+        "Fetal compromise",
+        "Intrapartum emergency response",
+        "Communication"
+      ],
+      "criticalSafetyErrors": [
+        "Continuing oxytocin despite tachysystole and fetal compromise.",
+        "Delaying escalation in a persistently pathological trace."
+      ],
+      "sourceNote": [
+        "Added high-yield CPSP/MBBS-style data interpretation station. CTG terminology and classification must follow the current locally adopted guideline."
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Primary Postpartum Haemorrhage",
+      "primaryCompetency": "Emergency resuscitation and cause-directed management",
+      "format": "Observed / interactive emergency simulation",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Maryam Tariq has heavy vaginal bleeding immediately after vaginal delivery.",
+        "Demonstrate or verbalise the first-line management of primary postpartum haemorrhage."
+      ],
+      "candidateHandout": [
+        "Treat PPH as simultaneous resuscitation plus control of bleeding.",
+        "Think 4 Ts: Tone, Trauma, Tissue, Thrombin."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Estimated blood loss rapidly increasing; uterus feels boggy.",
+        "BP 86/54 mmHg, pulse 124/min. Placenta appears delivered but completeness has not yet been confirmed."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "Call for major obstetric haemorrhage help; ABC, oxygen if clinically indicated, two large-bore IVs, bloods/crossmatch, warmed fluids/blood products and activate local massive haemorrhage protocol as needed.",
+        "Uterine massage and first-line uterotonic therapy according to protocol; empty bladder and assess retained tissue/trauma.",
+        "Tranexamic acid should be given early in clinically diagnosed PPH according to current protocol and contraindications.",
+        "Escalate rapidly to balloon tamponade, theatre, surgery/interventional radiology depending on response and resources."
+      ],
+      "suggestedApproach": [
+        "Call help → ABC/IV/bloods → uterine massage/uterotonic → 4 Ts → TXA → escalate mechanical/surgical control."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises shock and activates obstetric haemorrhage response."
+        },
+        {
+          "order": 2,
+          "criterion": "Performs ABC assessment and appropriate positioning/monitoring."
+        },
+        {
+          "order": 3,
+          "criterion": "Obtains two large-bore IV accesses and sends bloods/crossmatch."
+        },
+        {
+          "order": 4,
+          "criterion": "Starts warmed resuscitation/blood-product pathway according to severity."
+        },
+        {
+          "order": 5,
+          "criterion": "Massages uterus and assesses tone."
+        },
+        {
+          "order": 6,
+          "criterion": "Gives appropriate uterotonic treatment per protocol."
+        },
+        {
+          "order": 7,
+          "criterion": "Administers early tranexamic acid when indicated."
+        },
+        {
+          "order": 8,
+          "criterion": "Checks 4 Ts including genital tract trauma and retained placenta/tissue."
+        },
+        {
+          "order": 9,
+          "criterion": "Escalates to balloon/theatre/surgical control if bleeding persists."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates with anaesthesia/blood bank/team and monitors response/urine output."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What are the 4 Ts?",
+        "When should tranexamic acid be considered in PPH?"
+      ],
+      "expectedCompetencies": [
+        "Haemorrhage resuscitation",
+        "Cause identification",
+        "Uterotonic therapy",
+        "Escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Delayed activation of haemorrhage protocol in shock.",
+        "Focusing only on uterotonics while missing trauma or retained tissue."
+      ],
+      "sourceNote": [
+        "Added high-yield obstetric emergency station. Exact uterotonic doses and transfusion algorithm must follow current local major obstetric haemorrhage protocol."
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Early Pregnancy Pain & Bleeding — Suspected Ectopic Pregnancy",
+      "primaryCompetency": "Early-pregnancy triage, differential and emergency recognition",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mrs Saba Iqbal, 30, with 7 weeks amenorrhoea presents with lower abdominal pain and vaginal spotting.",
+        "Take a focused history, state your examination/investigations and immediate plan."
+      ],
+      "candidateHandout": [
+        "Ectopic pregnancy must be considered in any reproductive-age patient with pain/bleeding and possible pregnancy.",
+        "Haemodynamic instability or peritonism requires emergency action."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "LMP 7 weeks ago. Positive home pregnancy test.",
+        "Right-sided pelvic pain increasing over 12 hours; light spotting.",
+        "Feels dizzy on standing. Previous PID 4 years ago.",
+        "Examiner findings if requested: pulse 112/min, BP 94/60 mmHg, right lower abdominal tenderness with guarding."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "Provide examination findings, investigations or simulation data only when the candidate asks appropriately or the station card specifies them.",
+        "Award prompted checklist items no more than 1/2. Prioritise consent, dignity, privacy, safe escalation and evidence-based decision-making."
+      ],
+      "keyAnswerGuide": [
+        "This is a suspected ruptured ectopic pregnancy until proven otherwise because of pain, pregnancy, shock features and guarding.",
+        "Immediate ABC resuscitation, large-bore IV access, bloods/crossmatch and urgent senior gynaecology/anaesthetic involvement.",
+        "Do not delay life-saving surgery for routine ultrasound if haemodynamically unstable.",
+        "If stable, transvaginal ultrasound plus quantitative beta-hCG and serial assessment according to pregnancy-of-unknown-location pathway.",
+        "Check Rh status and administer anti-D according to current local guideline/gestational/procedural indications."
+      ],
+      "suggestedApproach": [
+        "Pregnancy status → pain/bleeding → ectopic risk → shock/peritonism → ABC → urgent gynae → ultrasound/hCG only if stable."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms pregnancy/LMP and bleeding amount."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises pain, shoulder-tip pain, dizziness/syncope."
+        },
+        {
+          "order": 3,
+          "criterion": "Elicits ectopic risk factors: prior ectopic, PID, tubal surgery, fertility treatment/IUD."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses haemodynamic status urgently."
+        },
+        {
+          "order": 5,
+          "criterion": "States abdominal examination and avoids unnecessary delay."
+        },
+        {
+          "order": 6,
+          "criterion": "Recognises likely ruptured ectopic in unstable patient."
+        },
+        {
+          "order": 7,
+          "criterion": "Starts ABC resuscitation, IV access, bloods and crossmatch."
+        },
+        {
+          "order": 8,
+          "criterion": "Calls senior gynaecology/anaesthesia and prepares for urgent operative management."
+        },
+        {
+          "order": 9,
+          "criterion": "Uses TVUS/beta-hCG pathway appropriately only if stable."
+        },
+        {
+          "order": 10,
+          "criterion": "Checks Rh status/anti-D indication and provides clear safety-netting."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Name three ectopic pregnancy risk factors.",
+        "Should ultrasound delay theatre in a shocked patient with suspected ruptured ectopic?"
+      ],
+      "expectedCompetencies": [
+        "Emergency gynaecology",
+        "Pregnancy triage",
+        "Resuscitation",
+        "Diagnostic reasoning"
+      ],
+      "criticalSafetyErrors": [
+        "Discharging an unstable pregnant patient with pain/bleeding.",
+        "Delaying urgent surgical escalation for imaging in suspected rupture."
+      ],
+      "sourceNote": [
+        "Added high-yield early-pregnancy emergency station; the source notes also flag ectopic pregnancy as an important differential in contraceptive/pelvic pain contexts."
+      ]
+    }
+  ]
+}

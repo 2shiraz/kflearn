@@ -1,0 +1,1559 @@
+{
+  "metadata": {
+    "title": "INFECTIOUS DISEASES OSCE",
+    "subtitle": "15 Structured Stations",
+    "audienceAndScoring": "Final-Year MBBS • 8 minutes per station • 20-point analytic checklist",
+    "includedMaterials": "Candidate materials • Standardised scripts • Examiner guides • Learning notes",
+    "facultyNote": [
+      "Built in the same station architecture as the preceding OSCE manuals. All patient names in source-derived scenarios have been changed.",
+      "The uploaded notes are used as the scenario base for typhoid, malaria, dengue, rabies and varicella/rubella-related encounters. Several treatment details in the notes are historical or locally specific; drug choice, dose, prophylaxis schedules, isolation and referral pathways must be checked against current institutional/provincial/national guidance before summative use.",
+      "Additional high-yield stations are included to broaden KMU MBBS and CPSP-style clinical coverage: sepsis, PUO, cholera, tetanus, meningitis, pulmonary TB and HIV testing/counselling.",
+      "The focus is clinical reasoning, infection prevention, appropriate investigations, recognition of danger signs, escalation, counselling and safe management rather than memorisation of a single drug regimen."
+    ],
+    "assessmentDesign": [
+      "15 stations; 8 minutes each.",
+      "Each station uses 10 observable criteria scored 0–2 (20 marks).",
+      "Critical safety errors may justify an overall fail despite the analytic score.",
+      "Local policy supersedes this teaching document."
+    ],
+    "contents": [
+      "1. Typhoid Fever",
+      "2. Malaria",
+      "3. Dengue Fever",
+      "4. Severe Dengue / Dengue Shock Data Interpretation",
+      "5. Rabies Post-Exposure Prophylaxis",
+      "6. Chickenpox Exposure in Pregnancy",
+      "7. Rubella Exposure in Pregnancy",
+      "8. Sepsis — Early Recognition & Initial Management",
+      "9. Pyrexia of Unknown Origin",
+      "10. Acute Watery Diarrhoea / Cholera",
+      "11. Tetanus — Recognition & Initial Management",
+      "12. Acute Bacterial Meningitis",
+      "13. Pulmonary Tuberculosis",
+      "14. HIV Testing & Post-Test Counselling",
+      "15. Fever in Returning Traveller — Integrated Data Interpretation"
+    ]
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Typhoid Fever",
+      "primaryCompetency": "Focused infectious-disease history, examination plan and management",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr. Adeel Rahman, 31, has 3 weeks of fever, malaise, headache and abdominal symptoms after working in an area with unsafe food and water.",
+        "Take a focused history, state the relevant examination, propose investigations and explain your initial management."
+      ],
+      "candidateHandout": [
+        "Clarify exposure to unsafe food/water, duration/pattern of fever, bowel symptoms, abdominal pain and complications.",
+        "Do not rely on a single serological screening test when cultures are available."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Fever 3 weeks; poor appetite; initially constipated, now loose stools and abdominal discomfort.",
+        "Recently worked in a rural settlement and ate from street vendors; drinking-water hygiene was poor.",
+        "Examiner findings if requested: febrile, relative bradycardia, faint blanching truncal macules, soft splenomegaly."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Likely enteric (typhoid) fever.",
+        "Obtain blood cultures ideally before antibiotics; CBC/LFTs and stool culture as clinically appropriate.",
+        "Assess hydration and complications such as GI bleeding/perforation, encephalopathy or shock.",
+        "Antibiotic selection must reflect current local resistance/antibiogram and severity; escalate/admit if toxic or complicated.",
+        "Food/water hygiene and follow-up are essential."
+      ],
+      "suggestedApproach": [
+        "Establish exposure and time course.",
+        "Characterise fever and GI symptoms.",
+        "Look for red flags/complications.",
+        "Examine vitals, hydration, abdomen, rash and spleen.",
+        "Culture before treatment where feasible; treat according to current local protocol."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity/consent and uses infection-control precautions."
+        },
+        {
+          "order": 2,
+          "criterion": "Elicits unsafe food/water exposure and duration/pattern of fever."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks bowel symptoms, abdominal pain, appetite, headache and constitutional symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens GI bleeding/perforation, altered mental state and shock."
+        },
+        {
+          "order": 5,
+          "criterion": "States focused vitals, hydration, abdominal, skin and splenic examination."
+        },
+        {
+          "order": 6,
+          "criterion": "Prioritises blood culture and appropriate baseline laboratory tests."
+        },
+        {
+          "order": 7,
+          "criterion": "Recognises likely enteric fever and gives sensible differentials."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains supportive care and antimicrobial treatment guided by current resistance/local protocol."
+        },
+        {
+          "order": 9,
+          "criterion": "Provides hygiene/transmission advice and safety-netting."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises, checks understanding and arranges review/escalation."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What is the most useful microbiological test early in illness?",
+        "Name two serious complications of enteric fever."
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Diagnostic reasoning",
+        "Culture-directed antimicrobial stewardship",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Failure to recognise shock, GI bleeding/perforation or encephalopathy.",
+        "Prescribing from an outdated fixed regimen without considering resistance or local policy."
+      ],
+      "sourceNote": [
+        "Source-derived scenario: uploaded infectious-disease notes, typhoid section; patient name changed. Management deliberately updated to require current local antimicrobial guidance."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Malaria",
+      "primaryCompetency": "Travel fever history, diagnosis and severity assessment",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr. Haris Khan, 34, presents with recurrent fever, rigors, sweats and severe headache after travel to a malaria-endemic area.",
+        "Take a focused history and explain investigations and initial management."
+      ],
+      "candidateHandout": [
+        "Always assess severity: altered consciousness, hypoglycaemia, jaundice, renal impairment, severe anaemia, respiratory distress or shock.",
+        "Species and local resistance influence definitive therapy."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Episodes of fever with rigors and drenching sweats; myalgia and headache.",
+        "Recent travel to an endemic rural area; no prophylaxis.",
+        "If asked: dark urine and increasing lethargy today."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Malaria is a medical priority in a febrile returning traveller.",
+        "Thick and thin blood films and/or validated rapid diagnostic testing; repeat testing if suspicion remains high despite an initial negative test.",
+        "CBC, glucose, renal/liver profile and severity assessment.",
+        "Severe malaria requires urgent admission and parenteral therapy per current national/WHO/local protocol."
+      ],
+      "suggestedApproach": [
+        "Travel/exposure → fever pattern → severity → differentials → malaria testing → supportive/definitive management."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self and clarifies travel geography/dates."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises fever, rigors, sweats and interval symptoms."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks prophylaxis and mosquito exposure."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens altered consciousness, seizures, dyspnoea, jaundice, oliguria, bleeding and shock."
+        },
+        {
+          "order": 5,
+          "criterion": "States focused vitals, GCS, hydration and abdominal/splenic examination."
+        },
+        {
+          "order": 6,
+          "criterion": "Requests thick/thin film or validated malaria test and baseline labs including glucose."
+        },
+        {
+          "order": 7,
+          "criterion": "Recognises severe features and need for admission if present."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains treatment is species/severity/resistance dependent and follows current protocol."
+        },
+        {
+          "order": 9,
+          "criterion": "Gives mosquito-bite prevention/travel advice."
+        },
+        {
+          "order": 10,
+          "criterion": "Safety-nets and arranges urgent escalation/review."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What makes malaria severe?",
+        "What should you do if the first film is negative but suspicion remains high?"
+      ],
+      "expectedCompetencies": [
+        "Travel medicine history",
+        "Malaria diagnosis",
+        "Severity recognition",
+        "Safe escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Missing cerebral malaria/hypoglycaemia/shock.",
+        "Delaying urgent treatment in severe malaria."
+      ],
+      "sourceNote": [
+        "Source-derived from uploaded malaria scenario; patient name changed. Exact antimalarial regimens in the source are historical and are not reproduced as fixed prescriptions."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Dengue Fever",
+      "primaryCompetency": "Focused assessment, warning signs and counselling",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms. Mehwish Tariq, 27, has 4 days of fever, severe myalgia, retro-orbital pain and a rash.",
+        "Assess her for dengue, identify warning signs, request appropriate tests and counsel her."
+      ],
+      "candidateHandout": [
+        "The key OSCE task is not just naming dengue: identify warning signs and the critical phase, hydration status, bleeding and shock.",
+        "Avoid aspirin/NSAIDs where dengue is suspected."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "High fever, severe body aches, retro-orbital pain, nausea and macular rash.",
+        "No major bleeding yet. On day 4 she has increasing abdominal discomfort."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Likely dengue. CBC with serial haematocrit/platelets; dengue testing depends on illness day and local diagnostic pathway.",
+        "Warning signs include severe abdominal pain, persistent vomiting, mucosal bleeding, lethargy/restlessness, fluid accumulation, hepatomegaly and rising haematocrit with falling platelets.",
+        "Supportive care and careful fluids; paracetamol for fever/pain; avoid NSAIDs/aspirin.",
+        "Escalate/admit when warning signs, shock, inability to maintain oral intake, significant bleeding or high-risk comorbidity are present."
+      ],
+      "suggestedApproach": [
+        "Confirm day of illness and epidemiology.",
+        "Assess warning signs and haemodynamics.",
+        "Order appropriate serial labs.",
+        "Explain hydration, safe antipyresis and return precautions."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self and establishes day of illness/exposure."
+        },
+        {
+          "order": 2,
+          "criterion": "Elicits fever, retro-orbital pain, myalgia/arthralgia, rash and GI symptoms."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens bleeding and all major warning signs."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses oral intake, urine output and dehydration."
+        },
+        {
+          "order": 5,
+          "criterion": "States vitals including pulse pressure, perfusion and abdominal examination."
+        },
+        {
+          "order": 6,
+          "criterion": "Requests CBC with serial haematocrit/platelets and appropriate dengue testing."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains supportive care and careful hydration."
+        },
+        {
+          "order": 8,
+          "criterion": "Avoids aspirin/NSAIDs and uses safe antipyretic advice."
+        },
+        {
+          "order": 9,
+          "criterion": "Recognises indications for admission/escalation."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides mosquito-control advice and clear safety-netting."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Why is pulse pressure important?",
+        "What laboratory trend suggests plasma leakage?"
+      ],
+      "expectedCompetencies": [
+        "Dengue assessment",
+        "Shock recognition",
+        "Safe counselling",
+        "Public-health prevention"
+      ],
+      "criticalSafetyErrors": [
+        "Giving aspirin/NSAIDs.",
+        "Missing shock or warning signs."
+      ],
+      "sourceNote": [
+        "Source-derived from uploaded dengue material; patient name changed. Current institutional dengue pathways should determine testing and fluid prescriptions."
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Severe Dengue / Dengue Shock Data Interpretation",
+      "primaryCompetency": "Interpretation of trends and emergency escalation",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Review the observation chart and laboratory trend supplied by the examiner for Ms. Anum Shah, 22, with suspected dengue.",
+        "Interpret the data, state the likely complication and outline immediate priorities."
+      ],
+      "candidateHandout": [
+        "Data: Day 3 Hct 36%, platelets 120×10⁹/L. Day 5 Hct 45%, platelets 58×10⁹/L. BP 90/76, pulse 118, cool peripheries, capillary refill 4 s, urine output falling."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "No additional history unless asked."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Rising haematocrit plus falling platelets and narrowing pulse pressure with poor perfusion suggests plasma leakage with dengue shock.",
+        "Immediate ABC assessment, monitored IV access, judicious isotonic crystalloid according to current dengue shock protocol, frequent reassessment and senior/critical-care escalation.",
+        "Look for bleeding; avoid reflex platelet transfusion based only on count."
+      ],
+      "suggestedApproach": [
+        "Recognise shock → ABC → access/monitoring → fluid resuscitation per protocol → repeat Hct/clinical response → search for bleeding/organ dysfunction."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Correctly identifies rising haematocrit and falling platelets."
+        },
+        {
+          "order": 2,
+          "criterion": "Calculates/recognises narrow pulse pressure."
+        },
+        {
+          "order": 3,
+          "criterion": "Recognises shock/critical phase rather than “improving fever”."
+        },
+        {
+          "order": 4,
+          "criterion": "Calls for urgent ABC assessment and senior help."
+        },
+        {
+          "order": 5,
+          "criterion": "Requests monitored IV access and appropriate crystalloid resuscitation per protocol."
+        },
+        {
+          "order": 6,
+          "criterion": "Plans frequent reassessment of BP, pulse pressure, capillary refill and mental state."
+        },
+        {
+          "order": 7,
+          "criterion": "Monitors urine output and repeat haematocrit."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses for occult/overt bleeding and organ dysfunction."
+        },
+        {
+          "order": 9,
+          "criterion": "Avoids unnecessary NSAIDs/IM injections and non-indicated platelet transfusion."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates urgency and safe escalation clearly."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What would a falling haematocrit in a shocked patient make you consider?",
+        "Why can excessive fluids be dangerous in dengue?"
+      ],
+      "expectedCompetencies": [
+        "Data interpretation",
+        "Shock management",
+        "Fluid safety",
+        "Escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Failure to recognise shock.",
+        "Large unmonitored fluid administration without reassessment."
+      ],
+      "sourceNote": [
+        "Source-derived from the uploaded DHF/critical-phase material; converted into a high-yield interpretation station."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Rabies Post-Exposure Prophylaxis",
+      "primaryCompetency": "Animal-bite assessment, wound care and PEP counselling",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms. Zoya Malik, 36, was bitten on the hand 2 hours ago by an unprovoked stray dog that cannot be traced.",
+        "Take a focused history, assess the wound and explain immediate management."
+      ],
+      "candidateHandout": [
+        "Do not delay wound washing or indicated PEP while waiting for symptoms.",
+        "Use current national/WHO-approved vaccine and rabies immunoglobulin schedules."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Unprovoked stray-dog bite; dog ran away.",
+        "No prior rabies vaccination. Tetanus status uncertain.",
+        "Wound: broken skin with bleeding on hand; distal neurovascular status intact."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Immediate thorough washing/irrigation with soap and water; appropriate antisepsis and wound assessment.",
+        "Classify exposure and give rabies vaccine; for severe transdermal exposure in an unvaccinated patient, infiltrate rabies immunoglobulin into/around wounds as anatomically feasible according to current protocol.",
+        "Assess tetanus prophylaxis and antibiotic need based on wound risk."
+      ],
+      "suggestedApproach": [
+        "Exposure details → wound/host risk → irrigation → rabies PEP → tetanus/antibiotic assessment → follow-up."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies time, animal, provocation, traceability and bite site."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks prior rabies vaccination and tetanus status."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses immunocompromise and wound contamination."
+        },
+        {
+          "order": 4,
+          "criterion": "Examines depth, tissue/tendon/joint involvement and neurovascular status."
+        },
+        {
+          "order": 5,
+          "criterion": "Initiates immediate copious soap-and-water irrigation."
+        },
+        {
+          "order": 6,
+          "criterion": "Correctly identifies high-risk transdermal exposure."
+        },
+        {
+          "order": 7,
+          "criterion": "Recommends vaccine promptly using current approved schedule."
+        },
+        {
+          "order": 8,
+          "criterion": "Recommends RIG infiltration into/around wounds when indicated, per current protocol."
+        },
+        {
+          "order": 9,
+          "criterion": "Addresses tetanus and selective antibiotic prophylaxis."
+        },
+        {
+          "order": 10,
+          "criterion": "Gives follow-up, adherence and urgent-return advice."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Should PEP wait for symptoms?",
+        "Where should rabies immunoglobulin be administered?"
+      ],
+      "expectedCompetencies": [
+        "Wound assessment",
+        "Rabies prevention",
+        "Vaccination counselling",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Delaying PEP in a high-risk exposure.",
+        "Giving RIG only at a distant IM site rather than infiltrating wounds when indicated."
+      ],
+      "sourceNote": [
+        "Source-derived from uploaded rabies dog-bite scenario; patient name changed. Historical vaccine/RIG details in the source are intentionally replaced by “current approved protocol”."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Chickenpox Exposure in Pregnancy",
+      "primaryCompetency": "Risk assessment and counselling after varicella exposure",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms. Eman Raza, 28, is 18 weeks pregnant and had significant household exposure to chickenpox yesterday. She is unsure whether she had chickenpox as a child.",
+        "Assess risk and counsel her on next steps."
+      ],
+      "candidateHandout": [
+        "This is a counselling/risk-stratification station.",
+        "Exact prophylaxis depends on immune status, timing and current obstetric/infectious-disease guidance."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Well at present; no rash or fever.",
+        "No reliable history of prior varicella infection or vaccination."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Confirm significant exposure and maternal immunity with appropriate serology if uncertain.",
+        "If susceptible, arrange time-sensitive post-exposure prophylaxis according to current local obstetric/infectious-disease guidance.",
+        "Explain maternal pneumonia risk and fetal/neonatal implications without alarmist language.",
+        "If rash develops, isolate from vulnerable contacts and seek urgent review for respiratory/neurological symptoms."
+      ],
+      "suggestedApproach": [
+        "Exposure → immunity → gestation → prophylaxis pathway → warning signs → obstetric follow-up."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies exposure timing/intensity and gestational age."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks prior chickenpox/vaccine history."
+        },
+        {
+          "order": 3,
+          "criterion": "Checks immunosuppression/comorbidity and current symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Explains need to establish immunity if uncertain."
+        },
+        {
+          "order": 5,
+          "criterion": "Recognises susceptible pregnancy as higher risk."
+        },
+        {
+          "order": 6,
+          "criterion": "Arranges timely prophylaxis/specialist advice per current protocol."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains maternal and fetal risks proportionately."
+        },
+        {
+          "order": 8,
+          "criterion": "Gives isolation advice if infection develops."
+        },
+        {
+          "order": 9,
+          "criterion": "Safety-nets chest symptoms, neurological symptoms, severe rash/bleeding."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges obstetric/infectious-disease follow-up and checks understanding."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Why is immunity status important?",
+        "Name two maternal red flags requiring urgent hospital assessment."
+      ],
+      "expectedCompetencies": [
+        "Risk counselling",
+        "Pregnancy infection management",
+        "Shared decision-making",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Giving a live varicella vaccine during pregnancy.",
+        "Failing to arrange time-sensitive prophylaxis/specialist advice in a susceptible pregnant patient."
+      ],
+      "sourceNote": [
+        "Source-derived from uploaded chickenpox-in-pregnancy material; patient name changed. Prophylaxis timing/product must follow current local guidance."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Rubella Exposure in Pregnancy",
+      "primaryCompetency": "Exposure history, investigation and non-directive counselling",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms. Hiba Noor, 25, is 10 weeks pregnant and reports close contact with a child who later developed a rubella-like illness.",
+        "Take a focused history and explain investigations and counselling."
+      ],
+      "candidateHandout": [
+        "Do not make irreversible recommendations from exposure history alone. Confirm diagnosis/immunity and involve obstetric/fetal-medicine services."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "No current symptoms. Unsure of vaccination history.",
+        "Very anxious about fetal effects."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Clarify exposure and maternal symptoms; check documented immunity/vaccination.",
+        "Arrange appropriate rubella serology/testing with specialist interpretation; consider alternative rash illnesses as appropriate.",
+        "If maternal infection is confirmed early in pregnancy, provide specialist fetal-risk counselling and discuss options non-directively.",
+        "MMR is not given during pregnancy; susceptible women should be offered postpartum vaccination per policy."
+      ],
+      "suggestedApproach": [
+        "Exposure → immunity → testing → specialist confirmation → balanced counselling → postpartum prevention."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies timing and nature of exposure."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks rash, fever, arthralgia and lymphadenopathy symptoms."
+        },
+        {
+          "order": 3,
+          "criterion": "Checks vaccination/documented immunity."
+        },
+        {
+          "order": 4,
+          "criterion": "Explains testing rather than assuming infection."
+        },
+        {
+          "order": 5,
+          "criterion": "Requests appropriate rubella serology/testing with specialist interpretation."
+        },
+        {
+          "order": 6,
+          "criterion": "Recognises early pregnancy as the highest fetal-risk period if infection is confirmed."
+        },
+        {
+          "order": 7,
+          "criterion": "Uses non-directive, non-stigmatising counselling."
+        },
+        {
+          "order": 8,
+          "criterion": "Refers to obstetric/fetal-medicine/infectious-disease team."
+        },
+        {
+          "order": 9,
+          "criterion": "Avoids live MMR during pregnancy and discusses postpartum vaccination if nonimmune."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses anxiety, checks understanding and arranges follow-up."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What classic lymph nodes may enlarge in rubella?",
+        "Can MMR be given during pregnancy?"
+      ],
+      "expectedCompetencies": [
+        "Maternal infection assessment",
+        "Serology interpretation planning",
+        "Ethical counselling",
+        "Prevention"
+      ],
+      "criticalSafetyErrors": [
+        "Recommending termination solely from an unconfirmed exposure.",
+        "Administering live MMR during pregnancy."
+      ],
+      "sourceNote": [
+        "Source-derived from uploaded rubella-and-pregnancy section; converted to a safer contemporary counselling station."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Sepsis — Early Recognition & Initial Management",
+      "primaryCompetency": "Recognition and immediate resuscitation of suspected sepsis",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr. Sameer Iqbal, 62, presents with fever, confusion, productive cough and hypotension.",
+        "Perform an initial assessment and tell the examiner your immediate management priorities."
+      ],
+      "candidateHandout": [
+        "Observations: T 39.1°C, HR 124, BP 84/52, RR 30, SpO₂ 90% room air, confused."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "History may reveal 2 days of cough and rigors.",
+        "Examiner provides findings only when requested."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Suspected infection with shock and organ dysfunction: treat as sepsis/septic shock.",
+        "ABC resuscitation, oxygen as indicated, IV access, lactate/bloods and cultures without delaying treatment, prompt empiric IV antimicrobials per local sepsis policy, judicious crystalloid with reassessment, urine output monitoring and urgent senior/critical-care escalation."
+      ],
+      "suggestedApproach": [
+        "Recognise → call for help → ABC → access/investigations/cultures → antibiotics → fluids/reassessment → source control/ICU."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises sepsis with shock and calls for urgent senior help."
+        },
+        {
+          "order": 2,
+          "criterion": "Uses ABCDE and appropriate oxygen/monitoring."
+        },
+        {
+          "order": 3,
+          "criterion": "Obtains IV access and requests lactate, CBC, renal/liver profile and other indicated tests."
+        },
+        {
+          "order": 4,
+          "criterion": "Obtains blood cultures before antibiotics if this causes no meaningful delay."
+        },
+        {
+          "order": 5,
+          "criterion": "Starts prompt empiric IV antimicrobials according to local source/sepsis guideline."
+        },
+        {
+          "order": 6,
+          "criterion": "Gives appropriate crystalloid resuscitation with frequent reassessment."
+        },
+        {
+          "order": 7,
+          "criterion": "Monitors urine output and mental state."
+        },
+        {
+          "order": 8,
+          "criterion": "Considers source identification/control and chest imaging/urine testing as indicated."
+        },
+        {
+          "order": 9,
+          "criterion": "Escalates persistent hypotension for vasopressor/critical-care support."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates clearly and documents time-critical interventions."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What bedside marker can help assess tissue hypoperfusion?",
+        "What if hypotension persists after appropriate fluids?"
+      ],
+      "expectedCompetencies": [
+        "ABCDE",
+        "Sepsis recognition",
+        "Time-critical treatment",
+        "Escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Delaying antibiotics in septic shock.",
+        "Failure to escalate persistent hypotension/organ dysfunction."
+      ],
+      "sourceNote": [
+        "Added high-yield station. KMU infectious-disease curriculum explicitly includes sepsis with OSPE/OSCE practical performance and initial management."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Pyrexia of Unknown Origin",
+      "primaryCompetency": "Structured fever history and investigation planning",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms. Ayesha Gul, 41, has recurrent documented fever for several weeks with no diagnosis after initial assessment.",
+        "Take a structured history and outline your examination and investigation strategy."
+      ],
+      "candidateHandout": [
+        "Use broad categories: infection, malignancy, inflammatory/autoimmune and miscellaneous/drug-related causes."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Fever 4 weeks; fatigue and 3-kg weight loss.",
+        "No diagnosis from initial basic tests. Further details only if asked."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Reconfirm true fever and chronology; exposures/travel, TB contact, animals, procedures/devices, drugs, immune status and focal symptoms.",
+        "Full examination including skin, nodes, heart, abdomen, joints and fundi where appropriate.",
+        "Investigations should be hypothesis-driven: repeat basic labs/cultures and targeted imaging/serology rather than indiscriminate panels."
+      ],
+      "suggestedApproach": [
+        "Confirm fever → exposure map → systems review → drugs/immune status → full exam → staged tests."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Establishes duration/pattern and documents true fever."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks travel, TB contact, animal/food/water and occupational exposures."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks procedures, prosthetic material, IV drug use and dental history where relevant."
+        },
+        {
+          "order": 4,
+          "criterion": "Performs broad systems review including weight loss/night sweats."
+        },
+        {
+          "order": 5,
+          "criterion": "Reviews drugs and immunosuppression."
+        },
+        {
+          "order": 6,
+          "criterion": "States comprehensive physical examination including nodes, skin, heart and abdomen."
+        },
+        {
+          "order": 7,
+          "criterion": "Requests rational baseline labs and cultures."
+        },
+        {
+          "order": 8,
+          "criterion": "Uses targeted imaging/serology guided by clues."
+        },
+        {
+          "order": 9,
+          "criterion": "Considers infectious, malignant, inflammatory and miscellaneous causes."
+        },
+        {
+          "order": 10,
+          "criterion": "Avoids premature empiric therapy in a stable undiagnosed patient and plans review/escalation."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Name four broad categories of PUO causes.",
+        "Why can indiscriminate testing be unhelpful?"
+      ],
+      "expectedCompetencies": [
+        "Diagnostic strategy",
+        "Exposure history",
+        "Differential diagnosis",
+        "Stewardship"
+      ],
+      "criticalSafetyErrors": [
+        "Missing immunosuppression or TB/endocarditis clues.",
+        "Unfocused empiric antibiotics in a stable patient without a diagnostic plan."
+      ],
+      "sourceNote": [
+        "Added high-yield station. KMU infectious-disease curriculum includes fever and pyrexia of unknown origin."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Acute Watery Diarrhoea / Cholera",
+      "primaryCompetency": "Dehydration assessment and infection-control management",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr. Waqas Ali, 38, presents with sudden profuse watery diarrhoea after attending a large gathering.",
+        "Assess severity and explain immediate management and public-health priorities."
+      ],
+      "candidateHandout": [
+        "The key skill is rapid dehydration/shock assessment and safe rehydration."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Large-volume painless watery stools and vomiting for 12 hours.",
+        "Very thirsty; reduced urine. Several attendees are also unwell."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Assess dehydration/shock immediately.",
+        "ORS for patients able to drink; IV isotonic rehydration for severe dehydration/shock according to current cholera/acute diarrhoea protocol, then replace ongoing losses.",
+        "Send stool testing when indicated/outbreak setting; antibiotics only when indicated and per local susceptibility policy.",
+        "Contact precautions, safe water/sanitation and public-health notification/outbreak control."
+      ],
+      "suggestedApproach": [
+        "ABCDE → dehydration → rehydration → electrolytes/glucose → stool/public health → selective antibiotics."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Elicits stool frequency/volume, vomiting and duration."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks urine output, thirst, dizziness and ability to drink."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens blood in stool, fever and severe abdominal pain."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses vitals, perfusion, mucosa, skin turgor and mental state."
+        },
+        {
+          "order": 5,
+          "criterion": "Recognises severe dehydration/shock when present."
+        },
+        {
+          "order": 6,
+          "criterion": "Starts appropriate oral or IV rehydration according to severity."
+        },
+        {
+          "order": 7,
+          "criterion": "Plans electrolyte/glucose/renal assessment and replacement of ongoing losses."
+        },
+        {
+          "order": 8,
+          "criterion": "Requests stool testing when clinically/public-health indicated."
+        },
+        {
+          "order": 9,
+          "criterion": "Uses antibiotics selectively according to current protocol/resistance."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses infection control, safe water/sanitation and outbreak notification."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What is the immediate lifesaving treatment in cholera?",
+        "When is IV fluid required?"
+      ],
+      "expectedCompetencies": [
+        "Dehydration assessment",
+        "Fluid therapy",
+        "Infection control",
+        "Public health"
+      ],
+      "criticalSafetyErrors": [
+        "Delaying rehydration while awaiting stool results.",
+        "Failure to recognise shock."
+      ],
+      "sourceNote": [
+        "Added high-yield station. KMU infectious-disease course content includes cholera and practical management of GIT infection."
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Tetanus — Recognition & Initial Management",
+      "primaryCompetency": "Recognition, airway safety and toxin-control strategy",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr. Daniyal Shah, 47, develops trismus and painful generalized spasms one week after a contaminated puncture wound.",
+        "State your focused assessment and immediate management priorities."
+      ],
+      "candidateHandout": [
+        "Minimise unnecessary stimulation; airway compromise and autonomic instability can be life-threatening."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "No reliable vaccination record.",
+        "Wound was not medically treated."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Clinical diagnosis. Urgent monitored admission/ICU assessment.",
+        "Airway/ventilation readiness; reduce stimuli; control spasms per protocol.",
+        "Wound cleaning/debridement, tetanus immune globulin according to current protocol, appropriate antimicrobial therapy and active vaccination because disease does not confer reliable immunity."
+      ],
+      "suggestedApproach": [
+        "Recognise → quiet monitored environment → airway → neutralise unbound toxin → eradicate source → spasm/autonomic control → vaccination."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises tetanus from trismus/spasms plus wound history."
+        },
+        {
+          "order": 2,
+          "criterion": "Checks airway/breathing and calls for urgent senior/ICU help."
+        },
+        {
+          "order": 3,
+          "criterion": "Minimises stimulation and monitors autonomic instability."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses wound and vaccination history."
+        },
+        {
+          "order": 5,
+          "criterion": "Plans wound cleaning/debridement."
+        },
+        {
+          "order": 6,
+          "criterion": "Recommends tetanus immune globulin per current protocol."
+        },
+        {
+          "order": 7,
+          "criterion": "Recommends appropriate antimicrobial therapy per protocol."
+        },
+        {
+          "order": 8,
+          "criterion": "Plans spasm control and ventilatory support if needed."
+        },
+        {
+          "order": 9,
+          "criterion": "Starts/continues active tetanus vaccination."
+        },
+        {
+          "order": 10,
+          "criterion": "Explains prognosis, prevention and follow-up."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Does tetanus infection itself provide reliable immunity?",
+        "What two immediate complications can kill the patient?"
+      ],
+      "expectedCompetencies": [
+        "Emergency recognition",
+        "Airway safety",
+        "Immunoprophylaxis",
+        "Wound/source management"
+      ],
+      "criticalSafetyErrors": [
+        "Failure to secure/escalate airway risk.",
+        "Omitting immune globulin or active vaccination when indicated."
+      ],
+      "sourceNote": [
+        "Added high-yield station. KMU infectious-disease curriculum includes tetanus and practical management."
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Acute Bacterial Meningitis",
+      "primaryCompetency": "Emergency recognition, investigations and empiric treatment",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Ms. Laiba Ahmed, 20, presents with fever, severe headache, neck stiffness and increasing drowsiness.",
+        "Assess her and state your immediate management."
+      ],
+      "candidateHandout": [
+        "This is a time-critical emergency. Do not delay appropriate empiric treatment for unnecessary tests."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Symptoms began today; photophobia and vomiting.",
+        "Examiner findings: T 39.3°C, GCS 13, neck stiffness; non-blanching rash may be provided if candidate asks about skin."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Suspected acute meningitis/meningococcal disease.",
+        "ABCDE, isolation precautions as appropriate, blood cultures/labs and immediate empiric IV antimicrobials according to age/local policy; adjunctive dexamethasone when indicated by protocol.",
+        "Lumbar puncture if safe and not contraindicated; do not delay antibiotics for CT/LP in a deteriorating patient."
+      ],
+      "suggestedApproach": [
+        "Recognise → ABC → infection control → cultures → immediate antibiotics ± dexamethasone → LP when safe → notify/prophylaxis contacts if meningococcal."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises meningitis and assesses ABC/GCS."
+        },
+        {
+          "order": 2,
+          "criterion": "Checks rash and sepsis/shock features."
+        },
+        {
+          "order": 3,
+          "criterion": "Uses appropriate droplet/infection-control precautions."
+        },
+        {
+          "order": 4,
+          "criterion": "Obtains blood cultures and baseline labs without delaying therapy."
+        },
+        {
+          "order": 5,
+          "criterion": "Starts immediate empiric IV antibiotics per current local guideline."
+        },
+        {
+          "order": 6,
+          "criterion": "Considers dexamethasone when indicated."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses contraindications to LP."
+        },
+        {
+          "order": 8,
+          "criterion": "Performs/plans LP with CSF studies when safe."
+        },
+        {
+          "order": 9,
+          "criterion": "Does not delay treatment for CT/LP in an unstable patient."
+        },
+        {
+          "order": 10,
+          "criterion": "Escalates urgently and considers public-health/contact prophylaxis if meningococcal disease."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Name contraindications to immediate LP.",
+        "What CSF pattern suggests bacterial meningitis?"
+      ],
+      "expectedCompetencies": [
+        "Emergency infection management",
+        "LP safety",
+        "Antimicrobial timing",
+        "Public health"
+      ],
+      "criticalSafetyErrors": [
+        "Delaying antibiotics for CT or LP in a critically ill patient.",
+        "Performing LP despite clear contraindications."
+      ],
+      "sourceNote": [
+        "Added high-yield station; meningitis is a core infection emergency and appears across KMU neuroscience/infection teaching."
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Pulmonary Tuberculosis",
+      "primaryCompetency": "Focused respiratory infection history, testing and infection control",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr. Farhan Yousaf, 43, has cough for 5 weeks, weight loss, night sweats and intermittent haemoptysis.",
+        "Take a focused history, state investigations and explain immediate infection-control and referral steps."
+      ],
+      "candidateHandout": [
+        "Think TB in chronic cough with constitutional symptoms and epidemiologic risk."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Lives with extended family; one relative was treated for TB last year.",
+        "No prior TB treatment."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Suspected pulmonary TB.",
+        "Respiratory sample testing with rapid molecular assay and smear/culture according to national TB pathway; chest radiograph and baseline assessment.",
+        "Airborne infection-control measures and prompt linkage to TB programme/specialist service.",
+        "Assess HIV and other comorbidity with consent; contact tracing and adherence support."
+      ],
+      "suggestedApproach": [
+        "Symptoms → exposure/risk → severity → airborne precautions → microbiology/imaging → programme referral."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises cough, sputum, haemoptysis and duration."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks fever, night sweats, weight loss and appetite."
+        },
+        {
+          "order": 3,
+          "criterion": "Elicits TB contact, prior TB/treatment and congregate exposure."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses HIV/immunosuppression and diabetes risk sensitively."
+        },
+        {
+          "order": 5,
+          "criterion": "States respiratory exam and severity assessment."
+        },
+        {
+          "order": 6,
+          "criterion": "Requests appropriate sputum molecular testing/smear-culture pathway and chest radiograph."
+        },
+        {
+          "order": 7,
+          "criterion": "Initiates airborne infection-control precautions."
+        },
+        {
+          "order": 8,
+          "criterion": "Refers/links to national/local TB programme and avoids unsupervised incomplete therapy."
+        },
+        {
+          "order": 9,
+          "criterion": "Addresses contact tracing and adherence."
+        },
+        {
+          "order": 10,
+          "criterion": "Safety-nets major haemoptysis, dyspnoea or deterioration."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What test can rapidly detect MTB and rifampicin resistance?",
+        "Why is adherence crucial?"
+      ],
+      "expectedCompetencies": [
+        "TB recognition",
+        "Microbiological diagnosis",
+        "Airborne precautions",
+        "Public-health management"
+      ],
+      "criticalSafetyErrors": [
+        "Failure to institute airborne precautions.",
+        "Starting an incomplete/non-programmatic TB regimen."
+      ],
+      "sourceNote": [
+        "Added high-yield station for MBBS/CPSP-style medicine practice. Use Pakistan national TB programme/local protocols for definitive regimens."
+      ]
+    },
+    {
+      "number": 14,
+      "title": "HIV Testing & Post-Test Counselling",
+      "primaryCompetency": "Consent, confidentiality and linkage to care",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr. Rayan Siddiqui, 29, has a reactive HIV screening test and is very anxious.",
+        "Counsel him about the result, next steps and immediate health considerations."
+      ],
+      "candidateHandout": [
+        "Use non-stigmatising language. A reactive screening test requires confirmation according to the approved testing algorithm."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Patient asks: “Does this mean I definitely have AIDS? Will my family be told?”"
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Clarify that screening reactivity is not the same as an AIDS diagnosis; confirm according to national testing algorithm.",
+        "Maintain confidentiality, assess immediate safety and psychosocial needs.",
+        "If confirmed, link promptly to HIV care for ART evaluation/initiation, baseline assessment, opportunistic infection screening/prevention and partner testing/notification support according to policy.",
+        "Discuss transmission prevention without blame."
+      ],
+      "suggestedApproach": [
+        "Set privacy → explain result → confirmatory pathway → emotional response/safety → prevention → linkage to care."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Ensures privacy and confirms patient identity/consent."
+        },
+        {
+          "order": 2,
+          "criterion": "Explains reactive screening result accurately without prematurely labelling AIDS."
+        },
+        {
+          "order": 3,
+          "criterion": "Explains confirmatory testing algorithm."
+        },
+        {
+          "order": 4,
+          "criterion": "Responds empathetically and assesses distress/self-harm risk if indicated."
+        },
+        {
+          "order": 5,
+          "criterion": "Maintains confidentiality and explains its limits appropriately."
+        },
+        {
+          "order": 6,
+          "criterion": "Takes/clarifies transmission-risk history sensitively."
+        },
+        {
+          "order": 7,
+          "criterion": "Discusses safer sex/needle practices and partner testing support."
+        },
+        {
+          "order": 8,
+          "criterion": "If confirmed, links promptly to ART/HIV specialist programme."
+        },
+        {
+          "order": 9,
+          "criterion": "Mentions baseline/OI screening and vaccination/prevention assessment."
+        },
+        {
+          "order": 10,
+          "criterion": "Checks understanding, provides follow-up and avoids stigma."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Is a reactive screening test equivalent to AIDS?",
+        "What are the core ethical principles in HIV counselling?"
+      ],
+      "expectedCompetencies": [
+        "Communication",
+        "Confidentiality",
+        "Testing interpretation",
+        "Linkage to care"
+      ],
+      "criticalSafetyErrors": [
+        "Breaching confidentiality without justification.",
+        "Stigmatising language or declaring AIDS from a single screening result."
+      ],
+      "sourceNote": [
+        "Added high-yield CPSP-style communication/infectious-disease station. Exact testing algorithm and ART pathway must follow current Pakistan programme/local policy."
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Fever in a Returning Traveller — Integrated Data Interpretation",
+      "primaryCompetency": "Synthesis of exposure, laboratory data and differential diagnosis",
+      "format": "Standardised patient / focused clinical encounter",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Mr. Talha Nadeem, 33, returned from travel 8 days ago and now has fever, headache and myalgia. Review the history and test panel supplied by the examiner.",
+        "Give your leading differential, identify immediate danger signs and propose the next diagnostic steps."
+      ],
+      "candidateHandout": [
+        "Data card: travel to a tropical region; mosquito exposure; no prophylaxis. T 39°C, HR 112, BP 104/68. Platelets 82×10⁹/L, WBC 3.1×10⁹/L, Hct 44%. Initial malaria rapid test negative."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "No focal respiratory/urinary symptoms. Mild retro-orbital pain. No bleeding."
+      ],
+      "examinerInstructions": [
+        "Allow the candidate to proceed without coaching.",
+        "If a required datum is not obtainable by simulation, provide it only when the candidate asks appropriately.",
+        "Award prompted checklist items no more than 1/2. Prioritise safe recognition, escalation and infection-control behaviour."
+      ],
+      "keyAnswerGuide": [
+        "Dengue is plausible, but malaria must not be dismissed after a single negative rapid test if epidemiologic/clinical suspicion persists.",
+        "Also consider enteric fever and other travel-related infections based on itinerary/exposures.",
+        "Repeat/confirm malaria testing with appropriate microscopy/assay; dengue testing based on day of illness; cultures if enteric fever suspected; serial CBC/Hct and clinical monitoring."
+      ],
+      "suggestedApproach": [
+        "Stabilise → itinerary/exposures → danger signs → interpret CBC → keep malaria in differential → targeted tests → reassess."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies exact itinerary, dates and incubation window."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks mosquito, food/water, freshwater, animal and sick-contact exposures."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses prophylaxis/vaccination and medication history."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens shock, altered consciousness, bleeding, jaundice, oliguria and respiratory distress."
+        },
+        {
+          "order": 5,
+          "criterion": "Interprets leukopenia/thrombocytopenia as compatible with dengue but not diagnostic."
+        },
+        {
+          "order": 6,
+          "criterion": "Does not exclude malaria on one negative rapid test when suspicion remains."
+        },
+        {
+          "order": 7,
+          "criterion": "Plans repeat/confirmatory malaria testing appropriately."
+        },
+        {
+          "order": 8,
+          "criterion": "Plans dengue testing/serial Hct-CBC according to illness day."
+        },
+        {
+          "order": 9,
+          "criterion": "Considers enteric fever/other travel infections and cultures when indicated."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides safe disposition, monitoring and explicit return/escalation advice."
+        }
+      ],
+      "scoringAnchor": "Scoring anchor: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/unsafe/incorrect. Prompted items score a maximum of 1/2.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Why is a travel timeline important?",
+        "Can one negative malaria test safely exclude malaria in a high-risk traveller?"
+      ],
+      "expectedCompetencies": [
+        "Integrated clinical reasoning",
+        "Travel history",
+        "Laboratory interpretation",
+        "Diagnostic safety"
+      ],
+      "criticalSafetyErrors": [
+        "Premature closure on dengue.",
+        "Failure to reconsider malaria despite compatible travel exposure and illness."
+      ],
+      "sourceNote": [
+        "Added integrative station combining the uploaded malaria/dengue/typhoid themes and the KMU curriculum emphasis on applying infection assessment to clinical scenarios."
+      ]
+    }
+  ]
+}

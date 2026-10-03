@@ -11,7 +11,7 @@ import {
   MCQ_COUNT,
   OSPE_COUNT,
   SIGNUP_LABEL,
-  WEIGHT_MARKS,
+  CHECKLIST_ITEM_MARKS,
   demoChecklist,
   demoPatient,
   faqs,
@@ -139,7 +139,7 @@ function PatientDemo() {
     <div className="site-grid site-shadow relative overflow-hidden rounded-3xl border border-s-line">
       <div className="flex items-center gap-4 border-b border-s-line bg-s-card/90 px-5 py-4">
         <span className="relative">
-          <Character name="patient-daniel" alt="Pixel-art portrait of the virtual patient, Daniel Reed" size={56} tone="indigo" />
+          <Character name="patient-maya" alt={`Pixel-art portrait of the virtual patient, ${demoPatient.name}`} size={56} tone="indigo" />
           <span className="absolute -bottom-1 left-1/2 flex h-5 -translate-x-1/2 items-center rounded-full bg-s-card px-1.5 text-s-accent shadow-sm">
             {pending !== null ? <VoiceBars /> : <Mic size={12} strokeWidth={2} aria-hidden="true" />}
           </span>
@@ -187,7 +187,7 @@ function PatientDemo() {
             <p className="font-medium">
               You covered {areas.size} of the {demoChecklist.length} checklist areas.
             </p>
-            <p className="mt-1 text-s-mute">The full station also asks about safety, other risks, differentials and your plan.</p>
+            <p className="mt-1 text-s-mute">The full station also covers your diagnosis, tests, referral and her worry about cancer.</p>
           </div>
         )}
       </div>
@@ -480,10 +480,9 @@ const RING_C = 2 * Math.PI * RING_R;
 
 function MarkLikeExaminer() {
   const [checked, setChecked] = useState(() => new Set());
-  const total = demoChecklist.reduce((sum, item) => sum + WEIGHT_MARKS[item.weight], 0);
-  const score = demoChecklist.reduce((sum, item, i) => sum + (checked.has(i) ? WEIGHT_MARKS[item.weight] : 0), 0);
+  const total = demoChecklist.length * CHECKLIST_ITEM_MARKS;
+  const score = checked.size * CHECKLIST_ITEM_MARKS;
   const pct = Math.round((score / total) * 100);
-  const missedCritical = demoChecklist.filter((item, i) => item.weight === "critical" && !checked.has(i)).length;
 
   function toggle(i) {
     setChecked((prev) => {
@@ -501,7 +500,7 @@ function MarkLikeExaminer() {
           <Character name="examiner" size={72} tone="mint" className="mx-auto" />
           <h2 className="mt-5 text-3xl font-semibold leading-tight text-s-ink md:text-[2.6rem]">Mark yourself like the examiner</h2>
           <p className="mt-4 text-lg leading-relaxed text-s-mute">
-            This is the real checklist for the pulmonary embolism station. Tick what you would have covered. Critical items count for more.
+            This is the real checklist for the inflammatory bowel disease station. Tick what you would have covered. Each item is worth 2 marks.
           </p>
         </div>
 
@@ -522,13 +521,9 @@ function MarkLikeExaminer() {
                       {on && <Check size={14} strokeWidth={3} />}
                     </span>
                     <span className="flex-1">
-                      <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <span className="font-medium text-s-ink">{item.label}</span>
-                        <WeightTag weight={item.weight} className="sm:hidden" />
-                      </span>
+                      <span className="font-medium text-s-ink">{item.label}</span>
                       <span className="mt-0.5 block text-sm leading-relaxed text-s-mute">{item.detail}</span>
                     </span>
-                    <WeightTag weight={item.weight} className="hidden shrink-0 sm:inline-flex" />
                   </label>
                 </li>
               );
@@ -561,22 +556,14 @@ function MarkLikeExaminer() {
             <p className="text-sm leading-relaxed text-s-mute" aria-live="polite">
               {checked.size === 0
                 ? "Tick an item to start scoring."
-                : missedCritical > 0
-                  ? `${missedCritical} critical ${missedCritical === 1 ? "item" : "items"} still missing.`
-                  : "Both critical items covered."}
+                : checked.size === demoChecklist.length
+                  ? "Every item covered."
+                  : `${demoChecklist.length - checked.size} of ${demoChecklist.length} items still to cover.`}
             </p>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function WeightTag({ weight, className = "" }) {
-  return (
-    <span className={`rounded-full px-2.5 py-1 font-chart text-xs ${weight === "critical" ? "bg-coral-soft text-coral" : "bg-s-tint text-s-mute"} ${className}`}>
-      {weight === "critical" ? "Critical" : "Major"}
-    </span>
   );
 }
 

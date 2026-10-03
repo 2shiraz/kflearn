@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { registerRequest, ROLE_OPTIONS, YEAR_LEVEL_OPTIONS } from "../lib/api";
+import { SignupAside } from "../components/AuthAside";
 import AuthShell, { FormError, inputClass, primaryButtonClass, secondaryButtonClass } from "../components/AuthShell";
 
 const STEP_LABELS = ["Account", "Role", "Profile"];
@@ -48,6 +49,7 @@ export default function SignupPage() {
 
   return (
     <AuthShell
+      aside={<SignupAside />}
       footer={
         step === 1 && (
           <>

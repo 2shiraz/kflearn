@@ -8,7 +8,7 @@ import { ErrorMessage, PageMain, RequireUser } from "../components/AppPage";
 import { Skeleton } from "../components/Skeleton";
 import { Character, HealthIcon, MedIcon, VoiceBars } from "../site/Illustrations";
 import { SECTION_LOOK, TONES } from "../site/tones";
-import { plus } from "../site/siteContent";
+import { demoPatient, plus } from "../site/siteContent";
 import { topics as historyGuideTopics } from "../data/historyTakingGuide";
 import { stations as examStations } from "../data/clinicalExaminationGuide";
 import { handouts } from "../data/handoutNotes";
@@ -150,19 +150,19 @@ function FeaturedOsce({ loading, count }) {
 
       <div className="relative mt-8 hidden rounded-3xl bg-s-card p-4 text-s-ink site-shadow sm:block md:mt-0" aria-hidden="true">
         <div className="flex items-center gap-3">
-          <Character name="patient-daniel" size={44} tone="indigo" />
+          <Character name="patient-maya" size={44} tone="indigo" />
           <div className="min-w-0">
-            <p className="text-sm font-medium">Daniel Reed, 54</p>
+            <p className="text-sm font-medium">{demoPatient.name}, {demoPatient.age}</p>
             <p className="flex items-center gap-1.5 text-xs text-s-mute">
               <VoiceBars className="text-s-accent" /> Speaking
             </p>
           </div>
         </div>
         <p className="mt-3 rounded-3xl rounded-tl-md bg-s-tint px-4 py-3 text-sm leading-relaxed">
-          I suddenly became short of breath this morning, and it hurts when I breathe in.
+          {demoPatient.opening}
         </p>
         <p className="ml-auto mt-2 w-fit rounded-3xl rounded-tr-md bg-s-accent px-4 py-2.5 text-sm text-s-on-accent">
-          When did this start?
+          {demoPatient.questions[0].ask}
         </p>
       </div>
     </Link>

@@ -40,67 +40,62 @@ export const yearCoverage = mcqYears
     };
   });
 
-// Real stations from the OSCE bank, used as public previews. Text is taken from
-// each station's candidate instructions.
+// Real stations from the newest OSCE sets (GIT, infectious diseases, gynae and
+// obstetrics), used as public previews. Briefs are each station's own short
+// description. Every station runs for 8 minutes.
 export const sampleStations = [
   {
-    title: "Suspected Pulmonary Embolism",
-    area: "Respiratory",
-    kind: "History and acute plan",
-    setting: "Acute assessment unit",
-    brief: "Daniel Reed, aged 54, developed sudden breathlessness and pleuritic chest pain three weeks after a knee replacement.",
-  },
-  {
-    title: "Suspected Adult Asthma",
-    area: "Respiratory",
-    kind: "History and diagnostic plan",
-    setting: "Respiratory outpatient clinic",
-    brief: "Maya Khan, a 28-year-old primary-school teacher, reports episodic wheeze and chest tightness.",
-  },
-  {
-    title: "Haematemesis History",
+    title: "Inflammatory Bowel Disease",
     area: "Gastroenterology",
-    kind: "History",
-    setting: "Emergency department",
-    brief: "A 50-year-old woman has presented with haematemesis.",
+    kind: "History and differential diagnosis",
+    brief: "Ms Kiran Abbasi, aged 27, presents with several weeks of bloody diarrhoea, abdominal pain and weight loss.",
   },
   {
-    title: "Hemoptysis",
-    area: "Respiratory",
-    kind: "History and urgent investigation",
-    setting: "Rapid-access respiratory clinic",
-    brief: "Peter Mensah, aged 61, has coughed up blood several times this week.",
+    title: "Dengue Fever",
+    area: "Infectious diseases",
+    kind: "Warning signs and counselling",
+    brief: "Ms Mehwish Tariq, 27, has 4 days of fever, severe myalgia, retro-orbital pain and a rash.",
   },
   {
-    title: "DKA Abdominal Pain History",
-    area: "Endocrinology",
-    kind: "History",
-    setting: "Emergency department",
-    brief: "A 24-year-old woman presents with vomiting and abdominal pain.",
+    title: "Female Infertility: Initial Assessment",
+    area: "Gynaecology and obstetrics",
+    kind: "Couple-based history and investigation",
+    brief: "Mrs Sara Nadeem, 31, has been trying to conceive for 18 months without success.",
   },
   {
-    title: "Suspected Interstitial Lung Disease",
-    area: "Respiratory",
-    kind: "Occupational history",
-    setting: "Respiratory clinic",
-    brief: "Ahmed Saleh, aged 58, has progressive exertional breathlessness and a persistent dry cough.",
+    title: "Malaria",
+    area: "Infectious diseases",
+    kind: "Travel fever history and severity",
+    brief: "Mr Haris Khan, 34, presents with recurrent fever, rigors, sweats and severe headache after travel to a malaria-endemic area.",
+  },
+  {
+    title: "Coeliac Disease",
+    area: "Gastroenterology",
+    kind: "History, investigation and counselling",
+    brief: "Ms Amna Riasat, aged 29, presents with bloating, loose stools, tiredness and unexplained low iron levels on a recent blood test.",
+  },
+  {
+    title: "Menopause: Focused History and Counselling",
+    area: "Gynaecology and obstetrics",
+    kind: "History and shared decision-making",
+    brief: "Mrs Nadia Farooq, 49, reports hot flushes, night sweats, vaginal dryness and sleep disturbance.",
   },
 ];
 
-// Interactive hero demo. The patient lines are taken from the "Suspected
-// Pulmonary Embolism" station script (opening statement and facts), written
-// in the first person. `area` matches the station's checklist row.
+// Interactive hero demo. The patient lines come from the "Inflammatory Bowel
+// Disease" station script (opening statement and authored facts), written in
+// the first person. `area` matches the checklist row below.
 export const demoPatient = {
-  name: "Daniel Reed",
-  age: 54,
-  station: "Suspected Pulmonary Embolism",
-  setting: "Acute assessment unit",
-  opening: "I suddenly became short of breath this morning, and it hurts when I breathe in.",
+  name: "Kiran Abbasi",
+  age: 27,
+  station: "Inflammatory Bowel Disease",
+  setting: "8-minute history station",
+  opening: "Doctor, I've had bloody diarrhoea and stomach cramps for weeks, and I've lost some weight.",
   questions: [
-    { ask: "When did this start?", reply: "Suddenly, about two hours ago.", area: "Symptom analysis" },
-    { ask: "Can you describe the pain?", reply: "It's sharp, on the right side, and worse when I take a deep breath.", area: "Symptom analysis" },
-    { ask: "Any recent surgery or travel?", reply: "I had a knee replacement three weeks ago, and I haven't been moving much since.", area: "Provoking risks" },
-    { ask: "Any swelling in your legs?", reply: "My left calf has been swollen and sore for two days.", area: "DVT or previous VTE" },
+    { ask: "What are your stools like?", reply: "There's blood and mucus in most of them, and the cramps are low down in my tummy.", area: "Stool content and pattern" },
+    { ask: "Any mouth ulcers, or pain around your back passage?", reply: "No mouth ulcers, and no pain or discharge around my back passage.", area: "Mouth and perianal symptoms" },
+    { ask: "Do you smoke?", reply: "No, I don't smoke.", area: "Smoking" },
+    { ask: "Any problems with your joints, eyes or skin?", reply: "My knees ache a little, but my eyes and skin are fine.", area: "Extra-intestinal features" },
   ],
 };
 
@@ -119,20 +114,22 @@ export const sampleMcq = {
   explanation: "ST elevation in the inferior leads (II, III, aVF) classically indicates occlusion of the right coronary artery, which typically supplies the inferior wall of the left ventricle in most individuals (right-dominant circulation).",
 };
 
-// The full marking checklist of the "Suspected Pulmonary Embolism" station,
-// with its real weights (critical = 3 marks, major = 2).
+// The full marking checklist of the "Inflammatory Bowel Disease" station:
+// 10 items, each marked out of 2, for 20 points.
 export const demoChecklist = [
-  { label: "Immediate safety", detail: "Distress, syncope, hypotension, hypoxaemia, ongoing pain", weight: "critical" },
-  { label: "Symptom analysis", detail: "Sudden onset, dyspnoea, pleuritic pain, cough, hemoptysis", weight: "major" },
-  { label: "DVT or previous VTE", detail: "Unilateral calf pain or swelling, previous DVT or PE", weight: "major" },
-  { label: "Provoking risks", detail: "Surgery, trauma, immobility, travel, admission", weight: "major" },
-  { label: "Additional risks", detail: "Cancer, pregnancy or postpartum, oestrogen, thrombophilia", weight: "major" },
-  { label: "Differentials", detail: "ACS, pneumothorax, pneumonia, aortic pathology", weight: "major" },
-  { label: "Treatment and imaging", detail: "Bleeding risk, anticoagulants, renal disease, allergy", weight: "major" },
-  { label: "Plan and communication", detail: "Urgency, observations, D-dimer or imaging, escalation", weight: "critical" },
+  { label: "Stool content and pattern", detail: "Blood and mucus, continuous or patchy" },
+  { label: "Pain pattern", detail: "Character and site of the abdominal pain" },
+  { label: "Mouth and perianal symptoms", detail: "Asks directly about mouth ulcers and perianal pain or discharge" },
+  { label: "Smoking", detail: "Smoking status and why it matters for each condition" },
+  { label: "Extra-intestinal features", detail: "Joints, eyes and skin" },
+  { label: "Reasoned diagnosis", detail: "The more likely diagnosis from the history, acknowledging overlap" },
+  { label: "Definitive diagnosis", detail: "Explains that colonoscopy with biopsy is needed" },
+  { label: "First-line tests", detail: "FBC, inflammatory markers, stool calprotectin and culture" },
+  { label: "Urgent referral", detail: "Gastroenterology referral for systemic symptoms and weight loss" },
+  { label: "Concerns and understanding", detail: "Addresses her worry about cancer honestly and checks understanding" },
 ];
 
-export const WEIGHT_MARKS = { critical: 3, major: 2, minor: 1 };
+export const CHECKLIST_ITEM_MARKS = 2;
 
 export const faqs = [
   {

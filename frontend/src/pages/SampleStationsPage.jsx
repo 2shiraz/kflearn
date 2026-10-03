@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, ClipboardCheck, MapPin } from "lucide-react";
+import { ArrowRight, Check, ClipboardCheck, Clock } from "lucide-react";
 import { Character, MedIcon } from "../site/Illustrations";
 import PageShell from "../components/PageShell";
 import { SIGNUP_LABEL, sampleStations } from "../site/siteContent";
 
 // Icon and colour per specialty area.
 const AREA = {
-  Respiratory: { icon: "lungs", tone: "bg-sky-soft text-sky" },
-  Gastroenterology: { icon: "stomach", tone: "bg-mint-soft text-mint" },
-  Endocrinology: { icon: "bloodDrop", tone: "bg-coral-soft text-coral" },
+  Gastroenterology: { icon: "microbe", tone: "bg-mint-soft text-mint" },
+  "Infectious diseases": { icon: "thermometer", tone: "bg-coral-soft text-coral" },
+  "Gynaecology and obstetrics": { icon: "pregnant-woman", tone: "bg-violet-soft text-violet" },
 };
 
 const included = [
   "Candidate instructions: setting, patient and tasks",
   "A scripted patient for the AI virtual patient",
-  "An examiner marking checklist with weighted items",
+  "An examiner marking checklist",
   "Guided self-practice with the script and checklist open",
 ];
 
@@ -47,7 +47,7 @@ export default function SampleStationsPage() {
               <p className="mt-3 flex-1 leading-relaxed text-s-mute">{s.brief}</p>
               <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-s-line pt-4 text-sm text-s-mute">
                 <span className="flex items-center gap-1.5">
-                  <MapPin size={15} strokeWidth={1.75} aria-hidden="true" /> {s.setting}
+                  <Clock size={15} strokeWidth={1.75} aria-hidden="true" /> 8 minutes
                 </span>
                 <span className="flex items-center gap-1.5">
                   <ClipboardCheck size={15} strokeWidth={1.75} aria-hidden="true" /> {s.kind}
@@ -59,7 +59,7 @@ export default function SampleStationsPage() {
 
         <aside data-reveal className="site-shadow rounded-3xl border border-s-line bg-s-card p-6 lg:sticky lg:top-24">
           <div className="flex -space-x-3">
-            <Character name="patient-daniel" size={56} tone="indigo" className="ring-4 ring-s-card" />
+            <Character name="patient-maya" size={56} tone="indigo" className="ring-4 ring-s-card" />
             <Character name="examiner" size={56} tone="mint" className="ring-4 ring-s-card" />
           </div>
           <h2 className="mt-5 text-xl font-semibold text-s-ink">Every station includes</h2>

@@ -10,3 +10,5 @@ Corporation. Resized to 128px.
 
 Profile avatars in avatars/ (a01 to a20) were generated with the same DiceBear
 "Pixel Art" style, licensed CC0 1.0. No attribution required.
+
+pregnant-woman.png added from the same Fluent Emoji 3D set (MIT).
