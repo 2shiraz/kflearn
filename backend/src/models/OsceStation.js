@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { OSCE_CATEGORIES } from "../utils/osceCategories.js";
 
 const osceStationSchema = new mongoose.Schema(
   {
@@ -9,6 +10,7 @@ const osceStationSchema = new mongoose.Schema(
     systemOrTopic: { type: String, default: "" },
     stationType: { type: String, enum: ["history", "counselling", "examination", "interpretation", "emergency"], default: "history" },
     stationFormat: { type: String, default: "" },
+    category: { type: String, enum: ["", ...OSCE_CATEGORIES.map(({ value }) => value)], default: "" },
     practiceModes: [{ type: String, enum: ["single-player", "virtual-patient"] }],
     taskTags: [{ type: String }],
     difficulty: { type: String, enum: ["beginner", "intermediate", "advanced"], default: "beginner" },

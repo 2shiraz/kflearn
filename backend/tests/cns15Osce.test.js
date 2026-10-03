@@ -96,6 +96,7 @@ test("candidate views hide examiner answers and show three AI conversations and 
   for (const bundle of bundles) {
     const response = await request(app).get(`/api/osce/${bundle.module.slug}`).set("Authorization", token);
     assert.equal(response.status, 200);
+    assert.ok(response.body.data, `Missing station data for ${bundle.module.slug}: ${response.text}`);
     assert.deepEqual(response.body.data.candidateHandout, bundle.module.candidateHandout);
     assert.deepEqual(response.body.data.practiceOptions, bundle.module.practiceModes);
     for (const field of ["learningNotes", "keyAnswerGuide", "examinerInstructions", "vivaQuestions", "criticalSafetyErrors"]) assert.equal(response.body.data[field], undefined);
@@ -186,4 +187,3 @@ test("AI marking receives parent counselling context and the complete partial-cr
   assert.equal(result.finalScore.rawScore,3);
   assert.equal(result.finalScore.maxRawScore,20);
 });
-

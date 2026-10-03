@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import OsceStationBrowser, { StationAvailability } from "../components/OsceStationBrowser";
+import { OSCE_CATEGORIES } from "../lib/osceFilters.js";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { TONES } from "../site/tones";
 import {
   ArrowRight,
   Check,
-  ChevronLeft,
-  ChevronRight,
   Clock3,
   Coins,
   Eye,
@@ -27,8 +28,6 @@ import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain
 import { CardGridSkeleton, ChatSkeleton, ChecklistSkeleton, DetailSkeleton, FormSkeleton, ListSkeleton, ResultsSkeleton, TwoColumnSkeleton } from "../components/Skeleton";
 import { ScoreRing, scoreTone } from "../components/StudyKit";
 import { Character, HealthIcon, MedIcon, VoiceBars } from "../site/Illustrations";
-import { TONES } from "../site/tones";
-import { plus } from "../site/siteContent";
 import {
   aiAssessOsceAttempt,
   createAdminOsceContent,
@@ -172,156 +171,65 @@ function formatDate(value) {
 const CHAT_CHAR_LIMIT = 640;
 
 export function OsceHome() {
-  const [state, setState] = useState({ loading: true, modules: [], attempts: [], error: "" });
-
+  const [state, setState] = useState({ loading: true, modules: [], error: "" });
   const load = useCallback(() => {
     setState((s) => ({ ...s, loading: true, error: "" }));
-    Promise.all([listOsceStations(), listOsceAttempts()])
-      .then(([modulesData, attemptsData]) => setState({ loading: false, modules: modulesData.modules || [], attempts: attemptsData || [], error: "" }))
+    listOsceStations()
+      .then((data) => setState({ loading: false, modules: data.modules || [], error: "" }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
+  useEffect(() => { load(); }, [load]);
   const groups = groupModulesBySpecialty(state.modules);
-
-  return (
-    <RequireUser>
-      <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations" }]} />
-        <PageHeader
-          title="OSCE Stations"
-          description="Pick a section, choose a station, then practise with the brief or talk to the virtual patient."
-          actions={
-            <LinkButton to="/stations/attempts" variant="secondary">
-              <History size={16} strokeWidth={2} aria-hidden="true" /> Attempts
-            </LinkButton>
-          }
-        />
-
-        {state.loading && <Loading variant="osce-bank" />}
-        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
-        {!state.loading && !state.error && groups.length === 0 && (
-          <EmptyState character="examiner" tone="mint" title="No stations yet" body="Published OSCE stations will appear here." action={<LinkButton to="/dashboard" variant="secondary">Back to dashboard</LinkButton>} />
-        )}
-        {!state.loading && !state.error && groups.length > 0 && (
-          <>
-            <p className="mb-4 text-sm text-s-mute">
-              {plus(state.modules.length)} stations across {groups.length} {groups.length === 1 ? "section" : "sections"}.
-            </p>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {groups.map((group, i) => {
-                const look = specialtyLook(group.name, i);
-                const t = TONES[look.tone];
-                return (
-                  <Link
-                    key={group.name}
-                    to={sectionPath(group.name)}
-                    style={{ "--rise-delay": `${i * 50}ms` }}
-                    className={`site-rise site-grid site-press group relative flex min-h-44 flex-col overflow-hidden rounded-3xl border border-s-line p-6 ${t.ring}`}
-                  >
-                    <div className="relative flex items-start justify-between gap-3">
-                      <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${t.soft} ${t.text}`} aria-hidden="true">
-                        <MedIcon name={look.icon} size={32} />
-                      </span>
-                      <Chip>{group.modules.length} {group.modules.length === 1 ? "station" : "stations"}</Chip>
-                    </div>
-                    <h2 className="relative mt-5 flex-1 text-xl font-semibold tracking-tight text-s-ink">{group.name}</h2>
-                    <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-s-ink">
-                      Open section <ArrowRight size={15} strokeWidth={2} className={`${t.text} transition-transform group-hover:translate-x-0.5`} aria-hidden="true" />
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          </>
-        )}
-      </PageMain>
-    </RequireUser>
-  );
+  return <RequireUser><PageMain>
+    <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations" }]} />
+    <PageHeader title="OSCE Stations" description="Find stations by clinical skill, specialty and practice availability." actions={<LinkButton to="/stations/attempts" variant="secondary"><History size={16} aria-hidden="true" /> Attempts</LinkButton>} />
+    {state.loading && <Loading variant="osce-bank" />}
+    {state.error && <ErrorMessage message={state.error} onRetry={load} />}
+    {!state.loading && !state.error && <>
+      <OsceStationBrowser stations={state.modules} defaultContent={<>
+        <p className="mb-4 text-sm text-s-mute">{state.modules.length} stations across {groups.length} specialties.</p>
+        {groups.length === 0 && <EmptyState character="examiner" tone="mint" title="No stations yet" body="Published OSCE stations will appear here." />}
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {groups.map((group, i) => {
+            const look = specialtyLook(group.name, i);
+            const tone = TONES[look.tone];
+            const aiCount = group.modules.filter((station) => station.aiVirtualPatientAvailable).length;
+            return <Link key={group.name} to={sectionPath(group.name)} className={`site-grid site-press group relative flex min-h-44 min-w-0 flex-col overflow-hidden rounded-3xl border border-s-line bg-s-card p-6 ${tone.ring}`}>
+              <div className="relative flex items-start justify-between gap-3">
+                <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${tone.soft} ${tone.text}`} aria-hidden="true"><MedIcon name={look.icon} size={32} /></span>
+                <Chip>{group.modules.length} {group.modules.length === 1 ? "station" : "stations"}</Chip>
+              </div>
+              <h2 className="relative mt-5 flex-1 text-xl font-semibold tracking-tight text-s-ink">{group.name}</h2>
+              <p className="relative mt-2 text-xs text-s-mute">{aiCount ? `${aiCount} with AI virtual patients · ${group.modules.length - aiCount} guided-only` : "Guided practice only"}</p>
+              <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-s-ink">Open specialty <ArrowRight size={15} className={tone.text} aria-hidden="true" /></span>
+            </Link>;
+          })}
+        </div>
+      </>} />
+    </>}
+  </PageMain></RequireUser>;
 }
 
 export function OsceSectionPage() {
   const { sectionName } = useParams();
-  const [state, setState] = useState({ loading: true, modules: [], attempts: [], error: "" });
-  const [page, setPage] = useState(1);
-  const pageSize = 6;
-  const decodedSectionName = decodeURIComponent(sectionName || "");
-
+  const [state, setState] = useState({ loading: true, modules: [], error: "" });
   const load = useCallback(() => {
     setState((s) => ({ ...s, loading: true, error: "" }));
-    Promise.all([listOsceStations(), listOsceAttempts()])
-      .then(([modulesData, attemptsData]) => setState({ loading: false, modules: modulesData.modules || [], attempts: attemptsData || [], error: "" }))
+    listOsceStations()
+      .then((data) => setState({ loading: false, modules: data.modules || [], error: "" }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, []);
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
-  const groups = groupModulesBySpecialty(state.modules);
-  const groupIndex = groups.findIndex((group) => group.name === decodedSectionName);
-  const selectedGroup = groups[groupIndex];
-  const totalPages = selectedGroup ? Math.max(1, Math.ceil(selectedGroup.modules.length / pageSize)) : 1;
-  const pagedModules = selectedGroup?.modules.slice((page - 1) * pageSize, page * pageSize) || [];
-  const look = specialtyLook(decodedSectionName, Math.max(0, groupIndex));
-  const t = TONES[look.tone];
-
-  return (
-    <RequireUser>
-      <PageMain>
-        <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: decodedSectionName || "Section" }]} />
-        {state.loading && <Loading variant="osce-section" />}
-        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
-        {!state.loading && !state.error && !selectedGroup && (
-          <EmptyState character="student-bilal" tone="sun" title="Section not found" body="This section may have been renamed. Pick one from the station bank." action={<LinkButton to="/stations">Station bank</LinkButton>} />
-        )}
-        {!state.loading && !state.error && selectedGroup && (
-          <section>
-            <div className="site-rise mb-8 flex flex-wrap items-center gap-4">
-              <span className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl ${t.soft} ${t.text}`} aria-hidden="true">
-                <MedIcon name={look.icon} size={38} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <h1 className="text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{selectedGroup.name}</h1>
-                <p className="mt-1 text-s-mute">Choose a station from this section.</p>
-              </div>
-              {totalPages > 1 && <Chip>Page {page} of {totalPages}</Chip>}
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {pagedModules.map((module, i) => (
-                <Link
-                  key={module.id}
-                  to={`/stations/${module.slug}`}
-                  style={{ "--rise-delay": `${i * 50}ms` }}
-                  className={`site-rise site-grid site-press group flex flex-col rounded-3xl border border-s-line p-6 ${t.ring}`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <Character name={patientFor(module.title)} size={48} tone={look.tone} />
-                    {module.difficulty && <Chip className="capitalize">{module.difficulty}</Chip>}
-                  </div>
-                  <h2 className="mt-4 text-lg font-semibold tracking-tight text-s-ink">{module.title}</h2>
-                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-s-mute">{module.shortDescription}</p>
-                  <div className="mt-4 flex flex-wrap items-center gap-2">
-                    <Chip><Clock3 size={12} strokeWidth={2} aria-hidden="true" /> {Math.round(module.timeLimitSeconds / 60)} min</Chip>
-                    {module.presentingComplaint && <Chip>{module.presentingComplaint}</Chip>}
-                  </div>
-                </Link>
-              ))}
-            </div>
-            {totalPages > 1 && (
-              <div className="mt-6 flex items-center justify-between gap-3">
-                <SecondaryButton disabled={page === 1} onClick={() => setPage((p) => Math.max(1, p - 1))}><ChevronLeft size={16} strokeWidth={2} aria-hidden="true" /> Previous</SecondaryButton>
-                <SecondaryButton disabled={page === totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))}>Next <ChevronRight size={16} strokeWidth={2} aria-hidden="true" /></SecondaryButton>
-              </div>
-            )}
-          </section>
-        )}
-      </PageMain>
-    </RequireUser>
-  );
+  useEffect(() => { load(); }, [load]);
+  const selected = groupModulesBySpecialty(state.modules).find((group) => group.name === sectionName);
+  return <RequireUser><PageMain>
+    <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: sectionName || "Specialty" }]} />
+    <PageHeader title={sectionName || "Specialty"} description="Filter stations in this specialty by clinical skill and practice availability." />
+    {state.loading && <Loading variant="osce-section" />}
+    {state.error && <ErrorMessage message={state.error} onRetry={load} />}
+    {!state.loading && !state.error && (selected
+      ? <OsceStationBrowser key={sectionName} stations={selected.modules} specialtyOnly />
+      : <EmptyState character="student-bilal" tone="sun" title="Specialty not found" body="Choose a specialty from the station bank." action={<LinkButton to="/stations">Station bank</LinkButton>} />)}
+  </PageMain></RequireUser>;
 }
 
 export function OsceStationDetail() {
@@ -380,6 +288,8 @@ export function OsceStationDetail() {
               </div>
               <p className="mt-4 leading-relaxed text-s-mute">{module.shortDescription}</p>
               <div className="mt-4 flex flex-wrap gap-2">
+                <Chip>{module.categoryLabel}</Chip>
+                <StationAvailability station={module} />
                 {module.timeLimitSeconds && <Chip><Clock3 size={12} strokeWidth={2} aria-hidden="true" /> {Math.round(module.timeLimitSeconds / 60)} min</Chip>}
                 {module.difficulty && <Chip className="capitalize">{module.difficulty}</Chip>}
               </div>
@@ -392,7 +302,8 @@ export function OsceStationDetail() {
                 loading={state.starting === "virtual-patient"}
                 shortfall={shortfall ? `You have ${balance} AI credit${balance === 1 ? "" : "s"}.` : ""}
               />}
-              <SelfPracticeCard onClick={() => start("single-player")} loading={state.starting === "single-player"} />
+              {module.practiceOptions?.includes("single-player") && <SelfPracticeCard onClick={() => start("single-player")} loading={state.starting === "single-player"} />}
+              {!module.practiceOptions?.includes("virtual-patient") && <p className="text-sm leading-relaxed text-s-mute">This station uses guided self-practice. An AI virtual patient is not available for this station.</p>}
               <SpendError error={state.startError} />
             </div>
           </div>
@@ -1086,6 +997,8 @@ const STATUS_STYLES = {
 export function AdminOscePage() {
   const [stationSearch, setStationSearch] = useState("");
   const [stationFilter, setStationFilter] = useState("all");
+  const [stationCategoryFilter, setStationCategoryFilter] = useState("");
+  const [stationModeFilter, setStationModeFilter] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [statusBusyId, setStatusBusyId] = useState(null);
@@ -1118,6 +1031,8 @@ export function AdminOscePage() {
       shortDescription: "",
       difficulty: "beginner",
       timeLimitMinutes: "6",
+      category: "history",
+      aiVirtualPatient: true,
       candidateContext: "",
       patientSummary: "",
       tasks: "",
@@ -1226,6 +1141,8 @@ export function AdminOscePage() {
   ];
   const counts = Object.fromEntries(["draft", "approved", "published", "archived"].map((status) => [status, state.modules.filter((station) => station.status === status).length]));
   const visibleStations = state.modules.filter((station) =>
+    (!stationCategoryFilter || station.category === stationCategoryFilter) &&
+    (!stationModeFilter || station.aiVirtualPatientAvailable === (stationModeFilter === "ai")) &&
     (stationFilter === "all" || (stationFilter === "review" ? ["draft", "approved"].includes(station.status) : station.status === stationFilter)) &&
     `${station.title} ${station.slug} ${station.specialty?.name || ""}`.toLowerCase().includes(stationSearch.toLowerCase().trim()),
   );
@@ -1293,14 +1210,18 @@ export function AdminOscePage() {
             <PrimaryButton type="button" onClick={() => setShowCreateForm((open) => !open)}><Plus size={16} strokeWidth={2} aria-hidden="true" /> {showCreateForm ? "Close editor" : "New station"}</PrimaryButton>
           </div>
           <Panel>
-            <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_180px]">
+            <div className="grid gap-3 sm:grid-cols-2">
               <label className="relative"><span className="sr-only">Search stations</span><Search size={17} strokeWidth={2} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-s-mute" aria-hidden="true" /><input value={stationSearch} onChange={(e) => setStationSearch(e.target.value)} placeholder="Search title, slug, or specialty" className="w-full min-h-11 rounded-xl border border-s-line bg-s-card py-2.5 pl-10 pr-3 text-sm text-s-ink outline-none placeholder:text-s-mute focus:border-s-accent" /></label>
               <label><span className="sr-only">Filter by status</span><select value={stationFilter} onChange={(e) => setStationFilter(e.target.value)} className="w-full min-h-11 rounded-xl border border-s-line bg-s-card p-2.5 text-sm text-s-ink outline-none focus:border-s-accent"><option value="all">All statuses</option><option value="review">Needs review</option>{Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}</select></label>
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <label className="text-sm text-s-mute">Category<select className="mt-1 min-h-11 w-full rounded-xl border border-s-line bg-s-card px-3 text-s-ink" value={stationCategoryFilter} onChange={(e) => setStationCategoryFilter(e.target.value)}><option value="">All categories</option>{OSCE_CATEGORIES.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}</select></label>
+              <label className="text-sm text-s-mute">Practice availability<select className="mt-1 min-h-11 w-full rounded-xl border border-s-line bg-s-card px-3 text-s-ink" value={stationModeFilter} onChange={(e) => setStationModeFilter(e.target.value)}><option value="">All stations</option><option value="ai">AI virtual patient available</option><option value="guided">Guided practice only</option></select></label>
             </div>
             <div className="mt-4 divide-y divide-s-line">
               {visibleStations.map((station) => (
                 <div key={station.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
-                  <div className="min-w-0 flex-1"><p className="font-semibold text-s-ink">{station.title}</p><p className="break-all text-xs text-s-mute">{station.specialty?.name || "General"} / {station.slug}</p></div>
+                  <div className="min-w-0 flex-1"><p className="font-semibold text-s-ink">{station.title}</p><p className="break-all text-xs text-s-mute">{station.specialty?.name || "General"} / {station.slug}</p><p className="my-1 text-xs text-s-mute">{station.categoryLabel}</p><StationAvailability station={station} /></div>
                   <span className={`rounded-full px-2.5 py-1 font-chart text-xs capitalize ${STATUS_STYLES[station.status] || "bg-s-tint text-s-mute"}`}>{station.status}</span>
                   <label className="sr-only" htmlFor={`station-status-${station.id}`}>Change status for {station.title}</label>
                   <select id={`station-status-${station.id}`} aria-label={`Change status for ${station.title}`} value={station.status} disabled={statusBusyId === station.id} onChange={(e) => changeStatus(station.id, e.target.value)} className="min-h-11 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent disabled:opacity-50">
@@ -1322,6 +1243,12 @@ export function AdminOscePage() {
             <form onSubmit={createDraft} className="mt-5 space-y-5">
               <div className="grid gap-3 md:grid-cols-2">
                 <TextInput label="Main section" value={state.form.section} onChange={(value) => updateForm("section", value)} required />
+                <label className="block text-sm font-medium text-s-ink">Category
+                  <select className="mt-2 min-h-11 w-full rounded-xl border border-s-line bg-s-card p-2.5" value={state.form.category} onChange={(e) => updateForm("category", e.target.value)}>
+                    {OSCE_CATEGORIES.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
+                  </select>
+                </label>
+                <label className="flex min-h-11 items-center gap-3 text-sm text-s-ink"><input type="checkbox" checked={state.form.aiVirtualPatient} onChange={(e) => updateForm("aiVirtualPatient", e.target.checked)} /> Enable AI virtual patient (requires a complete patient script)</label>
                 <TextInput label="Station title" value={state.form.title} onChange={(value) => updateForm("title", value)} required />
                 <TextInput label="Slug" value={state.form.slug} onChange={(value) => updateForm("slug", slugify(value))} placeholder="auto-created if blank" />
                 <TextInput label="Presenting complaint" value={state.form.presentingComplaint} onChange={(value) => updateForm("presentingComplaint", value)} required />
@@ -1630,7 +1557,7 @@ function parsePatientFacts(value, slug) {
   });
 }
 
-function parseChecklistItems(value, slug) {
+function parseChecklistItems(value, slug, category = "history") {
   return splitLines(value).map((line, index) => {
     const parts = line.split("|").map((part) => part.trim());
     if (parts.length !== 2 || parts.some((part) => !part)) throw new Error(`Checklist line ${index + 1} must be: Label | Description.`);
@@ -1640,7 +1567,7 @@ function parseChecklistItems(value, slug) {
       itemId,
       label,
       description,
-      category: "history",
+      category,
       expectedConcepts: [slugify(label) || itemId],
       relatedFactIds: [],
       weightCategory: "major",
@@ -1688,7 +1615,7 @@ function createAdminPayload(form) {
   const sectionSlug = slugify(form.section);
   const tasks = splitLines(form.tasks);
   const facts = parsePatientFacts(form.patientFacts, slug);
-  const checklistItems = parseChecklistItems(form.checklistItems, slug);
+  const checklistItems = parseChecklistItems(form.checklistItems, slug, form.category);
   return {
     specialtySlug: sectionSlug,
     specialtyName: form.section,
@@ -1697,14 +1624,17 @@ function createAdminPayload(form) {
       slug,
       presentingComplaint: form.presentingComplaint,
       systemOrTopic: form.section,
-      taskTags: ["history", sectionSlug],
+      category: form.category,
+      stationType: form.category === "procedure" ? "examination" : form.category,
+      practiceModes: form.aiVirtualPatient ? ["single-player", "virtual-patient"] : ["single-player"],
+      taskTags: [form.category, sectionSlug],
       difficulty: form.difficulty,
       shortDescription: form.shortDescription,
       candidateInstructions: {
         context: form.candidateContext,
         patientSummary: form.patientSummary,
         tasks,
-        examinationRequired: false,
+        examinationRequired: ["examination", "procedure"].includes(form.category),
         additionalInstructions: [],
       },
       timeLimitSeconds: Number(form.timeLimitMinutes || 6) * 60,
@@ -1735,7 +1665,7 @@ function createAdminPayload(form) {
       title: `${form.title} Checklist`,
       slug: `${slug}-checklist`,
       sourceScoring: { maxRawScore: checklistItems.length, description: "Admin-entered checklist" },
-      sections: [{ sectionId: "history_checklist", title: "History checklist", items: checklistItems }],
+      sections: [{ sectionId: "station_checklist", title: "Station checklist", items: checklistItems }],
       status: "draft",
     },
   };

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { OSCE_CATEGORIES, stationCategory } from "../utils/osceCategories.js";
 import { ContentAuditLog } from "../models/ContentAuditLog.js";
 import { OsceStation } from "../models/OsceStation.js";
 import { PatientScript } from "../models/PatientScript.js";
@@ -14,6 +15,11 @@ export async function listAdminStations(req, res) {
 
 export async function createOsceContent(req, res) {
   const { specialtySlug, specialtyName, guideSlug, module, patientScript, checklist } = req.body;
+  if (module?.category && !OSCE_CATEGORIES.some(({ value }) => value === module.category)) {
+    const error = new Error("Invalid station category.");
+    error.status = 400;
+    throw error;
+  }
   const specialty = await Specialty.findOneAndUpdate(
     { slug: specialtySlug },
     { $set: { name: specialtyName || specialtySlug, slug: specialtySlug, active: true } },
@@ -24,6 +30,7 @@ export async function createOsceContent(req, res) {
   const smartChecklist = await SmartChecklist.create(checklist);
   const createdModule = await OsceStation.create({
     ...module,
+    category: stationCategory(module),
     specialtyId: specialty._id,
     osceFrameworkId: guide?._id,
     patientScriptId: script._id,

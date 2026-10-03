@@ -1,4 +1,5 @@
 import { connectDatabase, disconnectDatabase } from "../config/database.js";
+import { categorizeOsceStations } from "../services/osceCategories.service.js";
 import { seedOsceContent } from "./osce.seed.js";
 import { seedCvsOsceStations } from "./cvsOsce.seed.js";
 import { seedEndocrinology15OsceStations } from "./endocrinology15Osce.seed.js";
@@ -48,4 +49,5 @@ for (const module of await seedRheumatology10OsceStations()) {
 for (const module of await seedCns15OsceStations()) {
   console.log(`Seeded OSCE station: ${module.title}`);
 }
+await categorizeOsceStations();
 await disconnectDatabase();

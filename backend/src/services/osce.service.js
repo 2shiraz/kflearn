@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
+import { OSCE_CATEGORIES, stationCategory, stationPracticeOptions } from "../utils/osceCategories.js";
 import { OsceStation } from "../models/OsceStation.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
 
 export function stationListDto(module) {
+  const category = stationCategory(module);
+  const practiceOptions = stationPracticeOptions(module);
   return {
     id: module._id,
     title: module.title,
@@ -17,6 +20,10 @@ export function stationListDto(module) {
     taskTags: module.taskTags,
     stationType: module.stationType,
     stationFormat: module.stationFormat,
+    category,
+    categoryLabel: OSCE_CATEGORIES.find(({ value }) => value === category).label,
+    practiceOptions,
+    aiVirtualPatientAvailable: practiceOptions.includes("virtual-patient"),
   };
 }
 
@@ -26,7 +33,7 @@ export function studentStationDetailDto(module, { includeReview = false } = {}) 
     ...stationListDto(module),
     candidateInstructions: module.candidateInstructions,
     candidateHandout: module.candidateHandout || [],
-    practiceOptions: module.practiceModes?.length ? module.practiceModes : ["single-player", "virtual-patient"],
+    practiceOptions: stationPracticeOptions(module),
     learningNotes: !hasPostStationReview || includeReview ? module.learningNotes : undefined,
     commonMistakes: module.commonMistakes,
     keyDifferentials: module.keyDifferentials,

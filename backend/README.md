@@ -87,6 +87,28 @@ clinical images, mannequins and examination equipment must be supplied separatel
 All eight sets have 20-point checklists with 0/1/2 self-marking. AI patient mode is enabled only where a
 patient conversation can cover the task; other stations offer guided practice.
 
+## OSCE categories and availability
+
+The station bank separates overall clinical-skill categories from specialties:
+history/clinical assessment, counselling/communication, clinical examination,
+data/image interpretation, emergency assessment/management, and procedures/practical skills.
+Each station has one primary category. AI availability comes from its configured
+practice modes, not its category; guided-only stations cannot start paid AI sessions.
+
+The frontend supports search, specialty/category/difficulty/availability filters,
+sorting and pagination. Filters are stored in the URL. Admin creation explicitly
+sets category and AI support.
+
+For an existing database or after running an individual seed:
+
+```bash
+npm run categorize:osce
+```
+
+This only fills missing categories, preserves content, IDs, timestamps and modes,
+and can be rerun safely. Full `npm run seed` includes this step. Uncategorised
+legacy stations also receive an effective category in API responses.
+
 ## Real-AI OSCE tests
 
 The normal `npm test` suite does not require a working AI provider key and

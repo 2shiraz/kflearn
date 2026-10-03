@@ -15,6 +15,7 @@
     "seed:orthopedics": "node src/seed/seedOrthopedics.js",
     "seed:rheumatology": "node src/seed/seedRheumatology.js",
     "seed:cns": "node src/seed/seedCns.js",
+    "categorize:osce": "node src/scripts/categorizeOsce.js",
     "make-admin": "node src/scripts/makeAdmin.js",
     "grant-credits": "node src/scripts/grantCredits.js",
     "test": "NODE_ENV=test node --test --test-concurrency=1 tests/*.test.js",
