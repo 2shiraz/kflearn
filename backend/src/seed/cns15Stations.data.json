@@ -1,0 +1,1548 @@
+{
+  "metadata": {
+    "title": "CENTRAL NERVOUS SYSTEM (CNS) OSCE",
+    "subtitle": "15 Structured Stations",
+    "audienceAndScoring": "Final-Year MBBS • 8 minutes per station • 20-point analytic checklist",
+    "includedMaterials": "Candidate materials • Standardised scripts • Examiner guides • Learning notes",
+    "facultyNote": [
+      "This manual follows the same station architecture as the preceding OSCE manuals. Patient names in source scenarios have been changed. Stations 1–4 are anchored directly in the supplied CNS notes; additional stations are selected to cover high-yield final-year KMU Neurosciences-III psychomotor/OSCE objectives and CPSP-style focused clinical assessment, interpretation, differential diagnosis and management planning. Safety note: the supplied notes contain some older prescribing/referral statements. Exact drug doses, thrombolysis criteria, antithrombotic timing, imaging pathways, seizure rescue treatment and infection management must be checked against current approved institutional/provincial/national protocols before summative use."
+    ],
+    "assessmentDesign": [
+      "15 stations; 8 minutes each.",
+      "Each analytic checklist totals 20 points: 10 criteria scored 0–2.",
+      "Prompted performance scores a maximum of 1/2 for that item.",
+      "A critical safety error may justify an overall fail despite the numeric score."
+    ],
+    "contents": [
+      "1. Migraine — Focused History & Management",
+      "2. First Adult Seizure — History & Safety Counselling",
+      "3. Febrile Seizure — Parent Counselling",
+      "4. TIA / Acute Stroke — FAST & Focused Assessment",
+      "5. Glasgow Coma Scale",
+      "6. CT Brain — Epidural vs Subdural Haematoma",
+      "7. CT Brain — Ischaemic vs Intracerebral Haemorrhage",
+      "8. Meningitis — Lumbar Puncture on Mannequin",
+      "9. Cranial Nerve Examination",
+      "10. Upper Limb Neurological Examination",
+      "11. Lower Limb Neurology / Myotomes in GBS",
+      "12. Cerebellar Examination",
+      "13. Parkinsonism — Focused Examination",
+      "14. Spinal Cord Compression — Recognition & Immobilisation",
+      "15. Status Epilepticus — Emergency Management"
+    ]
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Migraine — Focused History & Management",
+      "primaryCompetency": "Focused neurological history, differential diagnosis and management",
+      "format": "Interactive simulated patient",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Take a focused history of this patient with recurrent severe headache. Explain the likely diagnosis and outline initial management."
+      ],
+      "candidateHandout": [
+        "Clarify time course before labelling a headache.",
+        "Screen for meningitis, SAH, raised ICP, trauma and focal neurology.",
+        "For migraine ask aura, unilateral pulsatile pain, nausea, photophobia/phonophobia and triggers."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mr Ahsan Raza, 34-year-old office worker.",
+        "Right-sided throbbing headache for 2 days, 7/10, nausea, photophobia and phonophobia.",
+        "Visual zig-zag aura precedes headache. Better lying in a dark quiet room.",
+        "Similar attack 6 months ago; father has similar headaches.",
+        "No fever, neck stiffness, trauma, persistent focal deficit or thunderclap onset.",
+        "Concern: “Could this be a brain tumour?”"
+      ],
+      "examinerInstructions": [
+        "Do not volunteer red flags unless asked.",
+        "Award management credit for evidence-based acute treatment and safety-netting rather than memorised drug doses."
+      ],
+      "keyAnswerGuide": [
+        "Most likely migraine with aura.",
+        "Red flags requiring urgent evaluation include thunderclap onset, meningism/fever, altered consciousness, focal deficit, papilloedema/raised ICP features and significant trauma.",
+        "Management: explanation, trigger diary, sleep/meals/hydration, acute simple analgesic/NSAID ± antiemetic; triptan when appropriate; preventive therapy if frequent/disabling after assessment."
+      ],
+      "suggestedApproach": [
+        "Establish onset/duration and headache phenotype.",
+        "Identify migraine-associated symptoms and aura.",
+        "Exclude secondary headache red flags.",
+        "Address concern, explain diagnosis and agree management."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms patient and consent."
+        },
+        {
+          "order": 2,
+          "criterion": "Defines onset, duration, site, character and severity."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks nausea/vomiting, photophobia and phonophobia."
+        },
+        {
+          "order": 4,
+          "criterion": "Asks aura and functional impact."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens fever/neck stiffness and altered consciousness."
+        },
+        {
+          "order": 6,
+          "criterion": "Screens thunderclap onset, trauma and focal neurology."
+        },
+        {
+          "order": 7,
+          "criterion": "Asks previous episodes, drugs and family history."
+        },
+        {
+          "order": 8,
+          "criterion": "Explores triggers and medication overuse."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains likely migraine and acute/preventive options."
+        },
+        {
+          "order": 10,
+          "criterion": "Safety-nets urgent red flags and arranges follow-up."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What features favour migraine?",
+        "Name three secondary-headache red flags."
+      ],
+      "expectedCompetencies": [
+        "Focused history",
+        "Clinical reasoning",
+        "Communication",
+        "Safe initial management"
+      ],
+      "criticalSafetyErrors": [
+        "Reassures without screening red flags.",
+        "Misses sudden thunderclap headache or focal neurological deficit."
+      ],
+      "sourceNote": [
+        "Source-derived: supplied CNS notes — headache classification and migraine scenario. Management modernised for safe teaching use."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "First Adult Seizure — History & Safety Counselling",
+      "primaryCompetency": "Seizure history, differential diagnosis and counselling",
+      "format": "Interactive simulated patient",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Take a focused history of a possible first seizure and counsel the patient about immediate safety and next steps."
+      ],
+      "candidateHandout": [
+        "An eyewitness description is often crucial.",
+        "Ask prodrome/aura, ictal features and post-ictal state.",
+        "Screen provoking factors and mimics."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Ms Zoya Khan, 27-year-old teacher, seen after a first unprovoked collapse with shaking.",
+        "Witness saw sudden loss of consciousness, tonic stiffening then bilateral jerking for ~90 seconds.",
+        "Lateral tongue bite and post-event confusion for 20 minutes. No preceding chest pain/palpitations.",
+        "Sleep deprived recently; no alcohol/drug withdrawal.",
+        "No previous seizure. No current focal deficit."
+      ],
+      "examinerInstructions": [
+        "Candidate should advise urgent specialist assessment for first suspected seizure and appropriate investigations.",
+        "Do not reward a specific antiseizure drug choice as mandatory in a first-seizure station."
+      ],
+      "keyAnswerGuide": [
+        "Generalised tonic-clonic seizure is likely.",
+        "History: injury, CNS infection, stroke, febrile seizures, family history, substances/withdrawal, sleep deprivation, flashing lights; medication review.",
+        "Assess glucose and basic labs; ECG where syncope is a differential; specialist-directed EEG/neuroimaging.",
+        "Safety: avoid driving until medically cleared under applicable law, heights, unsupervised swimming/bathing, open flames/machinery."
+      ],
+      "suggestedApproach": [
+        "Characterise event before/after.",
+        "Identify provoked vs unprovoked seizure and mimics.",
+        "Check immediate safety and arrange specialist pathway."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self and confirms event chronology."
+        },
+        {
+          "order": 2,
+          "criterion": "Obtains eyewitness features and duration."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks aura/prodrome and loss of awareness."
+        },
+        {
+          "order": 4,
+          "criterion": "Asks tongue bite/incontinence/injury."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses post-ictal confusion/Todd weakness."
+        },
+        {
+          "order": 6,
+          "criterion": "Screens syncope and metabolic/toxic precipitants."
+        },
+        {
+          "order": 7,
+          "criterion": "Asks neurological history, drugs/substances and family history."
+        },
+        {
+          "order": 8,
+          "criterion": "Proposes glucose/basic tests, ECG and specialist EEG/imaging as appropriate."
+        },
+        {
+          "order": 9,
+          "criterion": "Provides seizure first-aid and personal safety advice."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges urgent specialist review and clear return precautions."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What features distinguish seizure from syncope?",
+        "What advice follows a first suspected seizure?"
+      ],
+      "expectedCompetencies": [
+        "History taking",
+        "Differential diagnosis",
+        "Safety counselling",
+        "Investigation planning"
+      ],
+      "criticalSafetyErrors": [
+        "Allows driving or hazardous activity without restriction pending assessment.",
+        "Fails to consider hypoglycaemia or ongoing neurological deficit."
+      ],
+      "sourceNote": [
+        "Source-derived: supplied CNS notes — adult epilepsy/first seizure history and referral principles; wording updated for current safe assessment."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Febrile Seizure — Parent Counselling",
+      "primaryCompetency": "Paediatric seizure history and parent counselling",
+      "format": "Interactive simulated parent",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Take a focused history from the parent and explain the likely diagnosis, first aid and red flags."
+      ],
+      "candidateHandout": [
+        "A simple febrile seizure is typically brief, generalised and followed by recovery.",
+        "Always screen for meningitis/serious infection and complex seizure features."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mrs Mahnoor Ali, mother of 18-month-old Rayyan, who had a fever-associated convulsion.",
+        "Rayyan had fever 39.4°C and a generalised convulsion lasting 3 minutes, then slept and returned to baseline.",
+        "First episode. No focal features or recurrence within 24 hours.",
+        "No non-blanching rash, persistent drowsiness or neck stiffness. Immunisations up to date.",
+        "Mother asks if he now has epilepsy."
+      ],
+      "examinerInstructions": [
+        "Assess whether candidate identifies simple vs complex features.",
+        "Credit calm first-aid counselling; do not require outdated routine cooling measures."
+      ],
+      "keyAnswerGuide": [
+        "Likely simple febrile seizure if age/context and examination fit.",
+        "First aid: protect from injury, place on side when possible, do not restrain or put objects in mouth, time the seizure, seek emergency help for prolonged seizure or concerning features.",
+        "Treat child discomfort/fever appropriately and assess source of fever; antipyretics do not reliably prevent recurrence."
+      ],
+      "suggestedApproach": [
+        "Describe seizure and fever relationship.",
+        "Screen meningitis and complex features.",
+        "Address parental concern and teach seizure first aid."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self and confirms child details."
+        },
+        {
+          "order": 2,
+          "criterion": "Clarifies seizure description, duration and recovery."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks fever and likely infection symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens focality, recurrence and prolonged seizure."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens meningism, non-blanching rash and persistent altered state."
+        },
+        {
+          "order": 6,
+          "criterion": "Reviews development, immunisation and previous/family seizures."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains likely febrile seizure in understandable language."
+        },
+        {
+          "order": 8,
+          "criterion": "Demonstrates correct seizure first aid."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains when emergency care is required."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges assessment/follow-up for fever source and parental concerns."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What makes a febrile seizure complex?",
+        "What should a parent do during another seizure?"
+      ],
+      "expectedCompetencies": [
+        "Paediatric history",
+        "Risk recognition",
+        "Parent counselling",
+        "Safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Advises restraining the child or placing an object in the mouth.",
+        "Misses meningitis red flags or prolonged seizure."
+      ],
+      "sourceNote": [
+        "Source-derived: supplied CNS notes — febrile fits scenario. First-aid wording updated to contemporary safety practice."
+      ]
+    },
+    {
+      "number": 4,
+      "title": "TIA / Acute Stroke — FAST & Focused Assessment",
+      "primaryCompetency": "Acute stroke recognition, FAST/NIHSS-oriented assessment and emergency action",
+      "format": "Interactive / focused examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Assess this patient with sudden focal neurological symptoms. Demonstrate FAST and state your immediate priorities."
+      ],
+      "candidateHandout": [
+        "Treat ongoing focal deficit as stroke until proven otherwise.",
+        "Record last-known-well time and activate emergency stroke pathway.",
+        "FAST is a rapid screen; NIHSS is a structured severity assessment."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mr Sameer Hussain, 66, sudden left arm and face weakness 35 minutes ago.",
+        "Symptoms began suddenly 35 minutes ago while eating breakfast.",
+        "Left facial droop and left arm weakness; speech is slurred.",
+        "Hypertension and diabetes; no recent trauma.",
+        "No seizure at onset."
+      ],
+      "examinerInstructions": [
+        "Provide simulated findings when candidate performs FAST.",
+        "Candidate must not delay emergency transfer for a lengthy clinic work-up."
+      ],
+      "keyAnswerGuide": [
+        "FAST: facial asymmetry, arm drift/weakness, speech disturbance, time/last known well.",
+        "Immediate priorities: ABC, capillary glucose, vitals, focused neuro assessment, urgent brain imaging and stroke-team pathway.",
+        "Do not give antithrombotic treatment blindly before the acute stroke pathway has excluded haemorrhage and considered reperfusion eligibility."
+      ],
+      "suggestedApproach": [
+        "Recognise time-critical stroke.",
+        "Establish onset/last known well.",
+        "Perform FAST and focused neurological assessment.",
+        "Escalate immediately."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self and assesses ABC/overall stability."
+        },
+        {
+          "order": 2,
+          "criterion": "Establishes exact onset/last-known-well."
+        },
+        {
+          "order": 3,
+          "criterion": "Checks facial asymmetry."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses arm power/drift bilaterally."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses speech/language."
+        },
+        {
+          "order": 6,
+          "criterion": "Checks capillary glucose and vital signs."
+        },
+        {
+          "order": 7,
+          "criterion": "Screens anticoagulants, bleeding risk, seizure/trauma and baseline function."
+        },
+        {
+          "order": 8,
+          "criterion": "States urgent non-contrast CT/appropriate imaging."
+        },
+        {
+          "order": 9,
+          "criterion": "Activates stroke/emergency pathway and considers reperfusion assessment."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates urgency and avoids unsafe delay/treatment."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What does FAST stand for?",
+        "Why is last-known-well time critical?"
+      ],
+      "expectedCompetencies": [
+        "Emergency recognition",
+        "Focused examination",
+        "Prioritisation",
+        "Safe escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Delays emergency transfer.",
+        "Gives empiric antithrombotic therapy without appropriate acute stroke assessment/imaging."
+      ],
+      "sourceNote": [
+        "Source-derived: supplied TIA/stroke material plus KMU Neurosciences-III emphasis on FAST/NIHSS and acute stroke assessment."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Glasgow Coma Scale",
+      "primaryCompetency": "Glasgow Coma Scale assessment",
+      "format": "Static / simulated patient",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Demonstrate and calculate the Glasgow Coma Scale (GCS) on this patient. State the score and immediate implication."
+      ],
+      "candidateHandout": [
+        "Score Eye (4), Verbal (5), Motor (6) separately.",
+        "Use the best observed response and document components, not only the total."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mr Daniyal Shah, 52, reduced consciousness after a road traffic collision.",
+        "Simulation findings are supplied by examiner."
+      ],
+      "examinerInstructions": [
+        "E: opens eyes to speech = 3. V: confused conversation = 4. M: localises pain = 5. Total 12/15.",
+        "Ensure ABC/cervical-spine precautions in trauma."
+      ],
+      "keyAnswerGuide": [
+        "GCS 12/15 = E3 V4 M5.",
+        "Trend serial GCS; deterioration is clinically important."
+      ],
+      "suggestedApproach": [
+        "Assess safely, then eye, verbal and motor response.",
+        "State component scores and total.",
+        "Relate to urgency and repeat assessment."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Checks immediate safety/ABC and trauma precautions."
+        },
+        {
+          "order": 2,
+          "criterion": "Assesses spontaneous eye opening then appropriate stimulus."
+        },
+        {
+          "order": 3,
+          "criterion": "Scores eye response correctly."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses verbal response appropriately."
+        },
+        {
+          "order": 5,
+          "criterion": "Scores verbal response correctly."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses motor response using command then stimulus if needed."
+        },
+        {
+          "order": 7,
+          "criterion": "Scores motor response correctly."
+        },
+        {
+          "order": 8,
+          "criterion": "States E3 V4 M5 and total 12/15."
+        },
+        {
+          "order": 9,
+          "criterion": "Mentions serial reassessment and pupil/vital monitoring."
+        },
+        {
+          "order": 10,
+          "criterion": "Escalates deterioration/reduced consciousness appropriately."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Why document E/V/M separately?",
+        "What other observations accompany GCS?"
+      ],
+      "expectedCompetencies": [
+        "Structured examination",
+        "Scoring accuracy",
+        "Emergency prioritisation"
+      ],
+      "criticalSafetyErrors": [
+        "Uses unsafe painful stimulus technique.",
+        "Fails to address airway risk in a deteriorating patient."
+      ],
+      "sourceNote": [
+        "Added high-yield station: directly aligned with KMU Neurosciences-III psychomotor objective for GCS assessment."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "CT Brain — Epidural vs Subdural Haematoma",
+      "primaryCompetency": "Neuroimaging interpretation",
+      "format": "Static image station",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Interpret the two non-contrast CT brain images and distinguish epidural from subdural haematoma. State one urgent management principle for each."
+      ],
+      "candidateHandout": [
+        "Epidural: classically biconvex/lentiform extra-axial collection.",
+        "Subdural: classically crescentic extra-axial collection.",
+        "Assess mass effect, midline shift and clinical deterioration."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "CT images are provided for two head-injury patients: Ms Eman Noor, 22, and Mr Haris Khan, 71.",
+        "Image A: hyperdense biconvex collection after temporal trauma.",
+        "Image B: crescentic hyperdense collection over cerebral convexity after a fall."
+      ],
+      "examinerInstructions": [
+        "Accept correct radiological pattern recognition and urgency."
+      ],
+      "keyAnswerGuide": [
+        "A = acute epidural haematoma; B = acute subdural haematoma.",
+        "Both require ABC stabilization, urgent neurosurgical discussion and management guided by clinical/imaging severity."
+      ],
+      "suggestedApproach": [
+        "Confirm scan/type/orientation.",
+        "Describe location, density, shape and mass effect.",
+        "Name diagnosis and urgency."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms non-contrast CT brain."
+        },
+        {
+          "order": 2,
+          "criterion": "Uses systematic image orientation."
+        },
+        {
+          "order": 3,
+          "criterion": "Describes extra-axial hyperdensity in A."
+        },
+        {
+          "order": 4,
+          "criterion": "Recognises biconvex/lentiform morphology."
+        },
+        {
+          "order": 5,
+          "criterion": "Diagnoses epidural haematoma."
+        },
+        {
+          "order": 6,
+          "criterion": "Describes crescentic extra-axial hyperdensity in B."
+        },
+        {
+          "order": 7,
+          "criterion": "Diagnoses subdural haematoma."
+        },
+        {
+          "order": 8,
+          "criterion": "Comments on mass effect/midline shift."
+        },
+        {
+          "order": 9,
+          "criterion": "States urgent ABC/neurosurgical escalation."
+        },
+        {
+          "order": 10,
+          "criterion": "Relates imaging to clinical deterioration/GCS."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Which collection is classically lentiform?",
+        "What imaging feature makes this immediately dangerous?"
+      ],
+      "expectedCompetencies": [
+        "Imaging interpretation",
+        "Pattern recognition",
+        "Emergency escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to recognise intracranial haemorrhage as an emergency."
+      ],
+      "sourceNote": [
+        "Added high-yield station: KMU specifically lists CT identification of epidural and subdural haematoma."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "CT Brain — Ischaemic vs Intracerebral Haemorrhage",
+      "primaryCompetency": "CT stroke interpretation",
+      "format": "Static image station",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Interpret the CT brain images in the context of acute stroke and state how the distinction affects immediate treatment."
+      ],
+      "candidateHandout": [
+        "Non-contrast CT is used urgently to identify haemorrhage and guide acute stroke decisions.",
+        "Early ischaemic CT can be normal or show subtle changes."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Two CT images: Mr Taimoor Aziz, 64, acute aphasia; Ms Alina Javed, 59, sudden hemiplegia and vomiting.",
+        "Image A: no acute haemorrhage; subtle early ischaemic change.",
+        "Image B: focal hyperdense intraparenchymal collection with surrounding mass effect."
+      ],
+      "examinerInstructions": [
+        "Do not require advanced radiology grading."
+      ],
+      "keyAnswerGuide": [
+        "A: likely acute ischaemic stroke after haemorrhage excluded; assess reperfusion eligibility.",
+        "B: intracerebral haemorrhage; no thrombolysis; urgent BP/anticoagulation/neurosurgical or stroke-team management per protocol."
+      ],
+      "suggestedApproach": [
+        "Identify haemorrhage first.",
+        "Describe findings, integrate with clinical presentation, state immediate pathway."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms non-contrast CT brain."
+        },
+        {
+          "order": 2,
+          "criterion": "Checks for haemorrhage systematically."
+        },
+        {
+          "order": 3,
+          "criterion": "Recognises absence of haemorrhage in A."
+        },
+        {
+          "order": 4,
+          "criterion": "Identifies possible early ischaemic changes in A."
+        },
+        {
+          "order": 5,
+          "criterion": "Links A to reperfusion eligibility assessment."
+        },
+        {
+          "order": 6,
+          "criterion": "Recognises intraparenchymal hyperdensity in B."
+        },
+        {
+          "order": 7,
+          "criterion": "Diagnoses intracerebral haemorrhage."
+        },
+        {
+          "order": 8,
+          "criterion": "States thrombolysis is contraindicated in haemorrhage."
+        },
+        {
+          "order": 9,
+          "criterion": "Mentions urgent specialist stroke/neurosurgical management."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates limitations and need for clinical correlation."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Can an early ischaemic CT be normal?",
+        "Why must haemorrhage be excluded urgently?"
+      ],
+      "expectedCompetencies": [
+        "Imaging interpretation",
+        "Acute stroke reasoning",
+        "Treatment safety"
+      ],
+      "criticalSafetyErrors": [
+        "Recommends thrombolysis for intracerebral haemorrhage."
+      ],
+      "sourceNote": [
+        "Added high-yield station: KMU Neurosciences-III requires interpretation of CT/MRI in stroke and recognition of haemorrhagic stroke."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Meningitis — Lumbar Puncture on Mannequin",
+      "primaryCompetency": "Lumbar puncture technique and meningitis safety",
+      "format": "Static procedural station",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Demonstrate the steps of lumbar puncture on the mannequin. You do not need to insert a real needle. State key contraindications and specimen handling."
+      ],
+      "candidateHandout": [
+        "Use aseptic technique and correct lumbar level.",
+        "Assess for contraindications/need for imaging before LP; do not delay life-saving treatment in suspected bacterial meningitis when LP is unsafe or delayed."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mr Shahzaib Iqbal, 24, fever, headache and neck stiffness; mannequin provided.",
+        "Mannequin, sterile tray and labelled specimen tubes are provided."
+      ],
+      "examinerInstructions": [
+        "Expect consent, positioning, landmarking, asepsis, local anaesthetic, needle direction, CSF collection, aftercare."
+      ],
+      "keyAnswerGuide": [
+        "Typical level L3/4 or L4/5 using iliac-crest line as landmark.",
+        "CSF studies depend on scenario: cell count, protein, glucose with paired blood glucose, microbiology/culture ± other tests."
+      ],
+      "suggestedApproach": [
+        "Check indication/contraindications.",
+        "Consent and position.",
+        "Aseptic preparation and landmarking.",
+        "Describe collection and aftercare."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms identity, indication, consent and allergies."
+        },
+        {
+          "order": 2,
+          "criterion": "Checks contraindications/raised ICP concerns, coagulopathy and cardiorespiratory stability."
+        },
+        {
+          "order": 3,
+          "criterion": "Positions lateral decubitus or seated appropriately."
+        },
+        {
+          "order": 4,
+          "criterion": "Identifies L3/4 or L4/5 landmark."
+        },
+        {
+          "order": 5,
+          "criterion": "Performs hand hygiene, sterile preparation and draping."
+        },
+        {
+          "order": 6,
+          "criterion": "Describes local anaesthetic and sterile spinal needle technique."
+        },
+        {
+          "order": 7,
+          "criterion": "Directs needle correctly and recognises CSF return."
+        },
+        {
+          "order": 8,
+          "criterion": "Collects sequential labelled tubes appropriately."
+        },
+        {
+          "order": 9,
+          "criterion": "Requests appropriate CSF/blood studies."
+        },
+        {
+          "order": 10,
+          "criterion": "Applies dressing, monitors patient and documents/escalates complications."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "When should LP be deferred?",
+        "Which CSF tests are important in suspected meningitis?"
+      ],
+      "expectedCompetencies": [
+        "Procedural skill",
+        "Asepsis",
+        "Risk assessment",
+        "Specimen planning"
+      ],
+      "criticalSafetyErrors": [
+        "Performs LP despite clear contraindication/instability.",
+        "Uses non-sterile technique."
+      ],
+      "sourceNote": [
+        "Added high-yield station: KMU explicitly lists lumbar puncture technique for CNS/spinal infections (meningitis)."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Cranial Nerve Examination",
+      "primaryCompetency": "Cranial nerve examination",
+      "format": "Interactive examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Perform a focused cranial nerve examination. Present your findings and localise the likely lesion."
+      ],
+      "candidateHandout": [
+        "Be systematic and compare sides.",
+        "Include pupils/eye movements, facial motor/sensory function and bulbar function as clinically appropriate."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Ms Iqra Salman, 41, diplopia and facial asymmetry.",
+        "Examiner supplies findings: right abduction weakness; otherwise normal."
+      ],
+      "examinerInstructions": [
+        "Candidate should identify right VI nerve palsy if examination is performed correctly."
+      ],
+      "keyAnswerGuide": [
+        "Right lateral rectus weakness = right abducens (VI) palsy.",
+        "Consider raised ICP, microvascular, cavernous sinus/brainstem and other causes depending context."
+      ],
+      "suggestedApproach": [
+        "Inspect, visual pathways/pupils, ocular movements, face, hearing, palate/voice, shoulder/tongue as appropriate.",
+        "Summarise and localise."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, consent and checks visual symptoms."
+        },
+        {
+          "order": 2,
+          "criterion": "Assesses visual acuity/fields appropriately."
+        },
+        {
+          "order": 3,
+          "criterion": "Examines pupils and light responses."
+        },
+        {
+          "order": 4,
+          "criterion": "Tests ocular movements and asks about diplopia/nystagmus."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses facial sensation and corneal reflex conceptually when indicated."
+        },
+        {
+          "order": 6,
+          "criterion": "Tests facial movements."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses hearing grossly."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses palate/voice/swallow-related CN function safely."
+        },
+        {
+          "order": 9,
+          "criterion": "Tests shoulder shrug/head turn and tongue."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises right VI palsy and proposes localisation/differentials."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Which muscle abducts the eye?",
+        "Give causes of an isolated VI palsy."
+      ],
+      "expectedCompetencies": [
+        "Neurological examination",
+        "Anatomical localisation",
+        "Presentation of findings"
+      ],
+      "criticalSafetyErrors": [
+        "Misses new diplopia with neurological red flags or unsafe swallow assessment."
+      ],
+      "sourceNote": [
+        "Added CPSP-style focused short-case station: systematic examination, correct findings, localisation and differential diagnosis."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Upper Limb Neurological Examination",
+      "primaryCompetency": "Upper limb neurological examination",
+      "format": "Interactive examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Perform a complete neurological examination of both upper limbs and present your findings."
+      ],
+      "candidateHandout": [
+        "Sequence: inspection → tone → power → reflexes → coordination → sensation.",
+        "Use MRC power grading and compare sides."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mr Affan Malik, 58, right-hand weakness after a neurological event.",
+        "Findings: increased tone right arm, pyramidal weakness, brisk reflexes, reduced fine movement; sensory exam normal."
+      ],
+      "examinerInstructions": [
+        "Provide findings only when manoeuvre is correctly performed."
+      ],
+      "keyAnswerGuide": [
+        "Pattern suggests upper motor neuron lesion affecting right upper limb.",
+        "Localise with other signs/context rather than naming a cause from the limb exam alone."
+      ],
+      "suggestedApproach": [
+        "Expose appropriately.",
+        "Inspect, tone, power, reflexes, coordination, sensation.",
+        "Summarise pattern and localisation."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, consent and adequate exposure."
+        },
+        {
+          "order": 2,
+          "criterion": "Inspects for posture, wasting, fasciculation and involuntary movement."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses tone correctly."
+        },
+        {
+          "order": 4,
+          "criterion": "Tests major myotomes/muscle groups with MRC grading."
+        },
+        {
+          "order": 5,
+          "criterion": "Tests biceps, supinator and triceps reflexes."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses finger-nose and rapid alternating movements."
+        },
+        {
+          "order": 7,
+          "criterion": "Tests light touch/pinprick in relevant distribution."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses proprioception/cortical sensation when indicated."
+        },
+        {
+          "order": 9,
+          "criterion": "Compares sides and identifies UMN pattern."
+        },
+        {
+          "order": 10,
+          "criterion": "Presents findings clearly and suggests localisation/next exam."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "How do UMN and LMN signs differ?",
+        "Which reflexes assess C5–C7?"
+      ],
+      "expectedCompetencies": [
+        "Examination technique",
+        "MRC grading",
+        "Pattern recognition",
+        "Localisation"
+      ],
+      "criticalSafetyErrors": [
+        "Causes pain/injury by excessive force.",
+        "Calls an UMN pattern peripheral neuropathy without reconciliation."
+      ],
+      "sourceNote": [
+        "Added high-yield CPSP-style neurological short case focused on systematic examination and localisation."
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Lower Limb Neurology / Myotomes in GBS",
+      "primaryCompetency": "Lower limb neurological examination, myotomes and GBS recognition",
+      "format": "Interactive examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Perform a focused lower-limb neurological examination with emphasis on myotomes and reflexes. State the likely syndrome and immediate safety concern."
+      ],
+      "candidateHandout": [
+        "GBS classically causes progressive symmetrical weakness with reduced/absent reflexes.",
+        "Respiratory and autonomic involvement can be life-threatening."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Ms Anaya Rahman, 32, progressive ascending leg weakness after diarrhoeal illness.",
+        "Findings: symmetrical proximal/distal weakness, absent knee/ankle jerks, plantar flexor responses, mild distal paraesthesia."
+      ],
+      "examinerInstructions": [
+        "If candidate recognises GBS, ask what must be monitored urgently."
+      ],
+      "keyAnswerGuide": [
+        "Likely Guillain–Barré syndrome.",
+        "Urgent hospital assessment; monitor respiratory function and autonomic instability; evaluate for mimics and specialist treatment."
+      ],
+      "suggestedApproach": [
+        "Assess gait if safe, tone, power by myotome, reflexes, plantars and sensation.",
+        "Recognise LMN/areflexic pattern and escalate."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, consent and checks safety before gait."
+        },
+        {
+          "order": 2,
+          "criterion": "Inspects and assesses tone."
+        },
+        {
+          "order": 3,
+          "criterion": "Tests hip flexion L1/2 and knee extension L3/4."
+        },
+        {
+          "order": 4,
+          "criterion": "Tests ankle dorsiflexion L4/5 and great-toe extension L5."
+        },
+        {
+          "order": 5,
+          "criterion": "Tests plantarflexion S1."
+        },
+        {
+          "order": 6,
+          "criterion": "Tests knee and ankle reflexes."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses plantar responses."
+        },
+        {
+          "order": 8,
+          "criterion": "Checks sensation and symmetry."
+        },
+        {
+          "order": 9,
+          "criterion": "Recognises ascending areflexic weakness compatible with GBS."
+        },
+        {
+          "order": 10,
+          "criterion": "States urgent respiratory/autonomic monitoring and specialist admission."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Which myotome tests great-toe extension?",
+        "What makes GBS immediately dangerous?"
+      ],
+      "expectedCompetencies": [
+        "Myotome examination",
+        "Reflex examination",
+        "Syndrome recognition",
+        "Emergency escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to assess/mention respiratory compromise.",
+        "Encourages unsafe ambulation in marked weakness."
+      ],
+      "sourceNote": [
+        "Added high-yield station: KMU specifically lists practical performance of myotomes in Guillain–Barré syndrome."
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Cerebellar Examination",
+      "primaryCompetency": "Cerebellar examination",
+      "format": "Interactive examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Perform a focused cerebellar examination and present your findings."
+      ],
+      "candidateHandout": [
+        "Assess speech, eyes/nystagmus, upper-limb coordination, lower-limb coordination and gait when safe.",
+        "Differentiate cerebellar ataxia from sensory ataxia."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mr Rameez Akhtar, 49, unsteady gait and clumsiness.",
+        "Findings: scanning dysarthria, gaze-evoked nystagmus, right dysmetria and dysdiadochokinesia, broad-based gait."
+      ],
+      "examinerInstructions": [
+        "Provide findings with correct manoeuvres."
+      ],
+      "keyAnswerGuide": [
+        "Right-sided appendicular cerebellar signs with gait ataxia.",
+        "Complete neuro exam and investigate acute vs chronic cause."
+      ],
+      "suggestedApproach": [
+        "Observe speech/eyes.",
+        "Finger-nose, rapid alternating movement, heel-shin.",
+        "Gait/tandem gait if safe; Romberg as a sensory comparison rather than a primary cerebellar test."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, consent and assesses fall risk."
+        },
+        {
+          "order": 2,
+          "criterion": "Assesses speech."
+        },
+        {
+          "order": 3,
+          "criterion": "Checks eye movements/nystagmus."
+        },
+        {
+          "order": 4,
+          "criterion": "Performs finger-nose accurately."
+        },
+        {
+          "order": 5,
+          "criterion": "Tests dysdiadochokinesia."
+        },
+        {
+          "order": 6,
+          "criterion": "Tests rebound appropriately/safely or explains."
+        },
+        {
+          "order": 7,
+          "criterion": "Performs heel-shin test."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses gait and broad base."
+        },
+        {
+          "order": 9,
+          "criterion": "Attempts tandem gait only if safe and interprets Romberg appropriately."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises laterality and suggests completion/localisation."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What is dysdiadochokinesia?",
+        "How does sensory ataxia differ?"
+      ],
+      "expectedCompetencies": [
+        "Examination skill",
+        "Fall safety",
+        "Neurological localisation"
+      ],
+      "criticalSafetyErrors": [
+        "Allows a markedly ataxic patient to walk unsupported."
+      ],
+      "sourceNote": [
+        "Added high-yield CPSP-style neurological short case assessing focused examination, findings and localisation."
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Parkinsonism — Focused Examination",
+      "primaryCompetency": "Focused extrapyramidal examination",
+      "format": "Interactive examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Examine this patient for parkinsonism and present the key positive findings."
+      ],
+      "candidateHandout": [
+        "Core parkinsonism: bradykinesia plus rigidity and/or rest tremor; assess gait/postural features.",
+        "Look for atypical/red-flag features."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mr Waleed Farooq, 68, slowness and tremor.",
+        "Findings: hypomimia, 4–6 Hz right rest tremor, cogwheel rigidity, bradykinesia, reduced right arm swing, short shuffling steps."
+      ],
+      "examinerInstructions": [
+        "Do not force pull test if unsafe."
+      ],
+      "keyAnswerGuide": [
+        "Findings support parkinsonism, clinically compatible with Parkinson disease if no atypical features.",
+        "Assess medications, cognition, autonomic symptoms, falls and functional impact."
+      ],
+      "suggestedApproach": [
+        "Observe at rest.",
+        "Tone/rigidity, bradykinesia tasks, tremor.",
+        "Stand/gait safely.",
+        "Summarise and identify atypical signs."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, consent and observes facial expression/posture."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises rest tremor."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses tone/rigidity with activation if needed."
+        },
+        {
+          "order": 4,
+          "criterion": "Tests finger tapping for bradykinesia."
+        },
+        {
+          "order": 5,
+          "criterion": "Tests hand opening/closing or pronation-supination."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses lower-limb bradykinesia."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses rising from chair safely."
+        },
+        {
+          "order": 8,
+          "criterion": "Observes gait, stride and arm swing."
+        },
+        {
+          "order": 9,
+          "criterion": "Assesses postural stability only when safe."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises parkinsonism and mentions medication/atypical-feature review."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "Define bradykinesia clinically.",
+        "Name two atypical features that should prompt reconsideration."
+      ],
+      "expectedCompetencies": [
+        "Movement-disorder examination",
+        "Pattern recognition",
+        "Patient safety"
+      ],
+      "criticalSafetyErrors": [
+        "Performs unsafe pull test without guarding."
+      ],
+      "sourceNote": [
+        "Added high-yield CPSP-style short case: focused examination and interpretation of a common neurological syndrome."
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Spinal Cord Compression — Recognition & Immobilisation",
+      "primaryCompetency": "Spinal cord compression recognition and spinal immobilisation",
+      "format": "Static / interactive emergency station",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Recognise the neurological emergency and demonstrate safe initial spinal immobilisation/handling principles."
+      ],
+      "candidateHandout": [
+        "Red flags: severe spinal pain, bilateral weakness/sensory change, sphincter dysfunction, saddle symptoms, cancer/infection/trauma context.",
+        "Avoid unnecessary movement; maintain alignment and urgent specialist pathway."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Ms Hania Siddiqui, 45, severe back pain, bilateral leg weakness and urinary retention after metastatic cancer treatment.",
+        "Progressive bilateral leg weakness over 24 hours, numbness to lower trunk, urinary retention.",
+        "Known breast cancer."
+      ],
+      "examinerInstructions": [
+        "Candidate should identify cord compression and urgent MRI/specialist escalation.",
+        "Use available collar/board only as appropriate to scenario and local trauma protocol."
+      ],
+      "keyAnswerGuide": [
+        "Suspected metastatic spinal cord compression.",
+        "Immediate neurological assessment, urgent MRI of appropriate spine and urgent specialist oncology/neurosurgery/spinal pathway; immobilise if instability/trauma suspected."
+      ],
+      "suggestedApproach": [
+        "Recognise red flags.",
+        "Assess neurological level and sphincter symptoms.",
+        "Protect spine when instability is possible.",
+        "Escalate urgently."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises spinal cord compression as emergency."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks onset/progression and severe spinal pain."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses bilateral motor deficit."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses sensory level/saddle symptoms."
+        },
+        {
+          "order": 5,
+          "criterion": "Asks bladder/bowel dysfunction."
+        },
+        {
+          "order": 6,
+          "criterion": "Identifies cancer/infection/trauma risk factors."
+        },
+        {
+          "order": 7,
+          "criterion": "Maintains spinal alignment and minimises unsafe movement."
+        },
+        {
+          "order": 8,
+          "criterion": "Demonstrates appropriate collar/immobilisation principles if indicated."
+        },
+        {
+          "order": 9,
+          "criterion": "Requests urgent MRI and specialist pathway."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates urgency and documents serial neurology."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "What features suggest cord rather than root disease?",
+        "When is spinal immobilisation particularly important?"
+      ],
+      "expectedCompetencies": [
+        "Emergency recognition",
+        "Focused neurology",
+        "Immobilisation",
+        "Escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Delays imaging/referral despite sphincter dysfunction and progressive weakness.",
+        "Moves a potentially unstable spine unsafely."
+      ],
+      "sourceNote": [
+        "Added high-yield station: KMU lists spinal cord compression/syndromes and demonstration of proper spine immobilisation with collars."
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Status Epilepticus — Emergency Management",
+      "primaryCompetency": "Emergency seizure management",
+      "format": "Static emergency / viva-OSCE",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Demonstrate your immediate management priorities for an ongoing convulsive seizure and explain the escalation plan if it continues."
+      ],
+      "candidateHandout": [
+        "Use an ABCDE approach and time the seizure.",
+        "Correct hypoglycaemia and other reversible causes.",
+        "Follow current local status-epilepticus protocol for rescue and second-line medication."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mr Azlan Qureshi, 36, ongoing generalised convulsive seizure in the emergency department.",
+        "Generalised convulsions have continued for >5 minutes. Oxygen saturation is falling. Capillary glucose result is available on request."
+      ],
+      "examinerInstructions": [
+        "Reward prioritisation over memorised doses.",
+        "Exact medication/dose must follow the institution’s current emergency protocol."
+      ],
+      "keyAnswerGuide": [
+        "Convulsive status epilepticus is a medical emergency.",
+        "Protect from injury, airway/oxygen/suction as needed, monitoring, IV/IO access, glucose, labs, first-line benzodiazepine per protocol, then second-line antiseizure therapy and anaesthetic/ICU escalation if refractory.",
+        "Search for cause: non-adherence, metabolic disturbance, infection, stroke, toxin/withdrawal, pregnancy-related causes where relevant."
+      ],
+      "suggestedApproach": [
+        "Call for help and ABCDE.",
+        "Time seizure, monitor, glucose/access.",
+        "Protocol-based first- and second-line treatment.",
+        "Investigate cause and escalate refractory seizure."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Calls for senior/emergency help and times seizure."
+        },
+        {
+          "order": 2,
+          "criterion": "Protects patient from injury; does not restrain or place objects in mouth."
+        },
+        {
+          "order": 3,
+          "criterion": "Manages airway, oxygenation and suction appropriately."
+        },
+        {
+          "order": 4,
+          "criterion": "Attaches monitoring and obtains IV/IO access."
+        },
+        {
+          "order": 5,
+          "criterion": "Checks capillary glucose and treats hypoglycaemia if present."
+        },
+        {
+          "order": 6,
+          "criterion": "States first-line benzodiazepine per current protocol."
+        },
+        {
+          "order": 7,
+          "criterion": "States timely second-line antiseizure therapy if ongoing."
+        },
+        {
+          "order": 8,
+          "criterion": "Plans ICU/anaesthetic escalation for refractory status."
+        },
+        {
+          "order": 9,
+          "criterion": "Requests appropriate labs/imaging/infection work-up after stabilisation."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates and documents seizure duration, drugs and response."
+        }
+      ],
+      "scoringAnchor": "Scoring rule: 2 = complete/independent; 1 = partial or prompted; 0 = omitted/incorrect/unsafe.",
+      "globalRating": [
+        "Clear fail",
+        "Borderline",
+        "Pass",
+        "Good",
+        "Excellent"
+      ],
+      "promptQuestions": [
+        "When does a convulsive seizure become status epilepticus for emergency treatment purposes?",
+        "What reversible causes must be checked immediately?"
+      ],
+      "expectedCompetencies": [
+        "ABCDE emergency care",
+        "Protocol use",
+        "Medication safety",
+        "Escalation"
+      ],
+      "criticalSafetyErrors": [
+        "Delays airway/glucose assessment while taking a long history.",
+        "Restrains the patient or puts an object in the mouth.",
+        "Repeats sedating medication without monitoring/escalation."
+      ],
+      "sourceNote": [
+        "Added high-yield station: KMU Neurosciences-III includes diagnostic work-up/management of fits, tonic-clonic epilepsy and status epilepticus; CPSP viva assesses emergency problem-solving."
+      ]
+    }
+  ]
+}

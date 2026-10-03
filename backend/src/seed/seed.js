@@ -6,6 +6,8 @@ import { seedGit15OsceStations } from "./git15Osce.seed.js";
 import { seedGynaeObstetrics15OsceStations } from "./gynaeObstetrics15Osce.seed.js";
 import { seedInfectiousDiseases15OsceStations } from "./infectiousDiseases15Osce.seed.js";
 import { seedOrthopedics15OsceStations } from "./orthopedics15Osce.seed.js";
+import { seedRheumatology10OsceStations } from "./rheumatology10Osce.seed.js";
+import { seedCns15OsceStations } from "./cns15Osce.seed.js";
 
 await connectDatabase();
 const result = await seedOsceContent();
@@ -38,6 +40,12 @@ for (const module of await seedInfectiousDiseases15OsceStations()) {
   console.log(`Seeded OSCE station: ${module.title}`);
 }
 for (const module of await seedOrthopedics15OsceStations()) {
+  console.log(`Seeded OSCE station: ${module.title}`);
+}
+for (const module of await seedRheumatology10OsceStations()) {
+  console.log(`Seeded OSCE station: ${module.title}`);
+}
+for (const module of await seedCns15OsceStations()) {
   console.log(`Seeded OSCE station: ${module.title}`);
 }
 await disconnectDatabase();

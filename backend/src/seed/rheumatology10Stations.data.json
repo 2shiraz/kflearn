@@ -1,0 +1,1143 @@
+{
+  "metadata": {
+    "title": "RHEUMATOLOGY OSCE",
+    "subtitle": "10 Evidence-Corrected Stations",
+    "audienceAndScoring": "Final-Year MBBS • 8 minutes per station • 20-point analytic checklist",
+    "includedMaterials": "Candidate materials • Standardised scripts • Examiner guides • Learning notes",
+    "facultyNote": [
+      "This manual contains exactly 10 standalone rheumatology OSCE stations. It follows the structure of the supplied GIT OSCE manual: candidate-facing material, examiner-confidential material, a 20-point analytic checklist, global rating, prompts, competencies and critical safety errors. The clinical topics are built from the material supplied in the prompt: rheumatic fever, rheumatoid arthritis, ankylosing spondylitis/axial spondyloarthritis, osteoarthritis, acute gouty arthritis and non-specific neck pain. Where the supplied notes contain oversimplifications, the stations use safer contemporary clinical framing rather than reproducing them as diagnostic rules. Local approved institutional, provincial and national protocols supersede imported or generic operational details, particularly drug choice/dose, emergency pathways, laboratory reference ranges and referral processes."
+    ],
+    "assessmentDesign": [
+      "Each station is designed for 8 minutes and uses a 20-point analytic checklist (10 observable items scored 0, 1 or 2).",
+      "Score 2 = clearly and independently achieved; 1 = partially achieved or achieved after a standard prompt; 0 = omitted, incorrect or unsafe.",
+      "The analytic score and global rating should be recorded independently. Use an approved standard-setting process rather than a fixed pass mark.",
+      "Prompted items score at most 1/2. Critical safety errors require examiner review."
+    ],
+    "contents": [
+      "1. Rheumatic Fever — Focused history, Jones-criteria reasoning, investigation and management planning",
+      "2. Rheumatoid Arthritis — Focused inflammatory-joint history, examination, investigation and referral",
+      "3. Ankylosing Spondylitis / Axial Spondyloarthritis — Inflammatory back-pain history, examination and investigation",
+      "planning",
+      "4. Knee Osteoarthritis — Mechanical-joint history, examination and conservative management",
+      "5. Acute Gouty Arthritis — Acute monoarthritis assessment, joint aspiration reasoning and management",
+      "6. Rheumatology Data Interpretation — Pattern recognition and interpretation across common rheumatological disorders",
+      "7. Rheumatoid Hand Examination — Structured upper-limb examination and interpretation",
+      "8. Axial Spondyloarthritis Examination — Spinal mobility and functional examination",
+      "9. Acute Hot Swollen Joint — Emergency differentiation of septic arthritis from crystal arthritis",
+      "10. Non-Specific Neck Pain — Focused history, red-flag screening, examination planning and conservative management"
+    ]
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Rheumatic Fever",
+      "primaryCompetency": "Focused history, Jones-criteria reasoning, investigation and management planning",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "A 15-year-old student presents with fever and pain that has moved from the knees to the ankles over several days. He had a sore throat about 3 weeks ago.",
+        "In 8 minutes: take a focused history, identify features supporting or opposing acute rheumatic fever, and outline initial investigations and management."
+      ],
+      "candidateHandout": [
+        "Migratory large-joint pain/swelling after a recent pharyngitis is the core teaching pattern supplied.",
+        "Ask specifically about carditis symptoms, chorea, rash/subcutaneous nodules, and evidence of preceding group A streptococcal infection."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “Doctor, first my knees hurt and swelled, and now my ankles are painful. I also had a bad sore throat a few weeks ago.”",
+        "If asked: fever; no trauma; intermittent palpitations but no syncope; no known previous rheumatic fever.",
+        "ICE: worried that the joint pains are spreading and asks whether the heart can be affected."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "Elicit timing of sore throat and migratory polyarthritis; screen Jones major/minor manifestations and cardiac symptoms.",
+        "Examine joints and cardiovascular system; look for rash/nodules and neurological features.",
+        "Investigate with evidence of recent streptococcal infection (e.g., ASO/anti-DNase B), inflammatory markers, ECG and echocardiography when indicated.",
+        "Treat confirmed disease according to local protocol: eradicate streptococcal infection, control inflammation, manage carditis/heart failure if present, and arrange secondary prophylaxis/follow-up."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies recent sore throat and interval before symptoms."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises migratory large-joint arthritis."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens for fever and other systemic symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens for carditis symptoms and performs/requests cardiovascular assessment."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens for chorea, rash and subcutaneous nodules."
+        },
+        {
+          "order": 6,
+          "criterion": "Requests evidence of preceding streptococcal infection."
+        },
+        {
+          "order": 7,
+          "criterion": "Requests inflammatory markers and appropriate cardiac investigations."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains the likely diagnosis using criteria rather than ASO titre alone."
+        },
+        {
+          "order": 9,
+          "criterion": "Outlines safe initial treatment and specialist/local-protocol management."
+        },
+        {
+          "order": 10,
+          "criterion": "Explains recurrence prevention, follow-up and safety-netting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“What evidence would you seek for a preceding streptococcal infection?”",
+        "“Which non-joint manifestations matter most?”",
+        "“Does a raised ASO titre alone diagnose rheumatic fever?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Diagnoses solely from an elevated ASO titre.",
+        "Fails to assess for carditis.",
+        "Provides no plan for streptococcal eradication/secondary prevention."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Rheumatoid Arthritis",
+      "primaryCompetency": "Focused inflammatory-joint history, examination, investigation and referral",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "A 42-year-old woman reports 4 months of pain, swelling and prolonged morning stiffness affecting both hands and wrists.",
+        "In 8 minutes: take a focused history, describe the relevant hand/joint examination, and outline investigations and initial management."
+      ],
+      "candidateHandout": [
+        "The supplied material emphasizes symmetrical small-joint disease, morning stiffness, rheumatoid factor, anti-CCP and classic deformities.",
+        "Do not rely on ANA as a diagnostic test for rheumatoid arthritis; interpret RF and anti-CCP in clinical context."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My hands are stiff and swollen every morning. It takes a long time before I can use them properly.”",
+        "If asked: symptoms are symmetrical; MCP/PIP and wrists affected; stiffness lasts >1 hour; fatigue; no psoriasis.",
+        "ICE: worried her fingers will become permanently deformed."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "Establish inflammatory pattern, distribution, duration and functional impact; screen extra-articular disease and differentials.",
+        "Examine for synovitis, tenderness, reduced grip, nodules and established deformities such as ulnar deviation, swan-neck or boutonnière deformity.",
+        "Order FBC, ESR/CRP, RF and anti-CCP; baseline renal/liver tests and imaging as appropriate before therapy.",
+        "Arrange early rheumatology referral for disease-modifying therapy; provide analgesia/NSAID only when appropriate and with safety assessment, plus exercise/physiotherapy and smoking advice."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises pain, swelling and prolonged morning stiffness."
+        },
+        {
+          "order": 2,
+          "criterion": "Identifies symmetrical MCP/PIP/wrist involvement."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses duration, fatigue and functional limitation."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens extra-articular features and relevant differentials."
+        },
+        {
+          "order": 5,
+          "criterion": "Describes examination for active synovitis and hand function."
+        },
+        {
+          "order": 6,
+          "criterion": "Recognises classic deformities/nodules as possible established disease."
+        },
+        {
+          "order": 7,
+          "criterion": "Requests ESR/CRP, RF and anti-CCP appropriately."
+        },
+        {
+          "order": 8,
+          "criterion": "Requests baseline blood tests/imaging appropriate to referral/therapy."
+        },
+        {
+          "order": 9,
+          "criterion": "Prioritises early rheumatology referral for DMARD treatment."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides symptom control, rehabilitation advice and safety-netting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“Which antibody is relatively specific for RA?”",
+        "“Why is early rheumatology referral important?”",
+        "“What would you look for in the hands?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Treats long-term RA with NSAIDs alone and no DMARD referral.",
+        "States ANA positivity is required for RA diagnosis.",
+        "Misses significant active synovitis or neurological/vascular compromise."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Ankylosing Spondylitis / Axial Spondyloarthritis",
+      "primaryCompetency": "Inflammatory back-pain history, examination and investigation planning",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "A 27-year-old man has chronic low-back and buttock pain with morning stiffness for 9 months.",
+        "In 8 minutes: distinguish inflammatory from mechanical back pain, describe examination, and outline investigation/referral."
+      ],
+      "candidateHandout": [
+        "The supplied material highlights young age, male predominance, sacroiliac involvement, HLA-B27 and later spinal restriction.",
+        "HLA-B27 supports but does not by itself diagnose axial spondyloarthritis."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My lower back is stiff every morning, but it actually feels better when I move around.”",
+        "If asked: onset before age 30; alternating buttock pain; wakes in second half of night; improves with exercise, not rest; no trauma.",
+        "If asked specifically: one episode of painful red eye in the past; no psoriasis known.",
+        "ICE: fears he will become unable to bend his spine."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "Identify inflammatory back-pain pattern and ask about uveitis, psoriasis, IBD, enthesitis and family history.",
+        "Examine spinal mobility, chest expansion and sacroiliac provocation; assess peripheral joints/entheses.",
+        "Use CRP/ESR and imaging of sacroiliac joints (X-ray or MRI depending stage/pathway); HLA-B27 may support diagnosis.",
+        "Refer to rheumatology; encourage exercise/physiotherapy and posture; use NSAIDs when appropriate; urgent eye review for acute uveitis symptoms."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Establishes age at onset and chronicity."
+        },
+        {
+          "order": 2,
+          "criterion": "Identifies improvement with exercise and lack of improvement with rest."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks about night pain/alternating buttock pain."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens uveitis, psoriasis, IBD and enthesitis."
+        },
+        {
+          "order": 5,
+          "criterion": "Asks family history and functional impact."
+        },
+        {
+          "order": 6,
+          "criterion": "Describes spinal mobility/chest expansion/SI assessment."
+        },
+        {
+          "order": 7,
+          "criterion": "Requests inflammatory markers and appropriate SI imaging."
+        },
+        {
+          "order": 8,
+          "criterion": "Interprets HLA-B27 as supportive, not diagnostic alone."
+        },
+        {
+          "order": 9,
+          "criterion": "Plans rheumatology referral and exercise/physiotherapy ± NSAID strategy."
+        },
+        {
+          "order": 10,
+          "criterion": "Safety-nets acute red painful eye and neurological red flags."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“What makes this inflammatory rather than mechanical back pain?”",
+        "“What does HLA-B27 tell you?”",
+        "“Which extra-articular symptom needs urgent review?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Diagnoses solely from HLA-B27 positivity.",
+        "Fails to ask about uveitis.",
+        "Recommends prolonged rest rather than maintaining activity."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Knee Osteoarthritis",
+      "primaryCompetency": "Mechanical-joint history, examination and conservative management",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "A 58-year-old woman reports gradually worsening right knee pain and stiffness, worse after a full day of activity.",
+        "In 8 minutes: take a focused history, describe knee examination, and give a stepwise management plan."
+      ],
+      "candidateHandout": [
+        "The supplied material describes middle-age onset, weight-bearing joint involvement, activity-related pain and X-ray osteophytes/joint-space narrowing.",
+        "Diagnosis is primarily clinical in a typical presentation; imaging is used when diagnosis is uncertain or management requires it."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My knee aches more the longer I am on my feet. It is stiff when I first get up, but not for very long.”",
+        "If asked: no fever, no hot swollen joint, no prolonged morning stiffness; difficulty with stairs; overweight.",
+        "ICE: asks whether she needs a knee replacement now."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "Establish mechanical pattern, functional limitation and red flags; examine gait, alignment, effusion, crepitus, tenderness, range and stability.",
+        "Explain OA and prioritize exercise/strengthening, weight management if relevant, activity modification and physiotherapy.",
+        "Use appropriate analgesia/topical NSAID strategy per local protocol and comorbidity assessment; consider injections or orthopaedic referral if persistent severe symptoms.",
+        "X-ray may show joint-space narrowing and osteophytes but should not replace clinical assessment."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises activity-related mechanical pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Clarifies stiffness duration and functional limitation."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens inflammatory/infective red flags and trauma."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses weight, occupation/activity and comorbidities."
+        },
+        {
+          "order": 5,
+          "criterion": "Describes gait, alignment, tenderness, crepitus and range of motion."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses effusion and joint stability as appropriate."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains role/limitations of plain radiography."
+        },
+        {
+          "order": 8,
+          "criterion": "Prioritises exercise/strengthening and weight management."
+        },
+        {
+          "order": 9,
+          "criterion": "Offers safe stepwise analgesia/physiotherapy plan."
+        },
+        {
+          "order": 10,
+          "criterion": "Explains indications for escalation/orthopaedic referral and safety-netting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“What features make this mechanical pain?”",
+        "“What would you examine in the knee?”",
+        "“When would surgery be considered?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Assumes X-ray changes alone determine symptoms/treatment.",
+        "Recommends inactivity as primary treatment.",
+        "Fails to recognise a hot acutely swollen knee as requiring a different pathway."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Acute Gouty Arthritis",
+      "primaryCompetency": "Acute monoarthritis assessment, joint aspiration reasoning and management",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "A 52-year-old man develops sudden severe pain, redness and swelling of the first metatarsophalangeal joint overnight.",
+        "In 8 minutes: assess the acute monoarthritis, identify important differentials, and outline investigation and treatment."
+      ],
+      "candidateHandout": [
+        "The supplied material highlights severe red, hot, tender swelling of the great toe and urate crystal disease.",
+        "A serum urate level may be normal during an acute attack; septic arthritis must be considered in a hot swollen joint."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My big toe became unbelievably painful overnight. Even the bedsheet touching it hurts.”",
+        "If asked: no trauma; low-grade feverish feeling but no rigors; previous similar shorter episode; hypertension; takes a diuretic.",
+        "ICE: asks whether a high uric acid blood test is enough to prove gout."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "Characterise onset and risk factors, but actively exclude sepsis and trauma.",
+        "Examine the affected joint and systemic state; if septic arthritis is possible or diagnosis uncertain, arrange urgent aspiration for microscopy/culture and crystal analysis.",
+        "Serum urate supports long-term assessment but does not reliably confirm/exclude an acute flare.",
+        "Treat an uncomplicated flare with an appropriate anti-inflammatory option (NSAID, colchicine or corticosteroid depending comorbidities/local protocol); discuss urate-lowering therapy separately after assessing recurrence/indications."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises sudden severe monoarthritis and previous attacks."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks about fever/systemic illness and septic arthritis risk."
+        },
+        {
+          "order": 3,
+          "criterion": "Reviews medicines, renal disease, alcohol/diet and other gout risks."
+        },
+        {
+          "order": 4,
+          "criterion": "Examines the joint and assesses systemic stability."
+        },
+        {
+          "order": 5,
+          "criterion": "Recognises septic arthritis as a key differential."
+        },
+        {
+          "order": 6,
+          "criterion": "Explains role of joint aspiration/crystal analysis when indicated."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains limitations of serum urate during an acute attack."
+        },
+        {
+          "order": 8,
+          "criterion": "Selects a safe acute anti-inflammatory strategy based on comorbidities."
+        },
+        {
+          "order": 9,
+          "criterion": "Separates acute-flare treatment from long-term urate-lowering decisions."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides recurrence/risk-factor counselling and urgent safety-netting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“Can serum urate be normal during an acute attack?”",
+        "“When would you aspirate the joint?”",
+        "“What dangerous diagnosis must you exclude?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Assumes every red hot first MTP joint is gout without considering infection.",
+        "Uses serum urate alone to confirm/exclude the acute diagnosis.",
+        "Starts/changes long-term urate therapy without considering the broader clinical context."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Rheumatology Data Interpretation",
+      "primaryCompetency": "Pattern recognition and interpretation across common rheumatological disorders",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "You are given five short clinical vignettes and selected test/imaging results.",
+        "In 8 minutes: match each vignette to the most likely diagnosis and explain the single most useful supporting clue. The conditions are rheumatic fever, rheumatoid arthritis, axial spondyloarthritis, osteoarthritis and gout."
+      ],
+      "candidateHandout": [
+        "A: Teenager, migratory large-joint arthritis 3 weeks after sore throat; inflammatory markers elevated.",
+        "B: Symmetrical MCP/PIP synovitis with prolonged morning stiffness; anti-CCP positive.",
+        "C: Young adult with inflammatory back pain and sacroiliitis on imaging; HLA-B27 positive.",
+        "D: Older adult with activity-related knee pain; osteophytes and joint-space narrowing.",
+        "E: Sudden first-MTP red hot swollen joint; needle-shaped negatively birefringent urate crystals."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "No simulated patient. Examiner provides the data card and asks the candidate to reason aloud.",
+        "If candidate focuses on gender/age alone, ask for the clinical or investigation feature that most strongly supports each diagnosis."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "A rheumatic fever: preceding streptococcal illness plus compatible Jones-criteria pattern; ASO supports preceding infection, not diagnosis alone.",
+        "B RA: inflammatory symmetrical small-joint synovitis; anti-CCP supports diagnosis.",
+        "C axial SpA: inflammatory back pain plus sacroiliitis; HLA-B27 is supportive.",
+        "D OA: mechanical pain plus typical radiographic change.",
+        "E gout: monosodium urate crystals are diagnostic when demonstrated."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Correctly identifies rheumatic fever vignette."
+        },
+        {
+          "order": 2,
+          "criterion": "Explains why ASO supports preceding infection rather than diagnosing alone."
+        },
+        {
+          "order": 3,
+          "criterion": "Correctly identifies rheumatoid arthritis vignette."
+        },
+        {
+          "order": 4,
+          "criterion": "Correctly interprets anti-CCP in clinical context."
+        },
+        {
+          "order": 5,
+          "criterion": "Correctly identifies axial spondyloarthritis vignette."
+        },
+        {
+          "order": 6,
+          "criterion": "Correctly interprets HLA-B27 as supportive rather than diagnostic alone."
+        },
+        {
+          "order": 7,
+          "criterion": "Correctly identifies osteoarthritis and interprets osteophytes/joint-space narrowing."
+        },
+        {
+          "order": 8,
+          "criterion": "Correctly identifies gout from crystal findings."
+        },
+        {
+          "order": 9,
+          "criterion": "Uses clinical pattern plus tests rather than age/gender stereotypes alone."
+        },
+        {
+          "order": 10,
+          "criterion": "Communicates concise, structured reasoning for all five cases."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“Which test here is truly diagnostic rather than merely supportive?”",
+        "“What is the limitation of HLA-B27?”",
+        "“What does ASO actually demonstrate?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Uses age/gender alone to make diagnoses.",
+        "States HLA-B27 or ASO alone confirms disease.",
+        "Misidentifies urate crystals."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Rheumatoid Hand Examination",
+      "primaryCompetency": "Structured upper-limb examination and interpretation",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Examine the hands and wrists of a patient with established inflammatory arthritis. Describe your findings to the examiner and state the most likely diagnosis.",
+        "You do not need to examine other systems, but tell the examiner what additional examinations you would perform."
+      ],
+      "candidateHandout": [
+        "Equipment: examination couch/chair. Simulated findings may include MCP swelling, ulnar deviation, swan-neck/boutonnière deformity and rheumatoid nodules."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Patient reports mild discomfort; allow inspection and movement.",
+        "If asked about symptoms: long history of symmetrical hand stiffness and swelling.",
+        "Examiner may provide a photograph/model if physical findings cannot be simulated."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "Inspect from dorsum/palmar aspects for swelling, wasting, deformity, scars and nodules; assess temperature/tenderness and MCP/PIP/wrist synovitis.",
+        "Assess active/passive movement, grip and function; identify ulnar deviation, swan-neck or boutonnière patterns where present.",
+        "Check neurovascular status when indicated and mention elbows/shoulders, feet and extra-articular/systemic examination.",
+        "Conclude established RA if findings fit, while distinguishing active synovitis from fixed damage."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity, consent and pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Inspects both hands and wrists systematically."
+        },
+        {
+          "order": 3,
+          "criterion": "Looks for swelling/synovitis and muscle wasting."
+        },
+        {
+          "order": 4,
+          "criterion": "Identifies ulnar deviation if present."
+        },
+        {
+          "order": 5,
+          "criterion": "Identifies swan-neck/boutonnière deformity if present."
+        },
+        {
+          "order": 6,
+          "criterion": "Looks for rheumatoid nodules."
+        },
+        {
+          "order": 7,
+          "criterion": "Palpates relevant joints for warmth/tenderness/synovitis."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses wrist/finger movement, grip and functional tasks."
+        },
+        {
+          "order": 9,
+          "criterion": "Mentions neurovascular and broader joint/systemic examination."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises findings and distinguishes active disease from established deformity."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“Which deformities are typical of established RA?”",
+        "“How would you assess hand function?”",
+        "“What else would you examine?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Forces painful joints through movement.",
+        "Fails to compare both hands.",
+        "Labels deformity as active inflammation without assessment."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Axial Spondyloarthritis Examination",
+      "primaryCompetency": "Spinal mobility and functional examination",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Perform a focused musculoskeletal examination for suspected axial spondyloarthritis in a 29-year-old man with chronic inflammatory back pain.",
+        "Describe any additional examinations you would perform."
+      ],
+      "candidateHandout": [
+        "The station assesses posture, spinal movement, chest expansion and sacroiliac/entheseal assessment. A simulator may have normal findings; technique is scored."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Patient is comfortable and able to stand/walk.",
+        "If asked: morning stiffness and reduced spinal flexibility; no current red eye.",
+        "Examiner supplies measurements if a formal manoeuvre cannot be simulated."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "Inspect posture and gait; assess cervical and lumbar movement, including lumbar flexion with an accepted measurement technique.",
+        "Assess lateral flexion and chest expansion; examine sacroiliac region and entheses/peripheral joints.",
+        "Mention eye, skin, abdomen/IBD history and cardiovascular/respiratory assessment where appropriate.",
+        "Interpret reduced mobility as supportive but not diagnostic without clinical/imaging context."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity, consent and pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Inspects gait and spinal posture."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses cervical range of movement."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses lumbar flexion using an appropriate technique."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses lateral spinal flexion."
+        },
+        {
+          "order": 6,
+          "criterion": "Measures/assesses chest expansion."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses sacroiliac region appropriately."
+        },
+        {
+          "order": 8,
+          "criterion": "Looks for peripheral arthritis and enthesitis."
+        },
+        {
+          "order": 9,
+          "criterion": "Mentions extra-articular examination (eyes, skin, GI ± cardiorespiratory)."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises findings and relates them to axial spondyloarthritis without overclaiming."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“Which bedside measures assess spinal mobility?”",
+        "“Why assess chest expansion?”",
+        "“What extra-articular systems matter?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Performs unsafe forceful spinal manoeuvres.",
+        "Treats one reduced movement as diagnostic.",
+        "Fails to consider acute eye symptoms."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Acute Hot Swollen Joint",
+      "primaryCompetency": "Emergency differentiation of septic arthritis from crystal arthritis",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "A 63-year-old patient presents with an acutely painful, hot, swollen knee and fever.",
+        "In 8 minutes: take a focused history, explain your immediate assessment priorities, and outline investigations and management."
+      ],
+      "candidateHandout": [
+        "This is an emergency-safety station. Although gout is in the supplied rheumatology material, the candidate must not assume gout in a febrile hot swollen joint."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My knee became very painful and swollen yesterday, and I feel feverish.”",
+        "If asked: diabetes; no recent trauma; cannot bear weight; no known gout diagnosis.",
+        "ICE: asks whether this can simply be treated as gout at home."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "Treat septic arthritis as a must-exclude diagnosis; assess sepsis/systemic stability and risk factors.",
+        "Obtain urgent joint aspiration for Gram stain/culture, cell count and crystals where feasible; obtain blood cultures and blood tests without unnecessary delay.",
+        "Arrange urgent hospital/orthopaedic/rheumatology pathway and start empiric antibiotics according to local protocol after appropriate cultures/aspiration when this does not cause unsafe delay.",
+        "Analgesia, fluids and source control/washout may be required; crystals do not absolutely exclude concomitant infection."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Recognises septic arthritis as an emergency diagnosis to exclude."
+        },
+        {
+          "order": 2,
+          "criterion": "Assesses fever, systemic illness and sepsis features."
+        },
+        {
+          "order": 3,
+          "criterion": "Reviews risk factors including immunosuppression, diabetes, prosthesis/procedures and infection sources."
+        },
+        {
+          "order": 4,
+          "criterion": "Examines joint and assesses ability to bear weight/systemic stability."
+        },
+        {
+          "order": 5,
+          "criterion": "Plans urgent joint aspiration with culture and crystal analysis."
+        },
+        {
+          "order": 6,
+          "criterion": "Requests blood cultures and appropriate inflammatory/haematological tests."
+        },
+        {
+          "order": 7,
+          "criterion": "Does not rely on serum urate to diagnose the hot joint."
+        },
+        {
+          "order": 8,
+          "criterion": "Arranges urgent hospital/specialist management."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains antibiotic timing according to local emergency protocol and cultures without unsafe delay."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides clear communication, analgesia and escalation/safety-netting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“What diagnosis must be excluded first?”",
+        "“What sample is most important?”",
+        "“Can crystals and infection coexist?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Treats presumptively as gout and sends patient home.",
+        "Delays urgent assessment/antibiotics in a systemically unwell patient.",
+        "Fails to obtain/plan synovial fluid analysis."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Non-Specific Neck Pain",
+      "primaryCompetency": "Focused history, red-flag screening, examination planning and conservative management",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items × 0–2)",
+      "candidateInstructions": [
+        "Moin Ahmad, aged 28 years, comes to discuss neck pain and his worry about it. Take a relevant history and share a management plan.",
+        "In 8 minutes: clarify the pain pattern, screen serious causes, describe a focused examination and counsel on initial management."
+      ],
+      "candidateHandout": [
+        "This station is adapted from the supplied ‘NON SPECIFIC NECK PAIN’ scenario. Because chest/arm pain can indicate non-musculoskeletal disease, the candidate must clarify chest symptoms and cardiovascular red flags before labelling the problem non-specific neck pain."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “I have pain on the left side of my chest and it goes into my left arm and neck.”",
+        "If asked: pain is related to prolonged desk posture and neck movement; no exertional pressure-type chest pain, sweating, breathlessness or syncope; no trauma.",
+        "Neurological screen: no arm weakness, persistent numbness, gait disturbance or bowel/bladder symptoms.",
+        "ICE: worried the pain may be heart disease or a serious neck problem."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start. Assess observable performance, clinical reasoning and safety rather than recall alone.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "Accept locally appropriate equivalent investigations and management when clinically safe."
+      ],
+      "keyAnswerGuide": [
+        "First clarify chest pain and urgent cardiovascular/respiratory features; if concerning, use an emergency pathway rather than a musculoskeletal label.",
+        "For neck pain, ask onset, site/radiation, aggravating/relieving factors, trauma, fever/weight loss/cancer/infection risk and neurological/myelopathic symptoms.",
+        "Examine vitals as indicated, cervical spine, shoulder/upper limb, neurological status and cardiovascular/respiratory system when chest symptoms warrant.",
+        "If non-specific mechanical neck pain is supported: reassure, encourage activity/ergonomic modification, consider physiotherapy and appropriate simple analgesia/NSAID based on contraindications; safety-net neurological or systemic red flags."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and the patient's ideas, concerns and expectations where relevant.",
+        "Use a focused history/examination matched to the station task.",
+        "Identify important red flags and dangerous alternatives before reassurance.",
+        "Explain investigations and management in a structured, patient-centred way.",
+        "Arrange follow-up/referral and safety-net clearly."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies chest pain character and relationship to exertion/movement."
+        },
+        {
+          "order": 2,
+          "criterion": "Screens urgent cardiac/respiratory symptoms before assuming musculoskeletal pain."
+        },
+        {
+          "order": 3,
+          "criterion": "Takes structured neck-pain history including onset, radiation and aggravating/relieving factors."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens trauma, fever, weight loss, cancer/infection risk."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens neurological and myelopathic symptoms."
+        },
+        {
+          "order": 6,
+          "criterion": "Describes cervical and upper-limb neurological examination."
+        },
+        {
+          "order": 7,
+          "criterion": "Mentions cardiovascular/respiratory assessment when indicated."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains non-specific/mechanical neck pain only after red flags are excluded."
+        },
+        {
+          "order": 9,
+          "criterion": "Provides activity, ergonomic, analgesia and physiotherapy advice as appropriate."
+        },
+        {
+          "order": 10,
+          "criterion": "Addresses worry and gives explicit emergency/neurological safety-netting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail — Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline — Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass — Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good — Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent — Fluent integration of clinical reasoning, communication, safety-netting, and context."
+      ],
+      "promptQuestions": [
+        "“What must you clarify before calling this neck pain?”",
+        "“Which neurological symptoms would concern you?”",
+        "“What is the initial management if serious causes are excluded?”"
+      ],
+      "expectedCompetencies": [
+        "Focused assessment",
+        "Clinical reasoning",
+        "Interpretation/investigation planning",
+        "Management planning",
+        "Communication and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Labels left chest/arm/neck pain as musculoskeletal without screening cardiac red flags.",
+        "Misses myelopathic/major neurological symptoms.",
+        "Recommends prolonged immobilisation/bed rest for uncomplicated mechanical pain."
+      ],
+      "sourceNote": [
+        "Primary station content is derived from the rheumatology teaching material supplied by the user. Faculty should verify diagnostic criteria, prescribing details, referral pathways and emergency protocols against current local standards before summative use."
+      ]
+    }
+  ]
+}

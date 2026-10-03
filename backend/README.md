@@ -53,6 +53,8 @@ npm run seed:git
 npm run seed:gynae-obstetrics
 npm run seed:infectious-diseases
 npm run seed:orthopedics
+npm run seed:rheumatology
+npm run seed:cns
 npm run dev
 npm test
 ```
@@ -74,9 +76,15 @@ then run the relevant command from `backend`.
 These seeds upsert by stable slug, so repeated runs preserve station, script,
 and checklist IDs without adding duplicates. They update authored content
 for those slugs. CVS and endocrinology use ten-minute sessions; GIT uses
-eight-minute sessions, as do gynaecology/obstetrics and infectious diseases.
-All five sets have 20-point
-checklists with 0/1/2 self-marking. AI patient mode is enabled only where a
+eight-minute sessions, as do gynaecology/obstetrics, infectious diseases and orthopedics.
+The full seed also includes 10 rheumatology stations
+(`seed:rheumatology`): six AI histories and four guided interpretation,
+examination or emergency cases. These also use eight-minute sessions.
+The full seed also includes 15 CNS stations (`seed:cns`): three AI patient/parent
+conversations and twelve guided examination, interpretation, procedural or emergency
+stations, each eight minutes. CT cases preserve the authored textual findings;
+clinical images, mannequins and examination equipment must be supplied separately.
+All eight sets have 20-point checklists with 0/1/2 self-marking. AI patient mode is enabled only where a
 patient conversation can cover the task; other stations offer guided practice.
 
 ## Real-AI OSCE tests
