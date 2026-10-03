@@ -69,6 +69,16 @@ test("new users start with zero credits and see server-side pricing", async () =
   assert.equal(pro.fullStations, 146);
 });
 
+test("public credit packages expose names and prices only", async () => {
+  const res = await request(app).get("/api/public/credit-packages");
+  assert.equal(res.status, 200);
+  assert.deepEqual(res.body.data.packages.map((pkg) => Object.keys(pkg).sort()), [
+    ["credits", "id", "name", "pricePkr"], ["credits", "id", "name", "pricePkr"], ["credits", "id", "name", "pricePkr"],
+  ]);
+  assert.equal(res.body.data.packages.find((pkg) => pkg.id === "starter").pricePkr, 999);
+  assert.equal(res.body.data.costs, undefined);
+});
+
 test("credit endpoints require authentication", async () => {
   assert.equal((await request(app).get("/api/credits")).status, 401);
   assert.equal((await request(app).get("/api/credits/transactions")).status, 401);

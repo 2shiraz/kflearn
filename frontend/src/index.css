@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@fontsource-variable/lexend";
+@import "@fontsource/jetbrains-mono/500.css";
 
 @theme {
   --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -37,11 +39,16 @@ h1, h2, h3, .font-display {
   letter-spacing: 0;
 }
 
-button,
-input,
-textarea,
-select {
+/* Unlayered, so it beats Tailwind utilities. The public site (.site) gets the
+   same reset inside the base layer instead, so text-* classes still apply. */
+:is(button, input, textarea, select):not(.site *) {
   font: inherit;
+}
+
+@layer base {
+  .site :is(button, input, textarea, select) {
+    font: inherit;
+  }
 }
 
 .app-gradient-bg {
@@ -198,4 +205,159 @@ select {
   .animate-fade-up, .animate-fade-in, .animate-pop-in {
     animation: none;
   }
+}
+
+/* ---- Public marketing site (.site) ----------------------------------------
+   Landing, features, sample stations, pricing, about, sign in, sign up.
+   Light theme only (by request). Tokens are scoped to .site so the logged-in
+   app keeps its own look.
+   Colour rule: one primary (indigo) for actions; five specialty colours, each
+   tied to one part of the product, used for icons, tints and highlights only:
+   sky = MCQs, mint = OSPE, coral = clinical examination, sun = history taking,
+   violet = handouts.
+   Shape rule: buttons and chips are pills, inputs are rounded-xl (12px),
+   cards and panels are rounded-3xl (24px). */
+@theme inline {
+  --color-s-page: var(--s-page);
+  --color-s-card: var(--s-card);
+  --color-s-tint: var(--s-tint);
+  --color-s-ink: var(--s-ink);
+  --color-s-mute: var(--s-mute);
+  --color-s-line: var(--s-line);
+  --color-s-accent: var(--s-accent);
+  --color-s-accent-strong: var(--s-accent-strong);
+  --color-s-accent-soft: var(--s-accent-soft);
+  --color-s-on-accent: var(--s-on-accent);
+  --color-s-good: var(--s-good);
+  --color-s-miss: var(--s-miss);
+  --color-sky: #1F8BEA;
+  --color-sky-soft: #DDEEFF;
+  --color-mint: #0F9F84;
+  --color-mint-soft: #D5F5EC;
+  --color-coral: #E8456B;
+  --color-coral-soft: #FFE1E8;
+  --color-sun: #C98A00;
+  --color-sun-bright: #FFC93C;
+  --color-sun-soft: #FFF1C9;
+  --color-violet: #7C4DEB;
+  --color-violet-soft: #ECE4FF;
+  --font-lexend: "Lexend Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-chart: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.site {
+  --s-page: #F6F7FA;
+  --s-card: #FEFEFF;
+  --s-tint: #EEF0F8;
+  --s-ink: #141A33;
+  --s-mute: #555D76;
+  --s-line: rgba(20, 26, 51, 0.10);
+  --s-accent: #3B3FD8;
+  --s-accent-strong: #2C30B8;
+  --s-accent-soft: #E3E5FF;
+  --s-on-accent: #FAFAFF;
+  --s-good: #0B8A68;
+  --s-miss: #C42E50;
+  --s-shadow: 0 1px 2px rgba(35, 41, 110, 0.06), 0 20px 44px -30px rgba(35, 41, 110, 0.38);
+  background: var(--s-page);
+  color: var(--s-ink);
+  font-family: var(--font-lexend);
+  color-scheme: light;
+}
+
+.site h1, .site h2, .site h3, .site .font-display {
+  font-family: inherit;
+  letter-spacing: -0.025em;
+}
+
+/* Cards and panels: a soft wash from white to a faint lavender, like clean
+   clinical paper. No repeating pattern. */
+.site-grid {
+  background-color: var(--s-card);
+  background-image: linear-gradient(170deg, var(--s-card) 35%, #F5F6FD 100%);
+}
+
+/* Hero surface: white, with a faint wallpaper of medical line icons that fades
+   out behind the headline (left) so the copy stays clean. */
+.site-hero {
+  position: relative;
+  isolation: isolate;
+  background: var(--s-card);
+}
+.site-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/illustrations/medical-doodle.svg");
+  background-size: 384px 288px;
+  -webkit-mask-image: linear-gradient(100deg, transparent 18%, rgba(0, 0, 0, 0.55) 48%, #000 75%);
+  mask-image: linear-gradient(100deg, transparent 18%, rgba(0, 0, 0, 0.55) 48%, #000 75%);
+  pointer-events: none;
+}
+.site-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 120px;
+  z-index: -1;
+  background: linear-gradient(to bottom, transparent, var(--s-card));
+  pointer-events: none;
+}
+
+.site-shadow { box-shadow: var(--s-shadow); }
+
+.site :focus-visible {
+  outline: 2px solid var(--s-accent);
+  outline-offset: 2px;
+}
+
+.site-press { transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease; }
+.site-press:active { transform: scale(0.98); }
+
+/* Pixel-art characters must stay crisp when scaled up. */
+.pixel { image-rendering: pixelated; }
+
+/* Highlighter swipe behind a word in a headline. */
+.site-mark {
+  background-image: linear-gradient(transparent 58%, var(--color-sun-bright) 58%, var(--color-sun-bright) 92%, transparent 92%);
+  padding: 0 0.08em;
+}
+
+@keyframes voice-bar {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+@keyframes typing-dot {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+@keyframes ecg-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Scroll reveal: PageShell marks [data-reveal] elements as shown when they
+   enter the viewport. With reduced motion they are simply visible. */
+@media (prefers-reduced-motion: no-preference) {
+  .site [data-reveal] {
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .site [data-reveal]:not([data-shown]) {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  .site .site-rise {
+    animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--rise-delay, 0ms);
+  }
+  .site .voice-bar { animation: voice-bar 0.9s ease-in-out infinite; transform-origin: center; }
+  .site .typing-dot { animation: typing-dot 1s ease-in-out infinite; }
+  .site .ecg-line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ecg-draw 1.6s 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+  .site .bob { animation: bob 5s ease-in-out infinite; }
 }

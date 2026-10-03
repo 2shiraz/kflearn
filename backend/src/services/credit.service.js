@@ -83,6 +83,12 @@ export async function listTransactions(userId, limit = 50) {
   }));
 }
 
+// Public, unauthenticated view for the marketing pricing page: package names,
+// credit amounts and prices only. Per-action costs stay behind authentication.
+export function publicCreditPackages() {
+  return CREDIT_PACKAGES.map(({ id, name, credits, pricePkr }) => ({ id, name, credits, pricePkr }));
+}
+
 export function creditPricing() {
   const fullStation = CREDIT_COSTS.virtualPatient + CREDIT_COSTS.aiAssessment;
   return {

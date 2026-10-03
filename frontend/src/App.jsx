@@ -1,13 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import StatsBar from "./components/StatsBar";
-import HowItWorks from "./components/HowItWorks";
-import FeatureGrid from "./components/FeatureGrid";
-import FAQ from "./components/FAQ";
-import Disclaimer from "./components/Disclaimer";
-import Footer from "./components/Footer";
+import LandingPage from "./pages/LandingPage";
 // Every route except the landing page is code-split: its page (and any static
 // content it imports) downloads only when the route is first visited.
 // After a redeploy, a tab opened earlier may request chunk files that no longer
@@ -82,21 +75,6 @@ function RouteFallback() {
     <div className="flex min-h-screen items-center justify-center" role="status" aria-label="Loading">
       <div className="h-8 w-8 animate-spin rounded-full border-2 border-ink/15 border-t-ink/60" />
     </div>
-  );
-}
-
-function LandingPage() {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <StatsBar />
-      <HowItWorks />
-      <FeatureGrid />
-      <FAQ />
-      <Disclaimer />
-      <Footer />
-    </>
   );
 }
 

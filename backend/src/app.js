@@ -16,6 +16,7 @@ import adminOsceRoutes from "./routes/adminOsce.routes.js";
 import adminUserRoutes from "./routes/adminUser.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import creditRoutes from "./routes/credit.routes.js";
+import { getPublicCreditPackages } from "./controllers/credit.controller.js";
 
 export function createApp() {
   const app = express();
@@ -34,6 +35,7 @@ export function createApp() {
   });
   app.use("/api", apiLimiter);
   app.use("/api/auth", authRoutes);
+  app.get("/api/public/credit-packages", getPublicCreditPackages);
   app.use(authenticate);
   app.use(csrfProtection);
   app.use("/api/dashboard", dashboardRoutes);

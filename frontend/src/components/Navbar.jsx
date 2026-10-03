@@ -1,74 +1,83 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Bell, Menu, Stethoscope, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import BrandMark from "./BrandMark";
+import { SIGNUP_LABEL } from "../site/siteContent";
 
 const links = [
   { label: "Features", to: "/features" },
-  { label: "Sample Stations", to: "/sample-stations" },
+  { label: "Sample stations", to: "/sample-stations" },
   { label: "Pricing", to: "/pricing" },
   { label: "About", to: "/about" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  useEffect(() => setOpen(false), [pathname]);
+
+  const linkClass = ({ isActive }) =>
+    `site-press rounded-full px-3.5 py-2 text-sm font-medium ${
+      isActive ? "bg-s-accent-soft text-s-ink" : "text-s-mute hover:text-s-ink"
+    }`;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-white/70 backdrop-blur-xl">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:gap-6 sm:px-5 lg:px-8">
-        <button
-          type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((o) => !o)}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-ink transition hover:bg-white/70 md:hidden"
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
-        <Link to="/" className="flex items-center gap-2 whitespace-nowrap font-display text-base font-bold text-ink sm:text-lg">
-          <span className="gradient-brand flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] text-white">
-            <Stethoscope size={18} strokeWidth={2.5} />
-          </span>
-          KF LearnSmart
+    <header className="sticky top-0 z-40 border-b border-s-line bg-s-page/85 backdrop-blur-lg">
+      <nav aria-label="Main" className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Link to="/" className="flex min-h-11 shrink-0 items-center gap-2.5" aria-label="KF LearnSmart home">
+          <BrandMark />
+          <span className="text-[15px] font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
         </Link>
 
-        <ul className="hidden flex-1 items-center justify-center gap-7 text-sm font-medium text-ink-soft md:flex">
+        <ul className="hidden items-center gap-1 lg:flex">
           {links.map((l) => (
-            <li key={l.label}>
-              <Link to={l.to} className="transition hover:text-ink">
+            <li key={l.to}>
+              <NavLink to={l.to} className={linkClass}>
                 {l.label}
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <span className="hidden h-9 w-9 items-center justify-center rounded-lg bg-ink/5 text-ink sm:flex">
-            <Bell size={17} />
-          </span>
-          <Link to="/signin" className="hidden text-sm font-medium text-ink-soft hover:text-ink sm:block">
+        <div className="flex items-center gap-2">
+          <Link to="/signin" className="site-press hidden rounded-full px-4 py-3 text-sm font-semibold text-s-ink hover:bg-s-tint lg:block">
             Sign in
           </Link>
           <Link
             to="/signup"
-            className="gradient-brand whitespace-nowrap rounded-lg px-3.5 py-2.5 text-sm font-semibold text-white transition sm:px-5"
+            className="site-press hidden whitespace-nowrap rounded-full bg-s-accent px-4 py-3 text-sm font-semibold text-s-on-accent hover:bg-s-accent-strong sm:block"
           >
-            Start Free
+            {SIGNUP_LABEL}
           </Link>
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((o) => !o)}
+            className="site-press flex h-11 w-11 items-center justify-center rounded-full text-s-ink hover:bg-s-tint lg:hidden"
+          >
+            {open ? <X size={20} strokeWidth={1.75} /> : <Menu size={20} strokeWidth={1.75} />}
+          </button>
         </div>
       </nav>
 
       {open && (
-        <div className="border-t border-line bg-white/95 backdrop-blur-xl md:hidden">
-          <ul className="flex flex-col px-4 py-3 text-sm font-medium text-ink-soft">
+        <div className="border-t border-s-line bg-s-page lg:hidden">
+          <ul className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
             {links.map((l) => (
-              <li key={l.label}>
-                <Link to={l.to} onClick={() => setOpen(false)} className="block rounded-lg px-2 py-2.5 transition hover:bg-black/5 hover:text-ink">
+              <li key={l.to}>
+                <NavLink to={l.to} className={({ isActive }) => `block rounded-xl px-3 py-3 text-[15px] font-medium ${isActive ? "bg-s-accent-soft text-s-ink" : "text-s-mute"}`}>
                   {l.label}
-                </Link>
+                </NavLink>
               </li>
             ))}
-            <li className="mt-1 border-t border-line pt-2">
-              <Link to="/signin" onClick={() => setOpen(false)} className="block rounded-lg px-2 py-2.5 transition hover:bg-black/5 hover:text-ink">
+            <li className="mt-2 grid grid-cols-2 gap-2 border-t border-s-line pt-3">
+              <Link to="/signin" className="rounded-full border border-s-line px-4 py-2.5 text-center text-sm font-semibold text-s-ink">
                 Sign in
+              </Link>
+              <Link to="/signup" className="rounded-full bg-s-accent px-4 py-2.5 text-center text-sm font-semibold text-s-on-accent">
+                {SIGNUP_LABEL}
               </Link>
             </li>
           </ul>

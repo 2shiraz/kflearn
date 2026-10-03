@@ -1,19 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  BookOpen,
-  Building2,
-  CalendarClock,
-  Check,
-  ChevronLeft,
-  Eye,
-  EyeOff,
-  GraduationCap,
-  Stethoscope,
-  Target,
-  User,
-} from "lucide-react";
+import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { registerRequest, ROLE_OPTIONS } from "../lib/api";
+import AuthShell, { FormError, inputClass, primaryButtonClass, secondaryButtonClass } from "../components/AuthShell";
 
 const STEP_LABELS = ["Account", "Role", "Profile"];
 
@@ -58,201 +47,182 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="app-gradient-bg flex min-h-screen items-center justify-center px-6 py-12">
-      <div className="glass-surface w-full max-w-md rounded-lg p-8">
-        <Link to="/" className="mb-6 flex items-center justify-center gap-2">
-          <span className="gradient-brand flex h-8 w-8 items-center justify-center rounded-[9px] text-white">
-            <Stethoscope size={18} strokeWidth={2.5} />
-          </span>
-          <span className="font-display text-lg font-bold text-ink">KF LearnSmart</span>
-        </Link>
-
-        <div className="relative mb-7 flex items-center justify-between px-1">
-          <div className="absolute left-4 right-4 top-1/2 h-0.5 -translate-y-1/2 bg-line" />
-          <div
-            className="absolute left-4 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-[#FF8FCF] to-[#7FB8FF] transition-all duration-300"
-            style={{ width: `calc(${(Math.min(step, 3) - 1) / (STEP_LABELS.length - 1)} * (100% - 2rem))` }}
-          />
-          {STEP_LABELS.map((label, i) => {
-            const n = i + 1;
-            const isDone = n < step;
-            const isActive = n === step;
-            return (
-              <div
-                key={label}
-                className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[11px] font-semibold transition ${
-                  isDone ? "gradient-brand text-white" : isActive ? "bg-white text-brand ring-2 ring-brand" : "bg-white text-ink-soft ring-1 ring-line"
-                }`}
-              >
-                {isDone ? <Check size={12} /> : n}
-              </div>
-            );
-          })}
-        </div>
-
-        {step === 1 && (
+    <AuthShell
+      footer={
+        step === 1 && (
           <>
-            <h1 className="font-display text-2xl font-extrabold text-ink">Create your account</h1>
-            <p className="mt-1 text-ink-soft">Start practising clinical skills today - free.</p>
-
-            <form onSubmit={handleAccountSubmit} className="mt-6 space-y-4">
-              <TextField
-                label="Full name" icon={User} placeholder="Dr Ahmed Khan" required
-                value={account.fullName}
-                onChange={(v) => setAccount((a) => ({ ...a, fullName: v }))}
-              />
-              <TextField
-                label="Email address" icon={undefined} type="email" placeholder="you@example.com" required
-                value={account.email}
-                onChange={(v) => setAccount((a) => ({ ...a, email: v }))}
-              />
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-ink">Password</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    required
-                    minLength={8}
-                    pattern="(?=.*[A-Za-z])(?=.*\d).{8,}"
-                    title="At least 8 characters, including a letter and a number."
-                    placeholder="Min. 8 characters, 1 letter and 1 number"
-                    value={account.password}
-                    onChange={(e) => setAccount((a) => ({ ...a, password: e.target.value }))}
-                    className="w-full rounded-lg border border-line bg-white/80 px-4 py-3 pr-11 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-ink-soft hover:text-ink"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                <p className="mt-1.5 text-xs text-ink-soft">At least 8 characters, with a letter and a number.</p>
-              </div>
-
-              {status === "error" && (
-                <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="gradient-brand flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
-              >
-                {status === "loading" ? "Creating account..." : "Continue"}
-              </button>
-            </form>
-
-            <p className="mt-6 text-center text-sm text-ink-soft">
-              Already have an account?{" "}
-              <Link to="/signin" className="font-semibold text-brand hover:underline">Sign in</Link>
-            </p>
+            Already have an account?{" "}
+            <Link to="/signin" className="inline-block py-3 font-semibold text-s-accent hover:underline">
+              Sign in
+            </Link>
           </>
-        )}
+        )
+      }
+    >
+      <StepIndicator step={step} />
 
-        {step === 2 && (
-          <>
-            <button onClick={() => setStep(1)} className="mb-3 flex items-center gap-1 text-sm font-medium text-brand hover:underline">
-              <ChevronLeft size={16} /> Back
+      {step > 1 && (
+        <button
+          type="button"
+          onClick={() => setStep(step - 1)}
+          className="-ml-1 mt-4 flex min-h-11 items-center gap-1 rounded-full px-1 text-sm font-medium text-s-accent hover:underline"
+        >
+          <ChevronLeft size={16} strokeWidth={2} /> Back
+        </button>
+      )}
+
+      {step === 1 && (
+        <>
+          <h1 className="mt-6 text-2xl font-semibold text-s-ink">Create your account</h1>
+          <p className="mt-1.5 text-s-mute">Free, and it takes about a minute.</p>
+
+          <form onSubmit={handleAccountSubmit} className="mt-7 space-y-5">
+            <Field
+              id="fullName" label="Full name" placeholder="Ahmed Khan" required autoComplete="name"
+              value={account.fullName}
+              onChange={(v) => setAccount((a) => ({ ...a, fullName: v }))}
+            />
+            <Field
+              id="email" label="Email address" type="email" placeholder="you@example.com" required autoComplete="email"
+              value={account.email}
+              onChange={(v) => setAccount((a) => ({ ...a, email: v }))}
+            />
+            <div className="space-y-2">
+              <label htmlFor="password" className="block text-sm font-medium text-s-ink">Password</label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
+                  minLength={8}
+                  pattern="(?=.*[A-Za-z])(?=.*\d).{8,}"
+                  title="At least 8 characters, including a letter and a number."
+                  aria-describedby="password-help"
+                  placeholder="Create a password"
+                  value={account.password}
+                  onChange={(e) => setAccount((a) => ({ ...a, password: e.target.value }))}
+                  className={`${inputClass} pr-14`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-s-mute hover:text-s-ink"
+                >
+                  {showPassword ? <EyeOff size={18} strokeWidth={1.75} /> : <Eye size={18} strokeWidth={1.75} />}
+                </button>
+              </div>
+              <p id="password-help" className="text-sm text-s-mute">At least 8 characters, with a letter and a number.</p>
+            </div>
+
+            {status === "error" && <FormError>{error}</FormError>}
+
+            <button type="submit" disabled={status === "loading"} className={primaryButtonClass}>
+              Continue
             </button>
-            <h1 className="font-display text-2xl font-extrabold text-ink">Select your role</h1>
-            <p className="mt-1 text-ink-soft">This helps us personalise your experience.</p>
+          </form>
+        </>
+      )}
 
-            <div className="mt-6 space-y-3">
+      {step === 2 && (
+        <>
+          <h1 className="mt-4 text-2xl font-semibold text-s-ink">What describes you best?</h1>
+          <p className="mt-1.5 text-s-mute">This helps us tailor what you see first.</p>
+
+          <fieldset className="mt-7">
+            <legend className="sr-only">Your role</legend>
+            <div className="space-y-2.5">
               {ROLE_OPTIONS.map((opt) => {
                 const selected = role === opt;
                 return (
-                  <button
+                  <label
                     key={opt}
-                    type="button"
-                    onClick={() => setRole(opt)}
-                    className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3.5 text-left text-sm font-medium transition ${
-                      selected ? "border-transparent bg-white/80 text-brand shadow-sm" : "border-line text-ink hover:border-brand/40"
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3.5 text-[15px] font-medium transition ${
+                      selected ? "border-s-accent bg-s-accent-soft text-s-ink" : "border-s-line bg-s-page text-s-ink hover:border-s-accent/60"
                     }`}
                   >
-                    <span
-                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-lg border-2 transition ${
-                        selected ? "border-brand bg-gradient-to-br from-[#FF8FCF] to-[#7FB8FF]" : "border-line"
-                      }`}
-                    >
-                      {selected && <span className="h-1.5 w-1.5 rounded-lg bg-white" />}
-                    </span>
+                    <input
+                      type="radio"
+                      name="role"
+                      value={opt}
+                      checked={selected}
+                      onChange={() => setRole(opt)}
+                      className="h-4 w-4 accent-s-accent"
+                    />
                     {opt}
-                  </button>
+                  </label>
                 );
               })}
             </div>
+          </fieldset>
 
-            <button
-              onClick={handleRoleContinue}
-              disabled={!role}
-              className="gradient-brand mt-7 w-full rounded-lg px-4 py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Continue
-            </button>
-          </>
-        )}
+          <button type="button" onClick={handleRoleContinue} disabled={!role} className={`${primaryButtonClass} mt-7`}>
+            Continue
+          </button>
+        </>
+      )}
 
-        {step === 3 && (
-          <>
-            <button onClick={() => setStep(2)} className="mb-3 flex items-center gap-1 text-sm font-medium text-brand hover:underline">
-              <ChevronLeft size={16} /> Back
-            </button>
-            <h1 className="font-display text-2xl font-extrabold text-ink">Tell us about your studies</h1>
-            <p className="mt-1 text-ink-soft">Optional - you can add or change this later in Settings.</p>
+      {step === 3 && (
+        <>
+          <h1 className="mt-4 text-2xl font-semibold text-s-ink">Tell us about your studies</h1>
+          <p className="mt-1.5 text-s-mute">Optional. You can change this later in Settings.</p>
 
-            <div className="mt-6 space-y-4">
-              <TextField label="Institution" icon={Building2} placeholder="Allama Iqbal Medical College" value={profile.institution} onChange={(v) => setProfile((p) => ({ ...p, institution: v }))} />
-              <div className="grid grid-cols-2 gap-4">
-                <TextField label="Programme" icon={BookOpen} placeholder="MBBS" value={profile.programme} onChange={(v) => setProfile((p) => ({ ...p, programme: v }))} />
-                <TextField label="Year / Level" icon={GraduationCap} placeholder="Year 4" value={profile.yearLevel} onChange={(v) => setProfile((p) => ({ ...p, yearLevel: v }))} />
-              </div>
-              <TextField label="Target examination" icon={Target} placeholder="FCPS Part 1" value={profile.targetExam} onChange={(v) => setProfile((p) => ({ ...p, targetExam: v }))} />
-              <TextField label="Expected exam date" icon={CalendarClock} placeholder="e.g. March 2027" value={profile.expectedExamDate} onChange={(v) => setProfile((p) => ({ ...p, expectedExamDate: v }))} />
+          <div className="mt-7 space-y-5">
+            <Field id="institution" label="Institution" placeholder="Allama Iqbal Medical College" autoComplete="organization" value={profile.institution} onChange={(v) => setProfile((p) => ({ ...p, institution: v }))} />
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field id="programme" label="Programme" placeholder="MBBS" value={profile.programme} onChange={(v) => setProfile((p) => ({ ...p, programme: v }))} />
+              <Field id="yearLevel" label="Year or level" placeholder="Year 4" value={profile.yearLevel} onChange={(v) => setProfile((p) => ({ ...p, yearLevel: v }))} />
             </div>
+            <Field id="targetExam" label="Target examination" placeholder="FCPS Part 1" value={profile.targetExam} onChange={(v) => setProfile((p) => ({ ...p, targetExam: v }))} />
+            <Field id="expectedExamDate" label="Expected exam date" placeholder="March 2027" value={profile.expectedExamDate} onChange={(v) => setProfile((p) => ({ ...p, expectedExamDate: v }))} />
+          </div>
 
-            <div className="mt-7 flex gap-3">
-              <button
-                onClick={() => finishToDashboard(false)}
-                disabled={status === "loading"}
-                className="glass-surface flex-1 rounded-lg px-4 py-3 text-sm font-semibold text-ink-soft transition hover:border-brand hover:text-ink"
-              >
-                Skip for now
-              </button>
-              <button
-                onClick={() => finishToDashboard(true)}
-                disabled={status === "loading"}
-                className="gradient-brand flex-1 rounded-lg px-4 py-3 text-sm font-semibold text-white transition"
-              >
-                {status === "loading" ? "Creating..." : "Done"}
-              </button>
-            </div>
-            {status === "error" && (
-              <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{error}</p>
-            )}
-          </>
-        )}
-      </div>
+          {status === "error" && <div className="mt-5"><FormError>{error}</FormError></div>}
+
+          <div className="mt-7 grid gap-3 sm:grid-cols-2">
+            <button type="button" onClick={() => finishToDashboard(false)} disabled={status === "loading"} className={secondaryButtonClass}>
+              Skip for now
+            </button>
+            <button type="button" onClick={() => finishToDashboard(true)} disabled={status === "loading"} className={primaryButtonClass}>
+              {status === "loading" ? "Creating account..." : "Finish"}
+            </button>
+          </div>
+        </>
+      )}
+    </AuthShell>
+  );
+}
+
+function StepIndicator({ step }) {
+  return (
+    <div>
+      <p className="text-sm font-medium text-s-mute">
+        Step {step} of {STEP_LABELS.length}: <span className="text-s-ink">{STEP_LABELS[step - 1]}</span>
+      </p>
+      <ol className="mt-3 grid grid-cols-3 gap-2" aria-hidden="true">
+        {STEP_LABELS.map((label, i) => (
+          <li key={label} className={`h-1 rounded-full ${i < step ? "bg-s-accent" : "bg-s-line"}`} />
+        ))}
+      </ol>
     </div>
   );
 }
 
-function TextField({ label, icon: Icon, value, onChange, type = "text", placeholder, required = false }) {
+function Field({ id, label, value, onChange, type = "text", placeholder, required = false, autoComplete }) {
   return (
-    <label className="block">
-      <span className="mb-1.5 block text-sm font-medium text-ink">{label}</span>
-      <div className="relative">
-        {Icon && <Icon size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft" />}
-        <input
-          type={type}
-          required={required}
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={`w-full rounded-lg border border-line bg-white/80 py-3 pr-3.5 text-sm text-ink outline-none placeholder:text-ink-soft/70 focus:border-brand focus:ring-2 focus:ring-brand/20 ${Icon ? "pl-10" : "pl-4"}`}
-        />
-      </div>
-    </label>
+    <div className="space-y-2">
+      <label htmlFor={id} className="block text-sm font-medium text-s-ink">{label}</label>
+      <input
+        id={id}
+        type={type}
+        required={required}
+        autoComplete={autoComplete}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={inputClass}
+      />
+    </div>
   );
 }

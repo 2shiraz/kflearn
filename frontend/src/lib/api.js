@@ -151,6 +151,11 @@ async function apiFetch(path, options = {}) {
   return data.data;
 }
 
+// Public: credit package names, credits and prices for the pricing page.
+export function getPublicCreditPackages() {
+  return publicFetch("/public/credit-packages");
+}
+
 export function getCredits() {
   return apiFetch("/credits");
 }
