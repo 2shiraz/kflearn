@@ -134,7 +134,7 @@ function FeaturedOsce({ loading, count, osce }) {
     <section
       aria-labelledby="featured-osce-title"
       style={{ "--rise-delay": "80ms" }}
-      className="site-rise relative mt-8 grid gap-8 overflow-hidden rounded-3xl bg-s-accent p-6 text-s-on-accent sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] md:items-center"
+      className="site-rise relative mt-8 grid grid-cols-1 gap-8 overflow-hidden rounded-3xl bg-s-accent p-6 text-s-on-accent sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] md:items-center"
     >
       <span className="pointer-events-none absolute -bottom-10 -left-10 text-s-on-accent opacity-[0.08]" aria-hidden="true">
         <HealthIcon name="stethoscope" size={220} />

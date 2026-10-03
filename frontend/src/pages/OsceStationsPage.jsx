@@ -913,12 +913,7 @@ export function OsceResultPage() {
                   Nothing missed on the checklist.
                 </p>
               )}
-              {!!(state.data.module?.learningNotes || state.data.module?.keyAnswerGuide || state.data.module?.examinerInstructions) && (
-                <div className="mt-6 border-t border-s-line pt-5">
-                  <h2 className="font-semibold text-s-ink">Station review</h2>
-                  <StationReview module={state.data.module} />
-                </div>
-              )}
+              {state.data.module && <StationReview module={state.data.module} />}
             </Panel>
           </div>
         )}
@@ -1400,21 +1395,24 @@ function toItemScores(scores) {
   return Object.entries(scores).map(([itemId, rawScore]) => ({ itemId, rawScore }));
 }
 
+// What a student needs after a station: the model answer, the order to work
+// in, what examiners reward, self-test prompts and the errors that fail a
+// station. Exam-design metadata (circuit timing, rating scales, competency
+// tags) and the faculty note stay in the data for marking but aren't shown.
 function StationReview({ module }) {
-  const guidanceStart = module.facultyNote?.indexOf("Local protocols supersede imported guidance.") ?? -1;
-  const practiceGuidance = guidanceStart >= 0 ? module.facultyNote.slice(guidanceStart) : module.facultyNote;
+  const hasReview = module.learningNotes || module.keyAnswerGuide || module.examinerInstructions || module.suggestedCandidateApproach?.length;
+  if (!hasReview) return null;
   return (
-    <div className="mt-5 space-y-4 text-sm leading-relaxed text-s-mute">
-      {!!module.learningNotes && <p className="whitespace-pre-line rounded-2xl border border-s-line bg-s-card p-4"><strong>Review notes:</strong> {module.learningNotes}</p>}
-      {!!module.keyAnswerGuide && <p className="whitespace-pre-line"><strong>Answer guide:</strong> {module.keyAnswerGuide}</p>}
-      {!!module.examinerInstructions && <p className="whitespace-pre-line"><strong>Examiner guidance:</strong> {module.examinerInstructions}</p>}
-      {!!module.suggestedCandidateApproach?.length && <p><strong>Suggested approach:</strong> {module.suggestedCandidateApproach.join(" → ")}</p>}
-      {!!module.vivaQuestions?.length && <div><strong>Prompt questions:</strong><ul className="mt-2 list-disc pl-5">{module.vivaQuestions.map(prompt => <li key={prompt.question}>{prompt.question}</li>)}</ul></div>}
-      {!!module.expectedCompetencies?.length && <p><strong>Expected competencies:</strong> {module.expectedCompetencies.join(", ")}</p>}
-      {!!module.criticalSafetyErrors?.length && <div className="text-coral"><strong>Critical safety errors:</strong><ul className="mt-2 list-disc pl-5">{module.criticalSafetyErrors.map(error => <li key={error}>{error}</li>)}</ul></div>}
-      {!!module.assessmentDesign?.length && <p><strong>Assessment rules:</strong> {module.assessmentDesign.join(" ")}</p>}
-      {!!practiceGuidance && <p><strong>Practice guidance:</strong> {practiceGuidance}</p>}
-      {!!module.globalRatingOptions?.length && <p><strong>Global ratings:</strong> {module.globalRatingOptions.join(" · ")}</p>}
+    <div className="mt-6 border-t border-s-line pt-5">
+      <h2 className="font-semibold text-s-ink">Station review</h2>
+      <div className="mt-4 space-y-4 text-sm leading-relaxed text-s-mute">
+        {!!module.learningNotes && <p className="whitespace-pre-line rounded-2xl border border-s-line bg-s-card p-4"><strong>Review notes:</strong> {module.learningNotes}</p>}
+        {!!module.keyAnswerGuide && <p className="whitespace-pre-line"><strong>Answer guide:</strong> {module.keyAnswerGuide}</p>}
+        {!!module.suggestedCandidateApproach?.length && <p><strong>Suggested approach:</strong> {module.suggestedCandidateApproach.join(" → ")}</p>}
+        {!!module.examinerInstructions && <p className="whitespace-pre-line"><strong>What examiners look for:</strong> {module.examinerInstructions}</p>}
+        {!!module.vivaQuestions?.length && <div><strong>Questions an examiner may ask:</strong><ul className="mt-2 list-disc pl-5">{module.vivaQuestions.map(prompt => <li key={prompt.question}>{prompt.question}</li>)}</ul></div>}
+        {!!module.criticalSafetyErrors?.length && <div className="text-coral"><strong>Critical safety errors:</strong><ul className="mt-2 list-disc pl-5">{module.criticalSafetyErrors.map(error => <li key={error}>{error}</li>)}</ul></div>}
+      </div>
     </div>
   );
 }
