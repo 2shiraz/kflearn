@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Stethoscope, LayoutGrid, ClipboardList, Coins, FileQuestion, MessageSquareText, FileText, TrendingUp, Settings, LogOut, Menu, ShieldCheck, X } from "lucide-react";
+import { Stethoscope, LayoutGrid, ClipboardList, Coins, FileQuestion, Microscope, MessageSquareText, FileText, TrendingUp, Settings, LogOut, Menu, ShieldCheck, X } from "lucide-react";
 import { getCurrentUser } from "../lib/api";
 import { useCredits } from "../lib/credits";
 
@@ -13,6 +13,7 @@ export const SECTIONS = [
   { key: "history", label: "History Taking Guide", icon: ClipboardList, href: "/history-taking" },
   { key: "clinical-exam", label: "Clinical Examination Guide", icon: Stethoscope, href: "/clinical-examination" },
   { key: "mcqs", label: "MCQs", icon: FileQuestion, href: "/mcqs" },
+  { key: "ospe", label: "OSPE", icon: Microscope, href: "/ospe" },
   { key: "handouts", label: "Handout Notes", icon: FileText, href: "/handout-notes" },
   { key: "stations", label: "OSCE Stations", icon: MessageSquareText, href: "/stations" },
   { key: "progress", label: "Progress", icon: TrendingUp, href: "/progress" },

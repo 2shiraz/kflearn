@@ -31,6 +31,7 @@ import {
 import { HistoryGuideHome, HistoryGuideTopic } from "./pages/HistoryGuidePage";
 import { McqPractice, McqsHome, McqYearPage } from "./pages/McqsPage";
 import { McqRead } from "./pages/McqReadPage";
+import { OspeHome, OspePractice, OspeRead, OspeYearPage } from "./pages/OspePage";
 import { ClinicalExamGuideHome, ClinicalExamGuideStation } from "./pages/ClinicalExaminationPage";
 import { HandoutNotesDetail, HandoutNotesHome } from "./pages/HandoutNotesPage";
 import CreditsPage from "./pages/CreditsPage";
@@ -82,6 +83,10 @@ export default function App() {
           <Route path="/mcqs/:yearSlug" element={<McqYearPage />} />
           <Route path="/mcqs/:yearSlug/read" element={<McqRead />} />
           <Route path="/mcqs/:yearSlug/practice" element={<McqPractice />} />
+          <Route path="/ospe" element={<OspeHome />} />
+          <Route path="/ospe/:yearSlug" element={<OspeYearPage />} />
+          <Route path="/ospe/:yearSlug/read" element={<OspeRead />} />
+          <Route path="/ospe/:yearSlug/practice" element={<OspePractice />} />
           <Route path="/handout-notes" element={<HandoutNotesHome />} />
           <Route path="/handout-notes/:slug" element={<HandoutNotesDetail />} />
           <Route path="/progress" element={<ComingSoonPage sectionKey="progress" title="Progress" />} />

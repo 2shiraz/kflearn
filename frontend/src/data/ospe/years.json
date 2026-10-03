@@ -1,0 +1,674 @@
+[
+  {
+    "slug": "mbbs-1",
+    "year": 1,
+    "name": "MBBS First Year",
+    "count": 100,
+    "blocks": [
+      {
+        "slug": "foundation",
+        "name": "Foundation Module",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "cell-biology-and-genetics",
+            "name": "Cell Biology & Genetics",
+            "count": 4
+          },
+          {
+            "slug": "bioenergetics-and-enzymes",
+            "name": "Bioenergetics & Enzymes",
+            "count": 4
+          },
+          {
+            "slug": "general-histology",
+            "name": "General Histology",
+            "count": 4
+          },
+          {
+            "slug": "general-embryology",
+            "name": "General Embryology",
+            "count": 4
+          },
+          {
+            "slug": "community-medicine-and-biostatistics-basics",
+            "name": "Community Medicine & Biostatistics Basics",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "blood",
+        "name": "Blood Module",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "hematopoiesis-and-rbc-physiology",
+            "name": "Hematopoiesis & RBC Physiology",
+            "count": 4
+          },
+          {
+            "slug": "wbc-physiology-and-immunity",
+            "name": "WBC Physiology & Immunity",
+            "count": 4
+          },
+          {
+            "slug": "hemostasis-and-coagulation",
+            "name": "Hemostasis & Coagulation",
+            "count": 4
+          },
+          {
+            "slug": "blood-groups-transfusion-and-anemia",
+            "name": "Blood Groups, Transfusion & Anemia",
+            "count": 4
+          },
+          {
+            "slug": "lymphatic-system-anatomy-and-histology",
+            "name": "Lymphatic System Anatomy & Histology",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "musculoskeletal-msk",
+        "name": "Musculoskeletal (MSK) Module",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "upper-limb-anatomy",
+            "name": "Upper Limb Anatomy",
+            "count": 4
+          },
+          {
+            "slug": "lower-limb-anatomy",
+            "name": "Lower Limb Anatomy",
+            "count": 4
+          },
+          {
+            "slug": "back-vertebral-column-and-spinal-cord-anatomy",
+            "name": "Back, Vertebral Column & Spinal Cord Anatomy",
+            "count": 4
+          },
+          {
+            "slug": "bone-joint-and-cartilage-physiology",
+            "name": "Bone, Joint & Cartilage Physiology",
+            "count": 4
+          },
+          {
+            "slug": "muscle-physiology-and-msk-biochemistry",
+            "name": "Muscle Physiology & MSK Biochemistry",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "cardiovascular-cvs",
+        "name": "Cardiovascular (CVS) Module",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "heart-anatomy",
+            "name": "Heart Anatomy",
+            "count": 4
+          },
+          {
+            "slug": "cardiac-physiology",
+            "name": "Cardiac Physiology",
+            "count": 4
+          },
+          {
+            "slug": "ecg-and-cardiac-electrophysiology",
+            "name": "ECG & Cardiac Electrophysiology",
+            "count": 4
+          },
+          {
+            "slug": "vascular-physiology-and-bp-regulation",
+            "name": "Vascular Physiology & BP Regulation",
+            "count": 4
+          },
+          {
+            "slug": "cardiac-histology-embryology-and-biochemistry",
+            "name": "Cardiac Histology, Embryology & Biochemistry",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "respiratory",
+        "name": "Respiratory Module",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "respiratory-system-anatomy",
+            "name": "Respiratory System Anatomy",
+            "count": 4
+          },
+          {
+            "slug": "pulmonary-ventilation-and-mechanics",
+            "name": "Pulmonary Ventilation & Mechanics",
+            "count": 4
+          },
+          {
+            "slug": "gas-exchange-and-transport",
+            "name": "Gas Exchange & Transport",
+            "count": 4
+          },
+          {
+            "slug": "control-of-respiration-and-regulation",
+            "name": "Control of Respiration & Regulation",
+            "count": 4
+          },
+          {
+            "slug": "respiratory-histology-acid-base-and-pathophysiology",
+            "name": "Respiratory Histology, Acid-Base & Pathophysiology",
+            "count": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "mbbs-2",
+    "year": 2,
+    "name": "MBBS Second Year",
+    "count": 100,
+    "blocks": [
+      {
+        "slug": "git-and-nutrition",
+        "name": "GIT & Nutrition Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "git-anatomy",
+            "name": "GIT Anatomy",
+            "count": 4
+          },
+          {
+            "slug": "git-physiology",
+            "name": "GIT Physiology",
+            "count": 4
+          },
+          {
+            "slug": "liver-gallbladder-and-pancreas",
+            "name": "Liver/Gallbladder & Pancreas",
+            "count": 4
+          },
+          {
+            "slug": "git-histology-and-embryology",
+            "name": "GIT Histology & Embryology",
+            "count": 4
+          },
+          {
+            "slug": "nutrition-and-metabolism-biochemistry",
+            "name": "Nutrition & Metabolism Biochemistry",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "renal",
+        "name": "Renal Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "renal-anatomy",
+            "name": "Renal Anatomy",
+            "count": 4
+          },
+          {
+            "slug": "renal-physiology-filtration-reabsorption-secretion",
+            "name": "Renal Physiology (Filtration, Reabsorption, Secretion)",
+            "count": 4
+          },
+          {
+            "slug": "acid-base-balance-and-renal-regulation",
+            "name": "Acid-Base Balance & Renal Regulation",
+            "count": 4
+          },
+          {
+            "slug": "renal-histology-and-embryology",
+            "name": "Renal Histology & Embryology",
+            "count": 4
+          },
+          {
+            "slug": "fluid-electrolyte-and-renal-endocrine-function",
+            "name": "Fluid/Electrolyte & Renal Endocrine Function",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "nervous-system-neurosciences",
+        "name": "Nervous System (Neurosciences) Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "neuroanatomy-brain",
+            "name": "Neuroanatomy - Brain",
+            "count": 4
+          },
+          {
+            "slug": "neuroanatomy-spinal-cord-and-peripheral-nerves",
+            "name": "Neuroanatomy - Spinal Cord & Peripheral Nerves",
+            "count": 4
+          },
+          {
+            "slug": "neurophysiology",
+            "name": "Neurophysiology",
+            "count": 4
+          },
+          {
+            "slug": "neurohistology-and-embryology",
+            "name": "Neurohistology & Embryology",
+            "count": 4
+          },
+          {
+            "slug": "autonomic-nervous-system-and-higher-functions",
+            "name": "Autonomic Nervous System & Higher Functions",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "special-senses",
+        "name": "Special Senses Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "eye-anatomy-and-visual-pathway",
+            "name": "Eye Anatomy & Visual Pathway",
+            "count": 4
+          },
+          {
+            "slug": "ear-anatomy-and-vestibular-system",
+            "name": "Ear Anatomy & Vestibular System",
+            "count": 4
+          },
+          {
+            "slug": "physiology-of-vision",
+            "name": "Physiology of Vision",
+            "count": 4
+          },
+          {
+            "slug": "special-senses-histology-and-embryology",
+            "name": "Special Senses Histology & Embryology",
+            "count": 4
+          },
+          {
+            "slug": "physiology-of-hearing-and-balance",
+            "name": "Physiology of Hearing & Balance",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "endocrine-and-reproductive",
+        "name": "Endocrine & Reproductive Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "endocrine-glands-anatomy-and-histology",
+            "name": "Endocrine Glands Anatomy & Histology",
+            "count": 4
+          },
+          {
+            "slug": "hormone-physiology",
+            "name": "Hormone Physiology",
+            "count": 4
+          },
+          {
+            "slug": "male-reproductive-anatomy-and-physiology",
+            "name": "Male Reproductive Anatomy & Physiology",
+            "count": 4
+          },
+          {
+            "slug": "female-reproductive-anatomy-and-physiology",
+            "name": "Female Reproductive Anatomy & Physiology",
+            "count": 4
+          },
+          {
+            "slug": "reproductive-embryology-and-endocrinology-of-pregnancy",
+            "name": "Reproductive Embryology & Endocrinology of Pregnancy",
+            "count": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "mbbs-3",
+    "year": 3,
+    "name": "MBBS Third Year",
+    "count": 100,
+    "blocks": [
+      {
+        "slug": "general-and-systemic-pathology",
+        "name": "General & Systemic Pathology Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "cell-injury-and-necrosis",
+            "name": "Cell Injury & Necrosis",
+            "count": 4
+          },
+          {
+            "slug": "inflammation-and-repair",
+            "name": "Inflammation & Repair",
+            "count": 3
+          },
+          {
+            "slug": "neoplasia",
+            "name": "Neoplasia",
+            "count": 4
+          },
+          {
+            "slug": "hematopathology",
+            "name": "Hematopathology",
+            "count": 4
+          },
+          {
+            "slug": "systemic-pathology-cvs-and-respiratory",
+            "name": "Systemic Pathology (CVS & Respiratory)",
+            "count": 5
+          }
+        ]
+      },
+      {
+        "slug": "general-and-systemic-pharmacology",
+        "name": "General & Systemic Pharmacology Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "pharmacokinetics-and-pharmacodynamics",
+            "name": "Pharmacokinetics & Pharmacodynamics",
+            "count": 5
+          },
+          {
+            "slug": "autonomic-nervous-system-pharmacology",
+            "name": "Autonomic Nervous System Pharmacology",
+            "count": 3
+          },
+          {
+            "slug": "cardiovascular-pharmacology",
+            "name": "Cardiovascular Pharmacology",
+            "count": 3
+          },
+          {
+            "slug": "antimicrobial-pharmacology",
+            "name": "Antimicrobial Pharmacology",
+            "count": 4
+          },
+          {
+            "slug": "cns-pharmacology",
+            "name": "CNS Pharmacology",
+            "count": 5
+          }
+        ]
+      },
+      {
+        "slug": "microbiology-and-immunology",
+        "name": "Microbiology & Immunology Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "general-bacteriology",
+            "name": "General Bacteriology",
+            "count": 5
+          },
+          {
+            "slug": "virology",
+            "name": "Virology",
+            "count": 4
+          },
+          {
+            "slug": "mycology-and-parasitology",
+            "name": "Mycology & Parasitology",
+            "count": 3
+          },
+          {
+            "slug": "immunology",
+            "name": "Immunology",
+            "count": 4
+          },
+          {
+            "slug": "clinical-microbiology-and-infection-control",
+            "name": "Clinical Microbiology & Infection Control",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "forensic-medicine-and-toxicology",
+        "name": "Forensic Medicine & Toxicology Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "forensic-pathology-and-postmortem-changes",
+            "name": "Forensic Pathology & Postmortem Changes",
+            "count": 4
+          },
+          {
+            "slug": "mechanical-and-thermal-injuries",
+            "name": "Mechanical & Thermal Injuries",
+            "count": 4
+          },
+          {
+            "slug": "forensic-toxicology",
+            "name": "Forensic Toxicology",
+            "count": 6
+          },
+          {
+            "slug": "sexual-offences-and-medico-legal-examination",
+            "name": "Sexual Offences & Medico-legal Examination",
+            "count": 3
+          },
+          {
+            "slug": "medical-jurisprudence-and-ethics",
+            "name": "Medical Jurisprudence & Ethics",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "slug": "community-medicine-and-public-health",
+        "name": "Community Medicine & Public Health Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "epidemiology-and-disease-transmission",
+            "name": "Epidemiology & Disease Transmission",
+            "count": 5
+          },
+          {
+            "slug": "biostatistics-and-research-methodology",
+            "name": "Biostatistics & Research Methodology",
+            "count": 4
+          },
+          {
+            "slug": "preventive-medicine-and-immunization",
+            "name": "Preventive Medicine & Immunization",
+            "count": 3
+          },
+          {
+            "slug": "environmental-and-occupational-health",
+            "name": "Environmental & Occupational Health",
+            "count": 4
+          },
+          {
+            "slug": "health-systems-and-reproductive-maternal-health",
+            "name": "Health Systems & Reproductive/Maternal Health",
+            "count": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "mbbs-4",
+    "year": 4,
+    "name": "MBBS Fourth Year",
+    "count": 100,
+    "blocks": [
+      {
+        "slug": "internal-medicine",
+        "name": "Internal Medicine Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "cardiology",
+            "name": "Cardiology",
+            "count": 4
+          },
+          {
+            "slug": "respiratory-medicine",
+            "name": "Respiratory Medicine",
+            "count": 4
+          },
+          {
+            "slug": "gastroenterology-and-hepatology",
+            "name": "Gastroenterology & Hepatology",
+            "count": 4
+          },
+          {
+            "slug": "nephrology-and-endocrinology",
+            "name": "Nephrology & Endocrinology",
+            "count": 4
+          },
+          {
+            "slug": "neurology-and-rheumatology",
+            "name": "Neurology & Rheumatology",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "general-surgery",
+        "name": "General Surgery Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "surgical-principles-and-perioperative-care",
+            "name": "Surgical Principles & Perioperative Care",
+            "count": 4
+          },
+          {
+            "slug": "gi-surgery-esophagus-stomach-and-intestine",
+            "name": "GI Surgery (Esophagus, Stomach & Intestine)",
+            "count": 4
+          },
+          {
+            "slug": "hepatobiliary-and-pancreatic-surgery",
+            "name": "Hepatobiliary & Pancreatic Surgery",
+            "count": 4
+          },
+          {
+            "slug": "breast-and-endocrine-surgery",
+            "name": "Breast & Endocrine Surgery",
+            "count": 4
+          },
+          {
+            "slug": "urology-and-vascular-surgery",
+            "name": "Urology & Vascular Surgery",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "obstetrics-and-gynecology",
+        "name": "Obstetrics & Gynecology Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "antenatal-care",
+            "name": "Antenatal Care",
+            "count": 4
+          },
+          {
+            "slug": "obstetric-complications-and-labor",
+            "name": "Obstetric Complications & Labor",
+            "count": 4
+          },
+          {
+            "slug": "gynecological-disorders",
+            "name": "Gynecological Disorders",
+            "count": 4
+          },
+          {
+            "slug": "gynecological-oncology-and-infections",
+            "name": "Gynecological Oncology & Infections",
+            "count": 4
+          },
+          {
+            "slug": "infertility-and-family-planning",
+            "name": "Infertility & Family Planning",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "pediatrics",
+        "name": "Pediatrics Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "neonatology",
+            "name": "Neonatology",
+            "count": 4
+          },
+          {
+            "slug": "growth-development-and-nutrition",
+            "name": "Growth, Development & Nutrition",
+            "count": 4
+          },
+          {
+            "slug": "pediatric-infectious-diseases",
+            "name": "Pediatric Infectious Diseases",
+            "count": 4
+          },
+          {
+            "slug": "pediatric-respiratory-and-cardiac-disorders",
+            "name": "Pediatric Respiratory & Cardiac Disorders",
+            "count": 4
+          },
+          {
+            "slug": "pediatric-gi-renal-and-genetic-disorders",
+            "name": "Pediatric GI, Renal & Genetic Disorders",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "slug": "ophthalmology-and-ent",
+        "name": "Ophthalmology & ENT Block",
+        "count": 20,
+        "topics": [
+          {
+            "slug": "ophthalmology-anterior-segment-and-adnexa",
+            "name": "Ophthalmology: Anterior Segment & Adnexa",
+            "count": 4
+          },
+          {
+            "slug": "ophthalmology-posterior-segment-and-refractive-disorders",
+            "name": "Ophthalmology: Posterior Segment & Refractive Disorders",
+            "count": 4
+          },
+          {
+            "slug": "ent-diseases-of-the-ear",
+            "name": "ENT: Diseases of the Ear",
+            "count": 4
+          },
+          {
+            "slug": "ent-diseases-of-the-nose-and-paranasal-sinuses",
+            "name": "ENT: Diseases of the Nose & Paranasal Sinuses",
+            "count": 4
+          },
+          {
+            "slug": "ent-diseases-of-the-throat-head-and-neck",
+            "name": "ENT: Diseases of the Throat, Head & Neck",
+            "count": 4
+          }
+        ]
+      }
+    ]
+  }
+]
