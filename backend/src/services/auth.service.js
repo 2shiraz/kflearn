@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
+import { STARTING_CREDITS } from "../config/credits.js";
 import { avatarFor, isAvatarId, randomAvatarId } from "../config/avatars.js";
 import { CreditTransaction } from "../models/CreditTransaction.js";
 import { OsceAttempt } from "../models/OsceAttempt.js";
@@ -98,8 +99,21 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     roleLabel: String(roleLabel || "").trim(),
     avatar: randomAvatarId(),
     tourPending: true,
+    creditBalance: STARTING_CREDITS,
     profile: safeProfile,
   });
+
+  try {
+    await CreditTransaction.create({
+      userId: user._id, type: "grant", reason: "welcome-grant",
+      amount: STARTING_CREDITS, balanceAfter: STARTING_CREDITS,
+      note: "Welcome credits for your new account.", createdBy: "system",
+    });
+  } catch (error) {
+    // Don't leave a partially registered account with untracked credits.
+    await User.deleteOne({ _id: user._id });
+    throw error;
+  }
 
   const { token, expiresInMs } = signToken(user);
   return { token, expiresInMs, user: toUserDto(user) };

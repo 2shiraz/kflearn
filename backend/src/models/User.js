@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true },
     sessionVersion: { type: Number, default: 0 },
-    // Only ever changed through credit.service.js (atomic, ledgered). No user-
-    // facing route writes this field.
+    // Signup initializes a ledgered welcome grant; later changes go through
+    // credit.service.js. User-supplied balances are never accepted.
     creditBalance: {
       type: Number,
       default: 0,

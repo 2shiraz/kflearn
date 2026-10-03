@@ -117,7 +117,7 @@ test("account deletion needs the password and confirmation, then removes the use
   assert.equal(await User.exists({ _id: user.id }), null);
   assert.equal(await CreditTransaction.countDocuments({ userId: user.id }), 0);
   assert.equal(await OsceAttempt.countDocuments({ userId: user.id }), 0);
-  assert.equal(await CreditTransaction.countDocuments({ userId: other.user.id }), 1);
+  assert.equal(await CreditTransaction.countDocuments({ userId: other.user.id }), 2);
   assert.equal((await request(app).get("/api/auth/me").set(auth(token))).status, 401);
 });
 

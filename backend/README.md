@@ -109,6 +109,13 @@ This only fills missing categories, preserves content, IDs, timestamps and modes
 and can be rerun safely. Full `npm run seed` includes this step. Uncategorised
 legacy stations also receive an effective category in API responses.
 
+## Welcome credits
+
+New registrations currently receive 30 welcome credits once, recorded in the
+credit ledger. Existing account balances are unchanged; logging in does not
+grant credits. The allowance is configured as `STARTING_CREDITS` in
+`src/config/credits.js`.
+
 ## Real-AI OSCE tests
 
 The normal `npm test` suite does not require a working AI provider key and

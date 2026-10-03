@@ -10,6 +10,7 @@ const REASON_LABELS = {
   "virtual-patient": "AI Virtual Patient session",
   "ai-assessment": "AI Assessment",
   "admin-grant": "AI credits added",
+  "welcome-grant": "Welcome credits",
   purchase: "AI credit package purchase",
 };
 

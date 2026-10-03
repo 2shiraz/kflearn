@@ -10,6 +10,7 @@ import { createApp } from "../../src/app.js";
 import { env } from "../../src/config/env.js";
 import { CREDIT_COSTS } from "../../src/config/credits.js";
 import { CreditTransaction } from "../../src/models/CreditTransaction.js";
+import { User } from "../../src/models/User.js";
 import { OsceAttempt } from "../../src/models/OsceAttempt.js";
 import { seedOsceContent } from "../../src/seed/osce.seed.js";
 import { grantCredits } from "../../src/services/credit.service.js";
@@ -45,6 +46,9 @@ async function student(credits = FULL_COST) {
   });
   assert.equal(created.status, 201);
   const userId = created.body.data.user.id;
+  // Keep the explicit test budget independent of signup welcome credits.
+  await User.updateOne({ _id: userId }, { $set: { creditBalance: 0 } });
+  await CreditTransaction.deleteMany({ userId });
   if (credits) await grantCredits({ userId, amount: credits, note: "isolated live test" });
   return { auth: `Bearer ${created.body.data.token}`, userId };
 }
