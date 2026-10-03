@@ -73,9 +73,11 @@ function ProfileSummary({ user, onSaved }) {
             <ImagePlus size={14} strokeWidth={2} aria-hidden="true" />
           </button>
         </div>
-        <div className="min-w-0">
-          <p className="truncate text-lg font-semibold tracking-tight text-s-ink">{user.fullName}</p>
-          <p className="truncate text-sm text-s-mute">{subtitle || user.email}</p>
+        {/* Beside the avatar (mobile) the text truncates to one line; stacked
+            under it in the narrow desktop column it wraps instead. */}
+        <div className="min-w-0 flex-1 lg:w-full lg:flex-none">
+          <p className="truncate text-lg font-semibold tracking-tight text-s-ink lg:whitespace-normal lg:break-words">{user.fullName}</p>
+          <p className="truncate text-sm text-s-mute lg:mt-0.5 lg:whitespace-normal lg:break-words">{subtitle || user.email}</p>
         </div>
       </Panel>
       <nav aria-label="Settings sections" className="mt-4 hidden lg:block">

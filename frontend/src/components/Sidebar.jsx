@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ChevronLeft, ChevronRight, ClipboardList, HeartPulse, LayoutGrid, ListChecks, LogOut, Menu,
-  Microscope, NotebookText, Settings, ShieldCheck, Stethoscope, TrendingUp, X, Zap,
+  Microscope, NotebookText, ShieldCheck, Stethoscope, TrendingUp, X, Zap,
 } from "lucide-react";
 import BrandMark from "./BrandMark";
 import { UserAvatar } from "../site/Illustrations";
@@ -41,8 +41,6 @@ const NAV_ICONS = {
   progress: TrendingUp,
   admin: ShieldCheck,
   credits: Zap,
-  settings: Settings,
-  logout: LogOut,
 };
 
 function NavIcon({ item, active }) {
@@ -122,26 +120,58 @@ function NavList({ sections, active, mode, onNavigate }) {
   );
 }
 
-function AccountLinks({ active, balance, mode, onNavigate, onLogout }) {
+// Account row layouts. Expanded: one row with avatar, name and email (the
+// Settings link) and a sign-out icon beside it. Icon-only: the avatar, then
+// the sign-out icon under it.
+const PROFILE_ROW_CLASS = {
+  drawer: "flex items-center gap-1",
+  rail: "flex flex-col items-center gap-1 lg:flex-row lg:gap-1",
+  collapsed: "flex flex-col items-center gap-1",
+};
+const PROFILE_LINK_CLASS = {
+  drawer: "min-w-0 flex-1 gap-3 rounded-2xl p-1.5 pr-2",
+  rail: "h-11 w-11 justify-center rounded-full lg:h-auto lg:w-auto lg:min-w-0 lg:flex-1 lg:justify-start lg:gap-3 lg:rounded-2xl lg:p-1.5 lg:pr-2",
+  collapsed: "h-11 w-11 justify-center rounded-full",
+};
+
+function AccountLinks({ active, balance, mode, user, initials, onNavigate, onLogout }) {
   const creditsActive = active === "credits";
   const settingsActive = active === "settings";
   const hide = LABEL_CLASS[mode];
   const compact = mode !== "drawer";
   return (
-    <div className="flex flex-col gap-1 border-t border-s-line pt-3">
+    <div className="flex flex-col gap-1 pt-3">
       <Link to="/credits" data-tour="credits" title={compact ? `AI credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, mode)}>
         <NavIcon item={{ key: "credits" }} active={creditsActive} />
         <span className={hide}>AI Credits</span>
         <span className={`${hide} ml-auto font-chart text-xs text-s-mute`}>{formatBalance(balance)}</span>
       </Link>
-      <Link to="/settings" data-tour="settings" title={compact ? "Settings" : undefined} aria-current={settingsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(settingsActive, mode)}>
-        <NavIcon item={{ key: "settings" }} active={settingsActive} />
-        <span className={hide}>Settings</span>
-      </Link>
-      <button type="button" title={compact ? "Sign out" : undefined} onClick={onLogout} className={`${itemClass(false, mode)} ${mode === "drawer" ? "w-full" : mode === "rail" ? "lg:w-full" : ""} hover:text-s-miss`}>
-        <NavIcon item={{ key: "logout" }} active={false} />
-        <span className={hide}>Sign out</span>
-      </button>
+      <div className={PROFILE_ROW_CLASS[mode]}>
+        <Link
+          to="/settings"
+          data-tour="settings"
+          title={compact ? "Settings" : undefined}
+          aria-label={user ? `Settings, signed in as ${user.fullName}` : "Settings"}
+          aria-current={settingsActive ? "page" : undefined}
+          onClick={onNavigate}
+          className={`site-press group flex min-h-11 items-center ${PROFILE_LINK_CLASS[mode]} ${settingsActive ? "bg-s-accent-soft" : "hover:bg-s-tint/70"}`}
+        >
+          <ProfilePic user={user} initials={initials} />
+          <span className={`${hide} min-w-0 flex-1`}>
+            <span className="block truncate text-sm font-medium text-s-ink">{user?.fullName || "Settings"}</span>
+            <span className="block truncate text-xs text-s-mute">{user?.email ? user.email : "Profile and password"}</span>
+          </span>
+        </Link>
+        <button
+          type="button"
+          onClick={onLogout}
+          aria-label="Sign out"
+          title="Sign out"
+          className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-mute hover:bg-coral-soft/60 hover:text-s-miss"
+        >
+          <LogOut size={18} strokeWidth={1.9} aria-hidden="true" />
+        </button>
+      </div>
     </div>
   );
 }
@@ -263,16 +293,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
             <NavList sections={navSections} active={active} mode={railMode} />
           </nav>
 
-          {user && !collapsed && (
-            <div className="mb-2 hidden items-center gap-3 rounded-2xl bg-s-tint/60 p-2.5 lg:flex">
-              <ProfilePic user={user} initials={initials} />
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-medium text-s-ink">{user.fullName}</span>
-                <span className="block truncate text-xs text-s-mute">{user.email}</span>
-              </span>
-            </div>
-          )}
-          <AccountLinks active={active} balance={balance} mode={railMode} onLogout={onLogout} />
+          <AccountLinks active={active} balance={balance} mode={railMode} user={user} initials={initials} onLogout={onLogout} />
         </div>
       </aside>
 
@@ -310,7 +331,7 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
             <NavList sections={navSections} active={active} mode="drawer" onNavigate={close} />
           </nav>
 
-          <AccountLinks active={active} balance={balance} mode="drawer" onNavigate={close} onLogout={() => { close(); onLogout(); }} />
+          <AccountLinks active={active} balance={balance} mode="drawer" user={user} initials={initials} onNavigate={close} onLogout={() => { close(); onLogout(); }} />
         </div>
       </div>
     </>
