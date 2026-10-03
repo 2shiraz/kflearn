@@ -1,4 +1,4 @@
-import { Character, HealthIcon, MedIcon } from "../site/Illustrations";
+import { Character, MedIcon } from "../site/Illustrations";
 import {
   EXAM_GUIDE_COUNT,
   HANDOUT_COUNT,
@@ -9,20 +9,15 @@ import {
   sampleStations,
 } from "../site/siteContent";
 
-// Indigo panel beside the sign in / sign up form, in the same style as the
-// indigo cards inside the app (dashboard, AI credits).
+// Content for the indigo half of the sign in / sign up split screen. The
+// indigo background itself comes from AuthShell.
 function AsidePanel({ title, body, children, delay = "120ms" }) {
   return (
-    <aside className="site-rise relative overflow-hidden rounded-3xl bg-s-accent p-6 text-s-on-accent sm:p-8" style={{ "--rise-delay": delay }}>
-      <span className="pointer-events-none absolute -bottom-12 -right-12 opacity-[0.08]" aria-hidden="true">
-        <HealthIcon name="stethoscope" size={220} />
-      </span>
-      <div className="relative">
-        <h2 className="text-2xl font-semibold leading-tight tracking-tight sm:text-[1.75rem]">{title}</h2>
-        {body && <p className="mt-2 max-w-md leading-relaxed text-s-on-accent/80">{body}</p>}
-        {children}
-      </div>
-    </aside>
+    <div className="site-rise" style={{ "--rise-delay": delay }}>
+      <h2 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">{title}</h2>
+      {body && <p className="mt-3 max-w-md leading-relaxed text-s-on-accent/80">{body}</p>}
+      {children}
+    </div>
   );
 }
 

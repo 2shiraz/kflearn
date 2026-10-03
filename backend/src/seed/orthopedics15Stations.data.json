@@ -1,0 +1,1693 @@
+{
+  "metadata": {
+    "title": "ORTHOPEDICS OSCE",
+    "subtitle": "15 Structured Stations",
+    "audienceAndScoring": "Final-Year MBBS • 8 minutes per station • 20-point analytic checklist",
+    "includedMaterials": "Candidate materials • Standardised scripts • Examiner guides • Learning notes",
+    "facultyNote": [
+      "This manual contains exactly 15 standalone orthopedics/musculoskeletal OSCE stations developed from the teaching material supplied by the user. All patient names in the original scenarios have been changed. The source material includes non-specific neck pain, low back pain and nerve-root pain, rickets/osteomalacia, frozen shoulder, carpal tunnel syndrome, gout, knee osteoarthritis and osteoporosis. The source contains some older or locally specific prescribing statements. This manual preserves the source topics, examination structure and teaching emphasis, while medication selection, exact dose, contraindications, referral pathways and emergency management should be checked against the current approved institutional/provincial/national protocol before summative use."
+    ],
+    "assessmentDesign": [
+      "Each station is designed for 8 minutes and uses a 20-point analytic checklist (10 observable items scored 0, 1 or 2).",
+      "Score 2 = clearly and independently achieved; 1 = partially achieved or achieved after a standard prompt; 0 = omitted, incorrect or unsafe.",
+      "The analytic score and global rating should be recorded independently. Use an approved standard-setting process.",
+      "Prompted items score at most 1/2. Critical safety errors require examiner review."
+    ],
+    "contents": [
+      "1. Non-Specific Neck Pain - Focused history, red-flag screening and management",
+      "2. Acute Mechanical Low Back Pain - Focused back-pain history, red flags and early management",
+      "3. Lumbar Nerve Root Pain / Sciatica - Recognition of radicular pain and neurological assessment",
+      "4. Low Back Examination - Systematic lumbar spine and lower-limb neurological examination",
+      "5. Rickets in a Child - Recognition of skeletal manifestations and investigation planning",
+      "6. Osteomalacia in an Adult - Bone pain, muscle weakness and metabolic bone assessment",
+      "7. Frozen Shoulder / Adhesive Capsulitis - Shoulder history, differential diagnosis and management",
+      "8. Shoulder Examination - Systematic shoulder examination including impingement assessment",
+      "9. Carpal Tunnel Syndrome in Pregnancy - Median nerve compression history, examination and management",
+      "10. Carpal Tunnel Hand & Wrist Examination - Focused median nerve examination and provocative testing",
+      "11. Acute Gout of the First MTP Joint - Acute monoarthritis history and management",
+      "12. Knee Osteoarthritis - Mechanical knee-pain history, examination and management",
+      "13. Knee Examination - Systematic knee Look-Feel-Move and special tests",
+      "14. Osteoporosis - DEXA Interpretation - Fragility-fracture history, DEXA interpretation and risk assessment",
+      "15. Osteoporosis Prevention & Medication Counselling - Risk reduction and safe long-term treatment counselling"
+    ]
+  },
+  "stations": [
+    {
+      "number": 1,
+      "title": "Non-Specific Neck Pain",
+      "primaryCompetency": "Focused history, red-flag screening and management",
+      "format": "History, examination and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Mr Hamza Farooq, aged 29 years, works as a factory supervisor and reports dull left-sided neck pain extending toward the left shoulder/arm, worse when bending to inspect machinery.",
+        "Take a relevant history, address his worry about heart disease, describe a focused examination and share a management plan."
+      ],
+      "candidateHandout": [
+        "The source scenario links symptoms to prolonged awkward neck posture and emphasizes neurological screening, examination of neck movement and reassurance/ergonomic advice.",
+        "The patient is particularly worried because a close relative recently died from a heart attack."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “Doctor, I have pain on the left side of my neck and chest area and it seems to go toward my left arm.”",
+        "Pain is dull, about 5/10, worse with bending at work and relieved by rest; no trauma, rash, pins and needles or weakness.",
+        "No exertional pain, breathlessness or other volunteered cardiac symptoms. Concern: “I am frightened this could be my heart.”"
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Explore site, onset, character, radiation, severity, aggravating/relieving factors and occupational posture.",
+        "Screen neurological symptoms and relevant serious causes; clarify chest-pain features because this is the patient's main concern.",
+        "Describe inspection, palpation, cervical range of movement and upper-limb motor/neurological assessment.",
+        "Explain a likely mechanical/non-specific pattern if assessment is reassuring; discuss posture/ergonomics, activity, simple analgesia as locally appropriate, physiotherapy/occupational advice, follow-up and safety-netting."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity and obtains consent."
+        },
+        {
+          "order": 2,
+          "criterion": "Characterises the neck/chest/arm pain systematically."
+        },
+        {
+          "order": 3,
+          "criterion": "Links symptoms to posture and occupational activity without premature closure."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens weakness, numbness/pins and needles and other neurological symptoms."
+        },
+        {
+          "order": 5,
+          "criterion": "Clarifies exertional chest pain, breathlessness and other concerning chest symptoms."
+        },
+        {
+          "order": 6,
+          "criterion": "Reviews trauma, rash and relevant medical/drug history."
+        },
+        {
+          "order": 7,
+          "criterion": "Describes inspection, palpation and cervical range-of-motion examination."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses upper-limb power/neurological status."
+        },
+        {
+          "order": 9,
+          "criterion": "Addresses the patient's cardiac worry and explains the working diagnosis clearly."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides ergonomic/physiotherapy/analgesia advice, follow-up and safety-netting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“What features would make you reconsider a simple mechanical diagnosis?”",
+        "“What would you examine in the upper limbs?”",
+        "“How would you address his fear of heart disease?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Reassures about cardiac disease without first clarifying concerning chest symptoms.",
+        "Fails to screen new neurological deficit.",
+        "Provides no safety-net for worsening symptoms."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Acute Mechanical Low Back Pain",
+      "primaryCompetency": "Focused back-pain history, red flags and early management",
+      "format": "History and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Ms Sana Qureshi, aged 46 years, is a computer operator who developed severe low-back pain after lifting a heavy box in an awkward twisted position.",
+        "Take a focused history, screen for red flags and explain the initial management plan."
+      ],
+      "candidateHandout": [
+        "The source scenario describes acute mechanical backache after lifting, worsened by movement and relieved by rest, with no leg radiation.",
+        "It emphasizes avoiding prolonged bed rest, maintaining activity, lifting technique, workplace ergonomics and follow-up."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “I hurt my back lifting a heavy box and the pain has been terrible.”",
+        "Pain is lumbar, constant, about 6/10, worse with movement, no leg radiation, weakness or sensory loss.",
+        "She has been resting because she believes rest is best. ICE: worried about coping at home and wants pain relief."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Use a structured pain history and screen cauda equina, neurological, systemic and malignancy/infection red flags described in the source.",
+        "Describe a focused spinal and lower-limb neurological examination.",
+        "Explain likely acute mechanical back pain when the history/examination are reassuring.",
+        "Encourage remaining active and early return to usual activity, with ergonomic/lifting advice, locally appropriate analgesia, review and safety-netting."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes structured pain history including mechanism of injury."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks about leg radiation and cough/sneeze provocation."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens leg weakness and sensory symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens bladder/bowel disturbance and saddle sensory change."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens fever, weight loss, night pain, cancer/infection/steroid history."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses previous episodes and functional impact."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains focused spinal and neurological examination."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains likely mechanical back pain appropriately."
+        },
+        {
+          "order": 9,
+          "criterion": "Advises against prolonged bed rest and encourages graded activity/ergonomics."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides analgesia plan, follow-up and urgent red-flag safety-netting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“Which symptoms suggest cauda equina involvement?”",
+        "“Should she stay in bed until the pain resolves?”",
+        "“When would you reconsider the diagnosis?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Misses bladder/bowel or saddle symptoms.",
+        "Recommends prolonged bed rest.",
+        "Fails to safety-net progressive neurological deficit."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Lumbar Nerve Root Pain / Sciatica",
+      "primaryCompetency": "Recognition of radicular pain and neurological assessment",
+      "format": "History, examination and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Mr Bilal Ahmed, aged 39 years, has low-back pain radiating down one leg with intermittent numbness.",
+        "Take a focused history, describe the relevant neurological examination and outline management."
+      ],
+      "candidateHandout": [
+        "The source material distinguishes nerve-root pain from uncomplicated mechanical back pain by leg radiation, numbness, reduced straight-leg raise and reflex changes.",
+        "It includes lower-limb power, reflex and sensory testing by lumbar/sacral distribution."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “The back pain now shoots down my right leg and sometimes my foot feels numb.”",
+        "No bladder/bowel disturbance or saddle anaesthesia; no fever or weight loss.",
+        "Pain worsens with coughing; he is worried he has a slipped disc and will need surgery."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Clarify radicular distribution and neurological symptoms while screening cauda equina and systemic red flags.",
+        "Examine gait, lower-limb power, reflexes, dermatomal sensation and straight-leg raise as described in the source.",
+        "Explain that nerve-root pain can often improve with conservative management when no emergency features are present.",
+        "Discuss activity, analgesia, review and escalation/imaging/referral if severe, progressive, persistent or red flags develop."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises back and radiating leg pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks about numbness, pins and needles and weakness."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks about cough/sneeze provocation."
+        },
+        {
+          "order": 4,
+          "criterion": "Screens bladder/bowel dysfunction and saddle anaesthesia."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens systemic red flags."
+        },
+        {
+          "order": 6,
+          "criterion": "Describes gait and lower-limb motor assessment."
+        },
+        {
+          "order": 7,
+          "criterion": "Describes knee/ankle reflex and dermatomal sensory assessment."
+        },
+        {
+          "order": 8,
+          "criterion": "Performs/describes straight-leg raise appropriately."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains conservative management and expected review pathway."
+        },
+        {
+          "order": 10,
+          "criterion": "Safety-nets progressive weakness or cauda equina symptoms urgently."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“What findings support nerve-root involvement?”",
+        "“Which reflexes and sensory areas would you check?”",
+        "“Which symptoms require emergency assessment?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to screen cauda equina syndrome.",
+        "Omits lower-limb neurological examination.",
+        "Assures recovery despite progressive motor deficit."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Low Back Examination",
+      "primaryCompetency": "Systematic lumbar spine and lower-limb neurological examination",
+      "format": "Examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Mr Usman Tariq, aged 44 years, has low-back pain. Perform a focused examination of the lumbar spine and relevant lower-limb neurological system.",
+        "Explain your findings and what further examination you would perform."
+      ],
+      "candidateHandout": [
+        "The source uses a Look-Feel-Move sequence, spinal palpation, flexion/extension/lateral flexion/rotation, lower-limb power, straight-leg raise, knee/ankle reflexes and sensory testing."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Simulated patient is able to stand and walk. Mild paraspinal tenderness may be reported if asked.",
+        "No objective weakness is provided unless the examiner supplies it."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Inspect posture/curvature and gait; palpate spinous processes and paraspinal muscles.",
+        "Assess lumbar movement gently and safely.",
+        "Assess lower-limb power, reflexes and sensation; perform straight-leg raise when appropriate.",
+        "Conclude with relevant additional examination and red-flag assessment."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity, consent and pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Observes gait and spinal posture/curvature."
+        },
+        {
+          "order": 3,
+          "criterion": "Inspects from side and behind for asymmetry/deformity."
+        },
+        {
+          "order": 4,
+          "criterion": "Palpates spinous processes and paraspinal muscles."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses flexion, extension and lateral flexion safely."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses rotation appropriately."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses key lower-limb motor groups."
+        },
+        {
+          "order": 8,
+          "criterion": "Checks knee and ankle reflexes."
+        },
+        {
+          "order": 9,
+          "criterion": "Assesses dermatomal sensation and straight-leg raise."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises findings and mentions cauda equina/systemic red-flag assessment."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“Which lower-limb neurological tests are essential?”",
+        "“What does straight-leg raise assess?”",
+        "“Which sensory areas would you check?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Performs painful movements forcefully.",
+        "Omits neurological assessment.",
+        "Fails to recognise new objective neurological deficit as significant."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Rickets in a Child",
+      "primaryCompetency": "Recognition of skeletal manifestations and investigation planning",
+      "format": "History, examination and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "A 4-year-old child, Ayaan Khan, is brought by his mother because of bowed legs, delayed growth and intermittent bone discomfort.",
+        "Take a focused history, describe examination findings you would seek and outline investigations and management principles."
+      ],
+      "candidateHandout": [
+        "The source lists bone pain/tenderness, bow legs, pigeon chest, rachitic rosary, spinal deformity, delayed dentition, muscle weakness and impaired growth.",
+        "It suggests assessment of calcium, phosphate, vitamin D, parathyroid hormone, liver and renal function, and attention to dietary deficiency or secondary causes."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Mother says: “His legs look bowed and he seems shorter than other children his age.”",
+        "If asked: limited vitamin-D/calcium-rich diet; no known chronic kidney/liver disease.",
+        "Concern: whether the deformity will be permanent."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Assess diet, sunlight exposure, growth, bone pain, muscle weakness, fractures, dentition and features of secondary disease.",
+        "Examine growth parameters and skeletal features described in the source.",
+        "Plan biochemical assessment including calcium/phosphate/vitamin D and relevant secondary-cause tests.",
+        "Explain nutritional correction/supplementation and treatment of an underlying cause according to paediatric/local protocols, with follow-up."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Clarifies growth and developmental concern."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks about bone pain, weakness and fractures."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses diet and vitamin D/calcium intake."
+        },
+        {
+          "order": 4,
+          "criterion": "Asks about sunlight exposure and relevant secondary causes."
+        },
+        {
+          "order": 5,
+          "criterion": "Describes examination for bowing and other skeletal deformities."
+        },
+        {
+          "order": 6,
+          "criterion": "Mentions rachitic rosary/chest and spinal changes."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses dentition and growth parameters."
+        },
+        {
+          "order": 8,
+          "criterion": "Requests appropriate calcium/phosphate/vitamin D testing."
+        },
+        {
+          "order": 9,
+          "criterion": "Considers renal/liver/PTH assessment where indicated."
+        },
+        {
+          "order": 10,
+          "criterion": "Explains supplementation/nutrition, underlying-cause management and follow-up."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“Which skeletal signs would you look for?”",
+        "“Which laboratory tests are suggested by the source?”",
+        "“What secondary causes should be considered?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Ignores impaired growth or pathological fracture.",
+        "Provides supplementation without considering secondary disease when suggested.",
+        "No follow-up plan for a child with deformity."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Osteomalacia in an Adult",
+      "primaryCompetency": "Bone pain, muscle weakness and metabolic bone assessment",
+      "format": "History and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Ms Maryam Shah, aged 48 years, reports diffuse bone pain, particularly around the hips, and increasing proximal muscle weakness.",
+        "Take a focused history and outline investigation and management."
+      ],
+      "candidateHandout": [
+        "The source describes adult osteomalacia with bone pain, muscle weakness, pathological fractures and possible manifestations of low calcium.",
+        "It highlights dietary deficiency and secondary causes such as malabsorption, liver disease and chronic renal failure."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My hips and bones ache, and I feel weaker getting up from a chair.”",
+        "No major trauma; diet is poor in calcium/vitamin-D-rich foods.",
+        "If asked: no known renal or liver disease; no fracture yet."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Characterise bone pain and weakness, falls/fractures and functional impact.",
+        "Assess dietary/sun exposure and screen malabsorption, renal and liver disease.",
+        "Plan calcium, phosphate, vitamin D and related biochemical assessment, with additional tests guided by suspected cause.",
+        "Discuss vitamin D/calcium replacement and treatment of the underlying cause according to local protocol."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises bone pain and distribution."
+        },
+        {
+          "order": 2,
+          "criterion": "Assesses proximal muscle weakness/function."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks about falls and pathological/low-trauma fractures."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses dietary calcium/vitamin D intake."
+        },
+        {
+          "order": 5,
+          "criterion": "Asks about sunlight exposure."
+        },
+        {
+          "order": 6,
+          "criterion": "Screens malabsorption, renal and liver disease."
+        },
+        {
+          "order": 7,
+          "criterion": "Screens symptoms of significant hypocalcaemia described in the source."
+        },
+        {
+          "order": 8,
+          "criterion": "Requests appropriate metabolic bone blood tests."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains replacement and treatment of secondary cause."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides falls/fracture advice and follow-up."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“How does osteomalacia differ from rickets in presentation context?”",
+        "“Which secondary causes are listed?”",
+        "“Which symptoms might suggest low calcium?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Misses pathological fracture risk.",
+        "Fails to consider renal/liver/malabsorption causes.",
+        "No plan to investigate metabolic bone disease."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Frozen Shoulder / Adhesive Capsulitis",
+      "primaryCompetency": "Shoulder history, differential diagnosis and management",
+      "format": "History, examination and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Mr Kamran Siddiqui, aged 56 years, has had left shoulder pain for 6 weeks with progressive restriction of movement.",
+        "Take a focused history, describe the shoulder examination and outline management."
+      ],
+      "candidateHandout": [
+        "The source scenario highlights night pain, restriction in all directions, difficulty combing hair/external rotation and an association with diabetes.",
+        "It also prompts consideration of neck disease, trauma, infection and referred pain."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My left shoulder has become painful and stiff, and I can hardly move it.”",
+        "Pain is constant, 5-6/10, worse at night, may extend toward the elbow; combing hair is difficult.",
+        "He has diabetes. No fever, trauma, chest pain or neck stiffness."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Clarify pain and global movement restriction; assess functional impact and diabetes history.",
+        "Screen trauma, infection, cervical and referred causes as prompted in the source.",
+        "Examine shoulder using Look-Feel-Move and compare active/passive range.",
+        "Explain adhesive capsulitis and discuss analgesia, physiotherapy/exercise, possible injection and orthopaedic escalation according to local practice."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Takes structured shoulder-pain history."
+        },
+        {
+          "order": 2,
+          "criterion": "Identifies night pain and functional restriction."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks about restriction in all directions/external rotation."
+        },
+        {
+          "order": 4,
+          "criterion": "Checks diabetes and relevant comorbidity."
+        },
+        {
+          "order": 5,
+          "criterion": "Screens trauma, fever/infection and neck symptoms."
+        },
+        {
+          "order": 6,
+          "criterion": "Screens relevant referred pain symptoms."
+        },
+        {
+          "order": 7,
+          "criterion": "Describes Look-Feel-Move examination."
+        },
+        {
+          "order": 8,
+          "criterion": "Compares active and passive range of movement."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains adhesive capsulitis and conservative management."
+        },
+        {
+          "order": 10,
+          "criterion": "Discusses escalation/referral and follow-up."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“Which movement is often particularly limited?”",
+        "“Which associated condition is highlighted in the source?”",
+        "“What alternative causes should you screen?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Fails to screen a febrile hot shoulder.",
+        "Does not assess passive movement.",
+        "Promises rapid or guaranteed recovery."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Shoulder Examination",
+      "primaryCompetency": "Systematic shoulder examination including impingement assessment",
+      "format": "Examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Ms Hira Nadeem, aged 52 years, has shoulder pain. Perform a focused shoulder examination and present your findings.",
+        "Include the relevant special tests described in the teaching material."
+      ],
+      "candidateHandout": [
+        "The source emphasizes Look-Feel-Move, inspection from front/back, palpation of sternoclavicular and acromioclavicular regions, clavicle, coracoid/humerus/scapula, movement assessment and impingement/painful-arc testing."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Patient reports discomfort during abduction but can cooperate.",
+        "Examiner may provide positive/negative special-test findings if required."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Inspect both shoulders and scapulae; palpate systematically.",
+        "Assess active and passive movement and functional movements.",
+        "Perform appropriate impingement/painful-arc manoeuvres safely and interpret them in context.",
+        "Complete with cervical/neurological assessment where clinically relevant."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity, consent and pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Exposes appropriately and compares both shoulders."
+        },
+        {
+          "order": 3,
+          "criterion": "Inspects for swelling, scars, alignment and muscle wasting."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses temperature and palpates key bony/joint landmarks."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses active flexion/extension/abduction/adduction."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses internal/external rotation."
+        },
+        {
+          "order": 7,
+          "criterion": "Compares passive range where appropriate."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses painful arc/impingement manoeuvres safely."
+        },
+        {
+          "order": 9,
+          "criterion": "Assesses function and considers cervical/neurological source."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises findings without treating one special test as diagnostic alone."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“What do you inspect from the front and back?”",
+        "“Which movements are important in frozen shoulder?”",
+        "“How do special tests fit into the overall assessment?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Forces painful movement.",
+        "Fails to compare both shoulders.",
+        "Declares a diagnosis from one special test alone."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Carpal Tunnel Syndrome in Pregnancy",
+      "primaryCompetency": "Median nerve compression history, examination and management",
+      "format": "History, examination and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Ms Areeba Malik, aged 30 years and pregnant, reports intermittent nocturnal pain, tingling and numbness in the hand for 4 months.",
+        "Take a focused history, examine the hand/wrist and outline management."
+      ],
+      "candidateHandout": [
+        "The source describes nocturnal symptoms in the median-nerve distribution, improvement by shaking the wrist, pregnancy/obesity/hypothyroidism/wrist trauma associations and thenar wasting as an important severity feature.",
+        "It includes Phalen and Tinel tests and nerve-conduction studies when diagnosis is uncertain or severity assessment is needed."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My hand keeps going numb at night and I wake up shaking it.”",
+        "Tingling affects thumb, index and middle fingers and may ache into the forearm; worse at night and in certain wrist positions.",
+        "She is pregnant. Concern: symptoms are interfering with sleep and she is dropping objects."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Define median-distribution sensory symptoms, nocturnal pattern and functional weakness.",
+        "Review pregnancy and other associated factors in the source; ask about previous wrist injury and thyroid symptoms.",
+        "Examine thenar bulk, thumb abduction, grip and median/ulnar sensation; perform provocative tests appropriately.",
+        "Discuss night splinting and pregnancy-appropriate symptom control, with specialist assessment for weakness/thenar wasting or persistent severe disease."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises nocturnal intermittent symptoms."
+        },
+        {
+          "order": 2,
+          "criterion": "Maps symptoms to median-nerve distribution."
+        },
+        {
+          "order": 3,
+          "criterion": "Asks about relief by shaking and positional aggravation."
+        },
+        {
+          "order": 4,
+          "criterion": "Reviews pregnancy, obesity, thyroid and previous wrist trauma."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses dropping objects/functional weakness."
+        },
+        {
+          "order": 6,
+          "criterion": "Inspects for thenar wasting."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses thumb abduction, grip and median sensation."
+        },
+        {
+          "order": 8,
+          "criterion": "Performs/describes Phalen and Tinel tests."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains role of nerve-conduction studies when indicated."
+        },
+        {
+          "order": 10,
+          "criterion": "Provides splinting/safe management and escalates significant weakness/wasting."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“Which fingers are typically affected?”",
+        "“Which motor finding suggests more severe compression?”",
+        "“When would you consider nerve-conduction testing/referral?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Misses thenar wasting or progressive weakness.",
+        "Does not account for pregnancy when discussing medication.",
+        "Fails to assess median nerve motor function."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Carpal Tunnel Hand & Wrist Examination",
+      "primaryCompetency": "Focused median nerve examination and provocative testing",
+      "format": "Examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Mr Zain Ali, aged 45 years, reports hand numbness. Perform a focused examination for carpal tunnel syndrome.",
+        "Present your findings and state what further test may help if the diagnosis or severity is uncertain."
+      ],
+      "candidateHandout": [
+        "The source includes hand inspection, wrist movement, pincer/power grip, thumb abduction, thenar wasting, median/ulnar sensory comparison, Phalen and Tinel testing."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Simulator can reproduce altered sensation in the thumb/index/middle fingers if prompted.",
+        "Examiner may state whether Phalen/Tinel reproduces symptoms."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Inspect hands/wrists, assess movement and function, then examine median motor and sensory function.",
+        "Compare ulnar nerve function where useful.",
+        "Perform Phalen and Tinel manoeuvres and interpret as supportive clinical tests.",
+        "Mention nerve-conduction studies for diagnostic uncertainty/severity."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity, consent and pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Inspects both hands/wrists for deformity, scars and wasting."
+        },
+        {
+          "order": 3,
+          "criterion": "Assesses wrist and finger movement."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses pincer and power grip."
+        },
+        {
+          "order": 5,
+          "criterion": "Inspects thenar eminence."
+        },
+        {
+          "order": 6,
+          "criterion": "Tests thumb abduction/median motor function."
+        },
+        {
+          "order": 7,
+          "criterion": "Maps median sensory distribution and compares ulnar territory."
+        },
+        {
+          "order": 8,
+          "criterion": "Performs Phalen test appropriately."
+        },
+        {
+          "order": 9,
+          "criterion": "Performs Tinel test appropriately."
+        },
+        {
+          "order": 10,
+          "criterion": "Summarises findings and mentions nerve-conduction studies when indicated."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“Which muscle bulk do you inspect?”",
+        "“Which thumb movement tests median motor function?”",
+        "“What is the role of nerve-conduction studies?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Omits motor assessment.",
+        "Uses provocative tests as absolute proof of diagnosis.",
+        "Fails to identify marked thenar wasting as important."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Acute Gout of the First MTP Joint",
+      "primaryCompetency": "Acute monoarthritis history and management",
+      "format": "History and management",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Mr Fahad Raza, aged 43 years, presents with sudden severe pain in the right big-toe joint.",
+        "Gather relevant data, consider important differentials and outline investigation and management."
+      ],
+      "candidateHandout": [
+        "The source describes recurrent first-MTP pain, dietary/alcohol and thiazide associations, serum urate, inflammatory markers and monosodium urate crystals on synovial-fluid microscopy.",
+        "It also explicitly prompts fever/septic arthritis, trauma and recent GI/GU infection as differentials."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My right big toe is extremely painful and I can hardly let anything touch it.”",
+        "Previous similar episode; enjoys meat; takes a thiazide for hypertension; no trauma.",
+        "No fever volunteered. He asks whether this is definitely gout."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Characterise acute monoarthritis and previous attacks; review diet/alcohol, medicines, renal history and other risk factors in the source.",
+        "Actively screen infection, trauma and reactive-arthritis clues.",
+        "Explain serum urate can support assessment but synovial fluid crystal analysis may be required when diagnosis is uncertain or infection must be excluded.",
+        "Discuss acute anti-inflammatory management and longer-term recurrence prevention/urate-lowering assessment according to current local protocol."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises onset, severity and joint involved."
+        },
+        {
+          "order": 2,
+          "criterion": "Asks about previous attacks."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens fever/systemic illness and septic arthritis."
+        },
+        {
+          "order": 4,
+          "criterion": "Asks about trauma and recent GI/GU infection."
+        },
+        {
+          "order": 5,
+          "criterion": "Reviews diet/alcohol, weight and medicines including thiazides."
+        },
+        {
+          "order": 6,
+          "criterion": "Reviews renal and cardiovascular history."
+        },
+        {
+          "order": 7,
+          "criterion": "Requests/interprets serum urate in context."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains role of synovial-fluid microscopy/crystal analysis."
+        },
+        {
+          "order": 9,
+          "criterion": "Outlines acute symptom management safely."
+        },
+        {
+          "order": 10,
+          "criterion": "Discusses recurrence prevention and follow-up/long-term urate strategy."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“What dangerous alternative must be considered in a red hot joint?”",
+        "“What crystals are described in gout?”",
+        "“Which medication in his history may contribute?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Declares infection excluded solely because fever is absent.",
+        "Uses serum urate alone as definitive proof.",
+        "No plan for recurrent attacks/risk-factor review."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Knee Osteoarthritis",
+      "primaryCompetency": "Mechanical knee-pain history, examination and management",
+      "format": "History, examination and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Mr Saad Mahmood, aged 57 years, has gradually progressive pain in both knees, worse after daytime activity and relieved by rest.",
+        "Take a focused history, describe the knee examination and outline management."
+      ],
+      "candidateHandout": [
+        "The source emphasizes mechanical pain, weight-bearing joints, obesity/inactivity, Look-Feel-Move examination, ligament/meniscal assessment, standing knee radiographs and conservative management before joint replacement referral.",
+        "It prompts screening for prolonged morning stiffness, fever, trauma, weight loss and other inflammatory/infective features."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “Both knees ache, especially after I have been active all day.”",
+        "Gradual onset, no radiation, no fever or recent trauma; morning stiffness is brief rather than >1 hour.",
+        "He is overweight and sedentary. Concern: whether he needs surgery."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Establish mechanical pattern, duration, stiffness and functional impact; screen inflammatory/infective/red-flag features.",
+        "Examine knee using Look-Feel-Move and assess gait/function; special tests only as indicated.",
+        "Explain the role of weight-bearing radiography when needed.",
+        "Discuss weight management, exercise/physiotherapy, walking aids if needed, locally appropriate analgesia and orthopaedic referral for persistent severe disability."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Characterises gradual activity-related pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Clarifies morning stiffness duration."
+        },
+        {
+          "order": 3,
+          "criterion": "Screens fever, trauma and significant systemic/red-flag symptoms."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses weight, activity and functional limitation."
+        },
+        {
+          "order": 5,
+          "criterion": "Describes inspection for swelling/effusion/alignment."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses warmth/tenderness and range of movement."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses gait and stability/menisci when indicated."
+        },
+        {
+          "order": 8,
+          "criterion": "Explains role of standing knee radiographs."
+        },
+        {
+          "order": 9,
+          "criterion": "Provides exercise/weight/physiotherapy and safe symptom-control plan."
+        },
+        {
+          "order": 10,
+          "criterion": "Explains indications for orthopaedic referral/joint replacement and follow-up."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“What features support a mechanical rather than inflammatory pattern?”",
+        "“What would you look for on examination?”",
+        "“When would you refer for joint replacement assessment?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Misses a hot febrile swollen knee.",
+        "Recommends inactivity as primary treatment.",
+        "Presents surgery as the immediate first-line treatment."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Knee Examination",
+      "primaryCompetency": "Systematic knee Look-Feel-Move and special tests",
+      "format": "Examination",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Ms Noor Fatima, aged 60 years, has chronic knee pain. Perform a focused knee examination and present your findings.",
+        "Include ligament and meniscal assessment where appropriate."
+      ],
+      "candidateHandout": [
+        "The source uses Look-Feel-Move, inspection for erythema/swelling/effusion/ecchymosis, temperature comparison, flexion/extension, resisted movement, collateral ligament stress, drawer tests and McMurray testing."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Patient can walk and cooperate. Examiner may provide crepitus, reduced flexion or test findings if required.",
+        "No acute injury is assumed unless stated."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Inspect gait, alignment and both knees; palpate temperature, joint lines and effusion.",
+        "Assess active/passive flexion and extension and function.",
+        "Perform stability and meniscal tests when clinically appropriate.",
+        "Summarise findings and relate them to the clinical context."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Introduces self, confirms identity, consent and pain."
+        },
+        {
+          "order": 2,
+          "criterion": "Observes gait and standing alignment."
+        },
+        {
+          "order": 3,
+          "criterion": "Inspects both knees for swelling, erythema, scars and wasting."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses temperature and palpates relevant structures/joint lines."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses for effusion."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses active/passive flexion and extension."
+        },
+        {
+          "order": 7,
+          "criterion": "Assesses quadriceps function/power appropriately."
+        },
+        {
+          "order": 8,
+          "criterion": "Assesses collateral ligament stability."
+        },
+        {
+          "order": 9,
+          "criterion": "Assesses cruciate ligaments with appropriate drawer/Lachman-type testing."
+        },
+        {
+          "order": 10,
+          "criterion": "Assesses menisci when indicated and summarises findings."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“Which structures are assessed by stress testing?”",
+        "“What do drawer tests assess?”",
+        "“When is a meniscal test useful?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Performs provocative tests aggressively in severe pain.",
+        "Fails to assess gait or compare sides.",
+        "Ignores an acutely hot swollen knee."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Osteoporosis - DEXA Interpretation",
+      "primaryCompetency": "Fragility-fracture history, DEXA interpretation and risk assessment",
+      "format": "Data interpretation and counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Ms Farzana Iqbal, aged 67 years, sustained a wrist fracture after a fall from standing height. Her DEXA report shows a T-score of -2.8.",
+        "Take relevant history, interpret the report and outline further assessment and management."
+      ],
+      "candidateHandout": [
+        "The source scenario uses a low-trauma wrist fracture plus DEXA T-score -2.8 and explores risk factors including low BMI, smoking, alcohol, early menopause, steroid exposure, low-calcium diet and secondary causes.",
+        "It recommends assessment for secondary causes and lifestyle/bone-protection management."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “My wrist fracture is being treated, but I was asked to discuss this bone-density report.”",
+        "BMI is low; limited dairy intake; little exercise; smoking history; menopause occurred relatively early.",
+        "She wants to know what the T-score means and how to prevent another fracture."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Confirm patient/report identity and explain that a T-score of -2.8 is in the osteoporosis range.",
+        "Assess fragility-fracture history and risk factors/secondary causes described in the source.",
+        "Review relevant blood tests and secondary-cause work-up guided by history.",
+        "Discuss falls prevention, weight-bearing/resistance exercise, smoking/alcohol measures, adequate calcium/vitamin D and pharmacological treatment assessment according to local osteoporosis guidance."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Confirms identity and reason DEXA was obtained."
+        },
+        {
+          "order": 2,
+          "criterion": "Correctly interprets T-score -2.8 as osteoporosis."
+        },
+        {
+          "order": 3,
+          "criterion": "Recognises low-trauma wrist fracture as clinically important."
+        },
+        {
+          "order": 4,
+          "criterion": "Assesses steroid exposure."
+        },
+        {
+          "order": 5,
+          "criterion": "Assesses smoking/alcohol, low BMI and inactivity."
+        },
+        {
+          "order": 6,
+          "criterion": "Assesses menopause/hormonal and dietary factors."
+        },
+        {
+          "order": 7,
+          "criterion": "Screens renal, liver, thyroid/parathyroid and inflammatory secondary causes."
+        },
+        {
+          "order": 8,
+          "criterion": "Plans appropriate baseline/secondary-cause investigations."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains lifestyle, falls prevention and calcium/vitamin D principles."
+        },
+        {
+          "order": 10,
+          "criterion": "Discusses anti-osteoporosis treatment/referral/follow-up appropriately."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“What does a T-score of -2.8 mean?”",
+        "“Which risk factors in the source would you ask about?”",
+        "“Why does the low-trauma fracture matter?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Misinterprets the T-score.",
+        "Fails to recognise fragility fracture risk.",
+        "Starts treatment without considering contraindications/secondary causes."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Osteoporosis Prevention & Medication Counselling",
+      "primaryCompetency": "Risk reduction and safe long-term treatment counselling",
+      "format": "Counselling",
+      "time": "8 minutes",
+      "analyticScore": "20 points (10 items x 0-2)",
+      "candidateInstructions": [
+        "Mr Imran Yousaf, aged 69 years, has osteoporosis and asks what he can do to reduce future fracture risk and how bone-protection medicines are taken.",
+        "Counsel him on lifestyle measures, treatment principles and follow-up."
+      ],
+      "candidateHandout": [
+        "The source emphasizes exercise, smoking cessation, reducing alcohol, calcium/vitamin D where appropriate and bisphosphonate therapy, with specialist alternatives in selected patients.",
+        "Medication details and repeat-DEXA timing should follow current local guidance and individual risk."
+      ],
+      "learningNotes": [],
+      "simulationScript": [
+        "Opening: “I want to avoid another fracture. What changes should I make, and how do these bone medicines work?”",
+        "He is willing to exercise and change lifestyle but is worried about long-term tablets.",
+        "No specific contraindication is volunteered; candidate should check relevant history before giving medication advice."
+      ],
+      "examinerInstructions": [
+        "Give the candidate the station instructions at the start and assess observable performance, clinical reasoning, examination technique and safety.",
+        "Use the standard prompts only if progress stops. Prompted items score at most 1/2.",
+        "The station is grounded in the supplied teaching material. Accept clinically appropriate local equivalents and verify medication/protocol details before summative use."
+      ],
+      "keyAnswerGuide": [
+        "Assess fracture/falls risk and relevant comorbidity/medication factors before counselling.",
+        "Explain weight-bearing/resistance exercise, nutrition, smoking cessation, alcohol moderation and falls prevention.",
+        "Explain that antiresorptive/anabolic treatment choice depends on fracture risk, renal/GI factors and local guidance; if discussing an oral bisphosphonate, counsel on correct administration and adverse-effect review.",
+        "Arrange monitoring/follow-up and explain that treatment duration/DEXA interval is individualized rather than automatic."
+      ],
+      "suggestedApproach": [
+        "Clarify the presenting problem and relevant ideas, concerns and expectations.",
+        "Use a focused history or examination matched to the station task.",
+        "Screen important red flags and alternative diagnoses before reassurance.",
+        "Explain investigations and management in a structured, patient-centred manner.",
+        "Arrange appropriate follow-up/referral and safety-netting."
+      ],
+      "checklist": [
+        {
+          "order": 1,
+          "criterion": "Assesses previous fragility fractures and falls risk."
+        },
+        {
+          "order": 2,
+          "criterion": "Reviews steroid exposure and other secondary causes/medicines."
+        },
+        {
+          "order": 3,
+          "criterion": "Advises weight-bearing/resistance exercise."
+        },
+        {
+          "order": 4,
+          "criterion": "Advises smoking cessation and alcohol moderation."
+        },
+        {
+          "order": 5,
+          "criterion": "Discusses adequate calcium/vitamin D intake/supplementation where appropriate."
+        },
+        {
+          "order": 6,
+          "criterion": "Discusses home/falls-risk reduction."
+        },
+        {
+          "order": 7,
+          "criterion": "Explains purpose of osteoporosis medication in fracture-risk reduction."
+        },
+        {
+          "order": 8,
+          "criterion": "If oral bisphosphonate discussed, explains safe administration and checks contraindications."
+        },
+        {
+          "order": 9,
+          "criterion": "Explains that alternative/specialist therapies may be considered when indicated."
+        },
+        {
+          "order": 10,
+          "criterion": "Arranges individualized monitoring, adherence review and follow-up."
+        }
+      ],
+      "scoringAnchor": "Score each item: 0 = not achieved/unsafe; 1 = partial or prompted; 2 = clearly and independently achieved. Record prompts separately.",
+      "globalRating": [
+        "Clear fail - Unsafe, disorganised, or unable to achieve the core task despite prompts.",
+        "Borderline - Partial achievement with important omissions; may require prompts but avoids major harm.",
+        "Pass - Safe, structured, clinically appropriate performance with minor omissions.",
+        "Good - Efficient, patient-centred, well-reasoned performance with clear prioritisation.",
+        "Excellent - Fluent integration of clinical reasoning, communication, examination and safety-netting."
+      ],
+      "promptQuestions": [
+        "“Which lifestyle measures are emphasized?”",
+        "“What should you check before prescribing an oral bisphosphonate?”",
+        "“Is repeat DEXA timing identical for every patient?”"
+      ],
+      "expectedCompetencies": [
+        "Focused history/data gathering",
+        "Physical examination",
+        "Clinical reasoning",
+        "Investigation planning",
+        "Management and counselling",
+        "Professionalism and safety-netting"
+      ],
+      "criticalSafetyErrors": [
+        "Gives medication without checking relevant contraindications.",
+        "Promises that medication eliminates fracture risk.",
+        "Provides no falls-prevention or follow-up advice."
+      ],
+      "sourceNote": [
+        "Station content is derived from the orthopedics/musculoskeletal teaching material supplied by the user. Faculty should verify exact drug doses, contraindications, imaging thresholds, referral pathways and emergency protocols against current local standards before use."
+      ]
+    }
+  ]
+}

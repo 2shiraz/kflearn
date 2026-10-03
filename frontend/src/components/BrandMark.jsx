@@ -1,13 +1,6 @@
-import { Stethoscope } from "lucide-react";
-
-// The KF LearnSmart mark: the stethoscope logo in an accent tile.
+// The KF LearnSmart logo: the KF monogram with the graduation cap, drawn on
+// its own with no tile behind it (public/logo.svg). The favicon and app icons
+// keep the indigo tile so they stay legible in browser tabs.
 export default function BrandMark({ size = 34 }) {
-  return (
-    <span
-      className="flex shrink-0 items-center justify-center rounded-[10px] bg-s-accent text-s-on-accent"
-      style={{ width: size, height: size }}
-    >
-      <Stethoscope size={Math.round(size * 0.55)} strokeWidth={2.25} />
-    </span>
-  );
+  return <img src="/logo.svg" alt="" width={size} height={size} className="shrink-0 select-none" draggable="false" />;
 }

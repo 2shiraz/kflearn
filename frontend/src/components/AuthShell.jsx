@@ -1,24 +1,42 @@
 import { Link } from "react-router-dom";
 import BrandMark from "./BrandMark";
+import { HealthIcon } from "../site/Illustrations";
 
-// Sign in and sign up: the form card, with an optional content panel beside it
-// on large screens (below the form on small ones).
+// Sign in and sign up. With `aside`, a vertical split screen on large
+// screens: an indigo content half on the left and the form on the right. On
+// small screens the form comes first and the indigo section follows it.
 export default function AuthShell({ children, footer, aside }) {
+  const form = (
+    <div className="w-full max-w-md">
+      <Link to="/" className={`mb-8 flex min-h-11 w-fit items-center gap-2.5 ${aside ? "lg:hidden" : "mx-auto"}`} aria-label="KF LearnSmart home">
+        <BrandMark />
+        <span className="text-base font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
+      </Link>
+      <div className={`site-rise ${aside ? "" : "site-shadow rounded-3xl border border-s-line bg-s-card p-6 sm:p-8"}`}>{children}</div>
+      {footer && <div className={`mt-6 text-sm text-s-mute ${aside ? "" : "text-center"}`}>{footer}</div>}
+    </div>
+  );
+
+  if (!aside) {
+    return <div className="site flex min-h-dvh flex-col items-center justify-center px-4 py-12">{form}</div>;
+  }
+
   return (
-    <div className="site flex min-h-dvh flex-col items-center justify-center px-4 py-10 sm:px-6 sm:py-12">
-      <div className={`w-full ${aside ? "max-w-5xl" : "max-w-md"}`}>
-        <Link to="/" className={`mb-8 flex min-h-11 w-fit items-center gap-2.5 ${aside ? "mx-auto lg:mx-0" : "mx-auto"}`} aria-label="KF LearnSmart home">
-          <BrandMark />
-          <span className="text-base font-semibold tracking-tight text-s-ink">KF LearnSmart</span>
-        </Link>
-        <div className={aside ? "grid items-center gap-8 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:gap-12" : ""}>
-          <div className="mx-auto w-full max-w-md lg:mx-0">
-            <div className="site-rise site-shadow rounded-3xl border border-s-line bg-s-card p-6 sm:p-8">{children}</div>
-            {footer && <div className="mt-6 text-center text-sm text-s-mute">{footer}</div>}
-          </div>
-          {aside && <div className="mx-auto w-full max-w-md lg:max-w-none">{aside}</div>}
+    <div className="site grid min-h-dvh bg-s-card lg:grid-cols-2">
+      <main className="flex items-center justify-center px-4 py-10 sm:px-8 lg:order-2 lg:px-12">{form}</main>
+
+      <section className="relative overflow-hidden bg-s-accent text-s-on-accent lg:order-1">
+        <span className="pointer-events-none absolute -bottom-16 -right-16 opacity-[0.07]" aria-hidden="true">
+          <HealthIcon name="stethoscope" size={300} />
+        </span>
+        <div className="relative mx-auto flex h-full max-w-xl flex-col px-6 py-10 sm:px-10 lg:py-12">
+          <Link to="/" className="hidden min-h-11 w-fit items-center gap-2.5 lg:flex" aria-label="KF LearnSmart home">
+            <img src="/logo-white.svg" alt="" width={36} height={36} />
+            <span className="text-base font-semibold tracking-tight">KF LearnSmart</span>
+          </Link>
+          <div className="lg:my-auto lg:py-12">{aside}</div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

@@ -12,6 +12,7 @@
     "seed:git": "node src/seed/seedGit.js",
     "seed:gynae-obstetrics": "node src/seed/seedGynaeObstetrics.js",
     "seed:infectious-diseases": "node src/seed/seedInfectiousDiseases.js",
+    "seed:orthopedics": "node src/seed/seedOrthopedics.js",
     "make-admin": "node src/scripts/makeAdmin.js",
     "grant-credits": "node src/scripts/grantCredits.js",
     "test": "NODE_ENV=test node --test --test-concurrency=1 tests/*.test.js",

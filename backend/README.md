@@ -52,6 +52,7 @@ npm run seed:endocrinology
 npm run seed:git
 npm run seed:gynae-obstetrics
 npm run seed:infectious-diseases
+npm run seed:orthopedics
 npm run dev
 npm test
 ```
@@ -63,6 +64,9 @@ station's specialty without replacing its content or identifiers. The full
 the 15 gynaecology/obstetrics stations (`seed:gynae-obstetrics`),
 the 15 infectious-disease stations (`seed:infectious-diseases`),
 and the existing station bank.
+The full seed also includes 15 orthopedics stations (`seed:orthopedics`):
+10 AI conversations and 5 guided-only examinations, each eight minutes with
+a 20-point checklist. Their source data and reusable seed are in `src/seed`.
 The station data is checked into `src/seed`; the uploaded documents are not
 needed to seed another database. Set `MONGODB_URI` for the target database,
 then run the relevant command from `backend`.
