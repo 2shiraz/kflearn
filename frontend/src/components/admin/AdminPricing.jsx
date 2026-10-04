@@ -95,15 +95,17 @@ export default function AdminPricing() {
                 const price = toInt(pkg.pricePkr);
                 const stations = fullStation && credits ? Math.floor(credits / fullStation) : 0;
                 return (
-                  <div key={pkg.id || `new-${index}`} className="grid items-end gap-3 rounded-2xl border border-s-line p-4 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_auto]">
-                    <Field label="Name" value={pkg.name} maxLength={40} onChange={(v) => updatePackage(index, "name", v)} />
+                  // Phones: name and delete on the first line, credits and
+                  // price side by side below. Wider: all four in one row.
+                  <div key={pkg.id || `new-${index}`} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-end gap-3 rounded-2xl border border-s-line p-4 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_auto]">
+                    <Field className="col-span-2 sm:col-span-1" label="Name" value={pkg.name} maxLength={40} onChange={(v) => updatePackage(index, "name", v)} />
                     <Field label="AI credits" type="number" min="1" inputMode="numeric" value={pkg.credits} onChange={(v) => updatePackage(index, "credits", v)} />
                     <Field label="Price (PKR)" type="number" min="0" inputMode="numeric" value={pkg.pricePkr} onChange={(v) => updatePackage(index, "pricePkr", v)} />
-                    <button type="button" aria-label={`Remove ${pkg.name || "package"}`} onClick={() => update("packages", form.packages.filter((_, i) => i !== index))} className="site-press flex h-11 w-11 items-center justify-center rounded-full text-s-mute hover:bg-coral-soft/60 hover:text-s-miss">
+                    <button type="button" aria-label={`Remove ${pkg.name || "package"}`} onClick={() => update("packages", form.packages.filter((_, i) => i !== index))} className="site-press col-start-3 row-start-1 flex h-11 w-11 items-center justify-center rounded-full text-s-mute hover:bg-coral-soft/60 hover:text-s-miss sm:col-start-4">
                       <Trash2 size={17} strokeWidth={2} />
                     </button>
                     {stations > 0 && price >= 0 && (
-                      <p className="text-xs text-s-mute sm:col-span-4">About {stations} full stations with AI marking.</p>
+                      <p className="col-span-3 text-xs text-s-mute sm:col-span-4">About {stations} full stations with AI marking.</p>
                     )}
                   </div>
                 );
@@ -111,7 +113,7 @@ export default function AdminPricing() {
             </div>
           </Panel>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <PrimaryButton type="submit" disabled={!dirty || status === "saving"}>{status === "saving" ? "Saving..." : "Save pricing"}</PrimaryButton>
             {dirty && <SecondaryButton onClick={() => { setForm(JSON.parse(saved)); setError(""); }}>Discard changes</SecondaryButton>}
             {status === "saved" && !dirty && <SavedNote />}

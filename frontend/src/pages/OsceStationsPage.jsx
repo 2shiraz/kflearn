@@ -20,6 +20,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { TONES, specialtyLook } from "../site/tones";
 import {
   ArrowRight,
+  ChevronDown,
+  MessagesSquare,
   Trash2,
   Check,
   Clock3,
@@ -103,6 +105,55 @@ function groupModulesBySpecialty(modules) {
 function patientFor(title = "") {
   const sum = [...title].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
   return sum % 2 ? "patient-maya" : "patient-daniel";
+}
+
+// One message in the patient chat: the student's on the right in the accent
+// colour, the patient's on the left. Used live and in the transcript.
+function ChatMessage({ message, patient }) {
+  if (message.role === "student") {
+    return (
+      <p className="ml-auto w-fit max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-s-accent px-4 py-2.5 text-s-on-accent sm:max-w-[75%]">
+        {message.finalText}
+      </p>
+    );
+  }
+  return (
+    <div className="flex items-end gap-2">
+      <Character name={patient} size={28} tone="indigo" className="hidden sm:inline-flex" />
+      <p className="w-fit max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-bl-md bg-s-card px-4 py-2.5 text-s-ink shadow-sm sm:max-w-[75%]">{message.finalText}</p>
+    </div>
+  );
+}
+
+// The whole conversation, shown while marking so students can check what
+// they actually asked. Closed by default.
+function ChatTranscript({ messages, module }) {
+  const [open, setOpen] = useState(false);
+  const patient = patientFor(module?.title);
+  const questions = messages.filter((m) => m.role === "student").length;
+  return (
+    <section className="mt-6 overflow-hidden rounded-2xl border border-s-line bg-s-tint/40">
+      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="chat-transcript"
+        className="site-press flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left hover:bg-s-tint/70"
+      >
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-s-accent-soft text-s-accent" aria-hidden="true">
+          <MessagesSquare size={17} strokeWidth={2} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-medium text-s-ink">Your conversation</span>
+          <span className="block font-chart text-xs text-s-mute">{questions} {questions === 1 ? "question" : "questions"} asked</span>
+        </span>
+        <span className="hidden text-sm font-medium text-s-accent sm:inline">{open ? "Hide" : "Show"}</span>
+        <ChevronDown size={18} strokeWidth={2} className={`shrink-0 text-s-mute transition-transform duration-200 ${open ? "rotate-180" : ""}`} aria-hidden="true" />
+      </button>
+      {open && (
+        <div id="chat-transcript" className="max-h-[28rem] space-y-3 overflow-y-auto overscroll-contain border-t border-s-line px-4 py-5 text-[15px] leading-snug sm:px-5">
+          {module?.openingStatement && <ChatMessage patient={patient} message={{ role: "patient", finalText: module.openingStatement }} />}
+          {messages.map((message) => <ChatMessage key={message.id} message={message} patient={patient} />)}
+        </div>
+      )}
+    </section>
+  );
 }
 
 function formatTime(seconds = 0) {
@@ -729,18 +780,7 @@ export function VirtualPatientSession() {
                   </div>
                 ) : (
                   <div className="space-y-3 text-[15px] leading-snug">
-                    {state.attempt.messages.map((message) =>
-                      message.role === "student" ? (
-                        <p key={message.id} className="ml-auto w-fit max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-s-accent px-4 py-2.5 text-s-on-accent sm:max-w-[75%]">
-                          {message.finalText}
-                        </p>
-                      ) : (
-                        <div key={message.id} className="flex items-end gap-2">
-                          <Character name={patient} size={28} tone="indigo" className="hidden sm:inline-flex" />
-                          <p className="w-fit max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-bl-md bg-s-card px-4 py-2.5 text-s-ink shadow-sm sm:max-w-[75%]">{message.finalText}</p>
-                        </div>
-                      ),
-                    )}
+                    {state.attempt.messages.map((message) => <ChatMessage key={message.id} message={message} patient={patient} />)}
                     {state.sending && (
                       <div className="flex items-end gap-2">
                         <Character name={patient} size={28} tone="indigo" className="hidden sm:inline-flex" />
@@ -825,13 +865,13 @@ export function VirtualPatientSession() {
 export function SelfAssessmentPage() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
-  const [state, setState] = useState({ loading: true, attempt: null, checklist: null, checked: [], scores: {}, aiLoading: false, error: "", spendError: null });
+  const [state, setState] = useState({ loading: true, attempt: null, module: null, checklist: null, checked: [], scores: {}, aiLoading: false, error: "", spendError: null });
   const guard = useLeaveStationGuard({ attemptId, active: state.attempt?.status === "ended" && !state.aiLoading });
 
   const load = useCallback(() => {
     setState((s) => ({ ...s, loading: true, error: "" }));
     getOsceAttempt(attemptId)
-      .then((data) => setState((s) => ({ ...s, loading: false, attempt: data.attempt, checklist: data.checklist })))
+      .then((data) => setState((s) => ({ ...s, loading: false, attempt: data.attempt, module: data.module, checklist: data.checklist })))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [attemptId]);
 
@@ -877,6 +917,7 @@ export function SelfAssessmentPage() {
             <Panel className="site-rise">
               <h1 className="text-2xl font-semibold tracking-tight text-s-ink sm:text-3xl">Mark your station</h1>
               <p className="mt-2 leading-relaxed text-s-mute">Tick what you covered, or let the AI examiner read your transcript and mark it for you.</p>
+              {state.attempt?.messages?.length > 0 && <ChatTranscript messages={state.attempt.messages} module={state.module} />}
               <Checklist checklist={state.checklist} checked={state.checked} scores={state.scores} onChange={(checked) => setState((s) => ({ ...s, checked }))} onScoreChange={(itemId, rawScore) => setState((s) => withScoredItem(s, itemId, rawScore))} />
             </Panel>
             <Panel className="site-rise flex flex-col items-center text-center md:sticky md:top-6 md:self-start" style={{ "--rise-delay": "80ms" }}>
@@ -1172,7 +1213,7 @@ function AdminConsole() {
         {!state.loading && activeTab === "stations" && <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div><h2 className="text-2xl font-semibold tracking-tight text-s-ink">OSCE stations</h2><p className="text-sm text-s-mute">Search, edit, review, publish or archive stations.</p></div>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
               <SecondaryButton onClick={() => setShowCreateForm(true)}><Plus size={16} strokeWidth={2} aria-hidden="true" /> Write one</SecondaryButton>
               <PrimaryButton type="button" onClick={() => setImportOpen(true)}><FileJson size={16} strokeWidth={2} aria-hidden="true" /> Import JSON</PrimaryButton>
             </div>
@@ -1189,17 +1230,27 @@ function AdminConsole() {
             </div>
             <div className="mt-4 divide-y divide-s-line">
               {visibleStations.map((station) => (
-                <div key={station.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
-                  <div className="min-w-0 flex-1"><p className="font-semibold text-s-ink">{station.title}</p><p className="break-all text-xs text-s-mute">{station.specialty?.name || "General"} / {station.slug}</p><p className="my-1 text-xs text-s-mute">{station.categoryLabel}{station.createdAt && <span> / added {new Date(station.createdAt).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</span>}</p><StationAvailability station={station} /></div>
-                  <span className={`rounded-full px-2.5 py-1 font-chart text-xs capitalize ${STATUS_STYLES[station.status] || "bg-s-tint text-s-mute"}`}>{station.status}</span>
-                  <SecondaryButton onClick={() => setEditStationId(station.id)} className="px-4"><Pencil size={15} strokeWidth={2} aria-hidden="true" /> Edit</SecondaryButton>
-                  <label className="sr-only" htmlFor={`station-status-${station.id}`}>Change status for {station.title}</label>
-                  <select id={`station-status-${station.id}`} aria-label={`Change status for ${station.title}`} value={station.status} disabled={statusBusyId === station.id} onChange={(e) => changeStatus(station.id, e.target.value)} className="min-h-11 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent disabled:opacity-50">
-                    {Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}
-                  </select>
-                  <button type="button" onClick={() => setDeleteStation(station)} aria-label={`Delete ${station.title}`} title="Delete station" className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-mute hover:bg-coral-soft/60 hover:text-s-miss">
-                    <Trash2 size={17} strokeWidth={2} aria-hidden="true" />
-                  </button>
+                // Phones: details on top, the actions in their own row below.
+                // Wider screens: details and actions side by side.
+                <div key={station.id} className="grid gap-3 py-4 first:pt-0 last:pb-0 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+                  <div className="min-w-0">
+                    <div className="flex items-start gap-2">
+                      <p className="min-w-0 flex-1 font-semibold text-s-ink">{station.title}</p>
+                      <span className={`shrink-0 rounded-full px-2.5 py-1 font-chart text-xs capitalize ${STATUS_STYLES[station.status] || "bg-s-tint text-s-mute"}`}>{station.status}</span>
+                    </div>
+                    <p className="break-all text-xs text-s-mute">{station.specialty?.name || "General"} / {station.slug}</p>
+                    <p className="my-1 text-xs text-s-mute">{station.categoryLabel}{station.createdAt && <span> / added {new Date(station.createdAt).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</span>}</p>
+                    <StationAvailability station={station} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <SecondaryButton onClick={() => setEditStationId(station.id)} className="shrink-0 px-4"><Pencil size={15} strokeWidth={2} aria-hidden="true" /> Edit</SecondaryButton>
+                    <select id={`station-status-${station.id}`} aria-label={`Change status for ${station.title}`} value={station.status} disabled={statusBusyId === station.id} onChange={(e) => changeStatus(station.id, e.target.value)} className="min-h-11 min-w-0 flex-1 rounded-xl border border-s-line bg-s-card px-3 text-sm text-s-ink outline-none focus:border-s-accent disabled:opacity-50 md:w-36 md:flex-none">
+                      {Object.keys(counts).map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}
+                    </select>
+                    <button type="button" onClick={() => setDeleteStation(station)} aria-label={`Delete ${station.title}`} title="Delete station" className="site-press flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-s-mute hover:bg-coral-soft/60 hover:text-s-miss">
+                      <Trash2 size={17} strokeWidth={2} aria-hidden="true" />
+                    </button>
+                  </div>
                 </div>
               ))}
               {visibleStations.length === 0 && <p className="py-5 text-center text-sm text-s-mute">No stations match this search.</p>}
@@ -1226,7 +1277,7 @@ function AdminConsole() {
               </div>
               <div className="text-right text-xs font-semibold text-s-mute">
                 {(state.aiStatus?.providers || []).map((provider) => (
-                  <p key={provider.id}>{provider.label}: {provider.configured ? provider.apiKeyPreview || "configured" : "not configured"}</p>
+                  <p key={provider.id} className={provider.keyNeedsReentry ? "text-s-miss" : ""}>{provider.label}: {provider.keyNeedsReentry ? "saved key can't be read, enter it again" : provider.configured ? provider.apiKeyPreview || "configured" : "not configured"}</p>
                 ))}
               </div>
             </div>
