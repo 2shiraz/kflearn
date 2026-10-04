@@ -511,6 +511,16 @@ export function SinglePlayerOsce() {
   );
 }
 
+// Recording formats to try, best first. iPhone Safari only supports mp4.
+const RECORDING_TYPES = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus", "audio/ogg"];
+
+function micErrorMessage(err) {
+  if (err?.name === "NotAllowedError" || err?.name === "SecurityError") return "Microphone access is blocked. Allow it for this site in your browser settings (on iPhone: Settings, Safari, Microphone), or type your question.";
+  if (err?.name === "NotFoundError" || err?.name === "OverconstrainedError") return "No microphone was found. Type your question instead.";
+  if (err?.name === "NotReadableError") return "The microphone is being used by another app. Close it and try again.";
+  return "Couldn't start the microphone. Type your question instead.";
+}
+
 export function VirtualPatientSession() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
@@ -607,9 +617,15 @@ export function VirtualPatientSession() {
           .trim();
         setState((s) => ({ ...s, transcript, recording: false, voiceMode: "" }));
       };
-      recognition.onerror = async () => {
+      recognition.onerror = async (event) => {
         recognitionRef.current = null;
         setState((s) => ({ ...s, recording: false, voiceMode: "" }));
+        if (event.error === "aborted") return;
+        if (event.error === "no-speech") {
+          setState((s) => ({ ...s, error: "Didn't hear anything. Tap the mic and try again." }));
+          return;
+        }
+        // Browser speech didn't work (common on iPhone): record and send it instead.
         await startGroqFallbackRecording();
       };
       recognition.onend = () => {
@@ -626,14 +642,25 @@ export function VirtualPatientSession() {
   }
 
   async function startGroqFallbackRecording() {
+    if (!navigator.mediaDevices?.getUserMedia || typeof window.MediaRecorder === "undefined") {
+      setState((s) => ({ ...s, error: "Voice typing doesn't work in this browser. Type your question instead.", recording: false, voiceMode: "" }));
+      return;
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
+      // iPhone Safari can only record mp4; other browsers prefer webm or ogg.
+      const mimeType = RECORDING_TYPES.find((type) => window.MediaRecorder.isTypeSupported?.(type));
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
       chunksRef.current = [];
-      recorder.ondataavailable = (event) => chunksRef.current.push(event.data);
+      recorder.ondataavailable = (event) => { if (event.data?.size) chunksRef.current.push(event.data); };
       recorder.onstop = async () => {
         stream.getTracks().forEach((track) => track.stop());
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+        const type = recorder.mimeType || chunksRef.current[0]?.type || mimeType || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type });
+        if (blob.size < 800) {
+          setState((s) => ({ ...s, error: "That was too short. Tap the mic, speak, then tap it again to send.", recording: false, voiceMode: "" }));
+          return;
+        }
         try {
           const data = await transcribeOsceAudio(attemptId, blob);
           setState((s) => ({ ...s, transcript: data.transcript || "", recording: false, voiceMode: "" }));
@@ -645,7 +672,7 @@ export function VirtualPatientSession() {
       recorder.start();
       setState((s) => ({ ...s, recording: true, voiceMode: "groq" }));
     } catch (err) {
-      setState((s) => ({ ...s, error: err.message, recording: false, voiceMode: "" }));
+      setState((s) => ({ ...s, error: micErrorMessage(err), recording: false, voiceMode: "" }));
     }
   }
 

@@ -307,9 +307,12 @@ export function aiAssessOsceAttempt(attemptId) {
   });
 }
 
+const AUDIO_EXTENSIONS = { "audio/mp4": "mp4", "audio/ogg": "ogg", "audio/wav": "wav", "audio/mpeg": "mp3" };
+
 export function transcribeOsceAudio(attemptId, audioBlob) {
   const form = new FormData();
-  form.append("audio", audioBlob, "question.webm");
+  const ext = AUDIO_EXTENSIONS[(audioBlob.type || "").split(";")[0]] || "webm";
+  form.append("audio", audioBlob, `question.${ext}`);
   return apiFetch(`/osce/attempts/${attemptId}/transcribe`, {
     method: "POST",
     body: form,

@@ -373,3 +373,14 @@ test("users only see their own credit history", async () => {
   const bobRes = await request(app).get("/api/credits/transactions").set("Authorization", bob.auth);
   assert.deepEqual(bobRes.body.data.map((row) => row.amount), [20]);
 });
+
+test("an iPhone recording (mp4 with a codec) is accepted and a missing voice key gets a clear message", async () => {
+  const { auth } = await registerUser("iphone@example.com", 3);
+  const id = (await startSession(auth)).body.data.attempt.id;
+  const res = await request(app).post(`/api/osce/attempts/${id}/transcribe`).set("Authorization", auth)
+    .attach("audio", Buffer.alloc(2000, 1), { filename: "question.mp4", contentType: "audio/mp4;codecs=mp4a.40.2" });
+  assert.equal(res.status, 503, res.body.message);
+  assert.match(res.body.message, /Voice typing isn't set up yet/);
+  const attempt = await OsceAttempt.findById(id).lean();
+  assert.equal(attempt.usage?.transcriptions || 0, 0);
+});
