@@ -579,6 +579,10 @@ export function VirtualPatientSession() {
   const mediaRef = useRef(null);
   const recognitionRef = useRef(null);
   const chunksRef = useRef([]);
+  const streamRef = useRef(null);
+  // Set when the mic is shut down because the student left or the station
+  // ended: whatever was recorded is thrown away, not sent.
+  const discardRef = useRef(false);
   const endRef = useRef(false);
   const threadEndRef = useRef(null);
   const timer = useCountdown({ limitSeconds: state.module?.timeLimitSeconds || 360, startedAt: state.attempt?.startedAt, enabled: Boolean(state.attempt && state.module) });
@@ -590,7 +594,46 @@ export function VirtualPatientSession() {
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
   }, [attemptId]);
 
-  useEffect(() => () => window.speechSynthesis?.cancel(), []);
+  // Turns the microphone fully off: browser speech recognition, the recorder
+  // and the audio stream itself (which is what keeps the mic light on).
+  const stopMic = useCallback(({ discard = false } = {}) => {
+    if (discard) discardRef.current = true;
+    const recognition = recognitionRef.current;
+    recognitionRef.current = null;
+    if (recognition) {
+      recognition.onresult = null;
+      recognition.onerror = null;
+      try { recognition.abort(); } catch { /* already stopped */ }
+    }
+    const recorder = mediaRef.current;
+    mediaRef.current = null;
+    if (recorder && recorder.state !== "inactive") {
+      try { recorder.stop(); } catch { /* already stopped */ }
+    }
+    if (discard) {
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+  }, []);
+
+  // Leaving the page (another page in the app, signing out, closing the tab,
+  // or switching away on a phone) always turns the mic off.
+  useEffect(() => {
+    const offWhenHidden = () => {
+      if (document.visibilityState !== "hidden") return;
+      stopMic({ discard: true });
+      setState((s) => (s.recording ? { ...s, recording: false, voiceMode: "" } : s));
+    };
+    const off = () => stopMic({ discard: true });
+    document.addEventListener("visibilitychange", offWhenHidden);
+    window.addEventListener("pagehide", off);
+    return () => {
+      document.removeEventListener("visibilitychange", offWhenHidden);
+      window.removeEventListener("pagehide", off);
+      off();
+      window.speechSynthesis?.cancel();
+    };
+  }, [stopMic]);
 
   useEffect(() => {
     threadEndRef.current?.scrollIntoView({ block: "end" });
@@ -650,10 +693,12 @@ export function VirtualPatientSession() {
   async function toggleRecording() {
     if (state.recording) {
       recognitionRef.current?.stop();
-      mediaRef.current?.stop();
+      if (mediaRef.current?.state !== "inactive") mediaRef.current?.stop();
       setState((s) => ({ ...s, recording: false, voiceMode: "" }));
       return;
     }
+    if (endRef.current) return;
+    discardRef.current = false;
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -676,7 +721,9 @@ export function VirtualPatientSession() {
           setState((s) => ({ ...s, error: "Didn't hear anything. Tap the mic and try again." }));
           return;
         }
-        // Browser speech didn't work (common on iPhone): record and send it instead.
+        // Browser speech didn't work (common on iPhone): record and send it
+        // instead, unless the student has left or the station has ended.
+        if (discardRef.current || endRef.current) return;
         await startGroqFallbackRecording();
       };
       recognition.onend = () => {
@@ -699,6 +746,12 @@ export function VirtualPatientSession() {
     }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // The student may have left while the browser was asking for the mic.
+      if (discardRef.current || endRef.current) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
+      streamRef.current = stream;
       // iPhone Safari can only record mp4; other browsers prefer webm or ogg.
       const mimeType = RECORDING_TYPES.find((type) => window.MediaRecorder.isTypeSupported?.(type));
       const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
@@ -706,6 +759,8 @@ export function VirtualPatientSession() {
       recorder.ondataavailable = (event) => { if (event.data?.size) chunksRef.current.push(event.data); };
       recorder.onstop = async () => {
         stream.getTracks().forEach((track) => track.stop());
+        if (streamRef.current === stream) streamRef.current = null;
+        if (discardRef.current) return;
         const type = recorder.mimeType || chunksRef.current[0]?.type || mimeType || "audio/webm";
         const blob = new Blob(chunksRef.current, { type });
         if (blob.size < 800) {
@@ -730,6 +785,8 @@ export function VirtualPatientSession() {
   async function endSession() {
     if (endRef.current) return;
     endRef.current = true;
+    stopMic({ discard: true });
+    setState((s) => ({ ...s, recording: false, voiceMode: "" }));
     await endOsceAttempt(attemptId, { elapsedSeconds: timer.elapsedSeconds });
     navigate(`/stations/attempts/${attemptId}/self-assessment`);
   }
