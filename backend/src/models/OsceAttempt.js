@@ -79,4 +79,7 @@ const osceAttemptSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// A student's attempts, newest first (attempt history, progress, dashboard).
+osceAttemptSchema.index({ userId: 1, createdAt: -1 });
+
 export const OsceAttempt = mongoose.model("OsceAttempt", osceAttemptSchema, "osceattempts");

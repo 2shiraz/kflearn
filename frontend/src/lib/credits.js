@@ -6,6 +6,10 @@ import { getCredits } from "./api";
 let snapshot = { balance: null, pricing: null };
 const listeners = new Set();
 let inflight = null;
+let loadedAt = 0;
+// Spending and buying update the balance from the server's own answer, so a
+// balance this recent doesn't need asking for again on every page.
+const MAX_AGE_MS = 60 * 1000;
 
 function emit() {
   listeners.forEach((listener) => listener());
@@ -26,6 +30,7 @@ export function refreshCredits() {
   inflight ??= getCredits()
     .then((data) => {
       snapshot = { balance: data.balance, pricing: data };
+      loadedAt = Date.now();
       emit();
       return data;
     })
@@ -35,12 +40,19 @@ export function refreshCredits() {
   return inflight;
 }
 
-// Refetches on every mount so the balance is never stale after navigation or
-// a switch of account in the same tab.
+export function clearCredits() {
+  snapshot = { balance: null, pricing: null };
+  loadedAt = 0;
+  inflight = null;
+  emit();
+}
+
+// Loads the balance when the page opens unless it was loaded in the last
+// minute (the sidebar and the page share one request).
 export function useCredits() {
   const state = useSyncExternalStore(subscribe, () => snapshot);
   useEffect(() => {
-    refreshCredits().catch(() => {});
+    if (Date.now() - loadedAt > MAX_AGE_MS) refreshCredits().catch(() => {});
   }, []);
   return state;
 }

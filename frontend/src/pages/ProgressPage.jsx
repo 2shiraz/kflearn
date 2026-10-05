@@ -4,7 +4,8 @@ import { ArrowDownRight, ArrowRight, ArrowUpRight, Flame, History, Timer, Trophy
 import { EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain, Panel, RequireUser } from "../components/AppPage";
 import { ProgressSkeleton } from "../components/Skeleton";
 import { Chip, ProgressLine, rise, scoreTone } from "../components/StudyKit";
-import { listOsceAttempts, listOsceStations } from "../lib/api";
+import { attemptList, stationList } from "../lib/osce";
+import { accessOpen, useSite } from "../lib/site";
 import { displayTitle } from "../lib/osceFilters";
 import { mcqSummary, osceSummary, ospeSummary } from "../lib/progress";
 import { useCatalog } from "../lib/content";
@@ -20,16 +21,19 @@ function formatDate(value) {
 
 export default function ProgressPage() {
   const [state, setState] = useState({ loading: true, attempts: [], stations: [], error: "" });
+  const open = accessOpen(useSite());
 
   const load = useCallback(() => {
+    if (!open) return;
     setState((s) => ({ ...s, loading: true, error: "" }));
     // With the OSCE section switched off the station bank answers 403; show
     // the rest of the progress rather than an error.
     const closedAsEmpty = (empty) => (err) => { if (err.code === "SECTION_CLOSED") return empty; throw err; };
-    Promise.all([listOsceAttempts(), listOsceStations().catch(closedAsEmpty({ modules: [] }))])
+    // Both are shared with the dashboard and OSCE pages (lib/osce.js).
+    Promise.all([attemptList.get(), stationList.get().catch(closedAsEmpty({ modules: [] }))])
       .then(([attempts, stations]) => setState({ loading: false, attempts: attempts || [], stations: stations.modules || [], error: "" }))
       .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
-  }, []);
+  }, [open]);
   useEffect(() => { load(); }, [load]);
 
   const osce = useMemo(() => osceSummary(state.attempts, state.stations), [state.attempts, state.stations]);

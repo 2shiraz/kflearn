@@ -59,12 +59,9 @@ import {
   endOsceAttempt,
   getAiStatus,
   getOsceAttempt,
-  getOsceStation,
   getSinglePlayerContent,
   listAdminOsceStations,
   listAdminUsers,
-  listOsceAttempts,
-  listOsceStations,
   updateAdminOsceStationStatus,
   selfAssessOsceAttempt,
   sendPatientMessage,
@@ -73,6 +70,9 @@ import {
   getCurrentUser,
 } from "../lib/api";
 import { isCreditError, refreshCredits, setCreditBalance, useCredits } from "../lib/credits";
+import { attemptList, stationDetails, stationList } from "../lib/osce";
+import { useResource } from "../lib/resource";
+import { accessOpen, useSite } from "../lib/site";
 
 // Shows a spend error; credit errors get a direct link to the packages page.
 function SpendError({ error }) {
@@ -229,15 +229,17 @@ function formatDate(value) {
 
 const CHAT_CHAR_LIMIT = 640;
 
+// The station list, shared with the dashboard and specialty pages (see
+// lib/osce.js), so it's fetched once rather than on every page.
+function useStationList() {
+  const open = accessOpen(useSite());
+  const list = useResource(stationList, { enabled: open });
+  return { loading: list.loading, error: list.error, modules: list.data?.modules || [], load: list.reload };
+}
+
 export function OsceHome() {
-  const [state, setState] = useState({ loading: true, modules: [], error: "" });
-  const load = useCallback(() => {
-    setState((s) => ({ ...s, loading: true, error: "" }));
-    listOsceStations()
-      .then((data) => setState({ loading: false, modules: data.modules || [], error: "" }))
-      .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
-  }, []);
-  useEffect(() => { load(); }, [load]);
+  const state = useStationList();
+  const load = state.load;
   const groups = groupModulesBySpecialty(state.modules);
   return <RequireUser><PageMain>
     <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations" }]} />
@@ -271,14 +273,8 @@ export function OsceHome() {
 
 export function OsceSectionPage() {
   const { sectionName } = useParams();
-  const [state, setState] = useState({ loading: true, modules: [], error: "" });
-  const load = useCallback(() => {
-    setState((s) => ({ ...s, loading: true, error: "" }));
-    listOsceStations()
-      .then((data) => setState({ loading: false, modules: data.modules || [], error: "" }))
-      .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
-  }, []);
-  useEffect(() => { load(); }, [load]);
+  const state = useStationList();
+  const load = state.load;
   const selected = groupModulesBySpecialty(state.modules).find((group) => group.name === sectionName);
   return <RequireUser><PageMain>
     <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: sectionName || "Specialty" }]} />
@@ -294,25 +290,17 @@ export function OsceSectionPage() {
 export function OsceStationDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [state, setState] = useState({ loading: true, module: null, error: "", starting: "", startError: null });
+  const open = accessOpen(useSite());
+  const detail = useResource(stationDetails.member(slug), { enabled: open });
+  const [state, setState] = useState({ starting: "", startError: null });
   const { balance, pricing } = useCredits();
   const aiCost = pricing?.costs.virtualPatient;
-
-  const load = useCallback(() => {
-    setState((s) => ({ ...s, loading: true, error: "" }));
-    getOsceStation(slug)
-      .then((module) => setState({ loading: false, module, error: "", starting: "", startError: null }))
-      .catch((err) => setState((s) => ({ ...s, loading: false, error: err.message })));
-  }, [slug]);
-
-  useEffect(() => {
-    load();
-  }, [load]);
+  const load = detail.reload;
 
   async function start(mode) {
     setState((s) => ({ ...s, starting: mode, startError: null }));
     try {
-      const data = await createOsceAttempt({ stationId: state.module.id, mode });
+      const data = await createOsceAttempt({ stationId: module.id, mode });
       if (data.credits) setCreditBalance(data.credits.balance);
       if (mode === "single-player") navigate(`/stations/${slug}/single-player?attemptId=${data.attempt.id}`);
       else navigate(`/stations/attempts/${data.attempt.id}/session`);
@@ -322,7 +310,7 @@ export function OsceStationDetail() {
     }
   }
 
-  const module = state.module;
+  const module = detail.data;
   const shortfall = aiCost && balance !== null && balance < aiCost;
 
   return (
@@ -333,8 +321,8 @@ export function OsceStationDetail() {
         ) : (
           <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSCE Stations", to: "/stations" }, { label: "Station" }]} />
         )}
-        {state.loading && <Loading variant="module-detail" />}
-        {state.error && <ErrorMessage message={state.error} onRetry={load} />}
+        {detail.loading && <Loading variant="module-detail" />}
+        {detail.error && !module && <ErrorMessage message={detail.error} onRetry={load} />}
         {module && (
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
             <Panel className="site-rise">
@@ -1069,18 +1057,10 @@ export function OsceResultPage() {
 }
 
 export function OsceAttemptHistoryPage() {
-  const [state, setState] = useState({ loading: true, attempts: [], error: "" });
-
-  const load = useCallback(() => {
-    setState((s) => ({ ...s, loading: true, error: "" }));
-    listOsceAttempts()
-      .then((attempts) => setState({ loading: false, attempts, error: "" }))
-      .catch((err) => setState({ loading: false, attempts: [], error: err.message }));
-  }, []);
-
-  useEffect(() => {
-    load();
-  }, [load]);
+  const open = accessOpen(useSite());
+  const list = useResource(attemptList, { enabled: open });
+  const state = { loading: list.loading, error: list.error, attempts: list.data || [] };
+  const load = list.reload;
 
   return (
     <RequireUser>

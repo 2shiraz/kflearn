@@ -11,10 +11,11 @@ import { UnansweredQuestion } from "../models/UnansweredQuestion.js";
 import { REVIEW_PARTS, stationListDto } from "../services/osce.service.js";
 import { importStations, parseImport } from "../services/osceImport.service.js";
 import { invalidatePublicStats } from "../services/publicStats.service.js";
+import { LIST_FIELDS } from "../services/stationCache.service.js";
 
 export async function listAdminStations(req, res) {
   const [modules, attemptCounts] = await Promise.all([
-    OsceStation.find().populate("specialtyId").sort({ createdAt: -1 }),
+    OsceStation.find().select(`${LIST_FIELDS} createdAt`).populate("specialtyId", "name slug").sort({ createdAt: -1 }),
     OsceAttempt.aggregate([{ $group: { _id: "$stationId", count: { $sum: 1 } } }]),
   ]);
   const attempts = new Map(attemptCounts.map((row) => [String(row._id), row.count]));

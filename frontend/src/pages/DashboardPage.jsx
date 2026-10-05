@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { getCurrentUser, getDashboardSummary, listOsceAttempts, listOsceStations } from "../lib/api";
+import { getCurrentUser } from "../lib/api";
+import { attemptList, stationList } from "../lib/osce";
+import { useResource } from "../lib/resource";
 import { ErrorMessage, PageMain, RequireUser } from "../components/AppPage";
 import { Skeleton } from "../components/Skeleton";
 import { Chip, scoreTone } from "../components/StudyKit";
@@ -10,7 +12,7 @@ import { SECTION_LOOK, TONES, specialtyLook } from "../site/tones";
 import { plus } from "../site/siteContent";
 import { displayTitle } from "../lib/osceFilters";
 import { osceSummary } from "../lib/progress";
-import { sectionOpen, useSite } from "../lib/site";
+import { accessOpen, sectionOpen, useSite } from "../lib/site";
 import AnnouncementBanner from "../components/AnnouncementBanner";
 import { usePublicStats } from "../lib/publicStats";
 
@@ -78,15 +80,18 @@ function greeting() {
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
   const site = useSite();
-  const [summary, setSummary] = useState({ loading: true, modules: {}, error: "" });
-  const [osce, setOsce] = useState({ loading: true, attempts: [], stations: [] });
-
-  const loadSummary = useCallback(() => {
-    setSummary((s) => ({ ...s, loading: true, error: "" }));
-    getDashboardSummary()
-      .then((data) => setSummary({ loading: false, modules: data.modules || {}, error: "" }))
-      .catch((err) => setSummary({ loading: false, modules: {}, error: err.message }));
-  }, []);
+  // The station list and attempts are shared with the OSCE and progress pages
+  // (lib/osce.js), so opening those next doesn't load them again. Nothing is
+  // asked for while the account has no access or the section is off.
+  const loadOsce = Boolean(user) && accessOpen(site, user) && sectionOpen(site, "stations", user);
+  const stations = useResource(stationList, { enabled: loadOsce });
+  const attempts = useResource(attemptList, { enabled: loadOsce });
+  const osce = {
+    loading: stations.loading || attempts.loading,
+    attempts: attempts.data || [],
+    stations: stations.data?.modules || [],
+    failed: Boolean(stations.error || attempts.error),
+  };
 
   useEffect(() => {
     const u = getCurrentUser();
@@ -95,16 +100,12 @@ export default function DashboardPage() {
       return;
     }
     setUser(u);
-    loadSummary();
-    Promise.all([listOsceAttempts(), listOsceStations()])
-      .then(([attempts, stations]) => setOsce({ loading: false, attempts: attempts || [], stations: stations?.modules || [] }))
-      .catch(() => setOsce({ loading: false, attempts: [], stations: [], failed: true }));
-  }, [loadSummary]);
+  }, []);
 
   if (!user) return null;
 
   const student = studentFor(user.fullName);
-  const stationCount = Number(summary.modules?.stations || 0);
+  const stationCount = stations.data?.modules?.length || 0;
 
   return (
     <RequireUser active="dashboard">
@@ -120,9 +121,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {summary.error && (
+        {stations.error && (
           <div className="mt-6">
-            <ErrorMessage message={summary.error} onRetry={loadSummary} />
+            <ErrorMessage message={stations.error} onRetry={stations.reload} />
           </div>
         )}
 
@@ -138,7 +139,7 @@ export default function DashboardPage() {
               {(showOsce || practice.length > 0) && (
                 <section aria-labelledby="dash-practice" className="mt-10">
                   <RowHeading id="dash-practice">Practice</RowHeading>
-                  {showOsce && <FeaturedOsce loading={summary.loading} count={stationCount} osce={osce} />}
+                  {showOsce && <FeaturedOsce loading={stations.loading} count={stationCount} osce={osce} />}
                   {practice.length > 0 && (
                     <div className="mt-4 grid gap-4 md:grid-cols-6">
                       {withSpans(practice).map((s, i) => <SectionTile key={s.key} section={s} index={i} />)}

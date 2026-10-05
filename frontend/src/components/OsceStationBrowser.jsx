@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ArrowRight, Clock3, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
 import { OSCE_CATEGORIES, categoryOf, displayTitle, filterStations, hasVirtualPatient } from "../lib/osceFilters.js";
 import { EmptyState } from "./AppPage";
+import { prefetchStation } from "../lib/osce";
 import { inputClass } from "./AuthShell";
 import { Chip, Pager, rise } from "./StudyKit";
 import { MedIcon } from "../site/Illustrations";
@@ -40,6 +41,9 @@ function StationCard({ station, index }) {
   return (
     <Link
       to={`/stations/${station.slug}`}
+      // Start loading the station on hover, focus or touch, so it opens at once.
+      onPointerEnter={() => prefetchStation(station.slug)}
+      onFocus={() => prefetchStation(station.slug)}
       style={rise(index)}
       className={`site-rise site-grid site-press group flex min-w-0 flex-col rounded-3xl border border-s-line p-5 ${tone.ring}`}
     >

@@ -1,6 +1,6 @@
-import { OsceStation } from "../models/OsceStation.js";
 import { getStationClinicalBundle, getPublishedStationBySlug, stationListDto, singlePlayerDto, studentStationDetailDto } from "../services/osce.service.js";
 import { getSiteSettings, sectionClosed } from "../services/siteSettings.service.js";
+import { publishedStationList } from "../services/stationCache.service.js";
 
 // Students can't reach the station bank while an admin has the section off.
 // With the AI patient off, stations only offer checklist practice.
@@ -18,7 +18,7 @@ function withAccess(dto, site) {
 
 export async function listOsceStations(req, res) {
   const site = await studentAccess(req);
-  const modules = await OsceStation.find({ status: "published" }).populate("specialtyId").sort({ updatedAt: -1 });
+  const modules = await publishedStationList();
   res.json({
     success: true,
     data: {

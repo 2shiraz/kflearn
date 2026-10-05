@@ -3,6 +3,7 @@ import { OSCE_CATEGORIES, stationCategory, stationPracticeOptions } from "../uti
 import { OsceStation } from "../models/OsceStation.js";
 import { PatientScript } from "../models/PatientScript.js";
 import { SmartChecklist } from "../models/SmartChecklist.js";
+import { remember } from "./stationCache.service.js";
 
 export function stationListDto(module) {
   const category = stationCategory(module);
@@ -102,7 +103,9 @@ export function checklistDto(checklist) {
 }
 
 export async function getPublishedStationBySlug(slug) {
-  const module = await OsceStation.findOne({ slug, status: "published" }).populate("specialtyId");
+  const module = typeof slug === "string"
+    ? await remember(`slug:${slug}`, () => OsceStation.findOne({ slug, status: "published" }).populate("specialtyId"))
+    : null;
   if (!module) {
     const error = new Error("OSCE station not found.");
     error.status = 404;
@@ -117,16 +120,22 @@ export async function getStationClinicalBundle(stationId) {
     error.status = 404;
     throw error;
   }
-  const module = await OsceStation.findById(stationId).populate("specialtyId");
-  if (!module) {
+  // Read on every AI patient message, so kept in memory (see stationCache).
+  const bundle = await remember(`bundle:${stationId}`, async () => {
+    const module = await OsceStation.findById(stationId).populate("specialtyId");
+    if (!module) return null;
+    const [patientScript, checklist] = await Promise.all([
+      PatientScript.findById(module.patientScriptId),
+      SmartChecklist.findById(module.smartChecklistId),
+    ]);
+    return { module, patientScript, checklist };
+  });
+  if (!bundle) {
     const error = new Error("OSCE station not found.");
     error.status = 404;
     throw error;
   }
-  const [patientScript, checklist] = await Promise.all([
-    PatientScript.findById(module.patientScriptId),
-    SmartChecklist.findById(module.smartChecklistId),
-  ]);
+  const { module, patientScript, checklist } = bundle;
   if (!patientScript || !checklist) {
     const error = new Error("OSCE station clinical content is incomplete.");
     error.status = 409;

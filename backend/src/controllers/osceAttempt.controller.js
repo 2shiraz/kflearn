@@ -11,6 +11,7 @@ import { transcribeAudio } from "../services/transcription.service.js";
 import { refundCredits, spendCredits } from "../services/credit.service.js";
 import { MAX_STUDENT_MESSAGES_PER_ATTEMPT, MAX_TRANSCRIPTIONS_PER_ATTEMPT } from "../config/credits.js";
 import { getPricing, getSiteSettings, sectionClosed } from "../services/siteSettings.service.js";
+import { env } from "../config/env.js";
 
 async function findOwnedAttempt(attemptId, userId) {
   if (!mongoose.isObjectIdOrHexString(attemptId)) {
@@ -145,9 +146,13 @@ export async function getAttempt(req, res) {
 }
 
 export async function listAttempts(req, res) {
+  // Only the fields the list shows: not the transcript, marks or the full
+  // station content.
   const attempts = await OsceAttempt.find({ userId: req.user.id, status: { $in: ["self-assessed", "ai-assessed"] } })
-    .populate({ path: "stationId", populate: { path: "specialtyId", select: "name slug" } })
-    .sort({ createdAt: -1 });
+    .select("mode aiProvider status startedAt endedAt finalScore elapsedSeconds feedback.missedItems stationId createdAt")
+    .populate({ path: "stationId", select: "title slug presentingComplaint category stationType specialtyId", populate: { path: "specialtyId", select: "name slug" } })
+    .sort({ createdAt: -1 })
+    .lean();
   res.json({
     success: true,
     data: attempts.map((attempt) => ({
@@ -172,18 +177,27 @@ export async function listAttempts(req, res) {
   });
 }
 
-export async function sendPatientMessage(req, res) {
-  const { text, inputType = "typed", originalTranscript = "" } = req.body;
+// The checks before a question reaches the AI patient: the attempt is the
+// student's, still running, paid for, and under its question limit (one slot
+// is claimed here).
+async function prepareQuestion(req) {
   const attempt = await findOwnedAttempt(req.params.attemptId, req.user.id);
   if (attempt.status !== "active" || attempt.mode !== "virtual-patient") throw invalidAttemptState();
   const reserved = await reserveUsageSlot(
     attempt, req.user.id, "studentMessages", MAX_STUDENT_MESSAGES_PER_ATTEMPT,
     `You've reached the ${MAX_STUDENT_MESSAGES_PER_ATTEMPT}-question limit for this station. End the session to be assessed.`,
   );
+  return { attempt, reserved };
+}
+
+// Gets the patient's answer (passing its words to onText as they arrive, if
+// given) and saves the question and answer to the attempt.
+async function answerQuestion(req, { attempt, reserved }, onText) {
+  const { text, inputType = "typed", originalTranscript = "" } = req.body;
   let response;
   try {
     const { module, patientScript } = await getStationClinicalBundle(reserved.stationId);
-    response = await generatePatientResponse({ patientScript, module, attempt: reserved, studentQuestion: text });
+    response = await generatePatientResponse({ patientScript, module, attempt: reserved, studentQuestion: text, onText });
   } catch (error) {
     await releaseUsageSlot(attempt._id, req.user.id, "studentMessages");
     throw error;
@@ -220,14 +234,53 @@ export async function sendPatientMessage(req, res) {
   );
   if (!updated) throw invalidAttemptState();
 
-  res.json({
-    success: true,
-    data: {
-      studentMessage: { id: studentMessage.messageId, text: studentMessage.finalText },
-      patientMessage: { id: patientMessage.messageId, text: patientMessage.finalText },
-      attempt: attemptDto(updated),
-    },
+  return {
+    studentMessage: { id: studentMessage.messageId, text: studentMessage.finalText },
+    patientMessage: { id: patientMessage.messageId, text: patientMessage.finalText },
+    attempt: attemptDto(updated),
+  };
+}
+
+export async function sendPatientMessage(req, res) {
+  const prepared = await prepareQuestion(req);
+  res.json({ success: true, data: await answerQuestion(req, prepared) });
+}
+
+// The same, but the patient's reply is streamed as server-sent events while
+// the AI writes it:
+//   event: delta   data: { text }   more words of the reply
+//   event: done    data: { studentMessage, patientMessage, attempt }
+//   event: error   data: { status, code, message }
+// The text in "done" is the one to keep (it replaces the streamed words if
+// the AI's answer failed its checks). Anything refused before the AI is
+// asked comes back as an ordinary JSON error instead.
+export async function streamPatientMessage(req, res) {
+  const prepared = await prepareQuestion(req);
+  res.status(200).set({
+    "Content-Type": "text/event-stream; charset=utf-8",
+    // no-transform keeps compression from holding the words back.
+    "Cache-Control": "no-store, no-transform",
+    "X-Accel-Buffering": "no",
   });
+  res.flushHeaders();
+  let open = true;
+  res.on("close", () => { open = false; });
+  const send = (event, data) => {
+    if (open) res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  };
+  try {
+    // If the student leaves mid-reply, the answer is still saved.
+    send("done", await answerQuestion(req, prepared, (text) => send("delta", { text })));
+  } catch (error) {
+    const status = error.status || 500;
+    if (status >= 500) console.error(error);
+    send("error", {
+      status,
+      code: status < 500 && typeof error.code === "string" ? error.code : undefined,
+      message: status >= 500 && env.isProduction ? "Something went wrong. Please try again." : error.message,
+    });
+  }
+  res.end();
 }
 
 export async function endAttempt(req, res) {

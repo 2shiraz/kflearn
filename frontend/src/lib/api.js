@@ -1,5 +1,7 @@
 import { clearSite, markAccessLost, storeSite } from "./site";
 import { clearContentCache } from "./content";
+import { attemptsChanged, clearOsceCache, stationsChanged } from "./osce";
+import { clearCredits } from "./credits";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
@@ -85,6 +87,8 @@ export function logout() {
   clearLegacySessionStorage();
   clearSite();
   clearContentCache();
+  clearOsceCache();
+  clearCredits();
   // Best-effort: ask the server to clear the httpOnly cookie too (it can't be
   // cleared from JS). `keepalive` lets the request finish even though callers
   // redirect the page away immediately after calling logout().
@@ -179,8 +183,26 @@ async function publicFetch(path, options = {}) {
   return data.data;
 }
 
-async function apiFetch(path, options = {}) {
+// Identical GET requests already on their way share one response, so two
+// parts of a page asking for the same thing at once cost one request.
+const pendingGets = new Map();
+
+function apiFetch(path, options = {}) {
   const method = (options.method || "GET").toUpperCase();
+  if (method !== "GET" || options.body) return sendApiRequest(path, options, method);
+  if (!pendingGets.has(path)) {
+    pendingGets.set(path, sendApiRequest(path, options, method).finally(() => pendingGets.delete(path)));
+  }
+  return pendingGets.get(path);
+}
+
+// Changes that make kept OSCE data out of date.
+function afterChange(path) {
+  if (path.startsWith("/admin/osce")) stationsChanged();
+  if (path.startsWith("/osce/attempts")) attemptsChanged();
+}
+
+async function sendApiRequest(path, options, method) {
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
     credentials: "include",
@@ -204,6 +226,7 @@ async function apiFetch(path, options = {}) {
     error.code = data.code;
     throw error;
   }
+  if (method !== "GET") afterChange(path);
   return data.data;
 }
 
