@@ -20,7 +20,7 @@ import siteRoutes from "./routes/site.routes.js";
 import adminSettingsRoutes from "./routes/adminSettings.routes.js";
 import { getPublicFavicon, getPublicLogo, getPublicSite } from "./controllers/site.controller.js";
 import { asyncHandler } from "./utils/asyncHandler.js";
-import { getPublicCreditPackages } from "./controllers/credit.controller.js";
+import { getPublicCreditPackages, getPublicPricing, getPublicStatsHandler } from "./controllers/credit.controller.js";
 
 export function createApp() {
   const app = express();
@@ -40,6 +40,8 @@ export function createApp() {
   app.use("/api", apiLimiter);
   app.use("/api/auth", authRoutes);
   app.get("/api/public/credit-packages", asyncHandler(getPublicCreditPackages));
+  app.get("/api/public/pricing", asyncHandler(getPublicPricing));
+  app.get("/api/public/stats", asyncHandler(getPublicStatsHandler));
   app.get("/api/public/site", asyncHandler(getPublicSite));
   app.get("/api/public/logo", asyncHandler(getPublicLogo));
   app.get("/api/public/favicon", asyncHandler(getPublicFavicon));

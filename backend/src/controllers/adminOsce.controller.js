@@ -10,6 +10,7 @@ import { OsceAttempt } from "../models/OsceAttempt.js";
 import { UnansweredQuestion } from "../models/UnansweredQuestion.js";
 import { REVIEW_PARTS, stationListDto } from "../services/osce.service.js";
 import { importStations, parseImport } from "../services/osceImport.service.js";
+import { invalidatePublicStats } from "../services/publicStats.service.js";
 
 export async function listAdminStations(req, res) {
   const [modules, attemptCounts] = await Promise.all([
@@ -101,6 +102,7 @@ export async function updateStationStatus(req, res) {
   module.status = status;
   if (status === "published") module.publishedAt = new Date();
   await module.save();
+  invalidatePublicStats();
   await ContentAuditLog.create({
     contentType: "OsceStation",
     contentId: module._id,
@@ -358,6 +360,7 @@ export async function deleteAdminStation(req, res) {
   if (station.patientScriptId && !(await shared("patientScriptId", station.patientScriptId))) await PatientScript.deleteOne({ _id: station.patientScriptId });
   if (station.smartChecklistId && !(await shared("smartChecklistId", station.smartChecklistId))) await SmartChecklist.deleteOne({ _id: station.smartChecklistId });
   await OsceStation.deleteOne({ _id: station._id });
+  invalidatePublicStats();
   await ContentAuditLog.create({
     contentType: "OsceStation",
     contentId: station._id,

@@ -35,6 +35,8 @@ export default function SignupPage() {
     setStep(3);
   }
 
+  // New accounts land on the Subscribe page: nothing is unlocked until the
+  // account has an active monthly pass.
   async function finishToDashboard(withProfile) {
     setStatus("loading");
     setError("");
@@ -44,7 +46,7 @@ export default function SignupPage() {
         roleLabel: role,
         profile: withProfile ? profile : {},
       });
-      window.location.href = "/dashboard";
+      window.location.href = "/subscribe";
     } catch (err) {
       setStatus("error");
       setError(err.message);
@@ -103,7 +105,7 @@ export default function SignupPage() {
       {step === 1 && (
         <>
           <h1 className="mt-6 text-2xl font-semibold text-s-ink">Create your account</h1>
-          <p className="mt-1.5 text-s-mute">Free, and it takes about a minute.</p>
+          <p className="mt-1.5 text-s-mute">It takes about a minute.</p>
 
           <form onSubmit={handleAccountSubmit} className="mt-7 space-y-5">
             <Field
@@ -150,6 +152,11 @@ export default function SignupPage() {
             <button type="submit" disabled={status === "loading"} className={primaryButtonClass}>
               Continue
             </button>
+            <p className="text-center text-sm leading-relaxed text-s-mute">
+              By creating an account you agree to our{" "}
+              <Link to="/terms" className="font-medium text-s-accent hover:underline">Terms</Link> and{" "}
+              <Link to="/privacy" className="font-medium text-s-accent hover:underline">Privacy policy</Link>.
+            </p>
           </form>
         </>
       )}

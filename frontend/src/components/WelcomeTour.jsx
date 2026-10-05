@@ -58,7 +58,7 @@ const STEPS = [
     target: ["credits"],
     icons: [{ name: "coin", tone: "sun" }],
     title: "AI credits",
-    body: "The AI patient and AI marking use AI credits. Checklist practice, MCQs, OSPE and the guides are free.",
+    body: "The AI patient and AI marking use AI credits. Checklist practice, MCQs, OSPE and the guides are all part of your monthly pass.",
   },
   {
     id: "done",

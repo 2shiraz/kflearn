@@ -209,6 +209,16 @@ export function getPublicCreditPackages() {
   return publicFetch("/public/credit-packages");
 }
 
+// Public: the monthly access plan and the AI credit packs.
+export function getPublicPricing() {
+  return publicFetch("/public/pricing");
+}
+
+// Public: counts and names for the marketing pages (never any content).
+export function getPublicStats() {
+  return publicFetch("/public/stats");
+}
+
 export function getCredits() {
   return apiFetch("/credits");
 }

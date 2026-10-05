@@ -4,16 +4,8 @@ import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import BrandMark from "./BrandMark";
 import { Character, MedIcon } from "../site/Illustrations";
 import { useBranding } from "../lib/branding";
-import {
-  EXAM_GUIDE_COUNT,
-  HANDOUT_COUNT,
-  HISTORY_TOPIC_COUNT,
-  MCQ_COUNT,
-  OSPE_COUNT,
-  SIGNUP_LABEL,
-  demoPatient,
-  plus,
-} from "../site/siteContent";
+import { SIGNUP_LABEL, demoPatient, plus } from "../site/siteContent";
+import { usePublicStats } from "../lib/publicStats";
 
 const links = [
   { label: "Sample stations", to: "/sample-stations" },
@@ -22,14 +14,17 @@ const links = [
 ];
 
 // What's inside, linking to each section of the features page.
-const MODULES = [
-  { id: "osce", icon: "stethoscope", tone: "bg-s-accent-soft", name: "OSCE stations", note: "AI patient and examiner checklist" },
-  { id: "mcqs", icon: "books", tone: "bg-sky-soft", name: "MCQs", note: `${plus(MCQ_COUNT)} questions, first year to finals` },
-  { id: "ospe", icon: "microscope", tone: "bg-mint-soft", name: "OSPE", note: `${plus(OSPE_COUNT)} stations with checklists` },
-  { id: "clinical-examination", icon: "anatomical-heart", tone: "bg-coral-soft", name: "Clinical exam guide", note: `${EXAM_GUIDE_COUNT} examinations, step by step` },
-  { id: "history-taking", icon: "clipboard", tone: "bg-sun-soft", name: "History taking guide", note: `${HISTORY_TOPIC_COUNT} presentations and a framework` },
-  { id: "handouts", icon: "pill", tone: "bg-violet-soft", name: "Handout notes", note: `${HANDOUT_COUNT} handouts by system` },
-];
+function useModules() {
+  const stats = usePublicStats();
+  return [
+    { id: "osce", icon: "stethoscope", tone: "bg-s-accent-soft", name: "OSCE stations", note: "AI patient and examiner checklist" },
+    { id: "mcqs", icon: "books", tone: "bg-sky-soft", name: "MCQs", note: `${plus(stats.mcq.total)} questions, first year to finals` },
+    { id: "ospe", icon: "microscope", tone: "bg-mint-soft", name: "OSPE", note: `${plus(stats.ospe.total)} stations with checklists` },
+    { id: "clinical-examination", icon: "anatomical-heart", tone: "bg-coral-soft", name: "Clinical exam guide", note: `${stats.examGuides.total} examinations, step by step` },
+    { id: "history-taking", icon: "clipboard", tone: "bg-sun-soft", name: "History taking guide", note: `${stats.historyGuides.total} presentations and a framework` },
+    { id: "handouts", icon: "pill", tone: "bg-violet-soft", name: "Handout notes", note: `${stats.handouts.total} handouts by system` },
+  ];
+}
 
 // Full-width bar. Transparent over the top of the page, then a frosted
 // background and hairline once the page scrolls (watched with an
@@ -196,6 +191,7 @@ function DesktopLinks({ pathname, menuOpen, setMenuOpen }) {
 }
 
 function FeaturesPanel({ onNavigate }) {
+  const MODULES = useModules();
   return (
     <div id="site-features-panel" className="hidden border-t border-s-line bg-s-page lg:block">
       <div className="mx-auto grid max-w-7xl gap-8 px-8 py-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
@@ -240,6 +236,7 @@ function FeaturesPanel({ onNavigate }) {
 }
 
 function MobileMenu({ onNavigate }) {
+  const MODULES = useModules();
   return (
     <div id="site-mobile-menu" className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-s-line bg-s-page lg:hidden">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">

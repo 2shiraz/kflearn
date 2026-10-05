@@ -2,10 +2,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { MedIcon } from "../site/Illustrations";
 import PageShell from "../components/PageShell";
-import { handouts } from "../data/handoutNotes";
-import { stations as examStations } from "../data/clinicalExaminationGuide";
-import { topics as historyTopics } from "../data/historyTakingGuide";
-import { MCQ_COUNT, OSPE_COUNT, SIGNUP_LABEL, plus, yearCoverage } from "../site/siteContent";
+import { SIGNUP_LABEL, plus } from "../site/siteContent";
+import { usePublicStats } from "../lib/publicStats";
 
 const TONE = {
   indigo: "bg-s-accent-soft text-s-accent",
@@ -15,9 +13,9 @@ const TONE = {
   sun: "bg-sun-soft text-sun",
   violet: "bg-violet-soft text-violet",
 };
-const handoutSystems = [...new Set(handouts.map((h) => h.category))];
-
-const modules = [
+// Counts and the guide, topic and system names come from the server, so this
+// page never loads the content itself.
+const buildModules = (stats) => [
   {
     id: "osce",
     icon: "doctor",
@@ -36,8 +34,8 @@ const modules = [
     id: "mcqs",
     icon: "book",
     tone: "sky",
-    name: `${plus(MCQ_COUNT)} MCQs`,
-    lead: `Single-best-answer questions with explanations for MBBS ${yearCoverage[0].label} to ${yearCoverage[yearCoverage.length - 1].label}.`,
+    name: `${plus(stats.mcq.total)} MCQs`,
+    lead: "Single-best-answer questions with explanations for MBBS First Year to Final Year.",
     points: [
       "Browse by year, then module or block, then topic",
       "Read mode shows each question with its answer and explanation",
@@ -49,7 +47,7 @@ const modules = [
     id: "ospe",
     icon: "microscope",
     tone: "mint",
-    name: `${plus(OSPE_COUNT)} OSPE stations`,
+    name: `${plus(stats.ospe.total)} OSPE stations`,
     lead: "Specimens and scenarios with candidate tasks and the examiner scoring checklist, for MBBS First to Fourth Year.",
     points: [
       "Organised by year, module or block, and topic",
@@ -63,28 +61,29 @@ const modules = [
     icon: "heart",
     tone: "coral",
     name: "Clinical examination guide",
-    lead: `${plus(examStations.length)} examinations written as step-by-step technique, from introduction to closing.`,
-    chips: examStations.map((s) => s.title.replace(/ Examination$/, "")),
+    lead: `${plus(stats.examGuides.total)} examinations written as step-by-step technique, from introduction to closing.`,
+    chips: stats.examGuides.titles.map((title) => title.replace(/ Examination$/, "")),
   },
   {
     id: "history-taking",
     icon: "patient",
     tone: "sun",
     name: "History-taking guide",
-    lead: `A universal history framework, communication skills and ${plus(historyTopics.length)} focused presentations.`,
-    chips: historyTopics.map((t) => t.title),
+    lead: `A universal history framework, communication skills and ${plus(stats.historyGuides.total)} focused presentations.`,
+    chips: stats.historyGuides.titles,
   },
   {
     id: "handouts",
     icon: "medicines",
     tone: "violet",
     name: "Handout notes",
-    lead: `${plus(handouts.length)} handouts covering introduction, clinical features, diagnosis and management, grouped by system.`,
-    chips: handoutSystems,
+    lead: `${plus(stats.handouts.total)} handouts covering introduction, clinical features, diagnosis and management, grouped by system.`,
+    chips: stats.handouts.systems,
   },
 ];
 
 export default function FeaturesPage() {
+  const modules = buildModules(usePublicStats());
   return (
     <PageShell>
       <section className="mx-auto max-w-7xl px-4 pb-10 pt-14 sm:px-6 lg:px-8 lg:pt-20">
@@ -135,7 +134,7 @@ export default function FeaturesPage() {
                 </ul>
               )}
 
-              {m.chips && (
+              {m.chips?.length > 0 && (
                 <ul className="mt-6 flex flex-wrap gap-2">
                   {m.chips.map((c) => (
                     <li key={c} className={`rounded-full px-3 py-1.5 text-sm text-s-ink ${TONE[m.tone].split(" ")[0]}`}>
@@ -154,7 +153,10 @@ export default function FeaturesPage() {
           ))}
 
           <div data-reveal className="flex flex-col items-start justify-between gap-5 rounded-3xl bg-s-accent p-6 text-s-on-accent md:flex-row md:items-center md:p-8">
-            <p className="text-xl font-semibold">Try it with a free account.</p>
+            <div>
+              <p className="text-xl font-semibold">All of it, with one monthly pass.</p>
+              <p className="mt-1 text-sm text-s-on-accent/85">AI patient sessions and AI marking also use AI credits.</p>
+            </div>
             <Link to="/signup" className="site-press inline-flex items-center gap-2 rounded-full bg-s-on-accent px-6 py-3 text-[15px] font-semibold text-s-accent hover:opacity-90">
               {SIGNUP_LABEL} <ArrowRight size={17} strokeWidth={2} />
             </Link>

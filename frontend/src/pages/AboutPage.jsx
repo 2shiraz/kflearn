@@ -3,23 +3,8 @@ import { ArrowRight } from "lucide-react";
 import { Character, MedIcon } from "../site/Illustrations";
 import PageShell from "../components/PageShell";
 import { ROLE_OPTIONS } from "../lib/api";
-import {
-  EXAM_GUIDE_COUNT,
-  HANDOUT_COUNT,
-  HISTORY_TOPIC_COUNT,
-  MCQ_COUNT,
-  OSPE_COUNT,
-  SIGNUP_LABEL,
-  plus,
-} from "../site/siteContent";
-
-const stats = [
-  { value: plus(MCQ_COUNT), label: "MCQs" },
-  { value: plus(OSPE_COUNT), label: "OSPE stations" },
-  { value: plus(EXAM_GUIDE_COUNT), label: "Examination guides" },
-  { value: plus(HISTORY_TOPIC_COUNT), label: "History-taking guides" },
-  { value: plus(HANDOUT_COUNT), label: "Handout notes" },
-];
+import { SIGNUP_LABEL, plus } from "../site/siteContent";
+import { usePublicStats } from "../lib/publicStats";
 
 const problems = [
   {
@@ -43,6 +28,14 @@ const problems = [
 ];
 
 export default function AboutPage() {
+  const counts = usePublicStats();
+  const stats = [
+    { value: plus(counts.mcq.total), label: "MCQs" },
+    { value: plus(counts.ospe.total), label: "OSPE stations" },
+    { value: plus(counts.examGuides.total), label: "Examination guides" },
+    { value: plus(counts.historyGuides.total), label: "History-taking guides" },
+    { value: plus(counts.handouts.total), label: "Handout notes" },
+  ];
   return (
     <PageShell>
       <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-8 lg:pt-20">

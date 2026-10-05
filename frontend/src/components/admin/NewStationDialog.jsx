@@ -158,7 +158,7 @@ export default function NewStationDialog({ open, onClose, onCreated }) {
             <Field label="Time limit (minutes)" type="number" min="1" max="60" required value={form.minutes} onChange={(v) => set("minutes", v)} />
           </div>
           <div className="grid divide-y divide-s-line rounded-2xl border border-s-line px-4 lg:grid-cols-2 lg:gap-8 lg:divide-y-0">
-            <Toggle label="Checklist practice" description="Students work through the station and mark themselves. Free." checked={form.checklistPractice} onChange={(v) => set("checklistPractice", v)} />
+            <Toggle label="Checklist practice" description="Students work through the station and mark themselves. Uses no AI credits." checked={form.checklistPractice} onChange={(v) => set("checklistPractice", v)} />
             <Toggle label="AI patient" description="Students talk to the AI patient and can get AI marking. Needs the patient below." checked={form.aiPatient} onChange={(v) => set("aiPatient", v)} />
           </div>
         </section>

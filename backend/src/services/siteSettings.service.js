@@ -53,7 +53,12 @@ export function sectionClosed(message = "This section isn't available right now.
 }
 
 // ---- Pricing ----
+// The monthly access pass that unlocks the site. Each paid period adds
+// periodDays; access carries on for graceDays after it ends.
+const DEFAULT_SUBSCRIPTION = { pricePkr: 1499, periodDays: 30, graceDays: 3 };
+
 const DEFAULT_PRICING = {
+  subscription: { ...DEFAULT_SUBSCRIPTION },
   welcomeCredits: STARTING_CREDITS,
   costs: { ...CREDIT_COSTS },
   packages: CREDIT_PACKAGES.map((pkg) => ({ ...pkg })),
@@ -63,6 +68,7 @@ export async function getPricing() {
   const stored = (await AppSetting.findOne({ key: PRICING_KEY }).lean())?.value;
   if (!stored) return structuredClone(DEFAULT_PRICING);
   return {
+    subscription: { ...DEFAULT_SUBSCRIPTION, ...stored.subscription },
     welcomeCredits: Number.isSafeInteger(stored.welcomeCredits) ? stored.welcomeCredits : DEFAULT_PRICING.welcomeCredits,
     costs: { ...DEFAULT_PRICING.costs, ...stored.costs },
     packages: Array.isArray(stored.packages) ? stored.packages : DEFAULT_PRICING.packages,
@@ -76,6 +82,15 @@ export async function updatePricing(payload = {}) {
   const current = await getPricing();
   const next = structuredClone(current);
 
+  if (payload.subscription !== undefined) {
+    const sub = payload.subscription || {};
+    const limits = { pricePkr: [0, 10_000_000, "The monthly price must be a whole number of rupees."], periodDays: [1, 366, "The access period must be 1 to 366 days."], graceDays: [0, 30, "The grace period must be 0 to 30 days."] };
+    for (const [key, [min, max, message]] of Object.entries(limits)) {
+      if (sub[key] === undefined) continue;
+      if (!wholeNumber(sub[key], { min, max })) throw badRequest(message);
+      next.subscription[key] = sub[key];
+    }
+  }
   if (payload.welcomeCredits !== undefined) {
     if (!wholeNumber(payload.welcomeCredits, { max: 10_000 })) throw badRequest("Welcome credits must be a whole number from 0 to 10,000.");
     next.welcomeCredits = payload.welcomeCredits;

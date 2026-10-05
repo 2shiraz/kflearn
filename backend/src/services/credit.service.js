@@ -119,6 +119,15 @@ export async function publicCreditPackages() {
   return packages.map(({ id, name, credits, pricePkr }) => ({ id, name, credits, pricePkr }));
 }
 
+// Public: the monthly access pass and the AI credit packs, for the pricing page.
+export async function publicPricing() {
+  const { subscription, packages } = await getPricing();
+  return {
+    plan: { pricePkr: subscription.pricePkr, periodDays: subscription.periodDays, graceDays: subscription.graceDays },
+    packages: packages.map(({ id, name, credits, pricePkr }) => ({ id, name, credits, pricePkr })),
+  };
+}
+
 export async function creditPricing() {
   const { costs, packages } = await getPricing();
   const fullStation = costs.virtualPatient + costs.aiAssessment;

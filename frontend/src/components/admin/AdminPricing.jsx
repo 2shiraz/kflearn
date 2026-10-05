@@ -77,7 +77,7 @@ export default function AdminPricing() {
             </Panel>
             <Panel>
               <h3 className="font-semibold text-s-ink">New accounts</h3>
-              <Field className="mt-4" label="Free AI credits at signup" helper="Set to 0 to give none." type="number" min="0" inputMode="numeric" value={form.welcomeCredits} onChange={(v) => update("welcomeCredits", v)} />
+              <Field className="mt-4" label="AI credits given at signup" helper="Set to 0 to give none." type="number" min="0" inputMode="numeric" value={form.welcomeCredits} onChange={(v) => update("welcomeCredits", v)} />
             </Panel>
           </div>
 

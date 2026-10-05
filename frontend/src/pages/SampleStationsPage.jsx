@@ -24,7 +24,7 @@ export default function SampleStationsPage() {
       <section className="mx-auto max-w-7xl px-4 pb-10 pt-14 sm:px-6 lg:px-8 lg:pt-20">
         <h1 className="site-rise max-w-3xl text-4xl font-semibold leading-tight text-s-ink md:text-5xl">Sample OSCE stations</h1>
         <p className="site-rise mt-5 max-w-2xl text-lg leading-relaxed text-s-mute" style={{ "--rise-delay": "80ms" }}>
-          A selection of stations from the bank, shown with the brief you would read before walking in.
+          A few stations from the bank, shown with the brief you would read before walking in.
         </p>
       </section>
 
@@ -72,7 +72,7 @@ export default function SampleStationsPage() {
             ))}
           </ul>
           <p className="mt-5 text-sm leading-relaxed text-s-mute">
-            Guided self-practice is included with a free account.
+            Every station comes with your monthly access pass. The AI patient and AI marking also use AI credits.
           </p>
           <Link
             to="/signup"

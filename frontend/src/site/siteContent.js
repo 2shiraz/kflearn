@@ -1,18 +1,6 @@
-// Facts shown on the public pages. MCQ and OSPE figures come straight from the
-// banks' metadata (small files; the question bodies stay lazy-loaded).
-import { mcqTotalCount, mcqYears } from "../data/mcqs/catalog";
-import { ospeTotalCount, ospeYears } from "../data/ospe";
-
-// These three are copied from data/clinicalExaminationGuide.js (stations),
-// data/historyTakingGuide.js (topics) and data/handoutNotes.js (handouts) so the
-// landing page doesn't download those large files. Update them if the data changes.
-export const EXAM_GUIDE_COUNT = 19;
-export const HISTORY_TOPIC_COUNT = 9;
-export const HANDOUT_COUNT = 47;
-export const HANDOUT_SYSTEM_COUNT = 7;
-
-export const MCQ_COUNT = mcqTotalCount;
-export const OSPE_COUNT = ospeTotalCount;
+// Static copy for the public pages. Counts (MCQs, OSPE stations, guides) come
+// from the server through usePublicStats in lib/publicStats.js; nothing here
+// imports the content banks, so the public pages never download them.
 
 export const formatCount = (n) => n.toLocaleString("en-US");
 
@@ -20,26 +8,11 @@ export const formatCount = (n) => n.toLocaleString("en-US");
 // "at least" counts: 5,000+ rather than an exact number that goes stale.
 export const plus = (n) => `${formatCount(n)}+`;
 
-export const SIGNUP_LABEL = "Create free account";
+export const SIGNUP_LABEL = "Create account";
 
-const YEAR_LABELS = { 1: "First Year", 2: "Second Year", 3: "Third Year", 4: "Fourth Year", 5: "Final Year" };
-
-// Per-year coverage for the landing page: MCQ modules and OSPE blocks.
-export const yearCoverage = mcqYears
-  .slice()
-  .sort((a, b) => a.year - b.year)
-  .map((mcq) => {
-    const ospe = ospeYears.find((y) => y.year === mcq.year);
-    return {
-      year: mcq.year,
-      label: YEAR_LABELS[mcq.year] || mcq.name,
-      mcqCount: mcq.count,
-      mcqBlocks: mcq.blocks.map((b) => b.name),
-      ospeCount: ospe?.count || 0,
-      ospeBlocks: ospe ? ospe.blocks.map((b) => b.name) : [],
-    };
-  });
-
+// The preview stations, patient lines, question and checklist below are
+// hand-written copies for the public pages. Editing the banks doesn't change
+// them, and they don't load any bank data.
 // Real stations from the newest OSCE sets (GIT, infectious diseases, gynae and
 // obstetrics), used as public previews. Briefs are each station's own short
 // description. Every station runs for 8 minutes.
@@ -133,8 +106,8 @@ export const CHECKLIST_ITEM_MARKS = 2;
 
 export const faqs = [
   {
-    q: "Is KF LearnSmart free to use?",
-    a: "Yes. A free account includes the MCQ bank, OSPE stations, every guide, handout notes and guided self-practice on OSCE stations. The AI virtual patient comes with a practice pack.",
+    q: "How much does it cost?",
+    a: "One monthly access pass unlocks the whole site: OSCE stations, the MCQ bank, OSPE stations, every guide and the handout notes. Sessions with the AI patient and AI marking also use AI credits. See Pricing for the current price.",
   },
   {
     q: "How does the AI virtual patient work?",

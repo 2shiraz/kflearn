@@ -20,14 +20,22 @@ const columns = [
       { label: SIGNUP_LABEL, to: "/signup" },
     ],
   },
+  {
+    heading: "Legal",
+    links: [
+      { label: "Terms", to: "/terms" },
+      { label: "Privacy", to: "/privacy" },
+      { label: "Refunds", to: "/refunds" },
+    ],
+  },
 ];
 
 export default function Footer() {
   return (
     <footer className="border-t border-s-line bg-s-card">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
-          <div className="max-w-sm">
+        <div className="grid gap-10 sm:grid-cols-3 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="max-w-sm sm:col-span-3 md:col-span-1">
             <Link to="/" className="flex min-h-11 items-center gap-2.5">
               <BrandMark size={30} />
               <span className="text-[15px] font-semibold tracking-tight text-s-ink"><SiteName /></span>

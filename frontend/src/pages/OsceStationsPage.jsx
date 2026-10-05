@@ -448,7 +448,7 @@ function SelfPracticeCard({ onClick, loading }) {
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-soft text-mint" aria-hidden="true">
           <MedIcon name="medicalRecords" size={28} />
         </span>
-        <span className="rounded-full bg-mint-soft px-2.5 py-1 font-chart text-xs text-s-good">Free</span>
+        <span className="rounded-full bg-mint-soft px-2.5 py-1 font-chart text-xs text-s-good">No AI credits</span>
       </div>
       <h3 className="mt-4 text-lg font-semibold tracking-tight text-s-ink">Guided self-practice</h3>
       <p className="mt-1.5 text-sm leading-relaxed text-s-mute">Work through the station script, then reveal the checklist and mark yourself.</p>

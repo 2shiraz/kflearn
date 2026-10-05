@@ -4,12 +4,6 @@ import { ArrowRight, Check, Mic, Minus, Plus, RotateCcw, X } from "lucide-react"
 import PageShell from "../components/PageShell";
 import { Character, EcgLine, MedIcon, VoiceBars } from "../site/Illustrations";
 import {
-  EXAM_GUIDE_COUNT,
-  HANDOUT_COUNT,
-  HANDOUT_SYSTEM_COUNT,
-  HISTORY_TOPIC_COUNT,
-  MCQ_COUNT,
-  OSPE_COUNT,
   SIGNUP_LABEL,
   CHECKLIST_ITEM_MARKS,
   demoChecklist,
@@ -17,8 +11,8 @@ import {
   faqs,
   plus,
   sampleMcq,
-  yearCoverage,
 } from "../site/siteContent";
+import { usePublicStats, yearCoverage as buildYearCoverage } from "../lib/publicStats";
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -50,6 +44,7 @@ export default function LandingPage() {
 /* ================================================================== Hero */
 
 function Hero() {
+  const stats = usePublicStats();
   return (
     <section className="site-hero overflow-hidden border-b border-s-line">
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-14 px-4 pb-14 pt-8 sm:px-6 md:pb-20 md:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 lg:px-8 lg:pb-28">
@@ -69,7 +64,7 @@ function Hero() {
             </span>
           </h1>
           <p className="site-rise mt-8 max-w-lg text-lg leading-relaxed text-s-mute" style={{ "--rise-delay": "120ms" }}>
-            Run full OSCE stations by voice or text, get marked on the examiner checklist, and drill {plus(MCQ_COUNT)} MCQs.
+            Run full OSCE stations by voice or text, get marked on the examiner checklist, and drill {plus(stats.mcq.total)} MCQs.
           </p>
           <div className="site-rise mt-9 grid gap-3 sm:flex sm:flex-wrap sm:items-center" style={{ "--rise-delay": "180ms" }}>
             <Link
@@ -230,6 +225,7 @@ function PatientBubble({ children }) {
 /* =============================================================== Library */
 
 function Library() {
+  const stats = usePublicStats();
   return (
     <section id="library" className="mx-auto max-w-7xl px-4 py-12 md:py-16 sm:px-6 lg:px-8 lg:py-24">
       <div data-reveal className="max-w-2xl">
@@ -243,7 +239,7 @@ function Library() {
           className="md:col-span-3"
           tone="sky"
           icon="book"
-          stat={plus(MCQ_COUNT)}
+          stat={plus(stats.mcq.total)}
           title="MCQs with explanations"
           body="First Year to Final Year. Read a topic with answers open, or run a shuffled practice set."
           to="/features#mcqs"
@@ -253,7 +249,7 @@ function Library() {
           className="md:col-span-3"
           tone="mint"
           icon="microscope"
-          stat={plus(OSPE_COUNT)}
+          stat={plus(stats.ospe.total)}
           title="OSPE stations"
           body="Specimens and scenarios with candidate tasks and the examiner checklist to mark yourself."
           to="/features#ospe"
@@ -263,7 +259,7 @@ function Library() {
           className="md:col-span-2"
           tone="coral"
           icon="heart"
-          stat={plus(EXAM_GUIDE_COUNT)}
+          stat={plus(stats.examGuides.total)}
           title="Examination guides"
           body="Step-by-step technique, from cardiovascular to cranial nerves."
           to="/features#clinical-examination"
@@ -272,7 +268,7 @@ function Library() {
           className="md:col-span-2"
           tone="sun"
           icon="patient"
-          stat={plus(HISTORY_TOPIC_COUNT)}
+          stat={plus(stats.historyGuides.total)}
           title="History-taking guides"
           body="A universal framework plus chest pain, breathlessness, headache and more."
           to="/features#history-taking"
@@ -281,9 +277,9 @@ function Library() {
           className="md:col-span-2"
           tone="violet"
           icon="medicines"
-          stat={plus(HANDOUT_COUNT)}
+          stat={plus(stats.handouts.total)}
           title="Handout notes"
-          body={`Features, diagnosis and management across ${HANDOUT_SYSTEM_COUNT} body systems.`}
+          body={`Features, diagnosis and management across ${stats.handouts.systems.length || 7} body systems.`}
           to="/features#handouts"
         />
       </div>
@@ -572,6 +568,7 @@ function MarkLikeExaminer() {
 const YEAR_TONES = ["sky", "mint", "coral", "sun", "violet"];
 
 function Coverage() {
+  const yearCoverage = buildYearCoverage(usePublicStats());
   const [active, setActive] = useState(0);
   const baseId = useId();
   const year = yearCoverage[active];
@@ -592,7 +589,18 @@ function Coverage() {
         <p className="mt-4 text-lg leading-relaxed text-s-mute">See the modules waiting for you in the question banks.</p>
       </div>
 
-      <div data-reveal className="mt-8">
+      {!year && (
+        <div className="mt-8 space-y-4" aria-busy="true" aria-label="Loading years">
+          <div className="flex gap-2">
+            {[0, 1, 2, 3, 4].map((i) => <div key={i} className="h-11 w-28 animate-pulse rounded-full bg-s-tint" />)}
+          </div>
+          <div className="h-48 animate-pulse rounded-3xl bg-s-tint" />
+        </div>
+      )}
+      {/* No data-reveal here: this appears after the counts load, after the
+          page's reveal observer has already run. */}
+      {year && (
+      <div className="mt-8">
         <div role="tablist" aria-label="MBBS year" onKeyDown={onKeyDown} className="flex gap-2 overflow-x-auto pb-2">
           {yearCoverage.map((y, i) => (
             <button
@@ -630,6 +638,7 @@ function Coverage() {
           )}
         </div>
       </div>
+      )}
     </section>
   );
 }
@@ -719,7 +728,7 @@ function FinalCta() {
         <div className="relative max-w-xl">
           <h2 className="text-3xl font-semibold leading-tight md:text-[2.6rem]">Your next OSCE starts here</h2>
           <p className="mt-4 text-lg leading-relaxed opacity-90">
-            Question banks, OSPE stations, guides and guided self-practice are free from day one.
+            Every OSCE station, question bank, guide and handout, unlocked with one monthly access pass.
           </p>
           <Link
             to="/signup"

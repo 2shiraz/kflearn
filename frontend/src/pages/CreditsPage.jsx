@@ -60,7 +60,7 @@ export default function CreditsPage() {
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "AI Credits" }]} />
         <PageHeader
           title="AI Credits"
-          description="AI credits are for the AI patient and AI marking. Guides, handouts, MCQs, OSPE and self-practice are always free."
+          description="AI credits are for the AI patient and AI marking. Everything else is part of your monthly pass."
         />
 
         <div className="grid gap-6">
@@ -108,8 +108,8 @@ export default function CreditsPage() {
                     <Check size={20} strokeWidth={2.5} />
                   </span>
                   <span className="min-w-0 text-sm">
-                    <span className="block font-medium text-s-ink">Everything else is free</span>
-                    <span className="block leading-relaxed text-s-mute">Self-practice, voice typing, guides, handouts, MCQs and OSPE.</span>
+                    <span className="block font-medium text-s-ink">Everything else is in your monthly pass</span>
+                    <span className="block leading-relaxed text-s-mute">Self-practice, voice typing, guides, handouts, MCQs and OSPE use no AI credits.</span>
                   </span>
                 </li>
               </ul>

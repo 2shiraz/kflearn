@@ -35,6 +35,11 @@ const SampleStationsPage = lazyPage(() => import("./pages/SampleStationsPage"));
 const PricingPage = lazyPage(() => import("./pages/PricingPage"));
 const AboutPage = lazyPage(() => import("./pages/AboutPage"));
 const CreditsPage = lazyPage(() => import("./pages/CreditsPage"));
+const SubscribePage = lazyPage(() => import("./pages/SubscribePage"));
+const legal = () => import("./pages/LegalPages");
+const TermsPage = lazyPage(legal, "TermsPage");
+const PrivacyPage = lazyPage(legal, "PrivacyPage");
+const RefundsPage = lazyPage(legal, "RefundsPage");
 
 const osce = () => import("./pages/OsceStationsPage");
 const AdminOscePage = lazyPage(osce, "AdminOscePage");
@@ -91,9 +96,13 @@ export default function App() {
           <Route path="/sample-stations" element={<SampleStationsPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/refunds" element={<RefundsPage />} />
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/subscribe" element={<SubscribePage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/stations" element={<OsceHome />} />
           <Route path="/stations/section/:sectionName" element={<OsceSectionPage />} />

@@ -189,7 +189,7 @@ export default function OsceStationBrowser({ stations, specialtyOnly = false, de
               options={[["", "Recently updated"], ["title", "Title, A to Z"], ["duration", "Shortest first"]]}
             />
           </div>
-          <p className="mt-4 text-xs text-s-mute">Guided practice is free. AI patient sessions use AI credits.</p>
+          <p className="mt-4 text-xs text-s-mute">Guided practice is part of your monthly pass. AI patient sessions use AI credits.</p>
         </div>
 
         {showResults && (
