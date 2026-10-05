@@ -7,6 +7,7 @@ import { Chip, ProgressLine, rise, scoreTone } from "../components/StudyKit";
 import { listOsceAttempts, listOsceStations } from "../lib/api";
 import { displayTitle } from "../lib/osceFilters";
 import { mcqSummary, osceSummary, ospeSummary } from "../lib/progress";
+import { useCatalog } from "../lib/content";
 import { MedIcon } from "../site/Illustrations";
 import { TONES, specialtyLook } from "../site/tones";
 
@@ -32,8 +33,9 @@ export default function ProgressPage() {
   useEffect(() => { load(); }, [load]);
 
   const osce = useMemo(() => osceSummary(state.attempts, state.stations), [state.attempts, state.stations]);
-  const mcq = useMemo(() => mcqSummary(), []);
-  const ospe = useMemo(() => ospeSummary(), []);
+  const { data: catalog } = useCatalog();
+  const mcq = useMemo(() => mcqSummary(catalog?.mcq), [catalog]);
+  const ospe = useMemo(() => ospeSummary(catalog?.ospe), [catalog]);
   const nothingYet = osce.count === 0 && mcq.answered === 0 && ospe.attempted === 0;
 
   return (

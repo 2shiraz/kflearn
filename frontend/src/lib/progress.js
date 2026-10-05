@@ -1,8 +1,6 @@
 // Progress figures for the Progress page. Everything here is computed from
 // real records: marked OSCE attempts from the server, and the MCQ / OSPE
 // practice results the MCQ and OSPE pages already save in this browser.
-import { mcqYears } from "../data/mcqs/catalog";
-import { ospeYears } from "../data/ospe";
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -102,7 +100,8 @@ export function osceSummary(attempts, stations) {
 // ---- MCQ ----
 // Question ids are "y<year>-q<n>", numbered through the year in block and
 // topic order, the same scheme the MCQ pages use.
-export function mcqSummary() {
+// mcqYears / ospeYears come from the content catalog (lib/content.js).
+export function mcqSummary(mcqYears = []) {
   const progress = readLocal("kf_mcq_progress");
   const years = mcqYears.map((year) => {
     let offset = 0;
@@ -142,7 +141,7 @@ export function mcqSummary() {
 // ---- OSPE ----
 // Station ids are "ospe<year>-<block slug>-<n>"; values are the fraction of
 // checklist items ticked on the latest attempt.
-export function ospeSummary() {
+export function ospeSummary(ospeYears = []) {
   const progress = readLocal("kf_ospe_progress");
   const entries = Object.entries(progress);
   const years = ospeYears.map((year) => {

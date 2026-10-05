@@ -3,17 +3,13 @@ import { MessageCircle, ScrollText } from "lucide-react";
 import { Breadcrumbs, PageMain, Panel, RequireUser } from "../components/AppPage";
 import { ChecklistWidget, ExamTips, GuideBlock, GuideCard, GuideHero, GuideNotFound, GuideSection, GuideTitle, JumpNav, NumberedSteps, PanelHeading, PrevNext, QuoteBox, SectionHeading } from "../components/GuideBlocks";
 import { YEAR_TONES } from "../components/StudyKit";
-import {
-  communicationSkills,
-  coreMnemonics,
-  generalApproach,
-  getAdjacentTopics,
-  getTopic,
-  masterChecklist,
-  presentationTemplate,
-  topics,
-  universalOpening,
-} from "../data/historyTakingGuide";
+import { ErrorMessage } from "../components/AppPage";
+import { SetupSkeleton } from "../components/Skeleton";
+import { useContent } from "../lib/content";
+
+function Loading({ error }) {
+  return error ? <ErrorMessage message={error} onRetry={() => window.location.reload()} /> : <SetupSkeleton label="Loading" />;
+}
 
 // Colour icon per topic (keyed by the topic's icon name in the data file).
 const TOPIC_ICONS = {
@@ -29,6 +25,16 @@ const TOPIC_ICONS = {
 };
 
 export function HistoryGuideHome() {
+  const { data, error } = useContent("/guides/history");
+  if (!data) {
+    return (
+      <RequireUser active="history">
+        <PageMain><Loading error={error} /></PageMain>
+      </RequireUser>
+    );
+  }
+  const { universalOpening, coreMnemonics, generalApproach, communicationSkills, presentationTemplate, masterChecklist } = data.meta;
+  const topics = data.entries;
   return (
     <RequireUser active="history">
       <PageMain>
@@ -128,8 +134,16 @@ export function HistoryGuideHome() {
 
 export function HistoryGuideTopic() {
   const { topicSlug } = useParams();
-  const topic = getTopic(topicSlug);
+  const { data, error } = useContent(`/guides/history/${encodeURIComponent(topicSlug)}`);
+  const topic = data?.entry;
 
+  if (!data && !/doesn't exist|Not found/i.test(error)) {
+    return (
+      <RequireUser active="history">
+        <PageMain width="reading"><Loading error={error} /></PageMain>
+      </RequireUser>
+    );
+  }
   if (!topic) {
     return (
       <RequireUser active="history">
@@ -141,7 +155,7 @@ export function HistoryGuideTopic() {
     );
   }
 
-  const { prev, next } = getAdjacentTopics(topicSlug);
+  const { prev, next } = data;
 
   return (
     <RequireUser active="history">

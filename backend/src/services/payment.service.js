@@ -3,7 +3,27 @@ import { MAX_CREDIT_OPERATION } from "../config/credits.js";
 import { CreditTransaction } from "../models/CreditTransaction.js";
 import { Payment } from "../models/Payment.js";
 import { User } from "../models/User.js";
-import { getPricing } from "./siteSettings.service.js";
+import { Checkout } from "../models/Checkout.js";
+import { getPricing, getSiteSettings } from "./siteSettings.service.js";
+import { grantAccess, revokeAccessPeriod, subscriptionStats } from "./access.service.js";
+import { getProvider } from "./payments/providers/index.js";
+
+// The payment provider in use, whether students can pay online, and online
+// payments whose amount didn't match and are waiting for an admin to check.
+async function providerStatus() {
+  const provider = getProvider();
+  const [site, held] = await Promise.all([
+    getSiteSettings(),
+    Checkout.find({ status: "review" }).sort({ updatedAt: -1 }).limit(10).populate("userId", "email").lean(),
+  ]);
+  return {
+    connected: Boolean(provider),
+    name: provider?.label || "",
+    test: Boolean(provider?.isTest),
+    enabled: Boolean(provider && site.onlinePayments),
+    held: held.map((c) => ({ id: c._id, email: c.userId?.email || "Deleted account", item: c.packageName, amount: c.amount, reason: c.failureReason, at: c.updatedAt })),
+  };
+}
 
 const DAY = 24 * 60 * 60 * 1000;
 export const PAYMENT_METHODS = ["bank-transfer", "cash", "mobile-wallet", "card", "other"];
@@ -33,17 +53,30 @@ async function creditPayment(payment) {
   }
 }
 
+export const SUBSCRIPTION_PACKAGE_ID = "monthly-access";
+
 // A payment taken outside the site (bank transfer, cash, mobile wallet),
-// recorded by an admin. The account gets the credits straight away.
+// recorded by an admin. A credit pack adds AI credits straight away; a
+// monthly pass (kind "subscription") adds days of access straight away.
 export async function recordManualPayment(input, actor) {
   const email = typeof input.email === "string" ? input.email.trim().toLowerCase() : "";
   const user = email && (await User.findOne({ email }, { _id: 1 }).lean());
   if (!user) throw badRequest("No account has that email.");
 
+  const kind = input.kind === "subscription" || input.packageId === SUBSCRIPTION_PACKAGE_ID ? "subscription" : "credits";
   let { amount, credits } = input;
   let packageId = "";
   let packageName = "";
-  if (input.packageId) {
+  let accessDays = 0;
+  if (kind === "subscription") {
+    const plan = (await getPricing()).subscription;
+    packageId = SUBSCRIPTION_PACKAGE_ID;
+    packageName = "Monthly access";
+    amount ??= plan.pricePkr;
+    credits = 0;
+    accessDays = input.days ?? plan.periodDays;
+    if (!Number.isSafeInteger(accessDays) || accessDays < 1 || accessDays > 366) throw badRequest("Enter the days of access as a whole number from 1 to 366.");
+  } else if (input.packageId) {
     const pkg = (await getPricing()).packages.find((p) => p.id === input.packageId);
     if (!pkg) throw badRequest("That package no longer exists.");
     packageId = pkg.id;
@@ -64,11 +97,16 @@ export async function recordManualPayment(input, actor) {
   if (providerRef && (await Payment.exists({ provider: "manual", providerRef }))) throw badRequest("A payment with that reference is already recorded.", 409);
 
   const payment = await Payment.create({
-    userId: user._id, amount, credits, packageId, packageName, method, provider: "manual",
+    userId: user._id, amount, credits, kind, accessDays, packageId, packageName, method, provider: "manual",
     providerRef, note, paidAt, status: "paid", recordedBy: actor,
   });
   try {
-    payment.creditTransactionId = await creditPayment(payment);
+    if (kind === "subscription") {
+      const period = await grantAccess({ userId: user._id, days: accessDays, source: "payment", paymentId: payment._id, reason: "Monthly access payment", createdBy: actor });
+      payment.accessPeriodId = period._id;
+    } else {
+      payment.creditTransactionId = await creditPayment(payment);
+    }
     await payment.save();
   } catch (error) {
     await Payment.deleteOne({ _id: payment._id });
@@ -87,6 +125,16 @@ export async function refundPayment(id, { removeCredits = false, note = "" } = {
   payment.refundedAmount = payment.amount;
   payment.refundedAt = new Date();
   if (note) payment.note = `${payment.note ? `${payment.note} / ` : ""}Refund: ${String(note).trim()}`.slice(0, 300);
+  // A refunded pass ends the access it bought.
+  let accessRevoked = false;
+  if (payment.accessPeriodId) {
+    try {
+      await revokeAccessPeriod({ userId: payment.userId, periodId: payment.accessPeriodId, revokedBy: actor });
+      accessRevoked = true;
+    } catch (error) {
+      if (error.status !== 409 && error.status !== 404) throw error;
+    }
+  }
   let removed = 0;
   if (removeCredits && payment.credits) {
     const user = await User.findById(payment.userId, { creditBalance: 1 });
@@ -102,7 +150,43 @@ export async function refundPayment(id, { removeCredits = false, note = "" } = {
     }
   }
   await payment.save();
-  return { payment, creditsRemoved: removed };
+  return { payment, creditsRemoved: removed, accessRevoked };
+}
+
+// A payment confirmed by the online payment provider (see
+// checkout.service.js). Records it and adds the access or AI credits. The
+// unique (provider, providerRef) index means a payment can only be recorded
+// once, however often the provider repeats its notification.
+export async function recordProviderPayment(checkout) {
+  const payment = await Payment.create({
+    userId: checkout.userId,
+    amount: checkout.amount,
+    currency: checkout.currency,
+    credits: checkout.credits,
+    kind: checkout.kind,
+    accessDays: checkout.accessDays,
+    packageId: checkout.packageId,
+    packageName: checkout.packageName,
+    method: "online",
+    provider: checkout.provider,
+    providerRef: checkout.providerRef,
+    paidAt: new Date(),
+    status: "paid",
+    recordedBy: checkout.provider,
+  });
+  try {
+    if (checkout.kind === "subscription") {
+      const period = await grantAccess({ userId: checkout.userId, days: checkout.accessDays, source: "processor", paymentId: payment._id, reason: "Online payment", createdBy: checkout.provider });
+      payment.accessPeriodId = period._id;
+    } else {
+      payment.creditTransactionId = await creditPayment(payment);
+    }
+    await payment.save();
+  } catch (error) {
+    await Payment.deleteOne({ _id: payment._id });
+    throw error;
+  }
+  return payment;
 }
 
 // ---- Reports ----
@@ -221,8 +305,8 @@ export async function revenueReport({ days = 30, bucket } = {}) {
       payments: life?.payments || 0,
       customers: life?.customers.length || 0,
     },
-    // No processor is connected yet; payments are recorded by an admin.
-    provider: { connected: false, name: "" },
+    provider: await providerStatus(),
+    subscriptions: await subscriptionStats({ start }),
   };
 }
 
@@ -254,6 +338,8 @@ export function paymentDto(p) {
     name: user?.fullName || "",
     amount: p.amount,
     currency: p.currency,
+    kind: p.kind || "credits",
+    accessDays: p.accessDays || 0,
     fee: p.fee,
     credits: p.credits,
     packageName: p.packageName || "Custom amount",

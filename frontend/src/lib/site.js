@@ -10,7 +10,13 @@ const DEFAULT_SITE = {
   sections: {},
   aiPatient: true,
   signupsOpen: true,
+  requireSubscription: false,
+  watermark: false,
   announcements: [],
+  // The account's monthly access: { required, unlimited, active, inGrace,
+  // hasAccess, until, graceUntil, graceDays }. Worked out by the server; this
+  // copy only decides what the screens show.
+  access: null,
   loaded: false,
 };
 
@@ -71,6 +77,24 @@ export function useSite() {
     return () => listeners.delete(setValue);
   }, []);
   return value;
+}
+
+// Whether the account can open the study material. Admins and contributors
+// always can. Until the status is known it counts as locked, so nothing
+// appears and then disappears.
+export function accessOpen(currentSite, user = getCurrentUser()) {
+  if (["admin", "contributor"].includes(user?.role)) return true;
+  if (!currentSite.loaded) return false;
+  if (!currentSite.access) return !currentSite.requireSubscription;
+  return currentSite.access.hasAccess !== false;
+}
+
+// The server answered "subscription required" (the pass ended while the page
+// was open): lock straight away, then fetch the real status.
+export function markAccessLost() {
+  if (site.access) publish({ ...site, access: { ...site.access, hasAccess: false, active: false, inGrace: false } });
+  request = null;
+  refreshSite();
 }
 
 // A section is open unless the admin turned it off. Until the switches are

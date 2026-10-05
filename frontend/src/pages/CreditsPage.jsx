@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { Check, Minus, Plus, RotateCcw } from "lucide-react";
-import { Breadcrumbs, ErrorMessage, PageHeader, PageMain, Panel, RequireUser } from "../components/AppPage";
+import { Check, FlaskConical, Minus, Plus, RotateCcw } from "lucide-react";
+import { Breadcrumbs, ErrorMessage, PageHeader, PageMain, Panel, PrimaryButton, RequireUser, SecondaryButton } from "../components/AppPage";
+import { getCurrentUser } from "../lib/api";
+import { beginCheckout, usePaymentOptions } from "../lib/payments";
 import { ListSkeleton, Skeleton } from "../components/Skeleton";
 import { Character, HealthIcon, MedIcon } from "../site/Illustrations";
 import { getCreditTransactions } from "../lib/api";
@@ -33,6 +35,21 @@ const USES = [
 export default function CreditsPage() {
   const { balance, pricing } = useCredits();
   const [history, setHistory] = useState({ loading: true, rows: [], error: "" });
+  const payments = usePaymentOptions();
+  const canBuy = Boolean(payments?.enabled) && !["admin", "contributor"].includes(getCurrentUser()?.role);
+  const [buying, setBuying] = useState("");
+  const [buyError, setBuyError] = useState("");
+
+  async function buy(id) {
+    setBuying(id);
+    setBuyError("");
+    try {
+      await beginCheckout(id);
+    } catch (err) {
+      setBuyError(err.message);
+      setBuying("");
+    }
+  }
 
   const loadHistory = useCallback(() => {
     setHistory((h) => ({ ...h, loading: true, error: "" }));
@@ -118,10 +135,19 @@ export default function CreditsPage() {
 
           {packages.length > 0 && (
             <section>
-              <h2 className="mb-4 text-xl font-semibold tracking-tight text-s-ink">Practice packs</h2>
+              <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+                <h2 className="text-xl font-semibold tracking-tight text-s-ink">Practice packs</h2>
+                {canBuy && payments.test && (
+                  <p className="flex items-center gap-1.5 text-xs text-s-mute">
+                    <FlaskConical size={13} strokeWidth={2} aria-hidden="true" /> Test mode. No money is taken.
+                  </p>
+                )}
+              </div>
+              {buyError && <div className="mb-4"><ErrorMessage message={buyError} /></div>}
               <div className="grid gap-4 md:grid-cols-3">
                 {packages.map((pkg, i) => {
                   const best = pkg.id === bestValueId;
+                  const BuyButton = best ? PrimaryButton : SecondaryButton;
                   return (
                     <Panel key={pkg.id} className={`site-rise ${best ? "border-s-accent ring-2 ring-s-accent/30" : ""}`} style={{ "--rise-delay": `${i * 60}ms` }}>
                       <div className="flex items-center justify-between gap-2">
@@ -137,6 +163,11 @@ export default function CreditsPage() {
                         <Check size={16} strokeWidth={2.25} className="shrink-0 text-s-good" aria-hidden="true" />
                         {pkg.fullStations} full AI stations
                       </p>
+                      {canBuy && (
+                        <BuyButton type="button" onClick={() => buy(pkg.id)} disabled={Boolean(buying)} className="mt-5 w-full">
+                          {buying === pkg.id ? "Opening checkout..." : `Buy ${pkg.name}`}
+                        </BuyButton>
+                      )}
                     </Panel>
                   );
                 })}

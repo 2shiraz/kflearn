@@ -18,12 +18,13 @@ const SECTION_ROWS = [
 export default function AdminAccess() {
   const [site, setSite] = useState(null);
   const [saved, setSaved] = useState(null);
+  const [services, setServices] = useState(null);
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState("");
 
   useEffect(() => {
     getAdminSettings()
-      .then((data) => { setSite(data.site); setSaved(data.site); setStatus("idle"); })
+      .then((data) => { setSite(data.site); setSaved(data.site); setServices(data.services); setStatus("idle"); })
       .catch((err) => { setError(err.message); setStatus("error"); });
   }, []);
 
@@ -62,6 +63,59 @@ export default function AdminAccess() {
             </div>
           </Panel>
           <div className="space-y-5 self-start">
+            <Panel className={site.requireSubscription ? "border-s-accent/40" : ""}>
+              <h3 className="font-semibold text-s-ink">Monthly access</h3>
+              <div className="mt-2 divide-y divide-s-line">
+                <Toggle
+                  label="Require monthly access"
+                  description="When on, students need an active pass (or its grace days) to open any study section."
+                  checked={site.requireSubscription}
+                  onChange={(v) => setFlag("requireSubscription", v)}
+                />
+              </div>
+              {site.requireSubscription && !saved.requireSubscription && (
+                <p role="alert" className="mt-3 rounded-2xl bg-coral-soft p-3 text-sm leading-relaxed text-s-ink">
+                  Saving this locks every student without an active pass out of OSCE stations, MCQs, OSPE, the guides, handouts and progress straight away. Admins and contributors keep full access.
+                </p>
+              )}
+              {!site.requireSubscription && saved.requireSubscription && (
+                <p role="alert" className="mt-3 rounded-2xl bg-sun-soft p-3 text-sm leading-relaxed text-s-ink">
+                  Saving this opens every study section to all students, with or without a pass.
+                </p>
+              )}
+            </Panel>
+            <Panel>
+              <h3 className="font-semibold text-s-ink">Online payments</h3>
+              <div className="mt-2 divide-y divide-s-line">
+                <Toggle
+                  label="Let students pay online"
+                  description="Shows pay buttons on the Monthly access and AI Credits pages. Paid passes and AI credits are added automatically once the payment provider confirms the payment."
+                  checked={site.onlinePayments}
+                  onChange={(v) => setFlag("onlinePayments", v)}
+                />
+              </div>
+              {services && !services.payments.connected && (
+                <p className="mt-3 rounded-2xl bg-s-tint p-3 text-sm leading-relaxed text-s-mute">
+                  No payment provider is set up on the server, so pay buttons stay hidden even with this on. You can still record payments by hand on the Revenue tab.
+                </p>
+              )}
+              {services?.payments.test && (
+                <p className="mt-3 rounded-2xl bg-sun-soft p-3 text-sm leading-relaxed text-s-ink">
+                  Test mode: checkout uses a pretend payment page and no money is taken. Passes and AI credits bought this way are real, so only use it while testing.
+                </p>
+              )}
+            </Panel>
+            <Panel>
+              <h3 className="font-semibold text-s-ink">Content protection</h3>
+              <div className="mt-2 divide-y divide-s-line">
+                <Toggle
+                  label="Watermark study pages"
+                  description="Shows each student's email faintly across OSCE, MCQ, OSPE, guide and handout pages, so a shared screenshot shows whose account it came from."
+                  checked={site.watermark}
+                  onChange={(v) => setFlag("watermark", v)}
+                />
+              </div>
+            </Panel>
             <Panel>
               <h3 className="font-semibold text-s-ink">Features</h3>
               <div className="mt-2 divide-y divide-s-line">

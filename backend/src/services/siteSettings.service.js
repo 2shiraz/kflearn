@@ -23,6 +23,12 @@ export async function getSiteSettings() {
     sections,
     signupsOpen: stored.signupsOpen !== false,
     aiPatient: stored.aiPatient !== false,
+    // Off until the paywall is ready: while off, nobody is locked out.
+    requireSubscription: stored.requireSubscription === true,
+    // Faint repeated email over study pages, so shared screenshots can be traced.
+    watermark: stored.watermark === true,
+    // Lets students pay online (needs a payment provider configured).
+    onlinePayments: stored.onlinePayments === true,
   };
 }
 
@@ -36,7 +42,7 @@ export async function updateSiteSettings(payload = {}) {
       next.sections[key] = value;
     }
   }
-  for (const flag of ["signupsOpen", "aiPatient"]) {
+  for (const flag of ["signupsOpen", "aiPatient", "requireSubscription", "watermark", "onlinePayments"]) {
     if (payload[flag] === undefined) continue;
     if (typeof payload[flag] !== "boolean") throw badRequest(`Invalid ${flag}.`);
     next[flag] = payload[flag];

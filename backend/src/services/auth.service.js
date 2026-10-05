@@ -7,6 +7,10 @@ import { avatarFor, isAvatarId, randomAvatarId } from "../config/avatars.js";
 import { CreditTransaction } from "../models/CreditTransaction.js";
 import { OsceAttempt } from "../models/OsceAttempt.js";
 import { User } from "../models/User.js";
+import { AccessPeriod } from "../models/AccessPeriod.js";
+import { Session } from "../models/Session.js";
+import mongoose from "mongoose";
+import { closeAllSessions, openSession } from "./session.service.js";
 
 function toUserDto(user) {
   const profile = user.profile || {};
@@ -18,6 +22,7 @@ function toUserDto(user) {
     roleLabel: user.roleLabel || "",
     avatar: avatarFor(user),
     tourPending: Boolean(user.tourPending),
+    mustChangePassword: Boolean(user.mustChangePassword),
     institution: profile.institution || "",
     programme: profile.programme || "",
     yearLevel: profile.yearLevel || "",
@@ -29,12 +34,17 @@ function toUserDto(user) {
   };
 }
 
-function signToken(user) {
-  const token = jwt.sign({ sub: user._id.toString(), sv: user.sessionVersion || 0 }, env.jwtSecret, {
+// Signs a token for a new session on this device. The token carries the
+// session id, so the device limit and "sign out this device" take effect on
+// the very next request.
+async function issueSession(user, context) {
+  const sid = new mongoose.Types.ObjectId();
+  const token = jwt.sign({ sub: user._id.toString(), sv: user.sessionVersion || 0, sid: sid.toString() }, env.jwtSecret, {
     algorithm: "HS256",
     expiresIn: env.jwtExpiresIn,
   });
   const { exp } = jwt.decode(token);
+  await openSession(user, { id: sid, expiresAt: new Date(exp * 1000), context });
   return { token, expiresInMs: exp * 1000 - Date.now() };
 }
 
@@ -60,7 +70,7 @@ function cleanProfile(profile = {}) {
   }));
 }
 
-export async function registerUser({ fullName, email, password, roleLabel, profile }) {
+export async function registerUser({ fullName, email, password, roleLabel, profile }, context) {
   if (typeof fullName !== "string" || typeof email !== "string" || typeof password !== "string" ||
       Buffer.byteLength(password, "utf8") > 72 || fullName.length > 120 || email.length > 254 ||
       (roleLabel !== undefined && (typeof roleLabel !== "string" || roleLabel.length > 80))) {
@@ -124,11 +134,11 @@ export async function registerUser({ fullName, email, password, roleLabel, profi
     }
   }
 
-  const { token, expiresInMs } = signToken(user);
+  const { token, expiresInMs } = await issueSession(user, context);
   return { token, expiresInMs, user: toUserDto(user) };
 }
 
-export async function loginUser({ email, password }) {
+export async function loginUser({ email, password }, context) {
   if (typeof email !== "string" || typeof password !== "string" || email.length > 254 || Buffer.byteLength(password, "utf8") > 1024) {
     const error = new Error("Incorrect email or password.");
     error.status = 401;
@@ -148,12 +158,14 @@ export async function loginUser({ email, password }) {
     throw error;
   }
 
-  const { token, expiresInMs } = signToken(user);
+  const { token, expiresInMs } = await issueSession(user, context);
   return { token, expiresInMs, user: toUserDto(user) };
 }
 
+// "Sign out everywhere": every token the account has stops working.
 export async function revokeUserSessions(userId) {
   await User.updateOne({ _id: userId }, { $inc: { sessionVersion: 1 } });
+  await closeAllSessions(userId);
 }
 
 export async function currentUser(userId) {
@@ -220,7 +232,7 @@ async function verifyPassword(user, password) {
 
 // Changing the password signs out every other session (sessionVersion bump)
 // and returns a fresh token so this one stays signed in.
-export async function changePassword(userId, { currentPassword, newPassword } = {}) {
+export async function changePassword(userId, { currentPassword, newPassword } = {}, context) {
   const user = await User.findById(userId);
   if (!user) throw httpError(404, "User not found.");
   await verifyPassword(user, currentPassword);
@@ -237,9 +249,11 @@ export async function changePassword(userId, { currentPassword, newPassword } = 
 
   user.passwordHash = await bcrypt.hash(newPassword, 12);
   user.sessionVersion = (user.sessionVersion || 0) + 1;
+  user.mustChangePassword = false;
   await user.save();
+  await closeAllSessions(user._id, "password-changed");
 
-  const { token, expiresInMs } = signToken(user);
+  const { token, expiresInMs } = await issueSession(user, context);
   return { token, expiresInMs, user: toUserDto(user) };
 }
 
@@ -255,5 +269,7 @@ export async function deleteAccount(userId, { password, confirmation } = {}) {
 
   await OsceAttempt.deleteMany({ userId: user._id.toString() });
   await CreditTransaction.deleteMany({ userId: user._id });
+  await AccessPeriod.deleteMany({ userId: user._id });
+  await Session.deleteMany({ userId: user._id });
   await User.deleteOne({ _id: user._id });
 }

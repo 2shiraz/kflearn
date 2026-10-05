@@ -1,4 +1,5 @@
-import { clearSite, storeSite } from "./site";
+import { clearSite, markAccessLost, storeSite } from "./site";
+import { clearContentCache } from "./content";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
@@ -54,7 +55,7 @@ export function saveAuthSession(data) {
   clearLegacySessionStorage();
   if (data?.user) storeUser(data.user);
   if (data?.csrfToken) localStorage.setItem(CSRF_KEY, data.csrfToken);
-  if (data?.site) storeSite(data.site);
+  if (data?.site) storeSite({ ...data.site, ...(data.access ? { access: data.access } : {}) });
   return data;
 }
 
@@ -83,6 +84,7 @@ export function logout() {
   localStorage.removeItem(CSRF_KEY);
   clearLegacySessionStorage();
   clearSite();
+  clearContentCache();
   // Best-effort: ask the server to clear the httpOnly cookie too (it can't be
   // cleared from JS). `keepalive` lets the request finish even though callers
   // redirect the page away immediately after calling logout().
@@ -113,7 +115,7 @@ export async function loginRequest({ email, password }) {
 export async function fetchCurrentUser() {
   const data = await apiFetch("/auth/me");
   if (data?.user) storeUser(data.user);
-  if (data?.site) storeSite(data.site);
+  if (data?.site) storeSite({ ...data.site, ...(data.access ? { access: data.access } : {}) });
   if (data?.csrfToken) localStorage.setItem(CSRF_KEY, data.csrfToken);
   return data;
 }
@@ -193,8 +195,9 @@ async function apiFetch(path, options = {}) {
   const data = await res.json().catch(() => ({}));
   if (res.status === 401) {
     logout();
-    window.location.href = "/signin";
+    window.location.href = data.code === "SESSION_ENDED" ? "/signin?signedout=device" : "/signin";
   }
+  if (res.status === 402 && data.code === "SUBSCRIPTION_REQUIRED") markAccessLost();
   if (!res.ok || data.success === false) {
     const error = new Error(data.message || "Request failed.");
     error.status = res.status;
@@ -209,6 +212,32 @@ export function getPublicCreditPackages() {
   return publicFetch("/public/credit-packages");
 }
 
+// Study content (needs a signed-in account with access). See lib/content.js.
+export function getContentPath(path) {
+  return apiFetch(`/content${path}`);
+}
+
+// Signed-in devices.
+export function listMySessions() {
+  return apiFetch("/auth/sessions");
+}
+
+export function signOutDevice(sessionId) {
+  return apiFetch(`/auth/sessions/${sessionId}/revoke`, { method: "POST", body: JSON.stringify({}) });
+}
+
+export function signOutEverywhere() {
+  return apiFetch("/auth/sessions/revoke-all", { method: "POST", body: JSON.stringify({}) });
+}
+
+export function revokeAdminUserSession(id, sessionId) {
+  return apiFetch(`/admin/users/${id}/sessions/${sessionId}/revoke`, { method: "POST", body: JSON.stringify({}) });
+}
+
+export function revokeAllAdminUserSessions(id) {
+  return apiFetch(`/admin/users/${id}/sessions/revoke-all`, { method: "POST", body: JSON.stringify({}) });
+}
+
 // Public: the monthly access plan and the AI credit packs.
 export function getPublicPricing() {
   return publicFetch("/public/pricing");
@@ -217,6 +246,35 @@ export function getPublicPricing() {
 // Public: counts and names for the marketing pages (never any content).
 export function getPublicStats() {
   return publicFetch("/public/stats");
+}
+
+// ---- Online payments ----
+export function getPaymentOptions() {
+  return apiFetch("/payments/options");
+}
+
+// Starts checkout for the monthly pass ("monthly-access") or an AI credit
+// pack id. The server sets the price.
+export function startCheckout(item) {
+  return apiFetch("/payments/checkouts", { method: "POST", body: JSON.stringify({ item }) });
+}
+
+export function getCheckout(id) {
+  return apiFetch(`/payments/checkouts/${encodeURIComponent(id)}`);
+}
+
+// Test mode only: the pretend payment page's Pay and Decline buttons.
+export function completeTestCheckout(id, outcome) {
+  return apiFetch(`/payments/checkouts/${encodeURIComponent(id)}/test-complete`, { method: "POST", body: JSON.stringify({ outcome }) });
+}
+
+// ---- Forgot password ----
+export function forgotPasswordRequest(email) {
+  return publicFetch("/auth/forgot", { method: "POST", body: JSON.stringify({ email }) });
+}
+
+export function resetPasswordRequest({ token, password }) {
+  return publicFetch("/auth/reset", { method: "POST", body: JSON.stringify({ token, password }) });
 }
 
 export function getCredits() {
@@ -432,6 +490,20 @@ export function updateAdminUser(id, payload) {
 
 export function adjustAdminUserCredits(id, payload) {
   return apiFetch(`/admin/users/${id}/credits`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+// Monthly access: grant or extend by a number of days, or revoke one period.
+export function grantAdminUserAccess(id, { days, reason }) {
+  return apiFetch(`/admin/users/${id}/access`, { method: "POST", body: JSON.stringify({ days, reason }) });
+}
+
+export function revokeAdminUserAccess(id, periodId) {
+  return apiFetch(`/admin/users/${id}/access/${periodId}/revoke`, { method: "POST", body: JSON.stringify({}) });
+}
+
+// Sets a temporary password; the student is asked to change it.
+export function setAdminUserPassword(id, password) {
+  return apiFetch(`/admin/users/${id}/password`, { method: "POST", body: JSON.stringify({ password }) });
 }
 
 export function deleteAdminUser(id, confirmation) {

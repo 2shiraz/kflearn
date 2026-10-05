@@ -7,6 +7,8 @@ import { createApp } from "../src/app.js";
 import { seedOsceContent } from "../src/seed/osce.seed.js";
 import { User } from "../src/models/User.js";
 import { invalidatePublicStats } from "../src/services/publicStats.service.js";
+import { importContent } from "../src/content/importContent.js";
+import { resetContentCache } from "../src/services/content.service.js";
 
 let mongod;
 let app;
@@ -24,6 +26,8 @@ after(async () => {
 
 beforeEach(async () => {
   await mongoose.connection.db.dropDatabase();
+  await importContent();
+  resetContentCache();
   invalidatePublicStats();
 });
 

@@ -4,7 +4,7 @@ Layout of this bank (differs from the Year 1-4 banks):
   Heading 1 = KMU block (N, O, P, Q)   Heading 2 = module (Foundation-III, ...)
   "N1. stem" / "A. option" ... / "Answer: A. explanation   [Subject • Topic]"
 App mapping: module -> block, subject -> topic.
-Usage: python tools/parse_final_year.py <docx> <year_number> frontend/src/data/mcqs/extra
+Usage: python tools/parse_final_year.py <docx> <year_number> backend/content-source/mcqs/extra
 Then set the "name" field in the generated .meta.json if it is not "MBBS Final Year".
 """
 import docx, re, json, sys, collections

@@ -4,17 +4,15 @@ import { Breadcrumbs, PageMain, Panel, RequireUser } from "../components/AppPage
 import { ChecklistWidget, GuideBlock, GuideCard, GuideHero, GuideNotFound, GuideSection, GuideTitle, JumpNav, NumberedSteps, PanelHeading, PrevNext, QuoteBox, SectionHeading } from "../components/GuideBlocks";
 import { YEAR_TONES } from "../components/StudyKit";
 import { plus } from "../site/siteContent";
-import {
-  coreMnemonic,
-  finalChecklist,
-  getAdjacentStations,
-  getStation,
-  masterQuickReference,
-  mskFramework,
-  presentationTemplate,
-  stations,
-  universalOpening,
-} from "../data/clinicalExaminationGuide";
+import { ErrorMessage } from "../components/AppPage";
+import { SetupSkeleton } from "../components/Skeleton";
+import { useContent } from "../lib/content";
+
+function Loading({ error }) {
+  return error ? <ErrorMessage message={error} onRetry={() => window.location.reload()} /> : <SetupSkeleton label="Loading" />;
+}
+
+const isMissing = (error) => /doesn't exist|Not found/i.test(error || "");
 
 // Colour icon per station (keyed by the station's icon name in the data file).
 const STATION_ICONS = {
@@ -86,6 +84,16 @@ function StationMeta({ meta, order }) {
 }
 
 export function ClinicalExamGuideHome() {
+  const { data, error } = useContent("/guides/exam");
+  if (!data) {
+    return (
+      <RequireUser active="clinical-exam">
+        <PageMain><Loading error={error} /></PageMain>
+      </RequireUser>
+    );
+  }
+  const { universalOpening, coreMnemonic, mskFramework, masterQuickReference, presentationTemplate, finalChecklist } = data.meta;
+  const stations = data.entries;
   return (
     <RequireUser active="clinical-exam">
       <PageMain>
@@ -184,8 +192,16 @@ export function ClinicalExamGuideHome() {
 
 export function ClinicalExamGuideStation() {
   const { stationSlug } = useParams();
-  const station = getStation(stationSlug);
+  const { data, error } = useContent(`/guides/exam/${encodeURIComponent(stationSlug)}`);
+  const station = data?.entry;
 
+  if (!data && !isMissing(error)) {
+    return (
+      <RequireUser active="clinical-exam">
+        <PageMain width="reading"><Loading error={error} /></PageMain>
+      </RequireUser>
+    );
+  }
   if (!station) {
     return (
       <RequireUser active="clinical-exam">
@@ -197,7 +213,7 @@ export function ClinicalExamGuideStation() {
     );
   }
 
-  const { prev, next } = getAdjacentStations(stationSlug);
+  const { prev, next } = data;
 
   return (
     <RequireUser active="clinical-exam">

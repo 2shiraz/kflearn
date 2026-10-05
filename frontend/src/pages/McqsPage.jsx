@@ -5,7 +5,12 @@ import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageHeader, PageMain
 import { SetupSkeleton } from "../components/Skeleton";
 import { Chip, ChoicePills, PillLink, ProgressLine, ResultsSummary, SectionHeader, SetupCard, StepBar, Toggle, TopicCard, YEAR_TONES, YearCard } from "../components/StudyKit";
 import { plus } from "../site/siteContent";
-import { getBlock, getYear, loadQuestions, mcqTotalCount, mcqYears } from "../data/mcqs/catalog";
+import { findBlock, findYear, loadQuestions, preloadNextBlock, useCatalog } from "../lib/content";
+
+// While the catalog loads (or if it can't), the page shows this instead.
+function CatalogState({ error }) {
+  return error ? <ErrorMessage message={error} onRetry={() => window.location.reload()} /> : <SetupSkeleton label="Loading" />;
+}
 
 // ---- local progress (per browser; practice only, not a graded record) ----
 const PROGRESS_KEY = "kf_mcq_progress";
@@ -53,15 +58,26 @@ function shuffle(list) {
 
 // ---- /mcqs ----
 export function McqsHome() {
-  const progress = readProgress();
   return (
     <RequireUser active="mcqs">
+      <McqsHomeBody />
+    </RequireUser>
+  );
+}
+
+function McqsHomeBody() {
+  const progress = readProgress();
+  const { data: catalog, error } = useCatalog();
+  const mcqYears = catalog?.mcq || [];
+  const mcqTotalCount = mcqYears.reduce((n, y) => n + y.count, 0);
+  return (
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "MCQs" }]} />
         <PageHeader
           title="MCQs"
-          description={`${plus(mcqTotalCount)} single-best-answer questions with explanations. Pick your year to begin.`}
+          description={catalog ? `${plus(mcqTotalCount)} single-best-answer questions with explanations. Pick your year to begin.` : "Single-best-answer questions with explanations. Pick your year to begin."}
         />
+        {!catalog && <CatalogState error={error} />}
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {mcqYears.map((year, i) => {
             const p = progressFor(progress, year.year, 0, year.count);
@@ -82,7 +98,6 @@ export function McqsHome() {
           })}
         </div>
       </PageMain>
-    </RequireUser>
   );
 }
 
@@ -100,21 +115,26 @@ function NotFound({ backTo, backLabel }) {
 
 // ---- /mcqs/:yearSlug ----
 export function McqYearPage() {
+  return (
+    <RequireUser active="mcqs">
+      <McqYearBody />
+    </RequireUser>
+  );
+}
+
+function McqYearBody() {
   const { yearSlug } = useParams();
-  const year = getYear(yearSlug);
+  const { data: catalog, error } = useCatalog();
+  const year = findYear(catalog?.mcq, yearSlug);
   const progress = readProgress();
 
+  if (!catalog) return <PageMain><CatalogState error={error} /></PageMain>;
   if (!year) {
-    return (
-      <RequireUser active="mcqs">
-        <PageMain><NotFound backTo="/mcqs" backLabel="All years" /></PageMain>
-      </RequireUser>
-    );
+    return <PageMain><NotFound backTo="/mcqs" backLabel="All years" /></PageMain>;
   }
 
   let offset = 0;
   return (
-    <RequireUser active="mcqs">
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "MCQs", to: "/mcqs" }, { label: year.name }]} />
         <PageHeader
@@ -175,7 +195,6 @@ export function McqYearPage() {
           })}
         </div>
       </PageMain>
-    </RequireUser>
   );
 }
 
@@ -184,12 +203,21 @@ const COUNT_OPTIONS = [10, 20, 40, 0]; // 0 = all
 const LETTERS = "ABCDE";
 
 export function McqPractice() {
+  return (
+    <RequireUser active="mcqs">
+      <McqPracticeBody />
+    </RequireUser>
+  );
+}
+
+function McqPracticeBody() {
   const { yearSlug } = useParams();
   const [params] = useSearchParams();
   const blockSlug = params.get("block") || "";
   const topicSlug = params.get("topic") || "";
-  const year = getYear(yearSlug);
-  const block = blockSlug ? getBlock(yearSlug, blockSlug) : null;
+  const { data: catalog, error: catalogError } = useCatalog();
+  const year = findYear(catalog?.mcq, yearSlug);
+  const block = blockSlug ? findBlock(year, blockSlug) : null;
   const topic = block?.topics.find((t) => t.slug === topicSlug) || null;
 
   const [pool, setPool] = useState(null);
@@ -198,18 +226,20 @@ export function McqPractice() {
   const [session, setSession] = useState(null); // { questions, index, answers: {id: optionIndex}, revealed }
 
   useEffect(() => {
+    if (!year) return undefined;
     let active = true;
     setPool(null);
     setSession(null);
-    loadQuestions(yearSlug, blockSlug, topicSlug)
+    loadQuestions(year, blockSlug, topicSlug)
       .then((qs) => {
         if (!active) return;
         if (!qs.length) setError("No questions found for this selection.");
         setPool(qs);
+        preloadNextBlock("mcqs", year, blockSlug);
       })
       .catch((err) => active && setError(err.message));
     return () => { active = false; };
-  }, [yearSlug, blockSlug, topicSlug]);
+  }, [year, blockSlug, topicSlug]);
 
   const title = topic?.name || block?.name || (year ? `${year.name}, mixed practice` : "MCQs");
   const crumbs = [
@@ -226,7 +256,8 @@ export function McqPractice() {
   }
 
   let body;
-  if (!year || (blockSlug && !block) || (topicSlug && !topic)) body = <NotFound backTo={year ? `/mcqs/${year.slug}` : "/mcqs"} backLabel="Back to sections" />;
+  if (!catalog) body = <CatalogState error={catalogError} />;
+  else if (!year || (blockSlug && !block) || (topicSlug && !topic)) body = <NotFound backTo={year ? `/mcqs/${year.slug}` : "/mcqs"} backLabel="Back to sections" />;
   else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
   else if (!pool) body = <SetupSkeleton label="Loading questions" />;
   else if (!session) body = <Setup pool={pool} config={config} setConfig={setConfig} onStart={start} />;
@@ -234,13 +265,11 @@ export function McqPractice() {
   else body = <Runner session={session} setSession={setSession} />;
 
   return (
-    <RequireUser active="mcqs">
       <PageMain width="focused">
         <Breadcrumbs items={crumbs} />
         <h1 className="site-rise mb-8 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
         {body}
       </PageMain>
-    </RequireUser>
   );
 }
 

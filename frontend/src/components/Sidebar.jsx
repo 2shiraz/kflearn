@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ChevronLeft, ChevronRight, ClipboardList, HeartPulse, LayoutGrid, ListChecks, LogOut, Menu,
+  CalendarCheck, ChevronLeft, ChevronRight, Lock, ClipboardList, HeartPulse, LayoutGrid, ListChecks, LogOut, Menu,
   Microscope, NotebookText, ShieldCheck, Stethoscope, TrendingUp, X, Zap,
 } from "lucide-react";
 import BrandMark from "./BrandMark";
 import { UserAvatar } from "../site/Illustrations";
 import { getCurrentUser, USER_EVENT } from "../lib/api";
 import { useCredits } from "../lib/credits";
-import { sectionOpen, useSite } from "../lib/site";
+import { accessOpen, sectionOpen, useSite } from "../lib/site";
 import { SiteName } from "../lib/branding";
 
 function formatBalance(balance) {
@@ -81,7 +81,9 @@ function itemClass(active, mode) {
 const GROUP_TEXT_CLASS = { drawer: "block", rail: "hidden lg:block", collapsed: "hidden" };
 const GROUP_RULE_CLASS = { drawer: "hidden", rail: "lg:hidden", collapsed: "" };
 
-function NavList({ sections, active, mode, onNavigate }) {
+// Study sections (everything but admin) show a lock while the account has no
+// monthly pass. They still link to their page, which shows the paywall.
+function NavList({ sections, active, mode, onNavigate, locked = false }) {
   const groups = [];
   for (const s of sections) {
     const group = s.group || "home";
@@ -110,6 +112,9 @@ function NavList({ sections, active, mode, onNavigate }) {
                     <Link to={s.href} data-tour={s.key} title={mode !== "drawer" ? s.label : undefined} aria-current={isActive ? "page" : undefined} onClick={onNavigate} className={itemClass(isActive, mode)}>
                       <NavIcon item={s} active={isActive} />
                       <span className={`${LABEL_CLASS[mode]} truncate`}>{s.label}</span>
+                      {locked && s.key !== "admin" && (
+                        <Lock size={13} strokeWidth={2.25} className={`${LABEL_CLASS[mode]} ml-auto shrink-0 text-s-mute`} aria-label="Needs monthly access" />
+                      )}
                     </Link>
                   </li>
                 );
@@ -136,13 +141,22 @@ const PROFILE_LINK_CLASS = {
   collapsed: "h-11 w-11 justify-center rounded-full",
 };
 
-function AccountLinks({ active, balance, mode, user, initials, onNavigate, onLogout }) {
+function AccountLinks({ active, balance, mode, user, initials, onNavigate, onLogout, showAccess }) {
   const creditsActive = active === "credits";
+  const accessActive = active === "subscribe";
   const settingsActive = active === "settings";
   const hide = LABEL_CLASS[mode];
   const compact = mode !== "drawer";
   return (
     <div className="flex flex-col gap-1 pt-3">
+      {showAccess && (
+        <Link to="/subscribe" data-tour="subscribe" title={compact ? "Monthly access" : undefined} aria-current={accessActive ? "page" : undefined} onClick={onNavigate} className={itemClass(accessActive, mode)}>
+          <span className={`flex h-8 w-8 shrink-0 items-center justify-center ${accessActive ? "text-s-accent" : "text-s-mute group-hover:text-s-ink"}`} aria-hidden="true">
+            <CalendarCheck size={18} strokeWidth={1.9} />
+          </span>
+          <span className={hide}>Monthly access</span>
+        </Link>
+      )}
       <Link to="/credits" data-tour="credits" title={compact ? `AI credits: ${formatBalance(balance)}` : undefined} aria-current={creditsActive ? "page" : undefined} onClick={onNavigate} className={itemClass(creditsActive, mode)}>
         <NavIcon item={{ key: "credits" }} active={creditsActive} />
         <span className={hide}>AI Credits</span>
@@ -217,6 +231,10 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
   const { balance } = useCredits();
   const site = useSite();
   const openSections = SECTIONS.filter((s) => sectionOpen(site, s.key, user));
+  const privileged = ["admin", "contributor"].includes(user?.role);
+  const locked = site.loaded && !accessOpen(site, user);
+  // The Monthly access link shows once the paywall is on, for students.
+  const showAccess = !privileged && Boolean(site.requireSubscription || site.access?.required);
   const navSections = user?.role === "admin" ? [...openSections, { key: "admin", label: "Admin", href: "/admin", group: "admin" }] : openSections;
 
   const initials = user?.fullName ? user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "";
@@ -294,10 +312,10 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
           </Link>
 
           <nav aria-label="App" className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
-            <NavList sections={navSections} active={active} mode={railMode} />
+            <NavList sections={navSections} active={active} mode={railMode} locked={locked} />
           </nav>
 
-          <AccountLinks active={active} balance={balance} mode={railMode} user={user} initials={initials} onLogout={onLogout} />
+          <AccountLinks active={active} balance={balance} mode={railMode} user={user} initials={initials} onLogout={onLogout} showAccess={showAccess} />
         </div>
       </aside>
 
@@ -332,10 +350,10 @@ export default function Sidebar({ active = "dashboard", onLogout }) {
           </div>
 
           <nav aria-label="App" className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
-            <NavList sections={navSections} active={active} mode="drawer" onNavigate={close} />
+            <NavList sections={navSections} active={active} mode="drawer" onNavigate={close} locked={locked} />
           </nav>
 
-          <AccountLinks active={active} balance={balance} mode="drawer" user={user} initials={initials} onNavigate={close} onLogout={() => { close(); onLogout(); }} />
+          <AccountLinks active={active} balance={balance} mode="drawer" user={user} initials={initials} onNavigate={close} onLogout={() => { close(); onLogout(); }} showAccess={showAccess} />
         </div>
       </div>
     </>

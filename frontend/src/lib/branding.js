@@ -34,7 +34,7 @@ function readCache() {
   }
 }
 
-let publicSite = readCache() || { signupsOpen: null, branding: DEFAULT_BRANDING };
+let publicSite = readCache() || { signupsOpen: null, passwordReset: false, branding: DEFAULT_BRANDING };
 const listeners = new Set();
 
 export function logoUrl(branding) {
@@ -105,7 +105,7 @@ export function refreshPublicSite() {
   return fetch(`${API_BASE}/public/site`, { credentials: "include" })
     .then((res) => res.json())
     .then((json) => {
-      if (json?.data) publish({ signupsOpen: json.data.signupsOpen !== false, branding: { ...DEFAULT_BRANDING, ...json.data.branding } });
+      if (json?.data) publish({ signupsOpen: json.data.signupsOpen !== false, passwordReset: json.data.passwordReset === true, branding: { ...DEFAULT_BRANDING, ...json.data.branding } });
     })
     .catch(() => {});
 }

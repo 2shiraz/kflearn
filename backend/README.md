@@ -59,6 +59,24 @@ npm run dev
 npm test
 ```
 
+## Study content and accounts
+
+MCQs, OSPE stations, the guides and handout notes live in `content-source/`
+(written by the parsers in `../tools/`). They are served only through
+`/api/content`, to accounts with access. Load them into a database with:
+
+```bash
+node src/scripts/importContent.js --db kflearn-backup
+node src/scripts/importContent.js --db kflearn --production   # production
+```
+
+Remove every non-admin account and its data (dry run unless `--apply`):
+
+```bash
+node src/scripts/cleanupAccounts.js --db kflearn-backup
+node src/scripts/cleanupAccounts.js --db kflearn-backup --apply
+```
+
 `seed:cvs` imports the 15 cardiovascular stations. `seed:endocrinology`
 imports the 15 endocrinology stations and corrects the older DKA history
 station's specialty without replacing its content or identifiers. The full
@@ -109,12 +127,40 @@ This only fills missing categories, preserves content, IDs, timestamps and modes
 and can be rerun safely. Full `npm run seed` includes this step. Uncategorised
 legacy stations also receive an effective category in API responses.
 
+## Online payments and email
+
+Checkout is provider-neutral. A provider adapter lives in
+`src/services/payments/providers/` and implements `createCheckout` and
+`verifyWebhook`; its notifications arrive at `POST /api/payments/webhooks/<name>`
+and are only acted on after the signature, event id (once only), checkout
+reference and exact amount all check out. A wrong amount is held for review
+(shown on the admin Revenue tab) and grants nothing.
+
+```env
+PAYMENT_PROVIDER=test          # default outside production; empty means no online payments
+PAYMENT_TEST_SECRET=           # optional; random per start if unset
+ALLOW_TEST_PAYMENTS=false      # the test provider is refused in production unless true
+EMAIL_PROVIDER=console         # console (prints to the log) or disabled; production defaults to disabled
+EMAIL_FROM="KF LearnSmart <no-reply@example.com>"
+```
+
+Students only see pay buttons when a provider is set up and the admin turns on
+"Let students pay online" under Site access. With the `test` provider, checkout
+opens a pretend payment page (`/checkout/test/:id`) where you choose Pay or
+Decline; the result goes through the same signed webhook path a real provider
+uses. Passes and AI credits bought this way are real grants.
+
+Email sends password reset links, receipts and pass reminders (5 days before a
+pass ends, and once after it ends). Reminders run hourly in the server process
+and are marked on the access period, so they're never sent twice. The "Forgot
+password?" link only shows when email is enabled. To connect a real sender, add
+one entry to `TRANSPORTS` in `src/services/email/index.js`.
+
 ## Welcome credits
 
-New registrations currently receive 30 welcome credits once, recorded in the
-credit ledger. Existing account balances are unchanged; logging in does not
-grant credits. The allowance is configured as `STARTING_CREDITS` in
-`src/config/credits.js`.
+New registrations receive the welcome credits set under Pricing in the admin
+area once, recorded in the credit ledger. Existing account balances are unchanged; logging in does not
+grant credits. The default (0) is `STARTING_CREDITS` in `src/config/credits.js`.
 
 ## Real-AI OSCE tests
 

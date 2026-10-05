@@ -6,7 +6,7 @@ import { QuestionSkeleton, SetupSkeleton } from "../components/Skeleton";
 import { CheckRow, Chip, ChoicePills, Pager, PillLink, ProgressLine, ResultsSummary, SectionHeader, SetupCard, StepBar, TimerPill, Toggle, TopicCard, YEAR_TONES, YearCard, rise, scoreTone } from "../components/StudyKit";
 import { MedIcon } from "../site/Illustrations";
 import { plus } from "../site/siteContent";
-import { getBlock, getYear, loadStations, ospeTotalCount, ospeYears } from "../data/ospe";
+import { findBlock, findYear, loadStations, preloadNextBlock, useCatalog } from "../lib/content";
 
 // OSPE section — mirrors the MCQs section (years -> modules/blocks -> topics, with
 // Read and Practise modes). Practice is self-marked: the student attempts the
@@ -66,36 +66,48 @@ function shuffle(list) {
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
-function useStations(yearSlug, blockSlug, topicSlug) {
+// Loads stations once the year is known (from the catalog). A year with no
+// block loads block by block.
+function useStations(year, blockSlug, topicSlug) {
   const [stations, setStations] = useState(null);
   const [error, setError] = useState("");
   useEffect(() => {
+    if (!year) return undefined;
     let active = true;
     setStations(null);
     setError("");
-    loadStations(yearSlug, blockSlug, topicSlug)
+    loadStations(year, blockSlug, topicSlug)
       .then((list) => {
         if (!active) return;
         if (!list.length) setError("No stations found for this selection.");
         setStations(list);
+        preloadNextBlock("ospe", year, blockSlug);
       })
       .catch((err) => active && setError(err.message));
     return () => { active = false; };
-  }, [yearSlug, blockSlug, topicSlug]);
+  }, [year, blockSlug, topicSlug]);
   return { stations, error };
+}
+
+function CatalogState({ error }) {
+  return error ? <ErrorMessage message={error} onRetry={() => window.location.reload()} /> : <SetupSkeleton label="Loading" />;
 }
 
 // ---- /ospe ----
 export function OspeHome() {
   const progress = readProgress();
+  const { data: catalog, error } = useCatalog();
+  const ospeYears = catalog?.ospe || [];
+  const ospeTotalCount = ospeYears.reduce((n, y) => n + y.count, 0);
   return (
     <RequireUser active="ospe">
       <PageMain>
         <Breadcrumbs items={[{ label: "Home", to: "/dashboard" }, { label: "OSPE" }]} />
         <PageHeader
           title="OSPE"
-          description={`${plus(ospeTotalCount)} practical stations, each with a specimen or scenario, candidate tasks and the examiner checklist. Pick your year to begin.`}
+          description={`${catalog ? `${plus(ospeTotalCount)} practical` : "Practical"} stations, each with a specimen or scenario, candidate tasks and the examiner checklist. Pick your year to begin.`}
         />
+        {!catalog && <CatalogState error={error} />}
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {ospeYears.map((year, i) => {
             const p = progressFor(progress, `ospe${year.year}-`, year.count);
@@ -135,10 +147,18 @@ function NotFound({ backTo, backLabel }) {
 // ---- /ospe/:yearSlug ----
 export function OspeYearPage() {
   const { yearSlug } = useParams();
-  const year = getYear(yearSlug);
+  const { data: catalog, error } = useCatalog();
+  const year = findYear(catalog?.ospe, yearSlug);
   const progress = readProgress();
-  const { stations } = useStations(year ? yearSlug : "", "", "");
+  const { stations } = useStations(year, "", "");
 
+  if (!catalog) {
+    return (
+      <RequireUser active="ospe">
+        <PageMain><CatalogState error={error} /></PageMain>
+      </RequireUser>
+    );
+  }
   if (!year) {
     return (
       <RequireUser active="ospe">
@@ -218,11 +238,12 @@ function useSelection() {
   const [params] = useSearchParams();
   const blockSlug = params.get("block") || "";
   const topicSlug = params.get("topic") || "";
-  const year = getYear(yearSlug);
-  const block = blockSlug ? getBlock(yearSlug, blockSlug) : null;
+  const { data: catalog, error: catalogError } = useCatalog();
+  const year = findYear(catalog?.ospe, yearSlug);
+  const block = blockSlug ? findBlock(year, blockSlug) : null;
   const topic = block?.topics.find((t) => t.slug === topicSlug) || null;
-  const valid = year && !(blockSlug && !block) && !(topicSlug && !topic);
-  return { yearSlug, blockSlug, topicSlug, year, block, topic, valid, query: params.toString() };
+  const valid = Boolean(year && !(blockSlug && !block) && !(topicSlug && !topic));
+  return { yearSlug, blockSlug, topicSlug, year, block, topic, valid, loaded: Boolean(catalog), catalogError, query: params.toString() };
 }
 
 // The station card: specimen or scenario, then numbered candidate tasks.
@@ -269,8 +290,8 @@ function ChecklistBox({ title, children }) {
 const PAGE_SIZE = 10;
 
 export function OspeRead() {
-  const { yearSlug, blockSlug, topicSlug, year, block, topic, valid, query } = useSelection();
-  const { stations, error } = useStations(valid ? yearSlug : "", blockSlug, topicSlug);
+  const { yearSlug, blockSlug, topicSlug, year, block, topic, valid, loaded, catalogError, query } = useSelection();
+  const { stations, error } = useStations(valid ? year : null, blockSlug, topicSlug);
   const [page, setPage] = useState(1);
   const [hideChecklists, setHideChecklists] = useState(false);
   const [revealed, setRevealed] = useState({});
@@ -295,7 +316,8 @@ export function OspeRead() {
   }
 
   let body;
-  if (!valid) body = <NotFound backTo={year ? `/ospe/${year.slug}` : "/ospe"} backLabel="Back to sections" />;
+  if (!loaded) body = <CatalogState error={catalogError} />;
+  else if (!valid) body = <NotFound backTo={year ? `/ospe/${year.slug}` : "/ospe"} backLabel="Back to sections" />;
   else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
   else if (!stations) body = <QuestionSkeleton toolbar options={4} label="Loading stations" />;
   else {
@@ -370,8 +392,8 @@ const COUNT_OPTIONS = [5, 10, 20, 0]; // 0 = all
 const TIME_OPTIONS = [3, 5, 0]; // minutes per station; 0 = untimed
 
 export function OspePractice() {
-  const { yearSlug, blockSlug, topicSlug, year, block, topic, valid } = useSelection();
-  const { stations: pool, error } = useStations(valid ? yearSlug : "", blockSlug, topicSlug);
+  const { yearSlug, blockSlug, topicSlug, year, block, topic, valid, loaded, catalogError } = useSelection();
+  const { stations: pool, error } = useStations(valid ? year : null, blockSlug, topicSlug);
   const [config, setConfig] = useState({ count: 5, random: true, minutes: 5 });
   const [session, setSession] = useState(null); // { stations, index, phase: "attempt"|"mark", ticks: {id: [bool]}, marked: [id], finished }
 
@@ -392,7 +414,8 @@ export function OspePractice() {
   }
 
   let body;
-  if (!valid) body = <NotFound backTo={year ? `/ospe/${year.slug}` : "/ospe"} backLabel="Back to sections" />;
+  if (!loaded) body = <CatalogState error={catalogError} />;
+  else if (!valid) body = <NotFound backTo={year ? `/ospe/${year.slug}` : "/ospe"} backLabel="Back to sections" />;
   else if (error) body = <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
   else if (!pool) body = <SetupSkeleton label="Loading stations" />;
   else if (!session) body = <Setup pool={pool} config={config} setConfig={setConfig} onStart={start} />;

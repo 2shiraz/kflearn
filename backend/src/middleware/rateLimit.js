@@ -75,3 +75,55 @@ export const accountSecurityLimiter = rateLimit({
   skip: skipInTests,
   message: { success: false, message: "Too many attempts. Please try again in 15 minutes.", code: "RATE_LIMITED" },
 });
+
+// Study content (question blocks, OSPE stations, guide pages). Normal study is
+// a few hundred requests a day; these ceilings stop one account (or a script
+// using it) from downloading whole banks. Hitting one is written to the
+// admin activity log, once per account per window.
+const flagged = new Map();
+function flagContentLimit(req, windowName) {
+  const key = `${req.user?.id}:${windowName}`;
+  const last = flagged.get(key) || 0;
+  if (Date.now() - last < 60 * 60 * 1000) return;
+  flagged.set(key, Date.now());
+  import("../models/AdminAuditLog.js")
+    .then(({ AdminAuditLog }) => AdminAuditLog.create({
+      actorId: req.user?.id || "unknown",
+      actorEmail: req.user?.email || "",
+      action: `Hit the ${windowName} study content limit`,
+      target: req.user?.id || "",
+      fields: [],
+      ip: req.ip || "",
+    }))
+    .catch(() => {});
+}
+
+function contentLimiter({ windowMs, limit, windowName }) {
+  return rateLimit({
+    windowMs,
+    limit,
+    keyGenerator: (req) => req.user.id,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req) => skipInTests() || ["admin", "contributor"].includes(req.user?.role),
+    handler: (req, res, next, options) => {
+      flagContentLimit(req, windowName);
+      res.status(options.statusCode).json({ success: false, message: "You've opened a lot of study material in a short time. Please take a break and try again later.", code: "CONTENT_LIMIT" });
+    },
+  });
+}
+
+export const contentHourlyLimiter = contentLimiter({ windowMs: 60 * 60 * 1000, limit: 300, windowName: "hourly" });
+export const contentDailyLimiter = contentLimiter({ windowMs: 24 * 60 * 60 * 1000, limit: 1500, windowName: "daily" });
+
+// Starting and checking checkouts. The status page polls every few seconds
+// while a payment is confirmed, so reads are allowed more often than writes.
+export const paymentLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: (req) => (req.method === "GET" ? 300 : 30),
+  keyGenerator: (req) => req.user.id,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: skipInTests,
+  message: { success: false, message: "Too many payment requests. Please wait a few minutes.", code: "RATE_LIMITED" },
+});

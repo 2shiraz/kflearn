@@ -54,6 +54,13 @@ const STEPS = [
     body: "Your scores over time, your weaker specialties and the checklist items you miss most, so you know what to practise next.",
   },
   {
+    id: "access",
+    target: ["subscribe"],
+    icons: [{ name: "memo", tone: "indigo" }],
+    title: "Get access",
+    body: "A monthly access pass opens every study section. Check your status and the plan from Monthly access in the menu.",
+  },
+  {
     id: "credits",
     target: ["credits"],
     icons: [{ name: "coin", tone: "sun" }],

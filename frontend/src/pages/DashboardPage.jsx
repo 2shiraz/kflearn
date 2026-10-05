@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { mcqTotalCount } from "../data/mcqs/catalog";
-import { ospeTotalCount } from "../data/ospe";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { getCurrentUser, getDashboardSummary, listOsceAttempts, listOsceStations } from "../lib/api";
@@ -14,9 +12,7 @@ import { displayTitle } from "../lib/osceFilters";
 import { osceSummary } from "../lib/progress";
 import { sectionOpen, useSite } from "../lib/site";
 import AnnouncementBanner from "../components/AnnouncementBanner";
-import { topics as historyGuideTopics } from "../data/historyTakingGuide";
-import { stations as examStations } from "../data/clinicalExaminationGuide";
-import { handouts } from "../data/handoutNotes";
+import { usePublicStats } from "../lib/publicStats";
 
 // Bento order: two large tiles, then three small ones. OSCE stations sit above
 // as the featured card.
@@ -24,27 +20,27 @@ const sections = [
   {
     key: "mcqs", label: "MCQs", href: "/mcqs", large: true,
     desc: "Single-best-answer questions with explanations, by MBBS year, module and topic.",
-    staticCount: mcqTotalCount, countLabel: "questions",
+    stat: (s) => s.mcq.total, countLabel: "questions",
   },
   {
     key: "ospe", label: "OSPE", href: "/ospe", large: true,
     desc: "Practical stations with candidate tasks and the examiner checklist to mark yourself.",
-    staticCount: ospeTotalCount, countLabel: "stations",
+    stat: (s) => s.ospe.total, countLabel: "stations",
   },
   {
     key: "clinical-exam", label: "Clinical Exam Guide", href: "/clinical-examination",
     desc: "Step-by-step order, mnemonics and findings, from core systems to MSK and neuro.",
-    staticCount: examStations.length, countLabel: "guides",
+    stat: (s) => s.examGuides.total, countLabel: "guides",
   },
   {
     key: "history", label: "History Taking Guide", href: "/history-taking",
     desc: "Question sets, mnemonics and differentials, organised by presenting complaint.",
-    staticCount: historyGuideTopics.length, countLabel: "topics",
+    stat: (s) => s.historyGuides.total, countLabel: "topics",
   },
   {
     key: "handouts", label: "Handout Notes", href: "/handout-notes",
     desc: "Features, diagnosis and management for each station, organised by system.",
-    staticCount: handouts.length, countLabel: "handouts",
+    stat: (s) => s.handouts.total, countLabel: "handouts",
   },
 ];
 
@@ -285,6 +281,7 @@ function RowHeading({ id, children }) {
 }
 
 function SectionTile({ section: s, index }) {
+  const stats = usePublicStats();
   const look = SECTION_LOOK[s.key];
   const t = TONES[look.tone];
   return (
@@ -308,7 +305,7 @@ function SectionTile({ section: s, index }) {
         </>
       )}
       <p className={`relative ${s.large ? "mt-16 text-4xl" : "mt-5 text-3xl"} font-semibold tracking-tight text-s-ink`}>
-        {plus(s.staticCount)}
+        {plus(s.stat(stats))}
         <span className="ml-2 text-base font-normal tracking-normal text-s-mute">{s.countLabel}</span>
       </p>
       <h3 className="relative mt-1.5 text-lg font-medium text-s-ink">{s.label}</h3>

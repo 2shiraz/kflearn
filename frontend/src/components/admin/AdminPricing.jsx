@@ -17,6 +17,9 @@ export default function AdminPricing() {
 
   function load(pricing) {
     const next = {
+      planPrice: String(pricing.subscription?.pricePkr ?? 1499),
+      planDays: String(pricing.subscription?.periodDays ?? 30),
+      graceDays: String(pricing.subscription?.graceDays ?? 3),
       welcomeCredits: String(pricing.welcomeCredits),
       virtualPatient: String(pricing.costs.virtualPatient),
       aiAssessment: String(pricing.costs.aiAssessment),
@@ -45,6 +48,7 @@ export default function AdminPricing() {
     setError("");
     try {
       const data = await updateAdminPricing({
+        subscription: { pricePkr: toInt(form.planPrice), periodDays: toInt(form.planDays), graceDays: toInt(form.graceDays) },
         welcomeCredits: toInt(form.welcomeCredits),
         costs: { virtualPatient: toInt(form.virtualPatient), aiAssessment: toInt(form.aiAssessment) },
         packages: form.packages.map((p) => ({ id: p.id, name: p.name, credits: toInt(p.credits), pricePkr: toInt(p.pricePkr) })),
@@ -62,10 +66,19 @@ export default function AdminPricing() {
 
   return (
     <div className="space-y-5">
-      <SectionHeading title="Pricing" description="Changes apply straight away to new sessions, signups and the public pricing page. Past purchases and balances are not changed." />
+      <SectionHeading title="Pricing" description="The monthly access pass, AI credit costs and AI credit packs. Changes apply straight away to new purchases, sessions, signups and the public pricing page. Past purchases, passes and balances are not changed." />
       <InlineError>{error}</InlineError>
       {form && (
         <form onSubmit={save} className="space-y-5">
+          <Panel>
+            <h3 className="font-semibold text-s-ink">Monthly access pass</h3>
+            <p className="mt-0.5 text-sm text-s-mute">What students pay for access to the whole site. Changes apply to passes bought from now on.</p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              <Field label="Price (PKR)" type="number" min="0" inputMode="numeric" value={form.planPrice} onChange={(v) => update("planPrice", v)} />
+              <Field label="Days per pass" type="number" min="1" max="366" inputMode="numeric" value={form.planDays} onChange={(v) => update("planDays", v)} />
+              <Field label="Grace days after it ends" type="number" min="0" max="30" inputMode="numeric" value={form.graceDays} onChange={(v) => update("graceDays", v)} />
+            </div>
+          </Panel>
           <div className="grid gap-5 lg:grid-cols-2">
             <Panel>
               <h3 className="font-semibold text-s-ink">AI credit costs</h3>

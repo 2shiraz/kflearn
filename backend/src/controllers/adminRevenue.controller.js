@@ -32,7 +32,7 @@ export async function refundPaymentHandler(req, res) {
     error.status = 404;
     throw error;
   }
-  const { payment, creditsRemoved } = await refundPayment(req.params.id, { removeCredits: req.body?.removeCredits === true, note: req.body?.note }, req.user.email || req.user.id);
+  const { payment, creditsRemoved, accessRevoked } = await refundPayment(req.params.id, { removeCredits: req.body?.removeCredits === true, note: req.body?.note }, req.user.email || req.user.id);
   await payment.populate("userId", "email fullName");
-  res.json({ success: true, data: { payment: paymentDto(payment.toObject()), creditsRemoved } });
+  res.json({ success: true, data: { payment: paymentDto(payment.toObject()), creditsRemoved, accessRevoked } });
 }

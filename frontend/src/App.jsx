@@ -36,6 +36,12 @@ const PricingPage = lazyPage(() => import("./pages/PricingPage"));
 const AboutPage = lazyPage(() => import("./pages/AboutPage"));
 const CreditsPage = lazyPage(() => import("./pages/CreditsPage"));
 const SubscribePage = lazyPage(() => import("./pages/SubscribePage"));
+const checkout = () => import("./pages/CheckoutPages");
+const TestCheckoutPage = lazyPage(checkout, "TestCheckoutPage");
+const CheckoutReturnPage = lazyPage(checkout, "CheckoutReturnPage");
+const passwordReset = () => import("./pages/PasswordResetPages");
+const ForgotPasswordPage = lazyPage(passwordReset, "ForgotPasswordPage");
+const ResetPasswordPage = lazyPage(passwordReset, "ResetPasswordPage");
 const legal = () => import("./pages/LegalPages");
 const TermsPage = lazyPage(legal, "TermsPage");
 const PrivacyPage = lazyPage(legal, "PrivacyPage");
@@ -101,8 +107,12 @@ export default function App() {
           <Route path="/refunds" element={<RefundsPage />} />
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/subscribe" element={<SubscribePage />} />
+          <Route path="/checkout/test/:id" element={<TestCheckoutPage />} />
+          <Route path="/checkout/return" element={<CheckoutReturnPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/stations" element={<OsceHome />} />
           <Route path="/stations/section/:sectionName" element={<OsceSectionPage />} />

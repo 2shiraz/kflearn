@@ -612,6 +612,7 @@ test("login attempts and provider-backed actions have separate rate limits", asy
   const seeded = await seedOsceContent();
   const userA = await registerTestUser("limited.a@example.com");
   const userB = await registerTestUser("limited.b@example.com");
+  await User.updateOne({ email: "limited.a@example.com" }, { $set: { creditBalance: 30 } });
   const created = await request(app).post("/api/osce/attempts").set("Authorization", userA)
     .send({ stationId: seeded.module._id.toString(), mode: "virtual-patient" });
   const id = created.body.data.attempt.id;

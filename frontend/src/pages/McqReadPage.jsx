@@ -4,7 +4,7 @@ import { Check, Eye, EyeOff, PlayCircle } from "lucide-react";
 import { Breadcrumbs, EmptyState, ErrorMessage, LinkButton, PageMain, Panel, RequireUser, SecondaryButton } from "../components/AppPage";
 import { QuestionSkeleton } from "../components/Skeleton";
 import { Chip, Pager, PillLink, rise } from "../components/StudyKit";
-import { getBlock, getYear, loadQuestions } from "../data/mcqs/catalog";
+import { findBlock, findYear, loadQuestions, preloadNextBlock, useCatalog } from "../lib/content";
 
 // ---- /mcqs/:yearSlug/read?block=&topic= ----
 // Study mode: every question shown with its correct answer and explanation.
@@ -13,12 +13,21 @@ const PAGE_SIZE = 20;
 const LETTERS = "ABCDE";
 
 export function McqRead() {
+  return (
+    <RequireUser active="mcqs">
+      <McqReadBody />
+    </RequireUser>
+  );
+}
+
+function McqReadBody() {
   const { yearSlug } = useParams();
   const [params] = useSearchParams();
   const blockSlug = params.get("block") || "";
   const topicSlug = params.get("topic") || "";
-  const year = getYear(yearSlug);
-  const block = blockSlug ? getBlock(yearSlug, blockSlug) : null;
+  const { data: catalog, error: catalogError } = useCatalog();
+  const year = findYear(catalog?.mcq, yearSlug);
+  const block = blockSlug ? findBlock(year, blockSlug) : null;
   const topic = block?.topics.find((t) => t.slug === topicSlug) || null;
 
   const [questions, setQuestions] = useState(null);
@@ -28,19 +37,21 @@ export function McqRead() {
   const [revealed, setRevealed] = useState({}); // per-question reveal when answers are hidden
 
   useEffect(() => {
+    if (!year) return undefined;
     let active = true;
     setQuestions(null);
     setPage(1);
     setRevealed({});
-    loadQuestions(yearSlug, blockSlug, topicSlug)
+    loadQuestions(year, blockSlug, topicSlug)
       .then((qs) => {
         if (!active) return;
         if (!qs.length) setError("No questions found for this selection.");
         setQuestions(qs);
+        preloadNextBlock("mcqs", year, blockSlug);
       })
       .catch((err) => active && setError(err.message));
     return () => { active = false; };
-  }, [yearSlug, blockSlug, topicSlug]);
+  }, [year, blockSlug, topicSlug]);
 
   const title = topic?.name || block?.name || (year ? `${year.name}, all questions` : "MCQs");
   const query = params.toString();
@@ -62,7 +73,8 @@ export function McqRead() {
   }
 
   let body;
-  if (!year || (blockSlug && !block) || (topicSlug && !topic)) {
+  if (!catalog) body = catalogError ? <ErrorMessage message={catalogError} onRetry={() => window.location.reload()} /> : <QuestionSkeleton toolbar label="Loading questions" />;
+  else if (!year || (blockSlug && !block) || (topicSlug && !topic)) {
     body = (
       <EmptyState
         character="student-bilal"
@@ -146,12 +158,10 @@ export function McqRead() {
   }
 
   return (
-    <RequireUser active="mcqs">
       <PageMain width="focused">
         <Breadcrumbs items={crumbs} />
         <h1 className="site-rise mb-8 text-3xl font-semibold tracking-tight text-s-ink sm:text-4xl">{title}</h1>
         {body}
       </PageMain>
-    </RequireUser>
   );
 }

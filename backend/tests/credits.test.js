@@ -61,37 +61,18 @@ async function withoutAiProviders(fn) {
   }
 }
 
-test("new users receive 30 welcome credits once and see server-side pricing", async () => {
+test("new users start with no AI credits by default and see server-side pricing", async () => {
   const signup = await request(app).post("/api/auth/register").send({ fullName: "New Student", email: "welcome@example.com", password: "StrongPass123" });
   assert.equal(signup.status, 201);
   const userId = signup.body.data.user.id;
   const auth = `Bearer ${signup.body.data.token}`;
   const res = await request(app).get("/api/credits").set("Authorization", auth);
   assert.equal(res.status, 200);
-  assert.equal(res.body.data.balance, 30);
-  const ledger = await CreditTransaction.find({ userId }).lean();
-  assert.equal(ledger.length, 1);
-  assert.equal(ledger[0].reason, "welcome-grant");
-  assert.equal(ledger[0].amount, 30);
-  assert.equal(ledger[0].balanceAfter, 30);
-  assert.equal((await request(app).post("/api/auth/login").send({ email: "welcome@example.com", password: "StrongPass123" })).status, 200);
-  assert.equal(await balanceOf(userId), 30);
-  assert.equal(await CreditTransaction.countDocuments({ userId }), 1);
+  assert.equal(res.body.data.balance, 0);
+  assert.equal(await CreditTransaction.countDocuments({ userId }), 0);
   assert.equal((await request(app).post("/api/auth/register").send({ fullName: "New Student", email: "welcome@example.com", password: "StrongPass123" })).status, 409);
-  assert.equal(await CreditTransaction.countDocuments({ userId }), 1);
-  assert.deepEqual(res.body.data.costs, { virtualPatient: 3, aiAssessment: 2, fullStation: 5 });
-  const pro = res.body.data.packages.find((pkg) => pkg.id === "pro");
-  assert.equal(pro.credits, 730);
-  assert.equal(pro.fullStations, 146);
-  const legacy = await User.create({
-    externalId: "legacy-zero-credit-user", fullName: "Existing Student",
-    email: "existing@example.com",
-    passwordHash: (await User.findById(userId)).passwordHash,
-  });
-  assert.equal((await request(app).post("/api/auth/login").send({ email: legacy.email, password: "StrongPass123" })).status, 200);
-  assert.equal(await balanceOf(legacy._id), 0);
-  assert.equal(await CreditTransaction.countDocuments({ userId: legacy._id }), 0);
 });
+
 
 test("public credit packages expose names and prices only", async () => {
   const res = await request(app).get("/api/public/credit-packages");
@@ -152,10 +133,10 @@ test("clients cannot set or mint their own credits", async () => {
   assert.equal(register.status, 201);
   const auth = `Bearer ${register.body.data.token}`;
   const userId = register.body.data.user.id;
-  assert.equal(await balanceOf(userId), 30);
+  assert.equal(await balanceOf(userId), 0);
 
   await request(app).patch("/api/auth/me").set("Authorization", auth).send({ creditBalance: 9999, $inc: { creditBalance: 9999 } });
-  assert.equal(await balanceOf(userId), 30);
+  assert.equal(await balanceOf(userId), 0);
 
   for (const method of ["post", "put", "patch", "delete"]) {
     assert.equal((await request(app)[method]("/api/credits").set("Authorization", auth).send({ balance: 9999 })).status, 404);

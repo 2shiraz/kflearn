@@ -4,13 +4,15 @@ import { Breadcrumbs, PageMain, Panel, RequireUser } from "../components/AppPage
 import { GuideCard, GuideHero, GuideNotFound, GuideSection, GuideTitle, JumpNav, PanelHeading, PrevNext, SectionHeading } from "../components/GuideBlocks";
 import { plus } from "../site/siteContent";
 import { MedIcon } from "../site/Illustrations";
-import {
-  aboutThisCollection,
-  CATEGORY_ORDER,
-  getAdjacentHandouts,
-  getHandout,
-  handouts,
-} from "../data/handoutNotes";
+import { ErrorMessage } from "../components/AppPage";
+import { SetupSkeleton } from "../components/Skeleton";
+import { useContent } from "../lib/content";
+
+function Loading({ error }) {
+  return error ? <ErrorMessage message={error} onRetry={() => window.location.reload()} /> : <SetupSkeleton label="Loading" />;
+}
+
+const isMissing = (error) => /doesn't exist|Not found/i.test(error || "");
 
 // Colour icon per body system.
 const CATEGORY_ICONS = {
@@ -38,6 +40,16 @@ const CATEGORY_TONES = {
 const categoryTone = (category) => CATEGORY_TONES[category] || "violet";
 
 export function HandoutNotesHome() {
+  const { data, error } = useContent("/guides/handouts");
+  if (!data) {
+    return (
+      <RequireUser active="handouts">
+        <PageMain><Loading error={error} /></PageMain>
+      </RequireUser>
+    );
+  }
+  const { aboutThisCollection, categoryOrder: CATEGORY_ORDER } = data.meta;
+  const handouts = data.entries;
   return (
     <RequireUser active="handouts">
       <PageMain>
@@ -110,8 +122,16 @@ export function HandoutNotesHome() {
 
 export function HandoutNotesDetail() {
   const { slug } = useParams();
-  const handout = getHandout(slug);
+  const { data, error } = useContent(`/guides/handouts/${encodeURIComponent(slug)}`);
+  const handout = data?.entry;
 
+  if (!data && !isMissing(error)) {
+    return (
+      <RequireUser active="handouts">
+        <PageMain width="reading"><Loading error={error} /></PageMain>
+      </RequireUser>
+    );
+  }
   if (!handout) {
     return (
       <RequireUser active="handouts">
@@ -123,7 +143,7 @@ export function HandoutNotesDetail() {
     );
   }
 
-  const { prev, next } = getAdjacentHandouts(slug);
+  const { prev, next } = data;
 
   return (
     <RequireUser active="handouts">

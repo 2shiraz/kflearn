@@ -1,3 +1,4 @@
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -17,10 +18,14 @@ import adminUserRoutes from "./routes/adminUser.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import creditRoutes from "./routes/credit.routes.js";
 import siteRoutes from "./routes/site.routes.js";
+import contentRoutes from "./routes/content.routes.js";
+import { requireAccess, requireAccessOrUnfinishedAttempt } from "./middleware/requireAccess.js";
 import adminSettingsRoutes from "./routes/adminSettings.routes.js";
 import { getPublicFavicon, getPublicLogo, getPublicSite } from "./controllers/site.controller.js";
 import { asyncHandler } from "./utils/asyncHandler.js";
 import { getPublicCreditPackages, getPublicPricing, getPublicStatsHandler } from "./controllers/credit.controller.js";
+import { receiveWebhook } from "./controllers/payment.controller.js";
+import paymentRoutes from "./routes/payment.routes.js";
 
 export function createApp() {
   const app = express();
@@ -29,8 +34,12 @@ export function createApp() {
   if (env.trustedProxyHops > 0) app.set("trust proxy", env.trustedProxyHops);
 
   app.use(helmet());
+  // gzip/brotli for JSON and the site's files; most of the study content is text.
+  app.use(compression());
   app.use(cors({ origin: env.frontendUrl, credentials: true }));
-  app.use(express.json({ limit: "1mb" }));
+  // Keeps the exact bytes of each request too: payment provider notifications
+  // are signed over them.
+  app.use(express.json({ limit: "1mb", verify: (req, res, buf) => { req.rawBody = buf; } }));
   app.use(cookieParser());
   app.use(mongoSanitize()); // strips `$`/`.` keys from body/query/params to block NoSQL operator injection
 
@@ -42,15 +51,21 @@ export function createApp() {
   app.get("/api/public/credit-packages", asyncHandler(getPublicCreditPackages));
   app.get("/api/public/pricing", asyncHandler(getPublicPricing));
   app.get("/api/public/stats", asyncHandler(getPublicStatsHandler));
+  // Payment provider notifications: no session, checked by signature instead.
+  app.post("/api/payments/webhooks/:provider", asyncHandler(receiveWebhook));
   app.get("/api/public/site", asyncHandler(getPublicSite));
   app.get("/api/public/logo", asyncHandler(getPublicLogo));
   app.get("/api/public/favicon", asyncHandler(getPublicFavicon));
   app.use(authenticate);
   app.use(csrfProtection);
-  app.use("/api/dashboard", dashboardRoutes);
+  // Study material needs a monthly pass once the paywall is on. Credits,
+  // settings, the site switches and admin stay open.
+  app.use("/api/dashboard", requireAccess, dashboardRoutes);
   app.use("/api/credits", creditRoutes);
-  app.use("/api/osce/attempts", osceAttemptRoutes);
-  app.use("/api/osce", osceRoutes);
+  app.use("/api/osce/attempts", requireAccessOrUnfinishedAttempt, osceAttemptRoutes);
+  app.use("/api/osce", requireAccess, osceRoutes);
+  app.use("/api/content", contentRoutes);
+  app.use("/api/payments", paymentRoutes);
   app.use("/api/ai", aiRoutes);
   app.use("/api/admin/osce", adminOsceRoutes);
   app.use("/api/admin/users", adminUserRoutes);

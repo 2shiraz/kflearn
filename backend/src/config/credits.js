@@ -3,8 +3,9 @@
 // edit here. All enforcement happens server-side against these values.
 
 export const CREDIT_VALUE_PKR = 5;
-// Temporary signup allowance. Applies only when an account is registered.
-export const STARTING_CREDITS = 30;
+// AI credits given to a new account. None by default now that the site is
+// paid; an admin can set an allowance in Admin > Pricing.
+export const STARTING_CREDITS = 0;
 
 export const CREDIT_COSTS = Object.freeze({
   virtualPatient: 3,

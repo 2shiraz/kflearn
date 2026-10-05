@@ -9,6 +9,7 @@ const FIELD_LABELS = {
   role: "role", fullName: "name", suspended: "suspension", amount: "credits", sections: "sections", aiPatient: "AI patient",
   signupsOpen: "signups", welcomeCredits: "signup credits", costs: "costs", packages: "packages", siteName: "site name",
   metaTitle: "title", metaDescription: "description", accent: "theme colour", logo: "logo", status: "status",
+  requireSubscription: "monthly access", watermark: "watermark", onlinePayments: "online payments",
 };
 
 // Every change made in the admin area, newest first. Secret values such as

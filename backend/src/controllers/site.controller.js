@@ -1,5 +1,8 @@
+import { getAccess } from "../services/access.service.js";
 import { Announcement } from "../models/Announcement.js";
 import { getBranding, getFavicon, getLogo, getPricing, getSiteSettings, updateBranding, updatePricing, updateSiteSettings } from "../services/siteSettings.service.js";
+import { emailEnabled } from "../services/email/index.js";
+import { getProvider } from "../services/payments/providers/index.js";
 
 function notFound(message) {
   const error = new Error(message);
@@ -27,7 +30,7 @@ const liveFilter = () => ({ active: true, $or: [{ endsAt: null }, { endsAt: { $e
 // ---- For everyone ----
 export async function getPublicSite(req, res) {
   const [{ signupsOpen }, branding] = await Promise.all([getSiteSettings(), getBranding()]);
-  res.json({ success: true, data: { signupsOpen, branding } });
+  res.json({ success: true, data: { signupsOpen, passwordReset: emailEnabled(), branding } });
 }
 
 export const getPublicLogo = (req, res) => sendImage(res, getLogo);
@@ -51,18 +54,27 @@ async function sendImage(res, load) {
 
 // What the signed-in app needs: visible sections, feature switches and the
 // announcements to show.
+// Also the account's access status, so every page load re-checks it.
 export async function getSite(req, res) {
   const [site, announcements] = await Promise.all([
     getSiteSettings(),
     Announcement.find(liveFilter()).sort({ createdAt: -1 }).limit(3).lean(),
   ]);
-  res.json({ success: true, data: { ...site, announcements: announcements.map(announcementDto) } });
+  const access = await getAccess({ id: req.user.id, role: req.user.role }, { site });
+  res.json({ success: true, data: { ...site, announcements: announcements.map(announcementDto), access } });
 }
 
 // ---- Admin ----
 export async function adminGetSettings(req, res) {
   const [site, pricing, branding] = await Promise.all([getSiteSettings(), getPricing(), getBranding()]);
-  res.json({ success: true, data: { site, pricing, branding } });
+  // Which payment provider and email sender the server is set up with, so the
+  // admin can see whether online payments and reset emails can work.
+  const provider = getProvider();
+  const services = {
+    payments: { connected: Boolean(provider), name: provider?.label || "", test: Boolean(provider?.isTest) },
+    email: emailEnabled(),
+  };
+  res.json({ success: true, data: { site, pricing, branding, services } });
 }
 
 export async function adminUpdateBranding(req, res) {

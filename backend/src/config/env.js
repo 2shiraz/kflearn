@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -50,4 +51,18 @@ export const env = {
   openaiEvalModel: process.env.OPENAI_EVAL_MODEL || "gpt-5.6-luna",
   defaultAiProvider: process.env.DEFAULT_AI_PROVIDER || "groq",
   maxStudentMessageTokens: Number(process.env.MAX_STUDENT_MESSAGE_TOKENS || 160),
+  // Online checkout. "test" is a built-in pretend provider for trying the
+  // whole flow; it is refused in production unless ALLOW_TEST_PAYMENTS=true.
+  // A real provider is added as one adapter in services/payments/providers.
+  paymentProvider: (process.env.PAYMENT_PROVIDER ?? (isProduction ? "" : "test")).trim().toLowerCase(),
+  allowTestPaymentsInProduction: process.env.ALLOW_TEST_PAYMENTS === "true",
+  // Signs the test provider's notifications. A random one per start is fine
+  // for local testing.
+  paymentTestSecret: process.env.PAYMENT_TEST_SECRET || crypto.randomBytes(32).toString("hex"),
+  // Email: "console" prints messages to the server log (development);
+  // "disabled" sends nothing. Real providers plug into services/email.
+  // "console" prints emails (with their reset links) to the server log, so the
+  // live site sends nothing until a real email provider is chosen.
+  emailProvider: (process.env.EMAIL_PROVIDER || (isProduction ? "disabled" : "console")).trim().toLowerCase(),
+  emailFrom: process.env.EMAIL_FROM || "KF LearnSmart <no-reply@kflearnsmart.local>",
 };

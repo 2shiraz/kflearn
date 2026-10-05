@@ -14,10 +14,15 @@ const paymentSchema = new mongoose.Schema(
     // Charged by the processor; zero for payments recorded by hand.
     fee: { type: Number, default: 0, min: 0 },
     credits: { type: Number, required: true, min: 0 },
+    // "credits" buys an AI credit pack; "subscription" buys days of access
+    // (accessDays), recorded as an AccessPeriod.
+    kind: { type: String, enum: ["credits", "subscription"], default: "credits", index: true },
+    accessDays: { type: Number, default: 0, min: 0 },
+    accessPeriodId: { type: mongoose.Schema.Types.ObjectId, ref: "AccessPeriod" },
     packageId: { type: String, default: "" },
     packageName: { type: String, default: "" },
     status: { type: String, enum: ["pending", "paid", "failed", "refunded"], default: "paid", index: true },
-    method: { type: String, enum: ["bank-transfer", "cash", "mobile-wallet", "card", "other"], default: "other" },
+    method: { type: String, enum: ["bank-transfer", "cash", "mobile-wallet", "card", "online", "other"], default: "other" },
     // "manual" for admin-recorded payments, else the processor's name.
     provider: { type: String, default: "manual" },
     // The bank, wallet or processor transaction reference.

@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema(
     tourPending: { type: Boolean, default: false },
     // Set by an admin. A suspended account can't sign in and its sessions end.
     suspended: { type: Boolean, default: false },
+    // Set when an admin gives the account a temporary password; cleared when
+    // the student picks their own in Settings.
+    mustChangePassword: { type: Boolean, default: false },
     // Updated at most every few minutes from authenticated requests; drives
     // the "active students" figures in the admin area.
     lastActiveAt: Date,

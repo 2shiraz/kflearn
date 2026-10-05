@@ -10,6 +10,11 @@ const LABELS = [
   [/^PATCH \/admin\/users\/[^/]+$/, "Edited an account"],
   [/^POST \/admin\/users\/[^/]+\/credits$/, "Changed AI credits"],
   [/^POST \/admin\/users\/[^/]+\/delete$/, "Deleted an account"],
+  [/^POST \/admin\/users\/[^/]+\/access$/, "Granted access"],
+  [/^POST \/admin\/users\/[^/]+\/access\/[^/]+\/revoke$/, "Revoked access"],
+  [/^POST \/admin\/users\/[^/]+\/password$/, "Set a temporary password"],
+  [/^POST \/admin\/users\/[^/]+\/sessions\/revoke-all$/, "Signed an account out everywhere"],
+  [/^POST \/admin\/users\/[^/]+\/sessions\/[^/]+\/revoke$/, "Signed out an account's device"],
   [/^POST \/admin\/osce\/import$/, "Imported stations"],
   [/^POST \/admin\/osce$/, "Created a station"],
   [/^PATCH \/admin\/osce\/[^/]+\/status$/, "Changed a station's status"],
@@ -22,7 +27,7 @@ const LABELS = [
 
 // Field names are logged so the record says what changed; values are not,
 // because they can include API keys.
-const SKIP_FIELDS = new Set(["password", "confirmation", "confirmTitle"]);
+const SKIP_FIELDS = new Set(["password", "confirmation", "confirmTitle", "token"]);
 
 export function auditAdminChanges(req, res, next) {
   if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return next();

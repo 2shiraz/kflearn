@@ -168,6 +168,27 @@ export default function AdminRevenue() {
         </div>
       </Panel>
 
+      <Panel>
+        <h3 className="font-semibold text-s-ink">Monthly access</h3>
+        {report?.subscriptions ? (
+          <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+            {[
+              ["Active passes", report.subscriptions.active],
+              ["Ending within 7 days", report.subscriptions.expiringSoon],
+              ["In grace days", report.subscriptions.inGrace],
+              [`Ended, last ${rangeLabel}`, report.subscriptions.lapsed],
+              [`New, last ${rangeLabel}`, report.subscriptions.newSubscribers],
+              [`Renewed, last ${rangeLabel}`, report.subscriptions.renewals],
+            ].map(([k, v]) => (
+              <div key={k} className="rounded-2xl bg-s-tint/60 p-3">
+                <dt className="text-xs text-s-mute">{k}</dt>
+                <dd className="mt-0.5 text-xl font-semibold text-s-ink">{v.toLocaleString()}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : <ListSkeletonRows />}
+      </Panel>
+
       <div className="grid gap-5 lg:grid-cols-3">
         <Panel>
           <h3 className="font-semibold text-s-ink">By package</h3>
@@ -216,14 +237,33 @@ export default function AdminRevenue() {
               <h3 className="font-semibold text-s-ink">Payment provider</h3>
             </div>
             <p className="mt-2 text-sm text-s-mute">
-              {report?.provider.connected ? `Connected to ${report.provider.name}. Its payments appear here on their own.` : "None connected. Record each payment you receive and the student gets their AI credits straight away. A provider added later will fill this same list."}
+              {!report?.provider.connected
+                ? "None connected. Record each payment you receive and the student gets their pass or AI credits straight away. A provider added later fills this same list."
+                : report.provider.test
+                  ? `${report.provider.name} (test mode, no money is taken). Online payments are ${report.provider.enabled ? "on" : "off"} in Site access.`
+                  : `Connected to ${report.provider.name}. Online payments are ${report.provider.enabled ? "on" : "off"} in Site access, and they appear here on their own.`}
             </p>
+            {report?.provider.held?.length > 0 && (
+              <div className="mt-4 rounded-2xl bg-coral-soft p-3 text-sm text-s-ink">
+                <p className="font-semibold">Held for review</p>
+                <p className="mt-0.5 text-s-mute">The amount paid didn't match the price, so nothing was added. Check with the payment provider, then record the payment by hand if it's genuine.</p>
+                <ul className="mt-2 space-y-1.5">
+                  {report.provider.held.map((h) => (
+                    <li key={h.id} className="break-words">
+                      <span className="font-medium">{h.email}</span>, {h.item}, {pkr(h.amount)} expected, {day(h.at)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </Panel>
         </div>
       </div>
 
-      <RecordPaymentDialog open={recording} onClose={() => setRecording(false)} onRecorded={(payment) => changed(`Recorded ${pkr(payment.amount)} from ${payment.email}. ${payment.credits.toLocaleString()} AI credits added.`)} />
-      <RefundDialog payment={refunding} onClose={() => setRefunding(null)} onRefunded={(payment, removed) => changed(`Refund recorded for ${payment.email}.${removed ? ` ${removed.toLocaleString()} AI credits taken back.` : ""}`)} />
+      <RecordPaymentDialog open={recording} onClose={() => setRecording(false)} onRecorded={(payment) => changed(payment.kind === "subscription"
+        ? `Recorded ${pkr(payment.amount)} from ${payment.email}. ${payment.accessDays} days of access added.`
+        : `Recorded ${pkr(payment.amount)} from ${payment.email}. ${payment.credits.toLocaleString()} AI credits added.`)} />
+      <RefundDialog payment={refunding} onClose={() => setRefunding(null)} onRefunded={(payment, removed) => changed(`Refund recorded for ${payment.email}.${payment.kind === "subscription" ? " The access it added was removed." : removed ? ` ${removed.toLocaleString()} AI credits taken back.` : ""}`)} />
     </div>
   );
 }
@@ -296,7 +336,7 @@ function PaymentsList({ reload, onRefund }) {
                     <p className="truncate text-s-ink">{pay.email}</p>
                     {pay.reference && <p className="truncate font-chart text-xs text-s-mute">Ref {pay.reference}</p>}
                   </td>
-                  <td className="px-2 py-3 text-s-ink">{pay.packageName}<span className="block font-chart text-xs text-s-mute">{pay.credits.toLocaleString()} credits</span></td>
+                  <td className="px-2 py-3 text-s-ink">{pay.packageName}<span className="block font-chart text-xs text-s-mute">{pay.kind === "subscription" ? `${pay.accessDays} days` : `${pay.credits.toLocaleString()} credits`}</span></td>
                   <td className="whitespace-nowrap px-2 py-3 text-s-mute">{METHODS[pay.method] || pay.method}</td>
                   <td className="whitespace-nowrap px-2 py-3 text-right font-semibold text-s-ink">{pkr(pay.amount)}</td>
                   <td className="px-2 py-3"><span className={`rounded-full px-2.5 py-1 font-chart text-xs ${STATUS[pay.status]?.className}`}>{STATUS[pay.status]?.label || pay.status}</span></td>
@@ -325,7 +365,8 @@ function PaymentsList({ reload, onRefund }) {
 }
 
 const today = () => new Date().toISOString().slice(0, 10);
-const blankPayment = () => ({ email: "", packageId: "", amount: "", credits: "", method: "bank-transfer", reference: "", paidAt: today(), note: "" });
+const PASS_ID = "monthly-access";
+const blankPayment = () => ({ email: "", packageId: PASS_ID, amount: "", credits: "0", days: "30", method: "bank-transfer", reference: "", paidAt: today(), note: "" });
 
 // A payment received outside the site. Picking a package fills in its price
 // and credits; both can be changed for a discount or a custom deal.
@@ -333,6 +374,7 @@ function RecordPaymentDialog({ open, onClose, onRecorded }) {
   const [form, setForm] = useState(blankPayment);
   const [packages, setPackages] = useState([]);
   const [emails, setEmails] = useState([]);
+  const [plan, setPlan] = useState({ pricePkr: 1499, periodDays: 30 });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -342,14 +384,21 @@ function RecordPaymentDialog({ open, onClose, onRecorded }) {
     setError("");
     getAdminSettings().then((d) => {
       const list = d.pricing?.packages || [];
+      const plan = d.pricing?.subscription || { pricePkr: 1499, periodDays: 30 };
       setPackages(list);
-      if (list[0]) setForm((f) => ({ ...f, packageId: list[0].id, amount: String(list[0].pricePkr), credits: String(list[0].credits) }));
+      setPlan(plan);
+      setForm((f) => ({ ...f, packageId: PASS_ID, amount: String(plan.pricePkr), credits: "0", days: String(plan.periodDays) }));
     }).catch(() => {});
     listAdminUsers().then((users) => setEmails(users.map((u) => u.email))).catch(() => {});
   }, [open]);
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
+  const isPass = form.packageId === PASS_ID;
   const pickPackage = (id) => {
+    if (id === PASS_ID) {
+      setForm((f) => ({ ...f, packageId: id, amount: String(plan.pricePkr), credits: "0", days: String(plan.periodDays) }));
+      return;
+    }
     const pkg = packages.find((p) => p.id === id);
     setForm((f) => ({ ...f, packageId: id, ...(pkg ? { amount: String(pkg.pricePkr), credits: String(pkg.credits) } : {}) }));
   };
@@ -363,8 +412,8 @@ function RecordPaymentDialog({ open, onClose, onRecorded }) {
       const data = await recordAdminPayment({
         email: form.email,
         packageId: form.packageId || undefined,
+        ...(isPass ? { kind: "subscription", days: Number(form.days) } : { credits: Number(form.credits) }),
         amount: Number(form.amount),
-        credits: Number(form.credits),
         method: form.method,
         reference: form.reference,
         paidAt: form.paidAt,
@@ -380,12 +429,13 @@ function RecordPaymentDialog({ open, onClose, onRecorded }) {
   }
 
   return (
-    <AdminDialog open={open} wide title="Record a payment" description="For money received by bank transfer, mobile wallet or cash. The student gets the AI credits as soon as you save." onClose={onClose} dirty={dirty} busy={busy}>
+    <AdminDialog open={open} wide title="Record a payment" description="For money received by bank transfer, mobile wallet or cash. The student gets the access or AI credits as soon as you save." onClose={onClose} dirty={dirty} busy={busy}>
       <form onSubmit={save} className="space-y-4">
         <Field label="Student's email" type="email" required list="payment-emails" autoComplete="off" value={form.email} onChange={(v) => set("email", v)} />
         <datalist id="payment-emails">{emails.map((email) => <option key={email} value={email} />)}</datalist>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Select label="Package" value={form.packageId} onChange={pickPackage}>
+          <Select label="What they paid for" value={form.packageId} onChange={pickPackage}>
+            <option value={PASS_ID}>Monthly access ({pkr(plan.pricePkr)})</option>
             {packages.map((pkg) => <option key={pkg.id} value={pkg.id}>{pkg.name} ({pkr(pkg.pricePkr)})</option>)}
             <option value="">Custom amount</option>
           </Select>
@@ -393,7 +443,11 @@ function RecordPaymentDialog({ open, onClose, onRecorded }) {
             {Object.entries(METHODS).map(([k, label]) => <option key={k} value={k}>{label}</option>)}
           </Select>
           <Field label="Amount received (PKR)" type="number" min="1" step="1" required value={form.amount} onChange={(v) => set("amount", v)} />
-          <Field label="AI credits to add" type="number" min="0" step="1" required value={form.credits} onChange={(v) => set("credits", v)} />
+          {isPass ? (
+            <Field label="Days of access" helper="Added after any access they already have." type="number" min="1" max="366" step="1" required value={form.days} onChange={(v) => set("days", v)} />
+          ) : (
+            <Field label="AI credits to add" type="number" min="0" step="1" required value={form.credits} onChange={(v) => set("credits", v)} />
+          )}
           <Field label="Reference" helper="Bank or wallet transaction ID. Stops the same payment being recorded twice." maxLength={120} value={form.reference} onChange={(v) => set("reference", v)} />
           <Field label="Date received" type="date" max={today()} required value={form.paidAt} onChange={(v) => set("paidAt", v)} />
         </div>
@@ -437,12 +491,16 @@ function RefundDialog({ payment, onClose, onRefunded }) {
         <form onSubmit={refund} className="space-y-4">
           <div className="rounded-2xl bg-s-tint/60 p-4 text-sm">
             <p className="font-semibold text-s-ink">{pkr(payment.amount)} from {payment.email}</p>
-            <p className="mt-0.5 text-s-mute">{payment.packageName}, {payment.credits.toLocaleString()} AI credits, paid {payment.paidAt ? day(payment.paidAt) : ""}</p>
+            <p className="mt-0.5 text-s-mute">{payment.packageName}, {payment.kind === "subscription" ? `${payment.accessDays} days of access` : `${payment.credits.toLocaleString()} AI credits`}, paid {payment.paidAt ? day(payment.paidAt) : ""}</p>
           </div>
+          {payment.kind === "subscription" ? (
+            <p className="rounded-2xl bg-sun-soft p-3 text-sm text-s-ink">The {payment.accessDays} days of access this payment added will be removed.</p>
+          ) : (
           <label className="flex cursor-pointer items-start gap-3 text-sm text-s-ink">
             <input type="checkbox" checked={removeCredits} onChange={(e) => setRemoveCredits(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[var(--s-accent)]" />
             <span>Take back the {payment.credits.toLocaleString()} AI credits<span className="block text-s-mute">Only what's still unused in their account is removed.</span></span>
           </label>
+          )}
           <Field label="Reason" maxLength={120} value={note} onChange={setNote} />
           <InlineError>{error}</InlineError>
           <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">

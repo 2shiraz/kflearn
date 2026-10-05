@@ -1,4 +1,4 @@
-"""Parse MBBS<n>_OSPE_Bank_100.docx files into frontend/src/data/ospe/.
+"""Parse MBBS<n>_OSPE_Bank_100.docx files into backend/content-source/ospe/.
 
 Usage: python tools/parse_ospe_docx.py <dir-with-docx-files>
 Each docx: cover (module list) -> per module "MODULE k" + name + station list ->
@@ -43,7 +43,7 @@ def parse(path):
     return blocks
 
 def main(src):
-    out_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "src", "data", "ospe")
+    out_dir = os.path.join(os.path.dirname(__file__), "..", "backend", "content-source", "ospe")
     os.makedirs(out_dir, exist_ok=True)
     years = []
     for n in range(1, 5):

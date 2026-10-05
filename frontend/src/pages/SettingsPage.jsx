@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { Check, Eye, EyeOff, ImagePlus, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Check, Eye, EyeOff, ImagePlus, KeyRound, X } from "lucide-react";
+import { useSite } from "../lib/site";
 import {
   changePasswordRequest,
   deleteAccountRequest,
   fetchCurrentUser,
   getCurrentUser,
+  listMySessions,
+  logout,
+  signOutDevice,
+  signOutEverywhere,
   ROLE_OPTIONS,
   updateProfileRequest,
   YEAR_LEVEL_OPTIONS,
@@ -44,8 +50,18 @@ export default function SettingsPage() {
           <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
             <ProfileSummary user={user} onSaved={setUser} />
             <div className="grid min-w-0 gap-6">
+              {user.mustChangePassword && (
+                <div role="alert" className="site-rise flex items-start gap-3 rounded-3xl bg-sun-soft p-5 text-s-ink">
+                  <KeyRound size={20} strokeWidth={2} className="mt-0.5 shrink-0 text-sun" aria-hidden="true" />
+                  <p className="leading-relaxed">
+                    <span className="font-semibold">You're signed in with a temporary password.</span> Choose your own password under Security below.
+                  </p>
+                </div>
+              )}
+              <SubscriptionCard user={user} />
               <ProfileSection key={user.id} user={user} onSaved={setUser} />
               <SecuritySection email={user.email} />
+              <DevicesSection />
               <DangerSection isAdmin={user.role === "admin"} />
             </div>
           </div>
@@ -471,5 +487,112 @@ function SelectField({ label, name, value, options, onChange }) {
         {options.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
       </select>
     </div>
+  );
+}
+
+const shortDate = (value) => new Date(value).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+
+// Where the account's monthly access stands, with a link to the plan.
+function SubscriptionCard({ user }) {
+  const { access, requireSubscription } = useSite();
+  if (["admin", "contributor"].includes(user.role) || access?.unlimited) return null;
+  if (!access?.required && !requireSubscription) return null;
+  let line = "No monthly access yet.";
+  if (access?.active) line = `Active until ${shortDate(access.until)}.`;
+  else if (access?.inGrace) line = `Ended on ${shortDate(access.until)}. You can keep using the site until ${shortDate(access.graceUntil)}.`;
+  else if (access?.until) line = `Ended on ${shortDate(access.until)}.`;
+  return (
+    <Panel className="site-rise">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold text-s-ink">Monthly access</h2>
+          <p className="mt-1 text-sm leading-relaxed text-s-mute">{line}</p>
+        </div>
+        <Link to="/subscribe" className="site-press inline-flex min-h-11 items-center gap-1.5 rounded-full border border-s-line bg-s-card px-4 text-sm font-semibold text-s-ink hover:bg-s-tint">
+          {access?.active ? "View plan" : "Get access"} <ArrowRight size={15} strokeWidth={2} aria-hidden="true" />
+        </Link>
+      </div>
+    </Panel>
+  );
+}
+
+const seen = (value) => {
+  const minutes = Math.round((Date.now() - new Date(value).getTime()) / 60000);
+  if (minutes < 10) return "Active now";
+  if (minutes < 60) return `Active ${minutes} min ago`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `Active ${hours} h ago`;
+  return `Active ${new Date(value).toLocaleDateString(undefined, { day: "numeric", month: "short" })}`;
+};
+
+// Where this account is signed in. Students can be signed in on two devices;
+// signing in on a third signs out the oldest.
+function DevicesSection() {
+  const [sessions, setSessions] = useState(null);
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState("");
+
+  useEffect(() => {
+    listMySessions().then((d) => setSessions(d.sessions)).catch((err) => setError(err.message));
+  }, []);
+
+  async function signOut(id, current) {
+    setBusy(id);
+    setError("");
+    try {
+      const d = await signOutDevice(id);
+      if (current) {
+        logout();
+        window.location.href = "/signin";
+        return;
+      }
+      setSessions(d.sessions);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy("");
+    }
+  }
+
+  async function everywhere() {
+    if (!window.confirm("Sign out on every device, including this one?")) return;
+    setBusy("all");
+    try {
+      await signOutEverywhere();
+    } catch {
+      // Signed out either way.
+    }
+    logout();
+    window.location.href = "/signin";
+  }
+
+  return (
+    <Panel className="site-rise">
+      <h2 className="text-lg font-semibold text-s-ink">Signed-in devices</h2>
+      <p className="mt-1 text-sm leading-relaxed text-s-mute">Your account can be signed in on up to two devices. Signing in on another one signs out the device you signed in on longest ago.</p>
+      {error && <div className="mt-3"><FormError>{error}</FormError></div>}
+      {!sessions && !error && <p className="mt-4 text-sm text-s-mute">Loading devices...</p>}
+      {sessions && (
+        <ul className="mt-4 divide-y divide-s-line rounded-2xl border border-s-line">
+          {sessions.map((s) => (
+            <li key={s.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-medium text-s-ink">
+                  {s.device}
+                  {s.current && <span className="ml-2 rounded-full bg-mint-soft px-2 py-0.5 text-xs font-medium text-s-good">This device</span>}
+                </span>
+                <span className="block text-xs text-s-mute">{seen(s.lastSeenAt)}{s.ip ? `, from ${s.ip}` : ""}</span>
+              </span>
+              <SecondaryButton onClick={() => signOut(s.id, s.current)} disabled={busy === s.id} className="min-h-10 px-4 text-sm">
+                {busy === s.id ? "Signing out..." : "Sign out"}
+              </SecondaryButton>
+            </li>
+          ))}
+        </ul>
+      )}
+      <button type="button" onClick={everywhere} disabled={busy === "all"} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-s-miss hover:underline disabled:opacity-50">
+        Sign out everywhere
+      </button>
+    </Panel>
   );
 }
