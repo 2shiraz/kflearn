@@ -30,7 +30,7 @@ export async function requireAccess(req, res, next) {
 // can still be finished and marked after the pass runs out (within a day of
 // starting). Starting a new one, listing attempts and past results still need
 // access.
-const FINISHING = /^\/([0-9a-f]{24})(?:\/(messages|end|self-assessment|ai-assessment|transcribe|discard))?\/?$/i;
+const FINISHING = /^\/([0-9a-f]{24})(?:\/(messages(?:\/stream)?|end|self-assessment|ai-assessment|transcribe|discard))?\/?$/i;
 
 export async function requireAccessOrUnfinishedAttempt(req, res, next) {
   try {

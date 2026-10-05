@@ -214,6 +214,11 @@ async function sendApiRequest(path, options, method) {
       ...(options.headers || {}),
     },
   });
+  return readApiResponse(res, path, method);
+}
+
+// Signed out, pass ended or refused: handled the same for every request.
+async function readApiResponse(res, path, method) {
   const data = await res.json().catch(() => ({}));
   if (res.status === 401) {
     logout();
@@ -355,6 +360,52 @@ export function sendPatientMessage(attemptId, payload) {
     method: "POST",
     body: JSON.stringify(payload),
   });
+}
+
+// Asks the AI patient a question and passes the reply's words to onText as
+// they're written. Resolves with the same result as sendPatientMessage; its
+// patientMessage.text is the final reply and replaces the streamed words.
+export async function streamPatientMessage(attemptId, payload, { onText }) {
+  const path = `/osce/attempts/${attemptId}/messages/stream`;
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json", Accept: "text/event-stream", "X-XSRF-Token": getCsrfToken() },
+    body: JSON.stringify(payload),
+  });
+  // Refused before the patient was asked: an ordinary JSON answer.
+  if (!res.ok || !(res.headers.get("Content-Type") || "").includes("text/event-stream") || !res.body) {
+    return readApiResponse(res, path, "POST");
+  }
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let result = null;
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (value) buffer += decoder.decode(value, { stream: true });
+    let end;
+    while ((end = buffer.indexOf("\n\n")) !== -1) {
+      const block = buffer.slice(0, end);
+      buffer = buffer.slice(end + 2);
+      const event = /^event: (.*)$/m.exec(block)?.[1];
+      const raw = /^data: (.*)$/m.exec(block)?.[1];
+      if (!event || !raw) continue;
+      const data = JSON.parse(raw);
+      if (event === "delta") onText(data.text);
+      else if (event === "done") result = data;
+      else if (event === "error") {
+        const error = new Error(data.message || "Request failed.");
+        error.status = data.status;
+        error.code = data.code;
+        throw error;
+      }
+    }
+    if (done) break;
+  }
+  if (!result) throw new Error("The reply was cut off. Check your connection and ask again.");
+  afterChange(path);
+  return result;
 }
 
 export function endOsceAttempt(attemptId, payload = {}) {

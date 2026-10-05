@@ -64,7 +64,7 @@ import {
   listAdminUsers,
   updateAdminOsceStationStatus,
   selfAssessOsceAttempt,
-  sendPatientMessage,
+  streamPatientMessage,
   transcribeOsceAudio,
   updateAiStatus,
   getCurrentUser,
@@ -564,6 +564,8 @@ export function VirtualPatientSession() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
   const [state, setState] = useState({ loading: true, attempt: null, module: null, text: "", sending: false, error: "", recording: false, transcript: "", voiceMode: "", speakPatient: false });
+  // The patient's reply so far, while it's being written.
+  const [streamed, setStreamed] = useState("");
   const mediaRef = useRef(null);
   const recognitionRef = useRef(null);
   const chunksRef = useRef([]);
@@ -623,9 +625,12 @@ export function VirtualPatientSession() {
     };
   }, [stopMic]);
 
+  // Follows the conversation, and a streaming reply about once per line.
+  const messageCount = state.attempt?.messages?.length;
+  const streamedLines = streamed ? Math.floor(streamed.length / 80) + 1 : 0;
   useEffect(() => {
     threadEndRef.current?.scrollIntoView({ block: "end" });
-  }, [state.attempt?.messages?.length]);
+  }, [messageCount, streamedLines]);
 
   function speak(text) {
     if (!state.speakPatient || !window.speechSynthesis || !text) return;
@@ -662,11 +667,18 @@ export function VirtualPatientSession() {
         ? { ...s.attempt, messages: [...(s.attempt.messages || []), localMessage] }
         : s.attempt,
     }));
+    setStreamed("");
     try {
-      const data = await sendPatientMessage(attemptId, { text: finalText, inputType, originalTranscript });
+      const data = await streamPatientMessage(attemptId, { text: finalText, inputType, originalTranscript }, {
+        onText: (piece) => setStreamed((so) => so + piece),
+      });
+      // The saved reply replaces the streamed words (they match unless the
+      // AI's answer failed its checks and a scripted one was used).
+      setStreamed("");
       setState((s) => ({ ...s, sending: false, attempt: data.attempt }));
       speak(data.patientMessage?.text);
     } catch (err) {
+      setStreamed("");
       setState((s) => ({
         ...s,
         sending: false,
@@ -826,7 +838,14 @@ export function VirtualPatientSession() {
                 ) : (
                   <div className="space-y-3 text-[15px] leading-snug">
                     {state.attempt.messages.map((message) => <ChatMessage key={message.id} message={message} patient={patient} />)}
-                    {state.sending && (
+                    {state.sending && streamed.trim() && (
+                      // Hidden from screen readers while it grows; the finished
+                      // reply is read out once it's added to the thread.
+                      <div aria-hidden="true">
+                        <ChatMessage message={{ role: "patient", finalText: streamed.trimStart() }} patient={patient} />
+                      </div>
+                    )}
+                    {state.sending && !streamed.trim() && (
                       <div className="flex items-end gap-2">
                         <Character name={patient} size={28} tone="indigo" className="hidden sm:inline-flex" />
                         <p className="flex w-fit gap-1 rounded-2xl rounded-bl-md bg-s-card px-4 py-3.5 shadow-sm" aria-label="The patient is answering">

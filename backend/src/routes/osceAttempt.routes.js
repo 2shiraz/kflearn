@@ -8,6 +8,7 @@ import {
   listAttempts,
   selfAssessAttempt,
   sendPatientMessage,
+  streamPatientMessage,
   transcribeAttemptAudio,
 } from "../controllers/osceAttempt.controller.js";
 import { audioUpload } from "../middleware/upload.js";
@@ -21,6 +22,7 @@ router.get("/", asyncHandler(listAttempts));
 router.post("/", attemptCreateLimiter, requireBodyFields(["stationId", "mode"]), validateAttemptMode, validateAiProvider, asyncHandler(createAttempt));
 router.get("/:attemptId", asyncHandler(getAttempt));
 router.post("/:attemptId/messages", aiActionLimiter, requireBodyFields(["text"]), validateStudentMessageLength, asyncHandler(sendPatientMessage));
+router.post("/:attemptId/messages/stream", aiActionLimiter, requireBodyFields(["text"]), validateStudentMessageLength, asyncHandler(streamPatientMessage));
 router.post("/:attemptId/end", validateEndAttempt, asyncHandler(endAttempt));
 router.post("/:attemptId/discard", asyncHandler(discardAttempt));
 router.post("/:attemptId/self-assessment", validateSelfAssessment, asyncHandler(selfAssessAttempt));

@@ -1,5 +1,5 @@
 import { getGroqClient } from "../config/groq.js";
-import { createOpenAiResponse } from "../config/openai.js";
+import { createOpenAiResponse, streamOpenAiResponse } from "../config/openai.js";
 import { getAiSettings, providerConfigured } from "./aiSettings.service.js";
 
 export const AI_PROVIDERS = ["groq", "openai"];
@@ -94,6 +94,45 @@ export async function generateJson({ provider, messages, maxTokens = 5000, model
     model,
     provider: resolvedProvider,
   };
+}
+
+// Like generateJson, but hands each piece of the answer to onText as the
+// provider writes it. Returns the whole answer at the end.
+export async function streamJson({ provider, messages, maxTokens = 5000, modelType = "eval", onText }) {
+  const settings = await getAiSettings();
+  const resolvedProvider = resolveAiProvider(provider, settings);
+  let text = "";
+  const push = (piece) => {
+    if (!piece) return;
+    text += piece;
+    onText(piece);
+  };
+
+  if (resolvedProvider === "openai") {
+    const model = modelType === "chat" ? settings.openai.chatModel : settings.openai.evalModel;
+    await streamOpenAiResponse({
+      model,
+      input: toOpenAiInput(messages),
+      max_output_tokens: maxTokens,
+      text: { format: { type: "json_object" } },
+    }, settings.openai.apiKey, (event) => {
+      if (event.type === "response.output_text.delta") push(event.delta);
+    });
+    return { text: text.trim(), model, provider: resolvedProvider };
+  }
+
+  const groq = getGroqClient(settings.groq.apiKey);
+  const model = modelType === "chat" ? settings.groq.chatModel : settings.groq.evalModel;
+  const stream = await groq.chat.completions.create({
+    model,
+    temperature: 0.1,
+    max_tokens: maxTokens,
+    response_format: { type: "json_object" },
+    messages,
+    stream: true,
+  });
+  for await (const chunk of stream) push(chunk.choices[0]?.delta?.content);
+  return { text: text.trim(), model, provider: resolvedProvider };
 }
 
 function toOpenAiInput(messages) {

@@ -1,7 +1,8 @@
 import { UnansweredQuestion } from "../models/UnansweredQuestion.js";
 import { buildVirtualPatientMessages } from "../prompts/virtualPatient.prompt.js";
 import { selectRelevantFacts } from "./osceIntent.service.js";
-import { generateJson } from "./llm.service.js";
+import { generateJson, streamJson } from "./llm.service.js";
+import { createReplyExtractor } from "../utils/replyStream.js";
 import { keywordMatches, normalizeText } from "../utils/text.js";
 
 function parsePatientReply(text, patientScript) {
@@ -14,9 +15,12 @@ function parsePatientReply(text, patientScript) {
   return { text: parsed.reply.trim(), matchedFactIds, matchedConceptIds };
 }
 
-export async function generatePatientResponse({ patientScript, module, attempt, studentQuestion, generate = generateJson }) {
+// With onText, the reply's words are passed to it as the AI writes them. The
+// whole answer is still checked at the end, and the returned text is the one
+// to keep: if the answer turns out malformed, it's a scripted reply instead.
+export async function generatePatientResponse({ patientScript, module, attempt, studentQuestion, generate = generateJson, stream = streamJson, onText }) {
   try {
-    const completion = await generate({
+    const request = {
       provider: attempt.aiProvider,
       modelType: "chat",
       maxTokens: 450,
@@ -26,7 +30,8 @@ export async function generatePatientResponse({ patientScript, module, attempt, 
         recentMessages: attempt.messages.slice(-12),
         studentQuestion,
       }),
-    });
+    };
+    const completion = onText ? await streamReply({ stream, generate, request, onText }) : await generate(request);
     return {
       ...parsePatientReply(completion.text, patientScript),
       aiProvider: completion.provider,
@@ -35,6 +40,27 @@ export async function generatePatientResponse({ patientScript, module, attempt, 
   } catch (error) {
     // Keep a paid session usable if the provider fails or returns malformed JSON.
     return fallbackPatientResponse({ patientScript, module, studentQuestion });
+  }
+}
+
+async function streamReply({ stream, generate, request, onText }) {
+  const extract = createReplyExtractor();
+  let shown = false;
+  try {
+    return await stream({
+      ...request,
+      onText: (raw) => {
+        const piece = extract(raw);
+        if (!piece) return;
+        shown = true;
+        onText(piece);
+      },
+    });
+  } catch (error) {
+    // Some providers or models won't stream JSON: ask again the usual way,
+    // unless part of the reply is already on the student's screen.
+    if (shown) throw error;
+    return generate(request);
   }
 }
 
